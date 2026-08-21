@@ -1,0 +1,21 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "noEmitOnError": true,
+    "outDir": ".cocoframe/package-build",
+    "rootDir": "packages",
+    "declaration": true,
+    "declarationMap": false,
+    "sourceMap": false,
+    "allowImportingTsExtensions": false,
+    "rewriteRelativeImportExtensions": true
+  },
+  "include": [
+    "packages/*/src/**/*.ts",
+    "packages/*/src/**/*.tsx"
+  ],
+  "exclude": [
+    "packages/create-cocoframe/**"
+  ]
+}
