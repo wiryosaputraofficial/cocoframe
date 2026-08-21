@@ -1,0 +1,28 @@
+{
+  "name": "cocoframe",
+  "version": "0.0.1",
+  "private": true,
+  "type": "module",
+  "workspaces": [
+    "packages/*",
+    "examples/*"
+  ],
+  "scripts": {
+    "check": "tsc --noEmit",
+    "test": "node --test --test-concurrency=1 tests/*.test.ts",
+    "inspect": "node packages/cli/src/main.ts inspect examples/basic",
+    "dev": "node packages/cli/src/main.ts dev examples/basic",
+    "start": "node packages/cli/src/main.ts start examples/basic",
+    "build": "node packages/cli/src/main.ts build examples/basic",
+    "generate": "node packages/cli/src/main.ts generate examples/basic",
+    "openapi": "node packages/cli/src/main.ts openapi examples/basic",
+    "benchmark": "node benchmarks/ssr.bench.ts",
+    "benchmark:http": "node benchmarks/http.bench.ts",
+    "benchmark:http:concurrent": "node benchmarks/http-concurrent.bench.ts"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "rolldown": "^1.0.0",
+    "typescript": "^5.9.0"
+  }
+}

@@ -1,0 +1,18 @@
+/* Framework integration: islands keep the prototype's layout semantics. */
+coco-island { display: contents; }
+body { overflow-x: hidden; }
+
+/* Content remains usable without IntersectionObserver; entrance motion is CSS-only. */
+.reveal { opacity: 1; transform: none; animation: cocoframe-reveal 520ms ease both; }
+.main-nav a.active { color: var(--primary, #12a66a); font-weight: 700; }
+.docs-reference { margin-bottom: 4rem; }
+.docs-reference > span { scroll-margin-top: 6rem; }
+
+@keyframes cocoframe-reveal {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { animation: none; }
+}

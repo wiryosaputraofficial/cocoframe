@@ -1,0 +1,15 @@
+{
+  "name": "@cocoframe/client",
+  "version": "0.0.1",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./bootstrap": "./src/bootstrap.ts",
+    "./dev": "./src/dev.ts",
+    "./dev.css": "./src/dev.css",
+    "./stream": "./src/stream.ts"
+  },
+  "dependencies": {
+    "@cocoframe/jsx": "0.0.1"
+  }
+}

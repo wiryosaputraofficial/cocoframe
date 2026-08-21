@@ -1,0 +1,4 @@
+// Generated from @solar-icons/static. Do not edit manually.
+import { defineSolarIcon } from "../internal.ts";
+
+export default defineSolarIcon("wheel", "<circle cx=\"12\" cy=\"12\" r=\"10\" stroke=\"currentColor\"/>\n<circle cx=\"12\" cy=\"12\" r=\"6\" stroke=\"currentColor\"/>\n<circle cx=\"12\" cy=\"12\" r=\"2\" stroke=\"currentColor\"/>\n<path d=\"M6 12L10 12\" stroke=\"currentColor\" stroke-linecap=\"round\"/>\n<path d=\"M14 12L18 12\" stroke=\"currentColor\" stroke-linecap=\"round\"/>\n<path d=\"M9 17.1963L11 13.7322\" stroke=\"currentColor\" stroke-linecap=\"round\"/>\n<path d=\"M13 10.2681L15 6.80396\" stroke=\"currentColor\" stroke-linecap=\"round\"/>\n<path d=\"M15 17.1963L13 13.7322\" stroke=\"currentColor\" stroke-linecap=\"round\"/>\n<path d=\"M11 10.2681L9 6.80396\" stroke=\"currentColor\" stroke-linecap=\"round\"/>");

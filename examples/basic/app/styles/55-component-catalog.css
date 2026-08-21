@@ -1,0 +1,64 @@
+.utility-groups {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.utility-groups span {
+  padding: 7px 10px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  color: var(--green-800);
+  background: var(--green-100);
+  font-size: 9px;
+  font-weight: 750;
+}
+
+.component-mini-surface {
+  padding: 18px;
+  border: 1px dashed var(--green-500);
+  border-radius: 10px;
+  background: #fff;
+}
+
+.component-size-showcase{display:flex;align-items:flex-end;gap:10px;flex-wrap:wrap}.component-size-showcase--vertical{display:grid;align-items:start}.component-header-showcase{display:grid;width:100%;gap:10px}.component-preview-stage .coco-site-header{border:1px solid var(--line);border-radius:10px;overflow:hidden}.component-preview-stage .coco-site-header__inner{min-height:48px;padding:6px 10px;gap:10px}.component-preview-stage .coco-site-header__brand{font-size:13px}.component-preview-stage .coco-site-header__nav{gap:7px}.component-preview-stage .coco-site-header__nav>a{font-size:9px}.component-preview-stage .coco-mega-menu{width:100%}.component-preview-stage .coco-mega-menu__panel{position:relative;inset:auto;width:100%;margin-top:8px;padding:10px;grid-template-columns:1fr auto;transform:none}.component-preview-stage .coco-mega-menu__groups{gap:10px;padding:0}.component-preview-stage .coco-mega-menu__groups a{padding:6px}.component-preview-stage .coco-mega-menu__featured{width:110px;padding:10px}.component-offcanvas-nav{display:grid;gap:5px}.component-offcanvas-nav a{padding:10px 12px;border-radius:8px;color:var(--ink);font-weight:650;text-decoration:none}.component-offcanvas-nav a:hover{color:var(--green-700);background:var(--green-100)}
+.component-chart-showcase{display:grid;width:100%;min-width:0;gap:16px}.component-chart-showcase .coco-chart{width:100%;min-width:0}
+
+.component-preview-stage .coco-table-wrap,
+.component-preview-stage .coco-code-block {
+  max-width: 100%;
+}
+
+.solar-icon-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(68px, 1fr));
+  gap: 10px;
+  width: 100%;
+}
+
+.solar-icon-grid > span {
+  display: grid;
+  min-width: 0;
+  place-items: center;
+  gap: 7px;
+  padding: 13px 7px 9px;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  color: var(--green-700);
+  background: #fff;
+}
+
+.solar-icon-grid svg {
+  display: block;
+}
+
+.solar-icon-grid small {
+  overflow: hidden;
+  width: 100%;
+  color: var(--muted);
+  font-size: 9px;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

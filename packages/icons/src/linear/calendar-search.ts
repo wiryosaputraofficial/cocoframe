@@ -1,0 +1,4 @@
+// Generated from @solar-icons/static. Do not edit manually.
+import { defineSolarIcon } from "../internal.ts";
+
+export default defineSolarIcon("calendar-search", "<path d=\"M22 14V12C22 8.22876 22 6.34315 20.8284 5.17157C19.6569 4 17.7712 4 14 4H10C6.22876 4 4.34315 4 3.17157 5.17157C2 6.34315 2 8.22876 2 12V14C2 17.7712 2 19.6569 3.17157 20.8284C4.34315 22 6.22876 22 10 22H14\" stroke=\"currentColor\" stroke-linecap=\"round\"/>\n<path d=\"M7 4V2.5\" stroke=\"currentColor\" stroke-linecap=\"round\"/>\n<path d=\"M17 4V2.5\" stroke=\"currentColor\" stroke-linecap=\"round\"/>\n<circle cx=\"18\" cy=\"18\" r=\"3\" stroke=\"currentColor\"/>\n<path d=\"M20.5 20.5L22 22\" stroke=\"currentColor\" stroke-linecap=\"round\"/>\n<path d=\"M2.5 9H21.5\" stroke=\"currentColor\" stroke-linecap=\"round\"/>");

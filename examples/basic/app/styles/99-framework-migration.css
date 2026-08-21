@@ -1,0 +1,60 @@
+/* Framework integration: islands keep the prototype's layout semantics. */
+coco-island { display: contents; }
+body { overflow-x: hidden; }
+
+/* Content remains usable without IntersectionObserver; entrance motion is CSS-only. */
+.reveal { opacity: 1; transform: none; animation: cocoframe-reveal 520ms ease both; }
+.main-nav a.active { color: var(--primary, #12a66a); font-weight: 700; }
+.docs-reference { margin-bottom: 4rem; }
+.docs-reference > span { scroll-margin-top: 6rem; }
+
+/* Preserve the authored 3:2 hero artwork ratio at every breakpoint. */
+:where(.hero-art, .features-hero-art img, .docs-hero-art img, .components-hero-art img, .templates-hero-art img) {
+  aspect-ratio: 3 / 2;
+  height: auto;
+  object-fit: contain;
+}
+
+/* Keep bundled navigation icons aligned consistently wherever a text link uses one. */
+:where(.panel-heading > a, .docs-card a, .guide-top, .sidebar-help a, .submit-template a, .template-card footer a, .template-modal-copy > a) {
+  align-items: center;
+  gap: 0.35rem;
+}
+
+:where(.panel-heading > a, .docs-card a, .guide-top, .template-card footer a) {
+  display: inline-flex;
+}
+
+:where(.button, .panel-heading > a, .docs-card a, .guide-top, .sidebar-help a, .submit-template a, .template-card footer a, .template-modal-copy > a) svg {
+  display: block;
+  flex: none;
+}
+
+/* Floating previews must remain fully visible inside their documentation frame. */
+.official-component:has(.coco-hover-card) .component-preview-stage {
+  min-height: 360px;
+  align-content: start;
+  padding-top: 76px;
+}
+
+/* The dark usage surface joins the square header edge without rounded top corners. */
+.component-source > .coco-syntax {
+  border-top: 0;
+  border-radius: 0 0 8px 8px;
+}
+
+@media (max-width: 575px) {
+  .official-component:has(.coco-hover-card) .component-preview-stage {
+    min-height: 330px;
+    padding-top: 56px;
+  }
+}
+
+@keyframes cocoframe-reveal {
+  from { opacity: 0; transform: translateY(14px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { animation: none; }
+}

@@ -1,0 +1,11 @@
+{
+  "name": "@cocoframe/cli",
+  "version": "0.0.1",
+  "type": "module",
+  "bin": { "cocoframe": "./src/main.ts" },
+  "dependencies": {
+    "@cocoframe/core": "0.0.1",
+    "@cocoframe/server-node": "0.0.1",
+    "rolldown": "^1.0.0"
+  }
+}

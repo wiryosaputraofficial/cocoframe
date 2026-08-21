@@ -1,0 +1,4 @@
+// Generated from @solar-icons/static. Do not edit manually.
+import { defineSolarIcon } from "../internal.ts";
+
+export default defineSolarIcon("black-hole-2", "<circle cx=\"12\" cy=\"12\" r=\"2\" stroke=\"currentColor\"/>\n<path d=\"M10.1421 10.3628C13.6878 6.81707 21.9139 15.6105 16.5244 21\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-dasharray=\"2 2\"/>\n<path d=\"M13.8579 13.6372C10.3122 17.1829 2.08609 8.38952 7.4756 3.00001\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-dasharray=\"2 2\"/>\n<path d=\"M10.3628 13.8579C6.81707 10.3122 15.6105 2.08609 21 7.4756\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-dasharray=\"2 2\"/>\n<path d=\"M13.6372 10.1421C17.1829 13.6878 8.38952 21.9139 3.00002 16.5244\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-dasharray=\"2 2\"/>");

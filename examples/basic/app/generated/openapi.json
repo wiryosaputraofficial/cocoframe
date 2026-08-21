@@ -1,0 +1,115 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "CocoFrame Example API",
+    "version": "1.0.0",
+    "description": "API contract generated from the example application."
+  },
+  "paths": {
+    "/api/greet/{name}": {
+      "get": {
+        "operationId": "greet-person",
+        "parameters": [
+          {
+            "name": "name",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "minLength": 2,
+              "maxLength": 40
+            }
+          },
+          {
+            "name": "excited",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "boolean",
+              "x-coerce": true
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "message": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "message"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Input validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error",
+                    "issues"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/health": {
+      "get": {
+        "operationId": "health",
+        "responses": {
+          "200": {
+            "description": "Successful response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "ok": {
+                      "const": true
+                    },
+                    "framework": {
+                      "type": "string"
+                    }
+                  },
+                  "required": [
+                    "ok",
+                    "framework"
+                  ],
+                  "additionalProperties": false
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Input validation failed",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "error",
+                    "issues"
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

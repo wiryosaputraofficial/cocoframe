@@ -1,0 +1,4 @@
+// Generated from @solar-icons/static. Do not edit manually.
+import { defineSolarIcon } from "../internal.ts";
+
+export default defineSolarIcon("soundwave-circle", "<path d=\"M12 7L12 17\" stroke=\"currentColor\" stroke-linecap=\"round\"/>\n<path d=\"M17 10L17 14\" stroke=\"currentColor\" stroke-linecap=\"round\"/>\n<path d=\"M7 9L7 15\" stroke=\"currentColor\" stroke-linecap=\"round\"/>\n<path d=\"M2 12C2 6.47715 6.47715 2 12 2C17.5228 2 22 6.47715 22 12C22 17.5228 17.5228 22 12 22C6.47715 22 2 17.5228 2 12Z\" stroke=\"currentColor\"/>");

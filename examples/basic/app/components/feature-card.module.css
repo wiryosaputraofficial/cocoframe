@@ -1,0 +1,5 @@
+.card {
+  padding: 1rem;
+  border: 1px solid color-mix(in srgb, currentColor 25%, transparent);
+  border-radius: 0.75rem;
+}

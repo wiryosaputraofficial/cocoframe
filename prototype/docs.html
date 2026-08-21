@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Dokumentasi CocoFrame: panduan, API reference, komponen, deployment, dan praktik terbaik." />
+    <title>Documentation — CocoFrame</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="docs.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="index.html#top" aria-label="CocoFrame home">
+        <img src="assets/cocoframe-icon.png" alt="" />
+        <span>cocoframe</span>
+      </a>
+      <button class="menu-toggle" type="button" aria-label="Buka menu" aria-expanded="false"><span></span><span></span><span></span></button>
+      <nav class="main-nav" aria-label="Navigasi utama">
+        <a href="features.html">Features</a>
+        <a href="docs.html">Docs</a>
+        <a href="components.html">Components</a>
+        <a href="index.html#templates">Templates</a>
+        <a href="index.html#community">Community</a>
+        <a href="#pricing">Pricing</a>
+      </nav>
+      <div class="header-actions">
+        <a class="github-link" href="#" aria-label="GitHub">GH</a>
+        <a class="button button-ghost button-small" href="#signin">Sign in</a>
+        <a class="button button-primary button-small" href="#quick-start">Get Started</a>
+      </div>
+    </header>
+
+    <main id="top" class="docs-layout">
+      <button class="docs-sidebar-toggle" type="button" aria-expanded="false">Browse documentation <span>⌄</span></button>
+      <aside class="docs-sidebar" aria-label="Navigasi dokumentasi">
+        <nav>
+          <div class="sidebar-group"><h2>GET STARTED</h2><a class="active" href="#introduction">Introduction</a><a href="#installation">Installation</a><a href="#quick-start">Quick Start</a><a href="#project-structure">Project Structure</a><a href="#configuration">Configuration</a></div>
+          <div class="sidebar-group"><h2>GUIDES</h2><a href="#routing">Routing</a><a href="#data-fetching">Data Fetching</a><a href="#layouts">Layouts &amp; Pages</a><a href="#components">Components</a><a href="#forms">Forms</a><a href="#validation">Validation</a><a href="#authentication">Authentication</a><a href="#api-routes">API Routes</a><a href="#middleware">Middleware</a><a href="#errors">Error Handling</a></div>
+          <div class="sidebar-group"><h2>REFERENCE</h2><a href="#cli">CLI Reference</a><a href="#api">Framework API</a><a href="#configuration">Configuration</a><a href="#conventions">File Conventions</a><a href="#environment">Environment Variables</a></div>
+          <div class="sidebar-group"><h2>ADVANCED</h2><a href="#performance">Performance</a><a href="#caching">Caching</a><a href="#testing">Testing</a><a href="#deployment">Deployment</a><a href="#monitoring">Monitoring</a><a href="#security">Security</a></div>
+        </nav>
+        <div class="sidebar-help">
+          <img src="assets/cocoframe-icon.png" alt="" />
+          <h3>Need help?</h3><p>Join our community or ask a question.</p><a href="#community">Join Discord <span>→</span></a>
+        </div>
+      </aside>
+
+      <div class="docs-content">
+        <section class="docs-hero" id="introduction">
+          <div class="docs-hero-copy reveal">
+            <span class="eyebrow">DOCUMENTATION</span>
+            <h1>Build smarter with<br /><span>CocoFrame</span></h1>
+            <p>CocoFrame adalah framework modern untuk pengembangan web yang cepat, efisien, dan AI-friendly.</p>
+            <label class="docs-search">
+              <span aria-hidden="true">⌕</span>
+              <input type="search" placeholder="Search documentation..." aria-label="Search documentation" />
+              <kbd>⌘K</kbd>
+            </label>
+          </div>
+          <div class="docs-hero-art reveal"><div class="hero-art-glow"></div><img src="assets/cocoframe-hero-isometric.png" alt="Ilustrasi isometrik CocoFrame" /></div>
+        </section>
+
+        <section class="docs-panel quick-start" id="quick-start">
+          <div class="panel-heading"><div><h2>Quick Start</h2><p>Jalankan project pertama Anda dalam hitungan menit.</p></div><a href="#installation">View full guide →</a></div>
+          <div class="quick-steps">
+            <article><span>1</span><div><h3>Install CocoFrame</h3><p>Install CLI secara global dan buat project baru.</p></div><b>→</b></article>
+            <article><span>2</span><div><h3>Run Development Server</h3><p>Jalankan server lokal dan mulai coding.</p></div><b>→</b></article>
+            <article><span>3</span><div><h3>Start Building</h3><p>Bangun aplikasi modern dengan mudah.</p></div></article>
+          </div>
+          <div class="docs-code">
+            <div class="docs-code-bar"><div><button class="active" type="button" data-package="npm">npm</button><button type="button" data-package="pnpm">pnpm</button><button type="button" data-package="yarn">yarn</button><button type="button" data-package="bun">bun</button></div><button class="docs-copy" type="button">Copy</button></div>
+            <pre><code><i>1</i>  <span data-command>npm create cocoframe@latest my-app</span>
+<i>2</i>  cd my-app
+<i>3</i>  npm run dev
+<i>4</i>  <q># Buka http://localhost:3000 di browser Anda</q></code></pre>
+          </div>
+        </section>
+
+        <section class="docs-panel docs-explore" id="guides">
+          <div class="panel-heading"><div><h2>Explore the Docs</h2><p>Temukan semua yang Anda butuhkan untuk membangun dengan CocoFrame.</p></div></div>
+          <div class="docs-card-grid">
+            <article class="docs-card" data-search="getting started introduction installation quick start"><span class="feature-icon" aria-hidden="true"><b>↗</b></span><h3>Getting Started</h3><p>Pelajari dasar-dasar CocoFrame dan jalankan project pertama Anda.</p><a href="#quick-start">Mulai →</a></article>
+            <article class="docs-card" data-search="guides routing data fetching layouts forms validation"><span class="feature-icon" aria-hidden="true"><b>▤</b></span><h3>Guides</h3><p>Panduan langkah demi langkah untuk membangun aplikasi modern.</p><a href="#routing">Baca →</a></article>
+            <article class="docs-card" data-search="components ui reusable islands"><span class="feature-icon" aria-hidden="true"><b>✣</b></span><h3>Components</h3><p>Jelajahi komponen UI yang siap pakai dan mudah dikustomisasi.</p><a href="#components">Lihat →</a></article>
+            <article class="docs-card" data-search="api reference routes framework"><span class="feature-icon icon-code" aria-hidden="true"><b>&lt;/&gt;</b></span><h3>API Reference</h3><p>Referensi lengkap untuk API, utils, dan konfigurasi CocoFrame.</p><a href="#api">Lihat →</a></article>
+            <article class="docs-card" data-search="cli command terminal reference"><span class="feature-icon" aria-hidden="true"><b>›_</b></span><h3>CLI Reference</h3><p>Dokumentasi lengkap untuk CocoFrame CLI dan semua perintahnya.</p><a href="#cli">Lihat →</a></article>
+            <article class="docs-card" data-search="templates starter project"><span class="feature-icon" aria-hidden="true"><b>▧</b></span><h3>Templates</h3><p>Starter template untuk berbagai kebutuhan project Anda.</p><a href="#templates">Lihat →</a></article>
+            <article class="docs-card" data-search="deployment cloud production"><span class="feature-icon" aria-hidden="true"><b>☁</b></span><h3>Deployment</h3><p>Deploy aplikasi Anda ke berbagai platform dengan mudah.</p><a href="#deployment">Lihat →</a></article>
+            <article class="docs-card" data-search="best practices security performance scalability"><span class="feature-icon" aria-hidden="true"><b>⌾</b></span><h3>Best Practices</h3><p>Praktik terbaik untuk performa, keamanan, dan skalabilitas aplikasi.</p><a href="#security">Lihat →</a></article>
+          </div>
+          <p class="docs-empty" hidden>Tidak ada dokumentasi yang cocok dengan pencarian.</p>
+        </section>
+
+        <section class="docs-panel resources" id="resources">
+          <div class="panel-heading"><div><h2>Resources</h2><p>Sumber daya tambahan untuk membantu Anda.</p></div></div>
+          <div class="resource-grid">
+            <article><h3>▣ &nbsp; Blog</h3><p>Artikel terbaru dan update seputar CocoFrame.</p><a href="#">→</a></article>
+            <article><h3>◉ &nbsp; GitHub</h3><p>Lihat source code di GitHub dan berkontribusi.</p><a href="#">→</a></article>
+            <article><h3>♣ &nbsp; Community</h3><p>Bergabung dengan komunitas CocoFrame.</p><a href="#">→</a></article>
+            <article><h3>▤ &nbsp; Changelog</h3><p>Lihat perubahan dan rilis terbaru.</p><a href="#">→</a></article>
+          </div>
+        </section>
+      </div>
+    </main>
+
+    <footer class="site-footer" id="pricing">
+      <div class="footer-grid section-shell">
+        <div class="footer-brand"><a class="brand footer-logo" href="index.html#top" aria-label="CocoFrame home"><img src="assets/cocoframe-icon.png" alt="" /><span>cocoframe</span></a><p>Framework modern untuk membangun aplikasi web yang cepat, efisien, dan AI-friendly.</p><div class="socials"><a href="#">GH</a><a href="#">DI</a><a href="#">X</a><a href="#">YT</a></div></div>
+        <div><h3>Product</h3><a href="features.html">Features</a><a href="docs.html">Docs</a><a href="components.html">Components</a><a href="index.html#templates">Templates</a><a href="#pricing">Pricing</a></div>
+        <div><h3>Resources</h3><a href="#">Blog</a><a href="#">Guides</a><a href="#">API Reference</a><a href="#">Changelog</a><a href="#">Roadmap</a></div>
+        <div><h3>Community</h3><a href="#">GitHub</a><a href="#">Discord</a><a href="#">Stack Overflow</a><a href="#">Twitter</a><a href="#">Contributors</a></div>
+        <div><h3>Company</h3><a href="#">About</a><a href="#">Careers</a><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Contact</a></div>
+      </div>
+      <p class="copyright">© 2026 CocoFrame. All rights reserved.</p>
+    </footer>
+    <script src="script.js"></script>
+  </body>
+</html>

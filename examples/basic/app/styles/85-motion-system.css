@@ -1,0 +1,115 @@
+/* Motion and scroll behavior shared by the CocoFrame website and component catalog. */
+:root {
+  --motion-duration-fast: 140ms;
+  --motion-duration-base: 220ms;
+  --motion-duration-slow: 520ms;
+  --motion-ease-standard: cubic-bezier(.2, .8, .2, 1);
+  --motion-ease-emphasized: cubic-bezier(.16, 1, .3, 1);
+  --scrollbar-track: #edf4f0;
+  --scrollbar-thumb: #8bbca4;
+  --scrollbar-thumb-hover: var(--green-700);
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 6rem;
+  scrollbar-color: var(--scrollbar-thumb) var(--scrollbar-track);
+  scrollbar-gutter: stable;
+  scrollbar-width: thin;
+}
+
+body::-webkit-scrollbar { width: 12px; }
+body::-webkit-scrollbar-track { background: var(--scrollbar-track); }
+body::-webkit-scrollbar-thumb {
+  min-height: 44px;
+  border: 3px solid var(--scrollbar-track);
+  border-radius: 999px;
+  background: linear-gradient(180deg, var(--green-400), var(--green-700));
+}
+body::-webkit-scrollbar-thumb:hover { background: var(--scrollbar-thumb-hover); }
+
+:where(pre, .docs-sidebar, .component-source, .coco-table-wrap, .coco-tabs__list, .coco-bottom-sheet__surface, .coco-offcanvas__body) {
+  scrollbar-color: var(--scrollbar-thumb) transparent;
+  scrollbar-width: thin;
+}
+:where(pre, .docs-sidebar, .component-source, .coco-table-wrap, .coco-tabs__list, .coco-bottom-sheet__surface, .coco-offcanvas__body)::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+:where(pre, .docs-sidebar, .component-source, .coco-table-wrap, .coco-tabs__list, .coco-bottom-sheet__surface, .coco-offcanvas__body)::-webkit-scrollbar-track {
+  background: transparent;
+}
+:where(pre, .docs-sidebar, .component-source, .coco-table-wrap, .coco-tabs__list, .coco-bottom-sheet__surface, .coco-offcanvas__body)::-webkit-scrollbar-thumb {
+  border: 2px solid transparent;
+  border-radius: 999px;
+  background: var(--scrollbar-thumb);
+  background-clip: padding-box;
+}
+
+:where(.components-content, .docs-content) [id] { scroll-margin-top: 6rem; }
+
+:where(.official-component, .component-doc-panel, .foundation-grid > article, .category-grid article, .docs-card, .template-card) {
+  transition:
+    transform var(--motion-duration-base) var(--motion-ease-standard),
+    border-color var(--motion-duration-base) ease,
+    box-shadow var(--motion-duration-base) var(--motion-ease-standard);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  :where(.official-component, .component-doc-panel, .foundation-grid > article):hover {
+    transform: translateY(-3px);
+    border-color: color-mix(in srgb, var(--green-500) 42%, var(--line));
+    box-shadow: 0 18px 46px rgba(15, 61, 46, .09);
+  }
+
+  :where(.button, .coco-button, .coco-icon-button):not(:disabled):hover {
+    transform: translateY(-2px);
+  }
+
+  :where(.button, .coco-button, .coco-icon-button):not(:disabled):active {
+    transform: translateY(0) scale(.98);
+    transition-duration: var(--motion-duration-fast);
+  }
+}
+
+.hero-art,
+.components-hero-art img,
+.templates-hero-art img,
+.docs-hero-art img,
+.features-hero-art img {
+  animation: cocoframe-hero-float 6s ease-in-out infinite;
+  transform-origin: 50% 60%;
+}
+
+@keyframes cocoframe-hero-float {
+  0%, 100% { translate: 0 0; }
+  50% { translate: 0 -8px; }
+}
+
+@keyframes cocoframe-section-in {
+  from { opacity: .15; translate: 0 24px; scale: .985; }
+  to { opacity: 1; translate: 0 0; scale: 1; }
+}
+
+@supports (animation-timeline: view()) {
+  :where(.official-component, .component-doc-panel, .foundation-grid > article, .guide-section, .template-card) {
+    animation: cocoframe-section-in linear both;
+    animation-timeline: view(block);
+    animation-range: entry 0% cover 22%;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .hero-art,
+  .components-hero-art img,
+  .templates-hero-art img,
+  .docs-hero-art img,
+  .features-hero-art img { animation: none; }
+  :where(.official-component, .component-doc-panel, .foundation-grid > article, .guide-section, .template-card) {
+    animation: none;
+    opacity: 1;
+    translate: none;
+    scale: none;
+  }
+}

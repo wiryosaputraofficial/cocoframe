@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Jelajahi fitur CocoFrame untuk membangun aplikasi modern dengan cepat, aman, dan AI-ready." />
+    <title>Features — CocoFrame</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <link rel="stylesheet" href="features.css" />
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="index.html#top" aria-label="CocoFrame home">
+        <img src="assets/cocoframe-icon.png" alt="" />
+        <span>cocoframe</span>
+      </a>
+
+      <button class="menu-toggle" type="button" aria-label="Buka menu" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+
+      <nav class="main-nav" aria-label="Navigasi utama">
+        <a href="features.html">Features</a>
+        <a href="docs.html">Docs</a>
+        <a href="components.html">Components</a>
+        <a href="index.html#templates">Templates</a>
+        <a href="index.html#community">Community</a>
+        <a href="#pricing">Pricing</a>
+      </nav>
+
+      <div class="header-actions">
+        <a class="github-link" href="#" aria-label="GitHub">GH</a>
+        <a class="button button-ghost button-small" href="#signin">Sign in</a>
+        <a class="button button-primary button-small" href="#get-started">Get Started</a>
+      </div>
+    </header>
+
+    <main id="top">
+      <section class="features-hero section-shell">
+        <div class="features-hero-copy reveal">
+          <span class="eyebrow pill">FEATURES</span>
+          <h1>Everything you need to<br />build <span>better applications</span></h1>
+          <p>CocoFrame menyediakan semua yang Anda butuhkan untuk membangun aplikasi modern dengan cepat, efisien, dan AI-ready.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#get-started">Get Started <span>→</span></a>
+            <a class="button button-ghost" href="docs.html">View Documentation</a>
+          </div>
+        </div>
+        <div class="features-hero-art reveal">
+          <div class="hero-art-glow"></div>
+          <img src="assets/cocoframe-hero-isometric.png" alt="Ilustrasi isometrik platform CocoFrame" />
+        </div>
+      </section>
+
+      <section class="core-features section-shell">
+        <div class="section-heading reveal">
+          <span class="eyebrow">CORE FEATURES</span>
+          <h2>Powerful features for modern development</h2>
+        </div>
+        <div class="core-grid">
+          <article class="core-card reveal">
+            <div class="core-card-head"><span class="feature-icon" aria-hidden="true"><b>ϟ</b></span><div><h3>Blazing Fast</h3><p>Performa tinggi dengan arsitektur yang ringan dan efisien.</p></div></div>
+            <ul><li>Zero config untuk setup awal</li><li>Optimized performance out of the box</li><li>Caching dan lazy loading bawaan</li></ul>
+          </article>
+          <article class="core-card reveal">
+            <div class="core-card-head"><span class="feature-icon" aria-hidden="true"><b>▧</b></span><div><h3>Modular &amp; Scalable</h3><p>Arsitektur modular yang memudahkan scaling aplikasi Anda.</p></div></div>
+            <ul><li>Komponen reusable</li><li>Struktur folder yang fleksibel</li><li>Mudah dikembangkan bersama tim</li></ul>
+          </article>
+          <article class="core-card reveal">
+            <div class="core-card-head"><span class="feature-icon icon-code" aria-hidden="true"><b>&lt;/&gt;</b></span><div><h3>Developer Friendly</h3><p>DX luar biasa dengan API intuitif dan dokumentasi lengkap.</p></div></div>
+            <ul><li>API yang konsisten</li><li>Error handling yang jelas</li><li>Type-safe dari awal</li></ul>
+          </article>
+          <article class="core-card reveal">
+            <div class="core-card-head"><span class="feature-icon" aria-hidden="true"><b>✦</b></span><div><h3>AI-Ready</h3><p>Dibangun khusus untuk integrasi AI dan otomatisasi pengembangan.</p></div></div>
+            <ul><li>Integrasi AI tools mudah</li><li>Prompt-based scaffolding</li><li>AI-assisted code generation</li></ul>
+          </article>
+          <article class="core-card reveal">
+            <div class="core-card-head"><span class="feature-icon" aria-hidden="true"><b>☁</b></span><div><h3>Production Ready</h3><p>Siap digunakan di produksi dengan best practice terkini.</p></div></div>
+            <ul><li>Security by default</li><li>Monitoring &amp; logging built-in</li><li>CI/CD ready</li></ul>
+          </article>
+          <article class="core-card reveal">
+            <div class="core-card-head"><span class="feature-icon" aria-hidden="true"><b>⌾</b></span><div><h3>Secure by Default</h3><p>Keamanan menjadi prioritas dengan konfigurasi aman sejak awal.</p></div></div>
+            <ul><li>Authentication ready</li><li>Input validation bawaan</li><li>CSRF &amp; XSS protection</li></ul>
+          </article>
+        </div>
+      </section>
+
+      <section class="integrations section-shell reveal">
+        <div class="integration-copy">
+          <span class="eyebrow">BUILT FOR MODERN STACK</span>
+          <h2>Integrasi mulus dengan tools<br />modern yang Anda gunakan</h2>
+          <p>CocoFrame kompatibel dengan ekosistem tools terbaik yang digunakan developer saat ini.</p>
+          <a class="button button-ghost" href="docs.html">Lihat Dokumentasi Integrasi <span>→</span></a>
+        </div>
+        <div class="tool-grid" aria-label="Integrasi teknologi">
+          <div class="tool-card"><span class="tool-logo ts">TS</span><strong>TypeScript</strong></div>
+          <div class="tool-card"><span class="tool-logo react">⚛</span><strong>React</strong></div>
+          <div class="tool-card"><span class="tool-logo tailwind">≈</span><strong>Tailwind CSS</strong></div>
+          <div class="tool-card"><span class="tool-logo vite">ϟ</span><strong>Vite</strong></div>
+          <div class="tool-card"><span class="tool-logo eslint">◇</span><strong>ESLint</strong></div>
+          <div class="tool-card"><span class="tool-logo prettier">≋</span><strong>Prettier</strong></div>
+        </div>
+      </section>
+
+      <section class="cta section-shell" id="get-started">
+        <div><h2>Siap membangun sesuatu<br />yang luar biasa?</h2><p>Mulai project Anda dengan CocoFrame sekarang juga.</p></div>
+        <div class="cta-actions"><a class="button button-light" href="docs.html#quick-start">Get Started →</a><a class="button button-outline-light" href="docs.html">View Documentation</a></div>
+        <img src="assets/cocoframe-icon.png" alt="" />
+      </section>
+    </main>
+
+    <footer class="site-footer" id="pricing">
+      <div class="footer-grid section-shell">
+        <div class="footer-brand">
+          <a class="brand footer-logo" href="index.html#top" aria-label="CocoFrame home"><img src="assets/cocoframe-icon.png" alt="" /><span>cocoframe</span></a>
+          <p>Framework modern untuk membangun aplikasi web yang cepat, efisien, dan AI-friendly.</p>
+          <div class="socials"><a href="#">GH</a><a href="#">DI</a><a href="#">X</a><a href="#">YT</a></div>
+        </div>
+        <div><h3>Product</h3><a href="features.html">Features</a><a href="docs.html">Docs</a><a href="components.html">Components</a><a href="index.html#templates">Templates</a><a href="#pricing">Pricing</a></div>
+        <div><h3>Resources</h3><a href="#">Blog</a><a href="#">Guides</a><a href="#">API Reference</a><a href="#">Changelog</a><a href="#">Roadmap</a></div>
+        <div><h3>Community</h3><a href="#">GitHub</a><a href="#">Discord</a><a href="#">Stack Overflow</a><a href="#">Twitter</a><a href="#">Contributors</a></div>
+        <div><h3>Company</h3><a href="#">About</a><a href="#">Careers</a><a href="#">Privacy Policy</a><a href="#">Terms of Service</a><a href="#">Contact</a></div>
+      </div>
+      <p class="copyright">© 2026 CocoFrame. All rights reserved.</p>
+    </footer>
+
+    <script src="script.js"></script>
+  </body>
+</html>
