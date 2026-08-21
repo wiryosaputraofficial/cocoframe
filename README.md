@@ -56,6 +56,23 @@ Open `http://127.0.0.1:3000` after the development server reports that all
 routes are loaded. The server watches application files and reloads changes
 automatically.
 
+### Create a starter from the workspace
+
+The dependency-free project creator is included in this repository. Until the
+public runtime packages are released, create the starter inside the cloned
+workspace so npm can resolve the local packages:
+
+```bash
+npm run create -- examples/my-app --skip-install
+npm install
+npm run dev --workspace=my-app
+```
+
+The registry command will be `npm create cocoframe@latest my-app` after
+the public `@cocoframe/*` distribution packages are available. The creator
+supports `--package-manager npm|pnpm|yarn|bun` and `--skip-install`, and
+refuses to overwrite a non-empty directory.
+
 Before contributing or deploying, run the complete verification gate:
 
 ```bash
@@ -69,7 +86,7 @@ npm run build
 The production server bundle is written to
 `examples/basic/.cocoframe/server.mjs` and can be run with `npm start` after
 `npm run build`. CocoFrame is currently consumed from this GitHub workspace;
-the `create-cocoframe` scaffolder and public npm packages are not published yet.
+the creator source is ready, while public `@cocoframe/*` packages are not published yet.
 
 ## Current milestone
 
@@ -82,9 +99,9 @@ deployment, component streaming boundaries, exact CSS module types, OpenAPI 3.1,
 signed-cookie sessions, a database adapter contract, production manifests,
 development live reload, SQLite and PostgreSQL adapters, guarded CocoQL reads
 and mutations, 80 server-first UI primitives, twelve chart types, 1,246 typed
-Solar Linear icons, tests, and local SSR/HTTP baseline benchmarks.
+Solar Linear icons, a dependency-free project creator, tests, and local SSR/HTTP baseline benchmarks.
 
-Planned next: public package publishing and scaffolding, distributed rate-limit
+Planned next: public package distribution and npm publishing, distributed rate-limit
 stores, telemetry exporters, CSP nonce/integrity helpers, compression, and
 additional deployment adapters. See `/docs#roadmap` for the maintained list.
 

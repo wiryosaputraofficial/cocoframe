@@ -1,0 +1,41 @@
+{
+  "name": "create-cocoframe",
+  "version": "0.0.1",
+  "description": "Create a new CocoFrame application",
+  "keywords": [
+    "cocoframe",
+    "framework",
+    "scaffolding",
+    "typescript"
+  ],
+  "type": "module",
+  "license": "GPL-3.0-only",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "default": "./src/index.js"
+    }
+  },
+  "bin": {
+    "create-cocoframe": "src/cli.js"
+  },
+  "files": [
+    "src",
+    "template"
+  ],
+  "engines": {
+    "node": ">=24"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/wiryosaputraofficial/cocoframe.git",
+    "directory": "packages/create-cocoframe"
+  },
+  "bugs": {
+    "url": "https://github.com/wiryosaputraofficial/cocoframe/issues"
+  },
+  "homepage": "https://github.com/wiryosaputraofficial/cocoframe#readme"
+}

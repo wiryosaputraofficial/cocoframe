@@ -9,6 +9,7 @@
   ],
   "scripts": {
     "check": "tsc --noEmit",
+    "create": "node packages/create-cocoframe/src/cli.js",
     "test": "node --test --test-concurrency=1 tests/*.test.ts",
     "inspect": "node packages/cli/src/main.ts inspect examples/basic",
     "dev": "node packages/cli/src/main.ts dev examples/basic",

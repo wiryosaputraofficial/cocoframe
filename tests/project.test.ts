@@ -64,14 +64,15 @@ test("keeps the public documentation aligned with the complete framework surface
   const guideStyles = await readFile(path.resolve("examples/basic/app/styles/40-documentation-guide.css"), "utf8");
   const readme = await readFile(path.resolve("README.md"), "utf8");
 
-  for (const id of ["charts", "api-reference", "observability", "recipes", "troubleshooting", "versioning", "roadmap", "contributing"]) {
+  for (const id of ["project-creator", "charts", "api-reference", "observability", "recipes", "troubleshooting", "versioning", "roadmap", "contributing"]) {
     assert.match(docs, new RegExp(`id="${id}"`));
     assert.match(sidebar, new RegExp(`#${id}`));
   }
   for (const packageName of ["@cocoframe/core", "@cocoframe/jsx", "@cocoframe/router", "@cocoframe/client", "@cocoframe/ui", "@cocoframe/icons", "@cocoframe/schema", "@cocoframe/forms", "@cocoframe/auth", "@cocoframe/database", "@cocoframe/database-sqlite", "@cocoframe/database-postgres", "@cocoframe/security", "@cocoframe/observability", "@cocoframe/cocoql", "@cocoframe/server-node", "@cocoframe/server-web", "@cocoframe/cli"]) {
     assert.match(docs, new RegExp(packageName.replace("/", "\\/")));
   }
-  assert.ok((docs.match(/<GuideSection id=/g) ?? []).length >= 32);
+  assert.match(docs, /create-cocoframe/);
+  assert.ok((docs.match(/<GuideSection id=/g) ?? []).length >= 33);
   assert.match(search, /Package API Reference/);
   assert.match(search, /Versioning & Roadmap/);
   assert.doesNotMatch(header, /href="#(?:signin)?"/);

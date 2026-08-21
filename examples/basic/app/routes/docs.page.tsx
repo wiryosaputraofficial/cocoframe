@@ -114,7 +114,7 @@ export default definePage({
         <div class="panel-heading"><div><h2>Quick Start</h2><p>Clone repository resmi dan jalankan CocoFrame dengan Node.js 24 atau lebih baru.</p></div><a href="#project-structure">Pelajari strukturnya <span aria-hidden="true"><ArrowRightIcon size={15} /></span></a></div>
         <div class="quick-steps"><article><span>1</span><div><h3>Clone repository</h3><p>Ambil source dari GitHub resmi CocoFrame.</p></div><b aria-hidden="true"><ArrowRightIcon size={16} /></b></article><article><span>2</span><div><h3>Install dependencies</h3><p>Jalankan package manager dari root <code>cocoframe</code>.</p></div><b aria-hidden="true"><ArrowRightIcon size={16} /></b></article><article><span>3</span><div><h3>Start development</h3><p>Jalankan build awal, watcher, dan server lokal.</p></div><b aria-hidden="true"><ArrowRightIcon size={16} /></b></article><article><span>4</span><div><h3>Open the app</h3><p>Buka <code>http://127.0.0.1:3000</code>.</p></div></article></div>
         <PackageCommand />
-        <p class="guide-note"><strong>Repository resmi:</strong> <a href="https://github.com/wiryosaputraofficial/cocoframe">github.com/wiryosaputraofficial/cocoframe</a>. CocoFrame masih berupa workspace MVP; package creator <code>create-cocoframe</code> belum diterbitkan.</p>
+        <p class="guide-note"><strong>Project creator tersedia di source:</strong> gunakan <a href="#project-creator"><code>create-cocoframe</code></a> secara lokal dari workspace. Rilis npm publik menunggu pipeline distribusi seluruh package runtime.</p>
       </section>
 
       <section class="docs-panel docs-explore" id="guides"><div class="panel-heading"><div><h2>Explore the Docs</h2><p>Cari area framework yang ingin Anda gunakan.</p></div></div><DocsSearch /></section>
@@ -124,6 +124,16 @@ export default definePage({
           <p>Setelah server menampilkan pesan <code>routes loaded</code>, buka <code>http://127.0.0.1:3000</code>. Perubahan pada file aplikasi dipantau otomatis selama development.</p>
           <p>Sebelum contribution atau deployment, jalankan <code>npm run check</code>, <code>npm test</code>, <code>npm run inspect</code>, dan <code>npm run build</code>. Gunakan <code>npm start</code> untuk menjalankan bundle production setelah build.</p>
           <p>Untuk penggunaan package internal, import selalu melalui namespace <code>@cocoframe/*</code>. Jangan mengimpor file source package lain dengan path relatif dari aplikasi.</p>
+        </GuideSection>
+
+        <GuideSection id="project-creator" label="GET STARTED" title="Project creator" description="Creator dependency-free menghasilkan starter server-first, typed API, island interaktif, CSS responsif, dan konfigurasi TypeScript." language="bash" code={`npm run create -- examples/my-app --skip-install\nnpm install\nnpm run dev --workspace=my-app`}>
+          <p>Perintah lokal dijalankan dari root repository yang sudah di-clone. Target <code>examples/my-app</code> masuk ke npm workspace sehingga package <code>@cocoframe/*</code> diselesaikan dari source lokal.</p>
+          <ul>
+            <li>Gunakan <code>--package-manager npm|pnpm|yarn|bun</code> untuk memilih package manager.</li>
+            <li>Gunakan <code>--skip-install</code> untuk CI atau workflow AI yang ingin memeriksa file sebelum memasang dependency.</li>
+            <li>Creator menolak filesystem root dan directory yang sudah berisi file agar data project lama tidak tertimpa.</li>
+          </ul>
+          <p>Setelah package runtime diterbitkan ke npm, command publiknya adalah <code>npm create cocoframe@latest my-app</code>. Saat ini command tersebut belum diiklankan sebagai instalasi registry yang aktif.</p>
         </GuideSection>
 
         <GuideSection id="project-structure" label="CONVENTION" title="Project structure" description="Struktur sengaja dibuat predictable agar mudah dipelihara dan hemat konteks untuk AI." language="text" code={`my-app/\n├─ app/\n│  ├─ components/          # server components\n│  ├─ islands/             # *.island.tsx\n│  ├─ generated/           # typed client + OpenAPI\n│  ├─ routes/              # pages, APIs, layouts\n│  └─ styles/              # global CSS / CSS modules\n├─ public/                  # aset statis\n├─ cocoframe.config.ts      # konfigurasi aplikasi\n└─ package.json`}>
@@ -371,7 +381,7 @@ npm run build`}>
             <li>Sebelum upgrade, jalankan check, test, inspect, build, lalu simpan output sebagai baseline.</li>
             <li>Breaking change sebelum 1.0 harus dicatat bersama langkah migrasi dan contoh sebelum/sesudah.</li>
           </ul>
-          <p><code>create-cocoframe</code> belum diterbitkan. Sampai package release tersedia, instalasi yang didukung adalah workspace repository ini dan dokumentasi tidak mengklaim command scaffolding eksternal.</p>
+          <p><code>create-cocoframe</code> sudah diimplementasikan dan diuji dari workspace. Publikasi registry tetap menunggu build distribusi package runtime dan autentikasi npm; sampai itu selesai, gunakan command lokal pada bagian Project creator.</p>
         </GuideSection>
 
         <GuideSection id="roadmap" label="ROADMAP" title="Current roadmap" description="Prioritas berikut menjaga framework tetap kecil sambil menutup kebutuhan production yang belum tersedia.">
@@ -431,6 +441,7 @@ function PackageReferenceTable() {
     ["@cocoframe/server-node", "Node HTTP adapter", "createServer, gracefulShutdown, clientAddress"],
     ["@cocoframe/server-web", "Fetch/edge adapter", "webHandler"],
     ["@cocoframe/cli", "Project tooling", "dev, build, start, inspect, generate, openapi"],
+    ["create-cocoframe", "Project scaffolding", "starter template, package-manager selection, safe directory checks, skip-install"],
   ] as const;
   return <div class="guide-table guide-table--packages" role="table" aria-label="Public CocoFrame packages"><div role="row"><strong role="columnheader">Package</strong><strong role="columnheader">Responsibility</strong><strong role="columnheader">Primary API</strong></div>{packages.map(([name, responsibility, api]) => <div role="row"><code>{name}</code><span>{responsibility}</span><code>{api}</code></div>)}</div>;
 }
@@ -441,7 +452,7 @@ function DeploymentTargetTable() {
 
 function RoadmapTable() {
   const items = [
-    ["Package publishing & scaffolder", "Planned", "Release package publik dan create-cocoframe setelah API MVP dibekukan."],
+    ["Package publishing", "In progress", "Creator sudah siap; build distribusi runtime, provenance, dan release npm masih diperlukan."],
     ["Distributed rate limiting", "Planned", "Store interface untuk deployment multi-instance."],
     ["Telemetry exporters", "Planned", "Adapter vendor-neutral di atas structured request events."],
     ["CSP nonce & integrity helpers", "Planned", "Security enhancement tanpa mengekspos bundler internals."],

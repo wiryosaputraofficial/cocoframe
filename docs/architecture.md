@@ -49,6 +49,7 @@ HTTP request -> runtime adapter -> router -> page.load -> page.meta/page.view
   PostgreSQL compilation for AI-generated database work.
 - `@cocoframe/server-web`: Fetch export for edge and serverless hosts.
 - `@cocoframe/cli`: route discovery, project inspection, and development server.
+- `create-cocoframe`: dependency-free project scaffolding with a server-first starter, typed API, and opt-in island.
 
 ## Performance invariants
 

@@ -3,7 +3,7 @@ import AltArrowDownIcon from "@cocoframe/icons/linear/alt-arrow-down";
 import ArrowRightIcon from "@cocoframe/icons/linear/arrow-right";
 
 const groups = [
-  ["GET STARTED", [["Introduction", "#introduction"], ["Installation", "#installation"], ["Quick Start", "#quick-start"], ["Project Structure", "#project-structure"], ["Configuration", "#configuration"]]],
+  ["GET STARTED", [["Introduction", "#introduction"], ["Installation", "#installation"], ["Project Creator", "#project-creator"], ["Quick Start", "#quick-start"], ["Project Structure", "#project-structure"], ["Configuration", "#configuration"]]],
   ["FRONTEND", [["Routing & Pages", "#routing"], ["Layouts", "#layouts"], ["Data & Cache", "#data-fetching"], ["Components", "#components"], ["Charts", "#charts"], ["Icons", "#icons"], ["Interactive Islands", "#islands"], ["Forms", "#forms"], ["Validation", "#validation"]]],
   ["BACKEND", [["API Routes", "#api-routes"], ["Typed Client", "#api"], ["Package API Reference", "#api-reference"], ["Middleware", "#middleware"], ["Observability", "#observability"], ["Security", "#security"], ["Authentication", "#authentication"], ["Database", "#database"], ["CRUD Recipe", "#recipes"], ["CocoQL", "#cocoql"]]],
   ["PRODUCTION", [["Streaming & SEO", "#performance"], ["Testing", "#testing"], ["Deployment", "#deployment"], ["Environment", "#environment"], ["CLI Reference", "#cli"], ["Troubleshooting", "#troubleshooting"], ["Versioning", "#versioning"], ["Roadmap", "#roadmap"], ["Contributing", "#contributing"], ["Conventions", "#conventions"]]],

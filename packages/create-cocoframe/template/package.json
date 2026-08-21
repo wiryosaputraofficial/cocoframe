@@ -1,0 +1,26 @@
+{
+  "name": "{{PROJECT_NAME}}",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "cocoframe dev .",
+    "build": "cocoframe build .",
+    "start": "cocoframe start .",
+    "check": "tsc --noEmit",
+    "inspect": "cocoframe inspect .",
+    "generate": "cocoframe generate ."
+  },
+  "dependencies": {
+    "@cocoframe/client": "0.0.1",
+    "@cocoframe/core": "0.0.1",
+    "@cocoframe/jsx": "0.0.1",
+    "@cocoframe/schema": "0.0.1",
+    "@cocoframe/ui": "0.0.1"
+  },
+  "devDependencies": {
+    "@cocoframe/cli": "0.0.1",
+    "@types/node": "^24.0.0",
+    "typescript": "^5.9.0"
+  }
+}
