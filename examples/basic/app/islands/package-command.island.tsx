@@ -1,6 +1,8 @@
 import { defineIsland, signal } from "@cocoframe/client";
 import { SyntaxHighlighter } from "@cocoframe/ui";
 
+const cloneCommands = "git clone https://github.com/wiryosaputraofficial/cocoframe.git\ncd cocoframe";
+
 const commands = {
   npm: { install: "npm install", dev: "npm run dev" },
   pnpm: { install: "pnpm install", dev: "pnpm dev" },
@@ -16,7 +18,7 @@ export default defineIsland<Record<string, never>>({
     const copied = signal(false);
     return () => {
       const command = commands[selected.value];
-      const copyText = `${command.install}\n${command.dev}`;
+      const copyText = `${cloneCommands}\n${command.install}\n${command.dev}`;
       return <div class="docs-code"><div class="docs-code-bar"><div>{(Object.keys(commands) as Manager[]).map((manager) => <button class={selected.value === manager ? "active" : undefined} type="button" onClick={() => { selected.value = manager; }}>{manager}</button>)}</div><button class="docs-copy" type="button" onClick={async () => { try { await navigator.clipboard.writeText(copyText); copied.value = true; window.setTimeout(() => { copied.value = false; }, 1600); } catch { copied.value = false; } }}>{copied.value ? "Copied!" : "Copy"}</button></div><SyntaxHighlighter code={`${copyText}\n# buka http://127.0.0.1:3000`} language="bash" label={`${selected.value} setup commands`} showLineNumbers /></div>;
     };
   },

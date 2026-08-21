@@ -41,22 +41,35 @@ export default definePage({
 The repository is currently an architectural MVP, not a production release.
 See `docs/architecture.md` for scope and invariants.
 
-## Run the architectural MVP
+## Install from GitHub
 
-Requires Node.js 24 or newer.
+Requires Git, npm, and Node.js 24 or newer.
 
 ```bash
+git clone https://github.com/wiryosaputraofficial/cocoframe.git
+cd cocoframe
 npm install
+npm run dev
+```
+
+Open `http://127.0.0.1:3000` after the development server reports that all
+routes are loaded. The server watches application files and reloads changes
+automatically.
+
+Before contributing or deploying, run the complete verification gate:
+
+```bash
 npm run check
 npm test
 npm run inspect
 npm run generate
-npm run dev
+npm run build
 ```
 
-Then open `http://127.0.0.1:3000`. A production-oriented server bundle can be
-generated with `npm run build`; the example output is written to
-`examples/basic/.cocoframe/server.mjs`. Run it with `npm start`.
+The production server bundle is written to
+`examples/basic/.cocoframe/server.mjs` and can be run with `npm start` after
+`npm run build`. CocoFrame is currently consumed from this GitHub workspace;
+the `create-cocoframe` scaffolder and public npm packages are not published yet.
 
 ## Current milestone
 

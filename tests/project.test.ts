@@ -58,6 +58,7 @@ test("keeps the public documentation aligned with the complete framework surface
   const docs = await readFile(path.resolve("examples/basic/app/routes/docs.page.tsx"), "utf8");
   const sidebar = await readFile(path.resolve("examples/basic/app/islands/docs-sidebar.island.tsx"), "utf8");
   const search = await readFile(path.resolve("examples/basic/app/islands/docs-search.island.tsx"), "utf8");
+  const packageCommand = await readFile(path.resolve("examples/basic/app/islands/package-command.island.tsx"), "utf8");
   const header = await readFile(path.resolve("examples/basic/app/islands/site-header.island.tsx"), "utf8");
   const shell = await readFile(path.resolve("examples/basic/app/components/marketing-shell.tsx"), "utf8");
   const guideStyles = await readFile(path.resolve("examples/basic/app/styles/40-documentation-guide.css"), "utf8");
@@ -77,6 +78,12 @@ test("keeps the public documentation aligned with the complete framework surface
   assert.doesNotMatch(shell, /href="#"/);
   assert.match(readme, /80 semantic primitives/);
   assert.match(readme, /twelve chart types/);
+  for (const source of [readme, docs, packageCommand]) {
+    assert.match(source, /https:\/\/github\.com\/wiryosaputraofficial\/cocoframe\.git/);
+  }
+  assert.match(docs, /Installation from GitHub/);
+  assert.match(packageCommand, /cd cocoframe/);
+  assert.equal((docs.match(/<article><span>[1-4]<\/span>/g) ?? []).length, 4);
   assert.match(guideStyles, /\.guide-table>\[role=row\]>\*\{min-width:0;max-width:100%\}/);
   assert.match(guideStyles, /\.guide-table code\{white-space:normal;overflow-wrap:anywhere;word-break:break-word\}/);
 });

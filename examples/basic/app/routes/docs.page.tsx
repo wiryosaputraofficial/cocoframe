@@ -111,16 +111,18 @@ export default definePage({
       </section>
 
       <section class="docs-panel quick-start" id="quick-start">
-        <div class="panel-heading"><div><h2>Quick Start</h2><p>Jalankan workspace CocoFrame dengan Node.js 24 atau lebih baru.</p></div><a href="#project-structure">Pelajari strukturnya <span aria-hidden="true"><ArrowRightIcon size={15} /></span></a></div>
-        <div class="quick-steps"><article><span>1</span><div><h3>Install dependencies</h3><p>Pasang dependency workspace dari root repository.</p></div><b aria-hidden="true"><ArrowRightIcon size={16} /></b></article><article><span>2</span><div><h3>Run development server</h3><p>Build awal, hot reload, dan server lokal dijalankan bersama.</p></div><b aria-hidden="true"><ArrowRightIcon size={16} /></b></article><article><span>3</span><div><h3>Open the app</h3><p>Buka <code>http://127.0.0.1:3000</code>.</p></div></article></div>
+        <div class="panel-heading"><div><h2>Quick Start</h2><p>Clone repository resmi dan jalankan CocoFrame dengan Node.js 24 atau lebih baru.</p></div><a href="#project-structure">Pelajari strukturnya <span aria-hidden="true"><ArrowRightIcon size={15} /></span></a></div>
+        <div class="quick-steps"><article><span>1</span><div><h3>Clone repository</h3><p>Ambil source dari GitHub resmi CocoFrame.</p></div><b aria-hidden="true"><ArrowRightIcon size={16} /></b></article><article><span>2</span><div><h3>Install dependencies</h3><p>Jalankan package manager dari root <code>cocoframe</code>.</p></div><b aria-hidden="true"><ArrowRightIcon size={16} /></b></article><article><span>3</span><div><h3>Start development</h3><p>Jalankan build awal, watcher, dan server lokal.</p></div><b aria-hidden="true"><ArrowRightIcon size={16} /></b></article><article><span>4</span><div><h3>Open the app</h3><p>Buka <code>http://127.0.0.1:3000</code>.</p></div></article></div>
         <PackageCommand />
-        <p class="guide-note"><strong>Status saat ini:</strong> CocoFrame masih berupa workspace MVP. Package creator <code>create-cocoframe</code> belum diterbitkan, jadi panduan ini tidak mengklaim command scaffolding yang belum tersedia.</p>
+        <p class="guide-note"><strong>Repository resmi:</strong> <a href="https://github.com/wiryosaputraofficial/cocoframe">github.com/wiryosaputraofficial/cocoframe</a>. CocoFrame masih berupa workspace MVP; package creator <code>create-cocoframe</code> belum diterbitkan.</p>
       </section>
 
       <section class="docs-panel docs-explore" id="guides"><div class="panel-heading"><div><h2>Explore the Docs</h2><p>Cari area framework yang ingin Anda gunakan.</p></div></div><DocsSearch /></section>
 
       <article class="docs-guide" aria-label="Panduan lengkap CocoFrame">
-        <GuideSection id="installation" label="GET STARTED" title="Installation" description="CocoFrame memakai npm workspaces dan Node.js 24+. Setelah dependency terpasang, script root menjalankan example app pada port 3000." language="bash" code={`npm install\nnpm run check\nnpm test\nnpm run dev`}>
+        <GuideSection id="installation" label="GET STARTED" title="Installation from GitHub" description="Clone repository resmi, pasang npm workspace dengan Node.js 24+, lalu jalankan example app pada port 3000." language="bash" code={`git clone https://github.com/wiryosaputraofficial/cocoframe.git\ncd cocoframe\nnpm install\nnpm run dev`}>
+          <p>Setelah server menampilkan pesan <code>routes loaded</code>, buka <code>http://127.0.0.1:3000</code>. Perubahan pada file aplikasi dipantau otomatis selama development.</p>
+          <p>Sebelum contribution atau deployment, jalankan <code>npm run check</code>, <code>npm test</code>, <code>npm run inspect</code>, dan <code>npm run build</code>. Gunakan <code>npm start</code> untuk menjalankan bundle production setelah build.</p>
           <p>Untuk penggunaan package internal, import selalu melalui namespace <code>@cocoframe/*</code>. Jangan mengimpor file source package lain dengan path relatif dari aplikasi.</p>
         </GuideSection>
 

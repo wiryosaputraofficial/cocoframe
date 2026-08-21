@@ -11,7 +11,7 @@ import ShieldCheckIcon from "@cocoframe/icons/linear/shield-check";
 import ChecklistIcon from "@cocoframe/icons/linear/checklist";
 
 const cards = [
-  [BranchingPathsUpIcon, "Getting Started", "Installation, struktur project, konfigurasi, dan quick start.", "getting started introduction installation quick start structure configuration", "#installation"],
+  [BranchingPathsUpIcon, "Getting Started", "Clone GitHub, installation, struktur project, konfigurasi, dan quick start.", "getting started github clone repository installation quick start structure configuration", "#installation"],
   [DocumentTextIcon, "Pages & Routing", "Pages, layouts, data loading, caching, dan error boundaries.", "pages routing data fetching layouts cache errors", "#routing"],
   [PaletteIcon, "Frontend", "Server components, CSS Modules, UI primitives, islands, dan signals.", "components ui css reusable islands signals frontend", "#components"],
   [BranchingPathsUpIcon, "Charts", "Dua belas chart SVG server-first, multi-dataset, responsif, dan accessible.", "chart line area bar pie doughnut radar scatter bubble mixed analytics", "#charts"],
