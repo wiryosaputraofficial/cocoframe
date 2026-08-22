@@ -28,7 +28,7 @@ export default definePage({
     </ProjectHero>
 
     <section class="project-release section-shell reveal" aria-label="Current CocoFrame release status">
-      <div><span>Current release</span><strong>0.0.1</strong></div><div><span>Lifecycle</span><strong>Architectural MVP</strong></div><div><span>Public registry</span><strong>19 npm packages</strong></div><div><span>Compatibility</span><strong>Explicit per release</strong></div>
+      <div><span>Current release</span><strong>0.0.2</strong></div><div><span>Lifecycle</span><strong>Architectural MVP</strong></div><div><span>Public registry</span><strong>19 npm packages</strong></div><div><span>Compatibility</span><strong>Explicit per release</strong></div>
     </section>
 
     <ProjectSection eyebrow="VERSION MEANING" title="A version describes the promise." description="Versi package dan format contract diperlakukan sebagai boundary terpisah sehingga aplikasi dapat mengetahui perubahan yang relevan.">

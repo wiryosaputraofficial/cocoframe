@@ -375,7 +375,7 @@ npm run build`}>
           <p>Jika masalah tetap terjadi, siapkan versi Node, output <code>npm run inspect</code>, langkah reproduksi minimal, serta error yang sudah disanitasi lalu kirim melalui <a href="/contact">halaman kontak</a>.</p>
         </GuideSection>
 
-        <GuideSection id="versioning" label="RELEASES" title="Versioning and upgrade policy" description="Rilis publik awal berada pada versi 0.0.1 dan tetap berstatus architectural MVP menuju API yang stabil.">
+        <GuideSection id="versioning" label="RELEASES" title="Versioning and upgrade policy" description="Rilis framework saat ini berada pada versi 0.0.2 dan tetap berstatus architectural MVP menuju API yang stabil.">
           <ul class="guide-checklist">
             <li>Public API yang stabil selalu diekspor dari root package <code>@cocoframe/*</code>.</li>
             <li>Generated client, OpenAPI, manifest, dan CSS declaration harus dibuat ulang setelah upgrade.</li>
@@ -383,7 +383,7 @@ npm run build`}>
             <li>Sebelum upgrade, jalankan check, test, inspect, build, lalu simpan output sebagai baseline.</li>
             <li>Breaking change sebelum 1.0 harus dicatat bersama langkah migrasi dan contoh sebelum/sesudah.</li>
           </ul>
-          <p><code>create-cocoframe@0.0.2</code> dan 18 package scoped <code>@cocoframe/*</code> sudah tersedia publik di npm. Gunakan staged publishing untuk rilis lanjutan setelah package bootstrap ini.</p>
+          <p><code>create-cocoframe@0.0.3</code> serta package runtime Tahap 1 tersedia publik di npm. Package yang tidak berubah mempertahankan versinya agar dependency graph tetap kecil dan eksplisit.</p>
         </GuideSection>
 
         <GuideSection id="roadmap" label="ROADMAP" title="Current roadmap" description="Prioritas berikut menjaga framework tetap kecil sambil menutup kebutuhan production yang belum tersedia.">
@@ -454,7 +454,7 @@ function DeploymentTargetTable() {
 
 function RoadmapTable() {
   const items = [
-    ["Package publishing", "In progress", "Creator sudah siap; build distribusi runtime, provenance, dan release npm masih diperlukan."],
+    ["Package publishing", "Available", "19 package publik memakai staged build, exact dependency pins, tarball validation, dan template smoke test."],
     ["Distributed rate limiting", "Planned", "Store interface untuk deployment multi-instance."],
     ["Telemetry exporters", "Planned", "Adapter vendor-neutral di atas structured request events."],
     ["CSP nonce & integrity helpers", "Planned", "Security enhancement tanpa mengekspos bundler internals."],

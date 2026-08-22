@@ -108,7 +108,7 @@ development live reload, SQLite and PostgreSQL adapters, guarded CocoQL reads
 and mutations, 80 server-first UI primitives, twelve chart types, 1,246 typed
 Solar Linear icons, a dependency-free project creator, tests, and local SSR/HTTP baseline benchmarks.
 
-Planned next: public package distribution and npm publishing, distributed rate-limit
+Planned next: automated release provenance and changelogs, distributed rate-limit
 stores, telemetry exporters, CSP nonce/integrity helpers, compression, and
 additional deployment adapters. See `/docs#roadmap` for the maintained list.
 

@@ -42,7 +42,7 @@ test("scaffolds a buildable server-first application without installing", async 
     const manifest = JSON.parse(await readFile(path.join(target, "package.json"), "utf8"));
     assert.equal(manifest.name, "my-starter");
     assert.equal(manifest.scripts.dev, "cocoframe dev .");
-    assert.equal(manifest.dependencies["@cocoframe/core"], "0.0.1");
+    assert.equal(manifest.dependencies["@cocoframe/core"], "0.0.2");
     assert.match(await readFile(path.join(target, "app/routes/index.page.tsx"), "utf8"), /my-starter — CocoFrame/);
     await access(path.join(target, ".gitignore"));
     await assert.rejects(access(path.join(target, "_gitignore")));

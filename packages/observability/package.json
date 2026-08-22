@@ -1,11 +1,11 @@
 {
   "name": "@cocoframe/observability",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
   "exports": {
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@cocoframe/core": "0.0.1"
+    "@cocoframe/core": "0.0.2"
   }
 }

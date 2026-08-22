@@ -1,11 +1,13 @@
 {
   "name": "@cocoframe/cli",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
-  "bin": { "cocoframe": "./src/main.ts" },
+  "bin": {
+    "cocoframe": "./src/main.ts"
+  },
   "dependencies": {
-    "@cocoframe/client": "0.0.1",
-    "@cocoframe/core": "0.0.1",
+    "@cocoframe/client": "0.0.2",
+    "@cocoframe/core": "0.0.2",
     "@cocoframe/server-node": "0.0.1",
     "@cocoframe/ui": "0.0.1",
     "rolldown": "^1.0.0"
