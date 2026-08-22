@@ -1,13 +1,13 @@
 {
   "name": "@cocoframe/core",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "type": "module",
   "exports": {
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@cocoframe/jsx": "0.0.1",
-    "@cocoframe/router": "0.0.1",
-    "@cocoframe/schema": "0.0.1"
+    "@cocoframe/jsx": "0.0.2",
+    "@cocoframe/router": "0.0.2",
+    "@cocoframe/schema": "0.0.2"
   }
 }

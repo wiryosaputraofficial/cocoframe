@@ -1,6 +1,6 @@
 {
   "name": "@cocoframe/ui",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
@@ -9,7 +9,7 @@
     "./utilities.css": "./utilities.css"
   },
   "dependencies": {
-    "@cocoframe/icons": "0.0.1",
-    "@cocoframe/jsx": "0.0.1"
+    "@cocoframe/icons": "0.0.2",
+    "@cocoframe/jsx": "0.0.2"
   }
 }

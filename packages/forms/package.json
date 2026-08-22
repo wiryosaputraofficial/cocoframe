@@ -1,14 +1,14 @@
 {
   "name": "@cocoframe/forms",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "type": "module",
   "exports": {
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@cocoframe/core": "0.0.2",
-    "@cocoframe/jsx": "0.0.1",
-    "@cocoframe/schema": "0.0.1",
-    "@cocoframe/security": "0.0.2"
+    "@cocoframe/core": "0.0.3",
+    "@cocoframe/jsx": "0.0.2",
+    "@cocoframe/schema": "0.0.2",
+    "@cocoframe/security": "0.0.3"
   }
 }
