@@ -28,6 +28,36 @@ test("fine-grained bindings render on the server and subscribe directly", async 
   assert.equal(notifications, 1);
 });
 
+test("computed bindings update DOM and follow dynamic dependencies", async () => {
+  const usePrimary = signal(true);
+  const primary = signal(2);
+  const secondary = signal(7);
+  const total = computed(() => usePrimary.value ? primary.value * 2 : secondary.value * 3);
+  const cleanups: Array<() => void> = [];
+  const document = {
+    createDocumentFragment: () => new FakeNode("fragment"),
+    createElement: (tag: string) => new FakeNode(tag),
+    createElementNS: (_namespace: string, tag: string) => new FakeNode(tag),
+    createTextNode: (value: string) => new FakeNode("text", value),
+  } as unknown as Document;
+
+  const text = await renderToDom(bind(total), document, cleanups) as unknown as FakeNode;
+  assert.equal(text.data, "4");
+  primary.value = 3;
+  assert.equal(text.data, "6");
+  secondary.value = 8;
+  assert.equal(text.data, "6");
+  usePrimary.value = false;
+  assert.equal(text.data, "24");
+  primary.value = 4;
+  assert.equal(text.data, "24");
+  secondary.value = 9;
+  assert.equal(text.data, "27");
+
+  cleanups.forEach((cleanup) => cleanup());
+  secondary.value = 10;
+  assert.equal(text.data, "27");
+});
 test("progressively enhances server HTML without replacing the island boundary", async () => {
   let setupCalls = 0;
   let enhanceCalls = 0;
@@ -92,12 +122,14 @@ class FakeNode {
   readonly style = {};
   readonly tag: string;
   readonly value: string;
+  data: string;
   parent: FakeNode | undefined;
   content = this;
 
   constructor(tag: string, value = "") {
     this.tag = tag;
     this.value = value;
+    this.data = value;
   }
 
   get firstChild(): FakeNode | null {

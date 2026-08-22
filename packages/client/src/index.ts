@@ -57,14 +57,80 @@ export function signal<T>(initialValue: T): Signal<T> {
 export interface ReadonlySignal<T> {
   readonly value: T;
   readonly peek: () => T;
+  readonly subscribe: (subscriber: Subscriber<T>) => Unsubscribe;
 }
 
 export function computed<T>(compute: () => T): ReadonlySignal<T> {
+  let initialized = false;
+  let currentValue: T;
+  let dependencies = new Set<Trackable>();
+  const dependencyCleanups = new Map<Trackable, Unsubscribe>();
+  const subscribers = new Set<Subscriber<T>>();
+
+  const synchronizeDependencies = () => {
+    for (const [dependency, cleanup] of dependencyCleanups) {
+      if (!dependencies.has(dependency)) {
+        cleanup();
+        dependencyCleanups.delete(dependency);
+      }
+    }
+    for (const dependency of dependencies) {
+      if (!dependencyCleanups.has(dependency)) {
+        dependencyCleanups.set(dependency, dependency.subscribe(refresh));
+      }
+    }
+  };
+
+  const evaluate = (): T => {
+    const previousCollector = activeCollector;
+    const nextDependencies = new Set<Trackable>();
+    activeCollector = nextDependencies;
+    try {
+      currentValue = compute();
+      initialized = true;
+      dependencies = nextDependencies;
+    } finally {
+      activeCollector = previousCollector;
+    }
+    if (subscribers.size > 0) synchronizeDependencies();
+    return currentValue;
+  };
+
+  function refresh(): void {
+    const previous = currentValue;
+    const next = evaluate();
+    if (!Object.is(next, previous)) {
+      for (const subscriber of [...subscribers]) subscriber(next, previous);
+    }
+  }
+
+  const subscribe = (subscriber: Subscriber<T>): Unsubscribe => {
+    if (subscribers.size === 0) evaluate();
+    subscribers.add(subscriber);
+    if (subscribers.size === 1) synchronizeDependencies();
+    return () => {
+      subscribers.delete(subscriber);
+      if (subscribers.size === 0) {
+        for (const cleanup of dependencyCleanups.values()) cleanup();
+        dependencyCleanups.clear();
+        initialized = false;
+      }
+    };
+  };
+
+  const trackable: Trackable = {
+    subscribe(subscriber) {
+      return subscribe(() => subscriber());
+    },
+  };
+
   return {
     get value() {
-      return compute();
+      activeCollector?.add(trackable);
+      return subscribers.size > 0 && initialized ? currentValue : evaluate();
     },
-    peek: compute,
+    peek: () => subscribers.size > 0 && initialized ? currentValue : evaluate(),
+    subscribe,
   };
 }
 

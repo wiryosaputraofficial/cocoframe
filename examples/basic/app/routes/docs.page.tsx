@@ -141,8 +141,9 @@ export default definePage({
           <p>Semua output build berada di <code>.cocoframe/</code>; output development terpisah di <code>.cocoframe/dev/</code>.</p>
         </GuideSection>
 
-        <GuideSection id="configuration" label="CONFIG" title="Application configuration" description="Konfigurasi global berada di satu file dan divalidasi oleh TypeScript." code={`import { defineConfig } from "@cocoframe/core";\nimport { requestId } from "@cocoframe/observability";\nimport { securityHeaders } from "@cocoframe/security";\n\nexport default defineConfig({\n  language: "id",\n  siteName: "My App",\n  siteUrl: "https://example.com",\n  openapi: { title: "My App API", version: "1.0.0" },\n  middleware: [requestId(), securityHeaders()],\n  health: { readiness: async () => true },\n});`}>
-          <p>Opsi utama: <code>language</code>, <code>siteName</code>, <code>siteUrl</code>, <code>stylesheets</code>, <code>openapi</code>, <code>middleware</code>, <code>health</code>, dan asset runtime.</p>
+        <GuideSection id="configuration" label="CONFIG" title="Application configuration" description="Konfigurasi global berada di satu file dan divalidasi oleh TypeScript." code={`import { defineConfig } from "@cocoframe/core";\nimport { requestId } from "@cocoframe/observability";\nimport { securityHeaders } from "@cocoframe/security";\n\nexport default defineConfig({\n  language: "id",\n  siteName: "My App",\n  siteUrl: "https://example.com",\n  allowedHosts: ["example.com", "www.example.com"],\n  openapi: { title: "My App API", version: "1.0.0" },\n  middleware: [requestId(), securityHeaders()],\n  health: { readiness: async () => true },\n});`}>
+          <p>Opsi utama: <code>language</code>, <code>siteName</code>, <code>siteUrl</code>, <code>allowedHosts</code>, <code>stylesheets</code>, <code>openapi</code>, <code>middleware</code>, <code>health</code>, dan asset runtime.</p>
+          <p><code>allowedHosts</code> memvalidasi host sebelum routing dan middleware pada production. Gunakan hostname eksplisit beserta port jika diperlukan; wildcard ditolak. Pemeriksaan dilewati saat development agar tooling lokal tetap berjalan.</p>
         </GuideSection>
 
         <GuideSection id="routing" label="ROUTING" title="Pages and file-based routing" description="Nama file menentukan URL. Route statis diprioritaskan sebelum parameter dinamis." code={pageExample}>
@@ -191,7 +192,7 @@ export function Analytics() {
         </GuideSection>
 
         <GuideSection id="islands" label="INTERACTIVITY" title="Interactive islands and signals" description="Gunakan island hanya pada bagian yang membutuhkan event atau state browser." code={islandExample}>
-          <p>File island harus berada di <code>app/islands/*.island.tsx</code>, mempunyai nama unik lowercase, dan props-nya harus JSON-serializable. <code>bind(signal)</code> memperbarui text node secara langsung; membaca <code>signal.value</code> di view akan merender ulang island.</p>
+          <p>File island harus berada di <code>app/islands/*.island.tsx</code>, mempunyai nama unik lowercase, dan props-nya harus JSON-serializable. <code>bind(signal)</code> dan <code>bind(computed(...))</code> memperbarui text node secara langsung serta mengikuti dependency dinamis; membaca <code>signal.value</code> di view akan merender ulang island.</p>
         </GuideSection>
 
         <GuideSection id="forms" label="FORMS" title="Server-validated forms" description="Form tetap berfungsi tanpa JavaScript, mempertahankan nilai aman, dan merender ulang dengan status 422 saat invalid." code={formExample}>
@@ -337,7 +338,7 @@ try {
         </GuideSection>
 
         <GuideSection id="performance" label="SSR" title="Streaming, defer, SEO, and caching" description="HTML utama selalu server-rendered. Konten non-kritis dapat diselesaikan belakangan tanpa inline executable script." code={`import { defer } from "@cocoframe/core";\n\nconst Recommendations = () => defer(\n  loadRecommendations(),\n  <p>Loading recommendations...</p>,\n);\n\nexport default definePage({\n  meta: { title: "Product", description: "Product detail" },\n  cache: { browser: 60, edge: 300, staleWhileRevalidate: 600 },\n  view: () => <main><h1>Product</h1><Recommendations /></main>,\n});`}>
-          <p>Jangan menaruh title, copy utama, structured data, atau konten SEO penting di dalam <code>defer</code>. Static pages masuk otomatis ke <code>/sitemap.xml</code>; <code>/robots.txt</code> menunjuk ke sitemap.</p>
+          <p>Jangan menaruh title, copy utama, structured data, atau konten SEO penting di dalam <code>defer</code>. Hanya static pages yang masuk otomatis ke <code>/sitemap.xml</code>; API, action, dan system routes tidak disertakan. <code>/robots.txt</code> menunjuk ke sitemap.</p>
         </GuideSection>
 
         <GuideSection id="testing" label="QUALITY" title="Testing and inspection" description="Gunakan compiler, Node test runner, manifest inspection, dan production build sebagai quality gate." language="bash" code={`npm run check\nnpm test\nnpm run inspect\nnpm run build\n\n# benchmark ops renderer / HTTP lokal\nnpm run benchmark\nnpm run benchmark:http\nnpm run benchmark:http:concurrent`}>

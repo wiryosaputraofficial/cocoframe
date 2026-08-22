@@ -45,6 +45,8 @@ Read `docs/architecture.md` before changing framework behavior.
   response streaming. Never buffer a body merely to enforce its size limit.
 - Never trust forwarded host, protocol, or client IP unless the direct peer is
   explicitly configured as a trusted proxy.
+- Production apps exposed to untrusted Host headers should declare explicit
+  `allowedHosts`; do not use wildcard hosts.
 - Production browser assets use content hashes and must be resolved through the
   generated asset manifest; development filenames remain stable.
 - Readiness failures return only availability state, never dependency errors or
@@ -58,8 +60,8 @@ Read `docs/architecture.md` before changing framework behavior.
 - Prefer `@cocoframe/ui` semantic primitives before creating an application-specific
   equivalent. UI primitives stay server-first and browser-runtime-free unless
   interactivity genuinely requires an island.
-- Use `bind(signal)` when only reactive text changes. Reading `.value` in an
-  island view intentionally opts into a boundary re-render.
+- Use `bind(signal)` or `bind(computed(...))` when only reactive text changes.
+  Reading `.value` in an island view intentionally opts into a boundary re-render.
 - A page owns `load`, `meta`, and `view`; do not create parallel conventions.
 - Escape dynamic HTML by default. Raw HTML must require an explicit API.
 - Prefer Web Standard `Request` and `Response` at framework boundaries.

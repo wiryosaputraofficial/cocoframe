@@ -1,5 +1,5 @@
 import { defer, escapeAttribute, escapeText, jsx, renderToChunks, renderToString, type CocoNode } from "@cocoframe/jsx";
-import { Router, type HttpMethod } from "@cocoframe/router";
+import { normalizePath, Router, type HttpMethod } from "@cocoframe/router";
 import { ValidationError, type Schema } from "@cocoframe/schema";
 
 export interface RequestContext {
@@ -102,6 +102,14 @@ export interface ApiContractManifest {
   readonly output?: Readonly<Record<string, unknown>>;
 }
 
+export type AppRouteKind = "page" | "action" | "api" | "system";
+
+export interface AppRouteManifest {
+  readonly method: HttpMethod;
+  readonly pattern: string;
+  readonly kind: AppRouteKind;
+}
+
 export interface LayoutProps {
   readonly children: CocoNode;
   readonly context: RequestContext;
@@ -115,6 +123,7 @@ export interface AppOptions {
   readonly siteName?: string;
   readonly stylesheets?: readonly string[];
   readonly siteUrl?: string;
+  readonly allowedHosts?: readonly string[];
   readonly openapi?: OpenApiInfo;
   readonly middleware?: readonly Middleware[];
   readonly health?: false | HealthOptions;
@@ -195,6 +204,7 @@ export function withLayouts<Data>(
 export class CocoFrameApp {
   readonly #router = new Router<RegisteredHandler>();
   readonly #contracts: ApiContractManifest[] = [];
+  readonly #routes: AppRouteManifest[] = [];
   readonly #middleware: Middleware[] = [];
   readonly #options: {
     readonly development: boolean;
@@ -202,6 +212,7 @@ export class CocoFrameApp {
     readonly siteName: string;
     readonly stylesheets: readonly string[];
     readonly siteUrl?: string;
+    readonly allowedHosts: ReadonlySet<string>;
     readonly openapi: Required<Pick<OpenApiInfo, "title" | "version">> & OpenApiInfo;
     readonly health: false | Required<Pick<HealthOptions, "livePath" | "readyPath">> & HealthOptions;
     readonly assets: Required<RuntimeAssets>;
@@ -213,6 +224,7 @@ export class CocoFrameApp {
       language: options.language ?? "en",
       siteName: options.siteName ?? "CocoFrame",
       stylesheets: options.stylesheets ?? [],
+      allowedHosts: new Set((options.allowedHosts ?? []).map(normalizeAllowedHost)),
       openapi: {
         title: options.openapi?.title ?? `${options.siteName ?? "CocoFrame"} API`,
         version: options.openapi?.version ?? "0.0.1",
@@ -238,29 +250,34 @@ export class CocoFrameApp {
   }
 
   page<Data>(pattern: string, definition: PageDefinition<Data>): this {
-    this.#router.add("GET", pattern, {
+    const normalizedPattern = normalizePath(pattern);
+    this.#router.add("GET", normalizedPattern, {
       kind: "page",
       page: definition as PageDefinition<unknown>,
     });
+    this.#routes.push(Object.freeze({ method: "GET", pattern: normalizedPattern, kind: "page" }));
     if (definition.action) {
-      this.#router.add("POST", pattern, {
+      this.#router.add("POST", normalizedPattern, {
         kind: "action",
         page: definition as PageDefinition<unknown>,
       });
+      this.#routes.push(Object.freeze({ method: "POST", pattern: normalizedPattern, kind: "action" }));
     }
     return this;
   }
 
   api<Definitions extends ApiInputSchemas, Output>(pattern: string, definition: ApiDefinition<Definitions, Output>): this {
     const api = definition as ApiDefinition<ApiInputSchemas, unknown>;
-    this.#router.add(definition.method, pattern, { kind: "api", api });
+    const normalizedPattern = normalizePath(pattern);
+    this.#router.add(definition.method, normalizedPattern, { kind: "api", api });
+    this.#routes.push(Object.freeze({ method: definition.method, pattern: normalizedPattern, kind: "api" }));
     if (definition.id) {
       if (this.#contracts.some((contract) => contract.id === definition.id)) throw new Error(`Duplicate API contract id: ${definition.id}`);
       const input = definition.input ?? {};
       this.#contracts.push({
         id: definition.id,
         method: definition.method,
-        pattern,
+        pattern: normalizedPattern,
         input: Object.fromEntries(Object.entries(input as Record<string, Schema<unknown>>).map(([key, value]) => [key, value.json()])),
         ...(definition.output ? { output: definition.output.json() } : {}),
       });
@@ -280,17 +297,20 @@ export class CocoFrameApp {
     return this.#middleware.map((middleware, index) => ({ index, id: middleware.id ?? "anonymous" }));
   }
 
-  manifest(): readonly { method: HttpMethod; pattern: string }[] {
-    const routes = [...this.#router.manifest()];
+  manifest(): readonly AppRouteManifest[] {
+    const routes = [...this.#routes].sort((left, right) => left.pattern.localeCompare(right.pattern));
     if (this.#options.health) {
-      routes.push({ method: "GET", pattern: this.#options.health.livePath });
-      routes.push({ method: "GET", pattern: this.#options.health.readyPath });
+      routes.push({ method: "GET", pattern: this.#options.health.livePath, kind: "system" });
+      routes.push({ method: "GET", pattern: this.#options.health.readyPath, kind: "system" });
     }
     return routes;
   }
 
   fetch = async (request: Request): Promise<Response> => {
     const url = new URL(request.url);
+    if (!this.#options.development && this.#options.allowedHosts.size > 0 && !this.#options.allowedHosts.has(normalizeUrlHost(url))) {
+      return json({ error: "HOST_NOT_ALLOWED" }, { status: 421, headers: { "cache-control": "no-store" } });
+    }
     const requestedMethod = request.method.toUpperCase() as HttpMethod;
     const match =
       this.#router.match(requestedMethod, url.pathname) ??
@@ -391,8 +411,8 @@ export class CocoFrameApp {
       });
     }
     if (url.pathname === "/sitemap.xml") {
-      const locations = this.#router.manifest()
-        .filter(({ method, pattern }) => method === "GET" && !pattern.includes(":") && !pattern.includes("*"))
+      const locations = this.#routes
+        .filter(({ kind, method, pattern }) => kind === "page" && method === "GET" && !pattern.includes(":") && !pattern.includes("*"))
         .map(({ pattern }) => `<url><loc>${escapeXml(`${siteUrl}${pattern === "/" ? "" : pattern}`)}</loc></url>`)
         .join("");
       return new Response(`<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">${locations}</urlset>`, {
@@ -626,6 +646,26 @@ export function redirect(location: string, status: 301 | 302 | 303 | 307 | 308 =
 
 export { defer, jsx };
 export type { CocoNode } from "@cocoframe/jsx";
+
+function normalizeAllowedHost(value: string): string {
+  const candidate = value.trim();
+  if (!candidate || candidate.includes("://") || candidate.includes("*") || /[?#]/.test(candidate)) {
+    throw new TypeError(`Invalid allowed host: ${value}`);
+  }
+  let url: URL;
+  try {
+    url = new URL(`http://${candidate}`);
+  } catch {
+    throw new TypeError(`Invalid allowed host: ${value}`);
+  }
+  if (url.username || url.password || url.pathname !== "/") throw new TypeError(`Invalid allowed host: ${value}`);
+  return normalizeUrlHost(url);
+}
+
+function normalizeUrlHost(url: URL): string {
+  const hostname = url.hostname.toLowerCase().replace(/\.$/, "");
+  return url.port ? `${hostname}:${url.port}` : hostname;
+}
 
 function htmlResponse(body: string, status: number, cache?: CachePolicy): Response {
   return new Response(body, {

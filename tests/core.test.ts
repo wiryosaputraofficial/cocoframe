@@ -61,6 +61,22 @@ test("exposes built-in liveness and application readiness", async () => {
   assert.equal(available.headers.get("cache-control"), "no-store");
 });
 
+test("rejects untrusted production hosts when an allowlist is configured", async () => {
+  const page = definePage({ meta: { title: "Allowed" }, view: () => "allowed" });
+  const production = new CocoFrameApp({ allowedHosts: ["app.example", "app.example:8443"] }).page("/", page);
+
+  assert.equal((await production.fetch(new Request("http://app.example./"))).status, 200);
+  assert.equal((await production.fetch(new Request("http://app.example:8443/"))).status, 200);
+  const rejected = await production.fetch(new Request("http://attacker.example/"));
+  assert.equal(rejected.status, 421);
+  assert.equal(rejected.headers.get("cache-control"), "no-store");
+  assert.deepEqual(await rejected.json(), { error: "HOST_NOT_ALLOWED" });
+
+  const development = new CocoFrameApp({ development: true, allowedHosts: ["app.example"] }).page("/", page);
+  assert.equal((await development.fetch(new Request("http://localhost/"))).status, 200);
+  assert.throws(() => new CocoFrameApp({ allowedHosts: ["https://app.example"] }), /Invalid allowed host/);
+  assert.throws(() => new CocoFrameApp({ allowedHosts: ["*.example"] }), /Invalid allowed host/);
+});
 test("wraps pages in nested layouts and marks islands for hydration", async () => {
   const Counter = defineIsland<{ initial: number }>({
     name: "test-counter",
@@ -86,6 +102,7 @@ test("streams pages with cache policy and serves automatic SEO endpoints", async
     view: () => jsx("main", { children: "Documentation" }),
   }));
   app.page("/posts/:slug", definePage({ meta: { title: "Post" }, view: () => "post" }));
+  app.api("/api/status", defineApi({ method: "GET", handle: () => json({ ok: true }) }));
 
   const page = await app.fetch(new Request("https://docs.example/"));
   assert.ok(page.body);
@@ -97,6 +114,10 @@ test("streams pages with cache policy and serves automatic SEO endpoints", async
   const sitemap = await (await app.fetch(new Request("https://any-host/sitemap.xml"))).text();
   assert.match(sitemap, /<loc>https:\/\/docs\.example<\/loc>/);
   assert.doesNotMatch(sitemap, /:slug/);
+  assert.doesNotMatch(sitemap, /api\/status/);
+  assert.deepEqual(app.manifest().find(({ pattern }) => pattern === "/"), { method: "GET", pattern: "/", kind: "page" });
+  assert.deepEqual(app.manifest().find(({ pattern }) => pattern === "/api/status"), { method: "GET", pattern: "/api/status", kind: "api" });
+  assert.deepEqual(app.manifest().filter(({ kind }) => kind === "system").map(({ pattern }) => pattern), ["/_health/live", "/_health/ready"]);
 });
 
 test("handles form actions and page error boundaries", async () => {

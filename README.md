@@ -126,8 +126,8 @@ export default definePage({
 ```
 
 Pages may expose an `action` for progressively enhanced POST forms and an
-`error` boundary. Static page routes are included automatically in
-`/sitemap.xml`; `/robots.txt` points crawlers to that sitemap.
+`error` boundary. Static page routes—not API or system routes—are included
+automatically in `/sitemap.xml`; `/robots.txt` points crawlers to that sitemap.
 
 Slow, non-critical content can stream independently with an accessible fallback:
 
@@ -161,8 +161,9 @@ small bootstrap are loaded by the browser. Static pages do not receive the
 bootstrap script.
 
 `bind(signal)` updates its text node directly without replacing the surrounding
-element. Reading `signal.value` in the view remains available when a complete
-island re-render is intentional.
+element. It also accepts `computed(...)` values and follows their dynamic signal
+dependencies. Reading `signal.value` in the view remains available when a
+complete island re-render is intentional.
 
 CSS files named `*.module.css` are scoped and extracted automatically:
 

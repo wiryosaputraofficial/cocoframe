@@ -99,7 +99,9 @@ the browser bundle while still enabling progressive interaction.
 
 `bind(signal)` is the first fine-grained DOM primitive. It renders the current
 value during SSR and subscribes the browser text node directly, avoiding a
-replacement of its parent element.
+replacement of its parent element. Computed bindings subscribe to their current
+signal dependencies, update those subscriptions when branches change, and clean
+them up when the DOM binding is disposed.
 
 ## Deferred streaming
 
@@ -145,6 +147,8 @@ query, body, and response data at runtime. Input errors are aggregated with
 machine-readable paths and return HTTP 400; output contract failures return HTTP
 500. The serializable manifest feeds both `cocoframe inspect` and `cocoframe generate`, so
 runtime validation, AI context, and client types share one source of truth.
+Every registered route is classified as `page`, `action`, `api`, or `system`;
+automatic sitemap generation consumes only static `page` entries.
 `cocoframe generate` also emits OpenAPI 3.1 from the same contract metadata.
 
 ## Styling
@@ -225,6 +229,11 @@ Forwarded protocol, host, and client chains are ignored unless the direct peer
 matches `COCOFRAME_TRUSTED_PROXIES`. Graceful shutdown stops accepting connections,
 repeatedly closes newly idle keep-alive connections, drains active responses,
 then force-closes only after the configured deadline.
+
+Applications may declare explicit `allowedHosts` in configuration. Production
+requests whose URL host is outside that list are rejected with HTTP 421 before
+routing or middleware; development intentionally bypasses the check for local
+tooling. Wildcards are not accepted.
 
 Liveness reports process availability. Readiness can call an application check
 and returns 503 without leaking the underlying failure. Both endpoints disable
