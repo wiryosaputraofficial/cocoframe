@@ -218,6 +218,17 @@ rendering, island mounting, unhandled browser failures, and watcher build errors
 share the same accessible overlay while production responses keep failure details
 private.
 
+## Browser verification
+
+Playwright boots separate development and production servers for end-to-end
+verification. Development coverage exercises island mounting and the accessible
+runtime-error overlay. Production coverage verifies strict CSP behavior, reactive
+islands, server form 422/303 flows, deferred streaming, 404 responses, and clean
+browser consoles in Chromium, Firefox, and WebKit. Responsive projects visit the
+critical documentation and product pages at 320px, a 390px phone, tablet, laptop,
+and 4K viewports while checking horizontal overflow, keyboard reachability, image
+loading, and authored aspect ratios.
+
 ## Node runtime lifecycle
 
 The Node adapter reads request bodies incrementally and rejects them as soon as

@@ -9,6 +9,10 @@
   ],
   "scripts": {
     "check": "tsc --noEmit",
+    "test:e2e": "playwright test",
+    "test:e2e:runtime": "playwright test tests/e2e/runtime.spec.ts",
+    "test:e2e:chromium": "playwright test --project=development-chromium --project=production-chromium --project=viewport-320 --project=phone-6-inch --project=tablet --project=laptop --project=4k",
+    "quality": "npm run check && npm test && npm run inspect && npm run build && npm run test:e2e",
     "create": "node packages/create-cocoframe/src/cli.js",
     "test": "node --test --test-concurrency=1 tests/*.test.ts",
     "inspect": "node packages/cli/src/main.ts inspect examples/basic",
@@ -25,6 +29,7 @@
     "benchmark:http:concurrent": "node benchmarks/http-concurrent.bench.ts"
   },
   "devDependencies": {
+    "@playwright/test": "^1.62.1",
     "@types/node": "^24.0.0",
     "rolldown": "^1.0.0",
     "typescript": "^5.9.0"

@@ -88,7 +88,10 @@ npm test
 npm run inspect
 npm run generate
 npm run build
+npm run test:e2e
 ```
+
+Install the Playwright browsers once with `npx playwright install chromium firefox webkit`. The E2E gate boots isolated development and production servers, verifies Chromium, Firefox, and WebKit, and checks critical pages at 320px, 390px, tablet, laptop, and 4K viewports.
 
 The production server bundle is written to
 `examples/basic/.cocoframe/server.mjs` and can be run with `npm start` after
@@ -106,7 +109,8 @@ deployment, component streaming boundaries, exact CSS module types, OpenAPI 3.1,
 signed-cookie sessions, a database adapter contract, production manifests,
 development live reload, SQLite and PostgreSQL adapters, guarded CocoQL reads
 and mutations, 80 server-first UI primitives, twelve chart types, 1,246 typed
-Solar Linear icons, a dependency-free project creator, tests, and local SSR/HTTP baseline benchmarks.
+Solar Linear icons, a dependency-free project creator, unit and multi-browser
+E2E tests, and local SSR/HTTP baseline benchmarks.
 
 Planned next: automated release provenance and changelogs, distributed rate-limit
 stores, telemetry exporters, CSP nonce/integrity helpers, compression, and

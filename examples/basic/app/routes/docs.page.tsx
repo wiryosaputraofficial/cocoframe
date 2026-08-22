@@ -341,10 +341,10 @@ try {
           <p>Jangan menaruh title, copy utama, structured data, atau konten SEO penting di dalam <code>defer</code>. Hanya static pages yang masuk otomatis ke <code>/sitemap.xml</code>; API, action, dan system routes tidak disertakan. <code>/robots.txt</code> menunjuk ke sitemap.</p>
         </GuideSection>
 
-        <GuideSection id="testing" label="QUALITY" title="Testing and inspection" description="Gunakan compiler, Node test runner, manifest inspection, dan production build sebagai quality gate." language="bash" code={`npm run check\nnpm test\nnpm run inspect\nnpm run build\n\n# benchmark ops renderer / HTTP lokal\nnpm run benchmark\nnpm run benchmark:http\nnpm run benchmark:http:concurrent`}>
-          <p>Test aplikasi dapat memanggil <code>app.fetch(new Request(url))</code> langsung tanpa membuka port. Uji browser tetap diperlukan untuk islands dan responsive UI.</p>
+        <GuideSection id="testing" label="QUALITY" title="Testing and inspection" description="Gunakan compiler, Node test runner, inspection, production build, dan browser E2E sebagai quality gate." language="bash" code={`npm run check\nnpm test\nnpm run inspect\nnpm run build\n\n# install browser sekali, lalu jalankan seluruh E2E\nnpx playwright install chromium firefox webkit\nnpm run test:e2e\n\n# Chromium-only untuk iterasi lokal yang lebih cepat\nnpm run test:e2e:chromium\n\n# benchmark ops renderer / HTTP lokal\nnpm run benchmark\nnpm run benchmark:http\nnpm run benchmark:http:concurrent`}>
+          <p>Test aplikasi dapat memanggil <code>app.fetch(new Request(url))</code> langsung tanpa membuka port. Suite E2E menyalakan server development dan production terpisah, lalu menguji islands, overlay error development, CSP, form 422/303, streaming, 404, live search, sorting, dialog keyboard, dan console browser di Chromium, Firefox, serta WebKit.</p>
+          <p>Project responsif mengunjungi halaman kritis pada 320px, ponsel 390px, tablet, laptop, dan 4K. Pemeriksaan mencakup overflow horizontal, keyboard focus, mobile menu, asset gambar, dan aspect ratio.</p>
         </GuideSection>
-
         <GuideSection id="deployment" label="PRODUCTION" title="Build and deployment" description="Production build menghasilkan server bundle, public assets, manifest asset, dan deployment metadata." language="bash" code={`npm run build\nnpm start\n\n# output utama\n.cocoframe/server.mjs\n.cocoframe/public/\n.cocoframe/assets.json\n.cocoframe/deploy.json`}>
           <DeploymentTargetTable />
           <p>Node server mendukung body limit, request timeout, trusted proxies, liveness/readiness probes, dan graceful shutdown. Untuk platform Fetch/edge gunakan <code>webHandler(app)</code> dari <code>@cocoframe/server-web</code>.</p>

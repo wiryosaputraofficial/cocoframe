@@ -225,7 +225,7 @@ code i { color: #587167; font-style: normal; } code b { color: #d88db5; } code q
 
 @media (max-width: 430px) {
   .brand { font-size: 18px; }.brand img { width: 28px; height: 28px; }.footer-logo img { width: 30px; height: 30px; flex-basis: 30px; }.footer-logo span { height: 30px; font-size: 18px; }
-  .hero h1 { font-size: 42px; }.hero-copy > p { font-size: 13px; }.hero-visual { height: 310px; margin-inline: -34px; }
+  .hero h1 { font-size: 42px; }.hero-copy > p { font-size: 13px; }.hero-visual { width: 100%; height: 310px; margin-inline: 0; }.hero-art { width: 100%; max-width: 100%; }
   .feature-grid, .love-grid { grid-template-columns: 1fr; }.feature-card { min-height: auto; }.love article { padding: 0 18px; }
   .developer h2 { font-size: 40px; } pre { padding-inline: 18px; font-size: 10px; }.install-command { bottom: -35px; }
   .footer-grid { grid-template-columns: 1fr 1fr; }.footer-grid > div:not(.footer-brand) { min-width: 0; }

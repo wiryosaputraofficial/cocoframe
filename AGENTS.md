@@ -69,5 +69,7 @@ Read `docs/architecture.md` before changing framework behavior.
 - Do not add a package when a small, tested implementation is sufficient.
 - Do not expose compiler or bundler details through application APIs.
 
-Run `npm test`, `npm run check`, `npm run inspect`, and both benchmarks before
-handing off a performance-sensitive change.
+Run `npm test`, `npm run check`, and `npm run inspect` before handoff. Run
+`npm run test:e2e` for browser runtime, island, form, CSP, visual, or responsive
+changes, and run both benchmarks before handing off a performance-sensitive
+change.

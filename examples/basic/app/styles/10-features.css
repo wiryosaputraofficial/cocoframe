@@ -98,7 +98,7 @@
 }
 
 @media (max-width: 430px) {
-  .features-hero-copy h1 { font-size: 39px; }.features-hero-copy > p { font-size: 13px; }.features-hero-art { height: 275px; margin-inline: -40px; }
+  .features-hero-copy h1 { font-size: 39px; }.features-hero-copy > p { font-size: 13px; }.features-hero-art { width: 100%; height: 275px; margin-inline: 0; }
   .core-card { padding: 22px; }.core-card-head { gap: 14px; }.core-card-head .feature-icon { flex-basis: 52px; width: 52px; height: 52px; }
-  .integration-art { margin-inline: -24px; }
+  .integration-art { width: 100%; margin-inline: 0; }
 }

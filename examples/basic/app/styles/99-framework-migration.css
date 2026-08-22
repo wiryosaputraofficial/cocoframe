@@ -11,7 +11,10 @@ body { overflow-x: hidden; }
 /* Preserve the authored 3:2 hero artwork ratio at every breakpoint. */
 :where(.hero-art, .features-hero-art img, .docs-hero-art img, .components-hero-art img, .templates-hero-art img) {
   aspect-ratio: 3 / 2;
+  width: auto;
+  max-width: 100%;
   height: auto;
+  max-height: 100%;
   object-fit: contain;
 }
 
