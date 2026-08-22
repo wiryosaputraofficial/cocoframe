@@ -5,7 +5,9 @@ import { fileURLToPath } from "node:url";
 
 const packageRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const defaultTemplate = path.join(packageRoot, "template");
+const templatesRoot = path.join(packageRoot, "templates");
 const supportedPackageManagers = new Set(["npm", "pnpm", "yarn", "bun"]);
+export const availableTemplates = Object.freeze(["starter", "marketing", "dashboard", "documentation"]);
 
 export const helpText = [
   "Create a CocoFrame application",
@@ -14,6 +16,8 @@ export const helpText = [
   "  npm create cocoframe@latest <project-directory> [options]",
   "",
   "Options:",
+  "  --template <starter|marketing|dashboard|documentation>",
+  "                                      Select a project template",
   "  --package-manager <npm|pnpm|yarn|bun>  Select the package manager",
   "  --skip-install, --no-install           Generate files without installing",
   "  --help, -h                             Show this help",
@@ -23,6 +27,7 @@ export const helpText = [
 export function parseArguments(args, userAgent = process.env.npm_config_user_agent) {
   let projectDirectory;
   let packageManager = packageManagerFromUserAgent(userAgent);
+  let template = "starter";
   let install = true;
   let help = false;
   let version = false;
@@ -32,7 +37,13 @@ export function parseArguments(args, userAgent = process.env.npm_config_user_age
     if (argument === "--help" || argument === "-h") help = true;
     else if (argument === "--version" || argument === "-v") version = true;
     else if (argument === "--skip-install" || argument === "--no-install") install = false;
-    else if (argument === "--package-manager") {
+    else if (argument === "--template") {
+      const value = args[++index];
+      if (!value) throw new Error("--template requires a value.");
+      template = validateTemplate(value);
+    } else if (argument?.startsWith("--template=")) {
+      template = validateTemplate(argument.slice("--template=".length));
+    } else if (argument === "--package-manager") {
       const value = args[++index];
       if (!value) throw new Error("--package-manager requires a value.");
       packageManager = validatePackageManager(value);
@@ -44,7 +55,7 @@ export function parseArguments(args, userAgent = process.env.npm_config_user_age
   }
 
   if (!help && !version && !projectDirectory) throw new Error("A project directory is required.");
-  return { projectDirectory, packageManager, install, help, version };
+  return { projectDirectory, packageManager, template, install, help, version };
 }
 
 export async function scaffoldProject(options) {
@@ -52,7 +63,8 @@ export async function scaffoldProject(options) {
   const targetDirectory = resolveTargetDirectory(options.projectDirectory, cwd);
   const packageName = normalizePackageName(path.basename(targetDirectory));
   const packageManager = validatePackageManager(options.packageManager ?? "npm");
-  const templateDirectory = path.resolve(options.templateDirectory ?? defaultTemplate);
+  const template = validateTemplate(options.template ?? "starter");
+  const templateDirectory = path.resolve(options.templateDirectory ?? templatePath(template));
   const entries = await directoryEntries(targetDirectory);
   if (entries.length > 0) throw new Error("Target directory is not empty: " + targetDirectory);
 
@@ -65,7 +77,7 @@ export async function scaffoldProject(options) {
     await installDependencies(targetDirectory, packageManager, options.spawnCommand);
   }
 
-  return { targetDirectory, packageName, packageManager, installed: options.install !== false };
+  return { targetDirectory, packageName, packageManager, template, installed: options.install !== false };
 }
 
 export async function runCreator(args, options = {}) {
@@ -84,6 +96,7 @@ export async function runCreator(args, options = {}) {
   const result = await scaffoldProject({
     projectDirectory: parsed.projectDirectory,
     packageManager: parsed.packageManager,
+    template: parsed.template,
     install: parsed.install,
     cwd: options.cwd,
     templateDirectory: options.templateDirectory,
@@ -109,6 +122,17 @@ function validatePackageManager(value) {
     throw new Error("Unsupported package manager: " + value + ". Use npm, pnpm, yarn, or bun.");
   }
   return value;
+}
+
+function validateTemplate(value) {
+  if (!availableTemplates.includes(value)) {
+    throw new Error("Unknown template: " + value + ". Use " + availableTemplates.join(", ") + ".");
+  }
+  return value;
+}
+
+function templatePath(template) {
+  return template === "starter" ? defaultTemplate : path.join(templatesRoot, template);
 }
 
 function resolveTargetDirectory(input, cwd) {

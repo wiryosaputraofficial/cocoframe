@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "target": "ES2023",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "strict": true,
+    "noUncheckedIndexedAccess": true,
+    "exactOptionalPropertyTypes": true,
+    "verbatimModuleSyntax": true,
+    "allowImportingTsExtensions": true,
+    "jsx": "react-jsx",
+    "jsxImportSource": "@cocoframe/jsx",
+    "skipLibCheck": true,
+    "noEmit": true
+  },
+  "include": ["app/**/*.ts", "app/**/*.tsx", "cocoframe.config.ts"]
+}

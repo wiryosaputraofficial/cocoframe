@@ -2,7 +2,7 @@ import { execFile } from "node:child_process";
 import { mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import path from "node:path";
 import { promisify } from "node:util";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 
 const run = promisify(execFile);
 const repositoryRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
@@ -32,29 +32,37 @@ try {
   ].join("\n"));
   await node(["verify-imports.mjs"]);
 
-  const creator = path.join("node_modules", "create-cocoframe", "src", "cli.js");
-  await node([creator, "app", "--skip-install"]);
+const creator = path.join("node_modules", "create-cocoframe", "src", "cli.js");
   const tsc = path.join(repositoryRoot, "node_modules", "typescript", "bin", "tsc");
-  await node([tsc, "-p", path.join(smokeRoot, "app", "tsconfig.json"), "--noEmit"]);
-
   const cli = path.join("node_modules", "@cocoframe", "cli", "dist", "main.js");
-  await node([cli, "inspect", "app"]);
-  await node([cli, "build", "app"]);
+  const templateCases = [
+    { name: "starter", directory: "app-starter", marker: "Your CocoFrame project is ready." },
+    { name: "marketing", directory: "app-marketing", marker: "Turn your next idea into a clear, fast product story." },
+    { name: "dashboard", directory: "app-dashboard", marker: "Good morning, Alex" },
+    { name: "documentation", directory: "app-documentation", marker: "Build documentation people can actually navigate." },
+  ];
 
-  await writeFile(path.join(smokeRoot, "verify-app.mjs"), [
-    "const app = (await import('./app/.cocoframe/server.mjs')).default;",
-    "const page = await app.fetch(new Request('http://localhost/'));",
-    "if (page.status !== 200) throw new Error(`Unexpected page status: ${page.status}`);",
-    "const html = await page.text();",
-    "if (!html.includes('Your CocoFrame project is ready.')) throw new Error('Starter SSR content is missing.');",
-    "const health = await app.fetch(new Request('http://localhost/api/health'));",
-    "if (health.status !== 200) throw new Error(`Unexpected health status: ${health.status}`);",
-    "const data = await health.json();",
-    "if (data.ok !== true || data.framework !== 'cocoframe') throw new Error('Typed health response is invalid.');",
-    "console.log('Starter SSR and typed API passed.');",
-  ].join("\n"));
-  await node(["verify-app.mjs"]);
-  console.log("CocoFrame npm tarball smoke test passed.");
+  for (const template of templateCases) {
+    await node([creator, template.directory, "--skip-install", "--template", template.name]);
+    const projectRoot = path.join(smokeRoot, template.directory);
+    await node([tsc, "-p", path.join(projectRoot, "tsconfig.json"), "--noEmit"]);
+    await node([cli, "inspect", template.directory]);
+    await node([cli, "build", template.directory]);
+
+    const bundle = pathToFileURL(path.join(projectRoot, ".cocoframe", "server.mjs"));
+    bundle.searchParams.set("template", template.name);
+    const app = (await import(bundle.href)).default;
+    const page = await app.fetch(new Request("http://localhost/"));
+    if (page.status !== 200) throw new Error(`${template.name}: unexpected page status ${page.status}.`);
+    const html = await page.text();
+    if (!html.includes(template.marker)) throw new Error(`${template.name}: SSR content is missing.`);
+    const health = await app.fetch(new Request("http://localhost/api/health"));
+    if (health.status !== 200) throw new Error(`${template.name}: unexpected health status ${health.status}.`);
+    const data = await health.json();
+    if (data.ok !== true || data.framework !== "cocoframe") throw new Error(`${template.name}: typed health response is invalid.`);
+    console.log(`${template.name}: SSR, typed API, inspect, and production build passed.`);
+  }
+  console.log("CocoFrame npm tarball smoke test passed for every official template.");
 } finally {
   await resetSmokeDirectory();
 }

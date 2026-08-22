@@ -1,0 +1,33 @@
+:root { color: #14221b; background: #f4f7f5; font-family: Inter, ui-sans-serif, system-ui, sans-serif; }
+* { box-sizing: border-box; }
+body { margin: 0; }
+a { color: inherit; }
+.dashboard-shell { min-height: 100vh; display: grid; grid-template-columns: 250px minmax(0,1fr); }
+.dashboard-shell > .coco-sidebar { min-height: 100vh; border-right: 1px solid #dce6e0; background: #fff; position: sticky; top: 0; }
+.dashboard-brand { display: flex; align-items: center; gap: 10px; color: #187a55; font-weight: 850; text-decoration: none; }
+.dashboard-main { min-width: 0; }
+.dashboard-page { width: min(1440px,100%); margin: auto; padding: clamp(22px,4vw,54px); }
+.dashboard-topbar, .card-heading { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.dashboard-topbar { margin-bottom: 32px; }
+.dashboard-topbar .coco-heading { margin: 4px 0 0; }
+.icon-action, .period-button { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 42px; border: 1px solid #d8e4dd; border-radius: 10px; color: #365548; background: white; }
+.icon-action { width: 42px; padding: 0; }
+.period-button { padding: 0 13px; }
+.avatar { width: 42px; height: 42px; display: grid; place-items: center; border-radius: 50%; color: white; background: #187a55; font-size: 13px; font-weight: 800; }
+.stats-grid { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 14px; margin-bottom: 18px; }
+.stats-grid .coco-stat { padding: 22px; border: 1px solid #dce6e0; border-radius: 14px; background: white; }
+.dashboard-grid { display: grid; grid-template-columns: minmax(0,2fr) minmax(260px,.75fr); gap: 18px; margin-bottom: 18px; }
+.chart-card, .goal-card, .customers-card { padding: 24px; }
+.card-heading { margin-bottom: 18px; }
+.card-heading .coco-heading { margin: 8px 0 0; }
+.chart-card .coco-chart { border: 0; padding: 0; box-shadow: none; }
+.goal-card { display: flex; flex-direction: column; align-items: flex-start; }
+.goal-card > strong { margin: 20px 0 6px; font-size: 52px; letter-spacing: -.05em; }
+.goal-ring { width: 150px; height: 150px; display: grid; place-items: center; margin: 18px auto; border-radius: 50%; background: conic-gradient(#187a55 0 78%,#dcebe3 78%); position: relative; }
+.goal-ring::after { content: ""; position: absolute; inset: 15px; border-radius: inherit; background: white; }
+.goal-ring span { position: relative; z-index: 1; font-weight: 800; }
+.customers-card .coco-data-table { border: 0; }
+.customers-card a { color: #187a55; font-weight: 750; }
+@media (max-width: 1080px) { .stats-grid { grid-template-columns: repeat(2,1fr); } .dashboard-grid { grid-template-columns: 1fr; } }
+@media (max-width: 760px) { .dashboard-shell { grid-template-columns: 1fr; } .dashboard-shell > .coco-sidebar { min-height: auto; position: static; } .dashboard-page { padding: 20px 14px 40px; } .dashboard-topbar { align-items: flex-start; } }
+@media (max-width: 520px) { .stats-grid { grid-template-columns: 1fr; } .dashboard-topbar > .coco-inline .icon-action { display: none; } .card-heading { align-items: flex-start; flex-direction: column; } }

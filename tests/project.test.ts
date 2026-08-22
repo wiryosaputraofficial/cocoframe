@@ -93,6 +93,21 @@ test("keeps the public documentation aligned with the complete framework surface
   assert.match(guideStyles, /\.guide-table code\{white-space:normal;overflow-wrap:anywhere;word-break:break-word\}/);
 });
 
+test("keeps the template website aligned with every buildable creator template", async () => {
+  const { templates: catalog } = JSON.parse(await readFile(path.resolve("packages/create-cocoframe/templates/catalog.json"), "utf8")) as { templates: Array<{ id: string; components: string[]; icons: string[] }> };
+  const island = await readFile(path.resolve("examples/basic/app/islands/template-catalog.island.tsx"), "utf8");
+  const page = await readFile(path.resolve("examples/basic/app/routes/templates.page.tsx"), "utf8");
+
+  assert.deepEqual(catalog.map((template) => template.id), ["starter", "marketing", "dashboard", "documentation"]);
+  for (const template of catalog) {
+    assert.match(island, new RegExp(`slug: "${template.id}"`));
+    for (const component of template.components) assert.match(island, new RegExp(`\\b${component}\\b`));
+    for (const icon of template.icons) assert.match(island, new RegExp(icon));
+  }
+  assert.match(island, /--template \$\{template\}/);
+  assert.match(page, /Setiap template memakai komponen UI dan Solar icons bawaan CocoFrame/);
+  assert.doesNotMatch(island, /SaaS Starter|E-Commerce Store|Portfolio/);
+});
 test("keeps every CocoQL cookbook snippet valid and copy-ready", async () => {
   const source = await readFile(path.resolve("examples/basic/app/components/cocoql-cookbook.tsx"), "utf8");
   const snippets = [...source.matchAll(/code: `([\s\S]*?)`,\r?\n\s+outcome/g)].map((match) => match[1] ?? "");

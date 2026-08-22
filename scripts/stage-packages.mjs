@@ -60,6 +60,7 @@ async function stagePackages() {
     if (sourceManifest.name === "create-cocoframe") {
       await cp(path.join(sourceDirectory, "src"), path.join(targetDirectory, "src"), { recursive: true });
       await cp(path.join(sourceDirectory, "template"), path.join(targetDirectory, "template"), { recursive: true });
+      await cp(path.join(sourceDirectory, "templates"), path.join(targetDirectory, "templates"), { recursive: true });
     } else {
       const compiledSource = path.join(compiledRoot, directory, "src");
       if (!(await exists(compiledSource))) throw new Error(`Missing compiled output for ${sourceManifest.name}.`);
@@ -111,7 +112,7 @@ function releasePackageManifest(source, directory) {
   if (source.name === "create-cocoframe") {
     manifest.exports = source.exports;
     manifest.bin = source.bin;
-    manifest.files = ["src", "template", "README.md", "LICENSE"];
+    manifest.files = ["src", "template", "templates", "README.md", "LICENSE"];
     return manifest;
   }
 

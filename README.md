@@ -55,8 +55,19 @@ Open `http://127.0.0.1:3000` after the development server reports that all
 routes are loaded. The server watches application files and reloads changes
 automatically.
 
-The dependency-free creator supports `--package-manager npm|pnpm|yarn|bun`
-and `--skip-install`, and refuses to overwrite a non-empty directory.
+Choose an official template when you need more than the default starter:
+
+```bash
+npm create cocoframe@latest my-app -- --template starter
+npm create cocoframe@latest my-site -- --template marketing
+npm create cocoframe@latest my-dashboard -- --template dashboard
+npm create cocoframe@latest my-docs -- --template documentation
+```
+
+Every template is server-first and uses components from `@cocoframe/ui` plus
+Solar icons from `@cocoframe/icons`. The dependency-free creator also supports
+`--package-manager npm|pnpm|yarn|bun` and `--skip-install`, and refuses to
+overwrite a non-empty directory.
 
 ### Contribute from GitHub
 

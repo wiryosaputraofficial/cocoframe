@@ -12,7 +12,6 @@
     "generate": "cocoframe generate ."
   },
   "dependencies": {
-    "@cocoframe/client": "0.0.1",
     "@cocoframe/core": "0.0.1",
     "@cocoframe/icons": "0.0.1",
     "@cocoframe/jsx": "0.0.1",

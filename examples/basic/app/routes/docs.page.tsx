@@ -126,9 +126,10 @@ export default definePage({
           <p>Untuk penggunaan package internal, import selalu melalui namespace <code>@cocoframe/*</code>. Jangan mengimpor file source package lain dengan path relatif dari aplikasi.</p>
         </GuideSection>
 
-        <GuideSection id="project-creator" label="GET STARTED" title="Project creator" description="Creator dependency-free menghasilkan starter server-first, typed API, island interaktif, CSS responsif, dan konfigurasi TypeScript." language="bash" code={`npm create cocoframe@latest my-app\ncd my-app\nnpm run dev`}>
+        <GuideSection id="project-creator" label="GET STARTED" title="Project creator" description="Creator dependency-free menghasilkan empat template resmi yang server-first, responsif, dan memakai UI serta icons CocoFrame." language="bash" code={`# Starter (default)\nnpm create cocoframe@latest my-app\n\n# Pilih template resmi\nnpm create cocoframe@latest my-dashboard -- --template dashboard\ncd my-dashboard\nnpm run dev`}>
           <p>Perintah publik mengambil <code>create-cocoframe</code> dan seluruh package <code>@cocoframe/*</code> dari registry npm. Gunakan clone GitHub hanya ketika berkontribusi pada source framework.</p>
           <ul>
+            <li>Gunakan <code>--template starter|marketing|dashboard|documentation</code> untuk memilih fondasi aplikasi. Semuanya memakai <code>@cocoframe/ui</code> dan <code>@cocoframe/icons</code>.</li>
             <li>Gunakan <code>--package-manager npm|pnpm|yarn|bun</code> untuk memilih package manager.</li>
             <li>Gunakan <code>--skip-install</code> untuk CI atau workflow AI yang ingin memeriksa file sebelum memasang dependency.</li>
             <li>Creator menolak filesystem root dan directory yang sudah berisi file agar data project lama tidak tertimpa.</li>
@@ -381,7 +382,7 @@ npm run build`}>
             <li>Sebelum upgrade, jalankan check, test, inspect, build, lalu simpan output sebagai baseline.</li>
             <li>Breaking change sebelum 1.0 harus dicatat bersama langkah migrasi dan contoh sebelum/sesudah.</li>
           </ul>
-          <p><code>create-cocoframe@0.0.1</code> dan 18 package scoped <code>@cocoframe/*</code> sudah tersedia publik di npm. Gunakan staged publishing untuk rilis lanjutan setelah package bootstrap ini.</p>
+          <p><code>create-cocoframe@0.0.2</code> dan 18 package scoped <code>@cocoframe/*</code> sudah tersedia publik di npm. Gunakan staged publishing untuk rilis lanjutan setelah package bootstrap ini.</p>
         </GuideSection>
 
         <GuideSection id="roadmap" label="ROADMAP" title="Current roadmap" description="Prioritas berikut menjaga framework tetap kecil sambil menutup kebutuhan production yang belum tersedia.">
