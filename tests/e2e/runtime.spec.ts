@@ -33,6 +33,16 @@ test("component catalog live search, sorting, and dialog work with keyboard inpu
   const assertNoClientErrors = captureClientErrors(page);
   await page.goto("/components#catalog", { waitUntil: "domcontentloaded" });
   await expect(page.locator('coco-island[data-coco-module*="component-browser"][data-coco-mounted]')).toHaveCount(1, { timeout: 30_000 });
+  const sidebarComponentIds = await page.locator('.docs-sidebar a[href^="#"]').evaluateAll((links) =>
+    links.map((link) => link.getAttribute("href")?.slice(1) ?? "")
+      .filter((id) => id && document.getElementById(id)?.classList.contains("official-component")),
+  );
+  const renderedSidebarIds = await page.locator(".official-component").evaluateAll(
+    (sections, sidebarIds) => sections.map((section) => section.id).filter((id) => sidebarIds.includes(id)),
+    sidebarComponentIds,
+  );
+  expect(renderedSidebarIds).toEqual(sidebarComponentIds);
+
 
   const search = page.getByRole("searchbox", { name: "Search components and icons" });
   await page.keyboard.press("Control+K");

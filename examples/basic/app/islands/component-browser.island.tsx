@@ -1,5 +1,6 @@
 import { defineIsland, signal } from "@cocoframe/client";
 import type { CocoNode } from "@cocoframe/jsx";
+import { sortComponentCatalogEntries } from "../components/component-navigation.ts";
 import AddCircleIcon from "@cocoframe/icons/linear/add-circle";
 import AlignHorizontalCenterIcon from "@cocoframe/icons/linear/align-horizontal-center";
 import AlignLeftIcon from "@cocoframe/icons/linear/align-left";
@@ -76,7 +77,7 @@ const chartPoints = [
   { label: "Desktop", data: [{ x: 19, y: 51, r: 11, label: "D" }, { x: 39, y: 67, r: 17, label: "E" }, { x: 63, y: 58, r: 7, label: "F" }], tone: "violet" as const },
 ] as const;
 
-const entries: readonly ComponentEntry[] = [
+const unorderedEntries: readonly ComponentEntry[] = [
   entry("theme", "Theme", "FOUNDATION", "Boundary light, dark, atau system yang mengganti seluruh semantic token tanpa mengubah API komponen.", "theme dark mode light system color scheme", [["theme", '"light" | "dark" | "system"', '"system"'], ["as", '"div" | "section" | "main"', '"div"']], '<Theme theme="dark"><Card>Dark surface</Card></Theme>', () => <Theme theme="dark" class="component-mini-surface"><Stack gap="small"><Heading level={3} size="small">Dark theme</Heading><Text tone="muted" size="small">Semantic tokens tetap konsisten.</Text><Button size="small">Continue</Button></Stack></Theme>),
   entry("skip-link", "SkipLink", "ACCESSIBILITY", "Skip navigation link yang muncul saat keyboard focus dan langsung menuju konten utama.", "accessibility keyboard skip focus main", [["href", "string", '"#main"'], ["label", "string", '"Skip to main content"']], '<SkipLink href="#main" />', () => <div class="component-mini-surface"><SkipLink href="#skip-link-preview">Skip preview navigation</SkipLink><div id="skip-link-preview"><Text size="small">Tekan Tab untuk melihat skip link.</Text></div></div>),
   entry("live-region", "LiveRegion", "ACCESSIBILITY", "Region pengumuman typed untuk status async, error, loading, dan pembaruan UI.", "accessibility aria live status alert busy", [["politeness", '"polite" | "assertive" | "off"', '"polite"'], ["atomic / busy", "boolean", "true / false"]], '<LiveRegion politeness="polite">3 results loaded.</LiveRegion>', () => <Stack gap="small"><LiveRegion>3 projects loaded.</LiveRegion><LiveRegion politeness="assertive">Connection lost.</LiveRegion></Stack>),
@@ -190,7 +191,8 @@ const entries: readonly ComponentEntry[] = [
   entry("toggle-group", "ToggleGroup", "ACTION", "Sekumpulan toggle single/multiple dengan accessible group label dan empat ukuran.", "toggle group segmented control", [["items", "readonly ToggleGroupItem[]", "required"], ["value", "string | string[]", "—"], ["multiple / size", "boolean / ControlSize", "false / medium"]], `<ToggleGroup items={alignments} value="left" label="Alignment" />`, () => <ToggleGroup label="Text alignment" value="left" items={[{ value: "left", label: "Left", content: <AlignLeftIcon size={18} /> }, { value: "center", label: "Center", content: <AlignHorizontalCenterIcon size={18} /> }, { value: "right", label: "Right", content: <AlignRightIcon size={18} /> }]} />),
 ];
 
-const catalogCategories = Array.from(new Set(entries.map((item) => item.category))).sort();
+const entries = sortComponentCatalogEntries(unorderedEntries);
+const catalogCategories = Array.from(new Set(entries.map((item) => item.category)));
 
 export default defineIsland<Record<string, never>>({
   name: "component-browser",

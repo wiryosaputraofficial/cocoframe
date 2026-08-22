@@ -5,12 +5,30 @@ import { pathToFileURL } from "node:url";
 import test from "node:test";
 import { buildProject, developmentErrorEvent, discoverGlobalStyles, discoverIcons, discoverIslands, discoverRoutes, discoverUiComponents, generateClient, generateCssTypes, generateOpenApi, routePatternFromFile, serveProjectAsset } from "../packages/cli/src/project.ts";
 import { parseCocoQL, parseCocoQLMutation } from "../packages/cocoql/src/index.ts";
+import { componentCatalogOrder, sortComponentCatalogEntries } from "../examples/basic/app/components/component-navigation.ts";
 
 test("converts page filenames into route patterns", () => {
   const root = path.join("project", "app", "routes");
   assert.equal(routePatternFromFile(root, path.join(root, "index.page.tsx")), "/");
   assert.equal(routePatternFromFile(root, path.join(root, "blog", "[slug].page.tsx")), "/blog/:slug");
   assert.equal(routePatternFromFile(root, path.join(root, "docs", "[...rest].page.tsx")), "/docs/*rest");
+});
+
+test("orders component catalog sections exactly like the component sidebar", () => {
+  const scrambled = [
+    { id: "button-group", name: "ButtonGroup" },
+    { id: "container", name: "Container" },
+    { id: "safe-area", name: "SafeArea" },
+    { id: "button", name: "Button" },
+    { id: "aspect-ratio", name: "AspectRatio" },
+    { id: "app-shell", name: "AppShell" },
+  ];
+
+  assert.deepEqual(sortComponentCatalogEntries(scrambled).map(({ id }) => id), [
+    "app-shell", "safe-area", "aspect-ratio", "container", "button", "button-group",
+  ]);
+  const chartIndex = componentCatalogOrder.indexOf("chart");
+  assert.deepEqual(componentCatalogOrder.slice(chartIndex, chartIndex + 6), ["chart", "chart-bars", "chart-radial", "chart-radar", "chart-points", "chart-mixed"]);
 });
 
 test("serializes watcher failures as one safe development event", () => {

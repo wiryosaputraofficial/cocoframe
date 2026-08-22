@@ -1,6 +1,7 @@
 import { defineIsland } from "@cocoframe/client";
 import AltArrowDownIcon from "@cocoframe/icons/linear/alt-arrow-down";
 import ArrowRightIcon from "@cocoframe/icons/linear/arrow-right";
+import { componentNavigationGroups } from "../components/component-navigation.ts";
 
 const groups = [
   ["GET STARTED", [["Introduction", "#introduction"], ["Installation", "#installation"], ["Project Creator", "#project-creator"], ["Quick Start", "#quick-start"], ["Project Structure", "#project-structure"], ["Configuration", "#configuration"]]],
@@ -9,25 +10,10 @@ const groups = [
   ["PRODUCTION", [["Streaming & SEO", "#performance"], ["Testing", "#testing"], ["Deployment", "#deployment"], ["Environment", "#environment"], ["CLI Reference", "#cli"], ["Troubleshooting", "#troubleshooting"], ["Versioning", "#versioning"], ["Roadmap", "#roadmap"], ["Contributing", "#contributing"], ["Conventions", "#conventions"]]],
 ] as const;
 
-const componentGroups = [
-  ["GET STARTED", [["Overview", "#overview"], ["Installation", "#installation"], ["Theming", "#theming"], ["Utility Classes", "#utilities"], ["Size System", "#sizes"], ["Component Mapping", "#shadcn-mapping"], ["Accessibility", "#accessibility"]]],
-  ["FOUNDATION", [["Theme", "#theme"], ["Colors", "#colors"], ["Typography", "#typography"], ["Spacing", "#spacing"], ["Border Radius", "#radius"], ["Shadows", "#shadows"], ["Z-index", "#z-index"], ["Breakpoints", "#breakpoints"]]],
-  ["LAYOUT", [["App Shell", "#app-shell"], ["Page Header", "#page-header"], ["Toolbar", "#toolbar"], ["Safe Area", "#safe-area"], ["Aspect Ratio", "#aspect-ratio"], ["Container", "#container"], ["Direction", "#direction"], ["Grid", "#grid"], ["Inline", "#inline"], ["Resizable", "#resizable"], ["Scroll Area", "#scroll-area"], ["Stack", "#stack"], ["Divider", "#divider"]]],
-  ["TYPOGRAPHY", [["Heading", "#heading"], ["Text", "#text"], ["Code", "#code"], ["Kbd", "#kbd"], ["Syntax Highlighter", "#syntax-highlighter"]]],
-  ["FORMS & ACTIONS", [["Button", "#button"], ["Button Group", "#button-group"], ["Icon Button", "#icon-button"], ["Input", "#input"], ["Number Field", "#number-field"], ["Icon Input", "#icon-input"], ["Input Group", "#input-group"], ["Input OTP", "#input-otp"], ["Search Field", "#search-field"], ["Textarea", "#textarea"], ["Select", "#select"], ["Multi Select", "#multi-select"], ["Combobox", "#combobox"], ["Filter Bar", "#filter-bar"], ["Calendar", "#calendar"], ["Date Picker", "#date-picker"], ["Date Range Picker", "#date-range-picker"], ["Checkbox", "#checkbox"], ["Radio Group", "#radio-group"], ["Questionnaire", "#questionnaire"], ["Slider", "#slider"], ["Switch", "#switch"], ["Toggle", "#toggle"], ["Toggle Group", "#toggle-group"], ["File Upload", "#file-upload"], ["Form Field", "#form-field"], ["Label", "#label"]]],
-  ["FEEDBACK", [["Alert", "#alert"], ["Badge", "#badge"], ["Progress", "#progress"], ["Spinner", "#spinner"], ["Skeleton", "#skeleton"], ["Empty State", "#empty-state"], ["Toast", "#toast"], ["Toaster", "#toaster"]]],
-  ["DATA DISPLAY", [["Attachment", "#attachment"], ["Avatar", "#avatar"], ["Card", "#card"], ["Carousel", "#carousel"], ["Chart", "#chart"], ["Data Table", "#data-table"], ["Item", "#item"], ["Marker", "#marker"], ["Stat", "#stat"], ["Table", "#table"]]],
-  ["AI & CHAT", [["Prompt Composer", "#prompt-composer"], ["Thinking Indicator", "#thinking-indicator"], ["Citation", "#citation"], ["Bubble", "#bubble"], ["Message", "#message"], ["Message Scroller", "#message-scroller"]]],
-  ["ICONOGRAPHY", [["Solar Linear Icons", "#solar-icons"]]],
-  ["NAVIGATION", [["Bottom Navigation", "#bottom-navigation"], ["Stepper", "#stepper"], ["Tree View", "#tree-view"], ["Site Header", "#site-header"], ["Sidebar", "#sidebar"], ["Navigation Menu", "#navigation-menu"], ["Mega Menu", "#mega-menu"], ["Menubar", "#menubar"], ["Command", "#command"], ["Context Menu", "#context-menu"], ["Breadcrumb", "#breadcrumb"], ["Pagination", "#pagination"], ["Tabs", "#tabs"], ["Dropdown Menu", "#dropdown-menu"], ["Tooltip", "#tooltip"]]],
-  ["OVERLAY", [["Alert Dialog", "#alert-dialog"], ["Dialog / Modal", "#dialog"], ["Bottom Sheet", "#bottom-sheet"], ["Off-canvas", "#offcanvas"], ["Hover Card", "#hover-card"], ["Popover", "#popover"]]],
-  ["DISCLOSURE & A11Y", [["Skip Link", "#skip-link"], ["Live Region", "#live-region"], ["Accordion", "#accordion"], ["Collapsible", "#collapsible"], ["Details", "#details"], ["Visually Hidden", "#visually-hidden"]]],
-] as const;
-
 export default defineIsland<{ kind: "documentation" | "components" }>({
   name: "docs-sidebar",
   setup: ({ kind }) => () => {
-    const navigationGroups = kind === "documentation" ? groups : componentGroups;
+    const navigationGroups = kind === "documentation" ? groups : componentNavigationGroups;
     return <><button class="docs-sidebar-toggle" type="button" aria-expanded="false" onClick={(event: Event) => { const button = event.currentTarget as HTMLElement; const sidebar = button.nextElementSibling; const open = sidebar?.classList.toggle("open") ?? false; button.setAttribute("aria-expanded", String(open)); }}>{kind === "documentation" ? "Browse documentation" : "Browse components"} <span aria-hidden="true"><AltArrowDownIcon size={18} /></span></button><aside class="docs-sidebar" aria-label={`Navigasi ${kind}`}><nav>{navigationGroups.map(([title, links]) => <div class="sidebar-group"><h2>{title}</h2>{links.map(([label, href], index) => <a class={index === 0 && title === "GET STARTED" ? "active" : undefined} href={href} onClick={(event: Event) => { if (window.innerWidth <= 800) (event.currentTarget as HTMLElement).closest(".docs-sidebar")?.classList.remove("open"); }}>{label}</a>)}</div>)}</nav><div class="sidebar-help"><img src="/assets/cocoframe-icon.png" alt="" /><h3>Need help?</h3><p>Kirim pertanyaan atau laporan masalah yang sudah disanitasi.</p><a href="/contact">Contact support <span aria-hidden="true"><ArrowRightIcon size={14} /></span></a></div></aside></>;
   },
 });
