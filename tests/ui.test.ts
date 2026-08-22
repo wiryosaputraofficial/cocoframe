@@ -3,11 +3,11 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { jsx, renderToString } from "../packages/jsx/src/index.ts";
 import {
-  Accordion, Alert, AlertDialog, Attachment, Avatar, Badge, BottomSheet, Breadcrumb, Button, Calendar, Card, Chart, Checkbox, Code, Collapsible, Combobox, Container, ContextMenu,
-  DataTable, Details, Dialog, Divider, DropdownMenu, EmptyState, FileUpload, FormField, Grid, Heading,
+  Accordion, Alert, AlertDialog, AppShell, Attachment, Avatar, Badge, BottomNavigation, BottomSheet, Breadcrumb, Button, Calendar, Card, Chart, Checkbox, Citation, Code, Collapsible, Combobox, Container, ContextMenu,
+  DataTable, DateRangePicker, Details, Dialog, Divider, DropdownMenu, EmptyState, FileUpload, FilterBar, FormField, Grid, Heading,
   IconButton, IconInput, Inline, Input, InputGroup, InputOtp, MegaMenu, Message, MessageScroller, Offcanvas, Pagination, Popover, Progress, Questionnaire,
-  Menubar, NavigationMenu, RadioGroup, SearchField, Select, SiteHeader, Skeleton, Spinner, Stack, Stat, Switch, Table,
-  Sidebar, Slider, SyntaxHighlighter, Tabs, Text, Textarea, Toast, Toaster, ToggleGroup, Tooltip, VisuallyHidden, uiComponents,
+  LiveRegion, Menubar, MultiSelect, NavigationMenu, NumberField, PageHeader, PromptComposer, RadioGroup, SafeArea, SearchField, Select, SiteHeader, Skeleton, SkipLink, Spinner, Stack, Stat, Stepper, Switch, Table,
+  Sidebar, Slider, SyntaxHighlighter, Tabs, Text, Textarea, Theme, ThinkingIndicator, Toast, Toaster, ToggleGroup, Toolbar, Tooltip, TreeView, VisuallyHidden, uiComponents,
 } from "../packages/ui/src/index.ts";
 import { tokenizeSyntax } from "../packages/ui/src/syntax-highlighter.ts";
 
@@ -55,7 +55,7 @@ test("renders the complete semantic UI catalog", async () => {
     Table({ caption: "Services", headers: ["Name", "State"], rows: [["Web", "Ready"]], striped: true }),
   ] }) }));
 
-  assert.equal(uiComponents.length, 80);
+  assert.equal(uiComponents.length, 97);
   assert.match(body, /^<div class="coco-container coco-container--medium">/);
   assert.match(body, /<h1 class="coco-heading coco-heading--xlarge">Dashboard<\/h1>/);
   assert.match(body, /aria-current="page">Dashboard/);
@@ -67,6 +67,49 @@ test("renders the complete semantic UI catalog", async () => {
   assert.match(body, /<details class="coco-details" open>/);
   assert.match(body, /<table class="coco-table coco-table--striped">/);
   assert.doesNotMatch(body, /<script/);
+});
+
+test("renders theme, mobile, workflow, advanced form, and AI patterns without browser runtime", async () => {
+  const bottomNavigation = BottomNavigation({ items: [
+    { label: "Home", href: "/", current: true },
+    { label: "Projects", href: "/projects", badge: "3" },
+  ] });
+  const body = await renderToString(Theme({ theme: "dark", children: AppShell({
+    header: PageHeader({ title: "Projects", description: "Manage deployments", actions: Button({ children: "New" }) }),
+    sidebar: TreeView({ items: [{ id: "app", label: "app", expanded: true, children: [{ id: "routes", label: "routes", href: "/routes", current: true }] }] }),
+    mobileNavigation: bottomNavigation,
+    children: Stack({ children: [
+      SkipLink({ href: "#workspace" }),
+      SafeArea({ edges: ["bottom"], children: Toolbar({ start: "2 selected", end: Button({ children: "Publish" }) }) }),
+      FilterBar({ filters: SearchField({ id: "filter", name: "q", label: "Search" }), results: "24 projects" }),
+      NumberField({ id: "seats", name: "seats", label: "Seats", value: 12, min: 1, max: 100, hint: "Team capacity" }),
+      MultiSelect({ id: "roles", name: "roles", label: "Roles", value: ["dev"], options: [{ label: "Developer", value: "dev" }, { label: "Designer", value: "design" }] }),
+      DateRangePicker({ id: "period", name: "period", label: "Period", start: "2026-08-01", end: "2026-08-31" }),
+      Stepper({ items: [{ id: "one", label: "Account", state: "complete" }, { id: "two", label: "Profile", state: "current" }] }),
+      PromptComposer({ id: "prompt", hint: "Review generated code.", actions: Button({ variant: "ghost", children: "Attach" }) }),
+      ThinkingIndicator({ label: "Coco AI is thinking" }),
+      Citation({ index: 1, href: "/docs", title: "Rendering architecture", source: "CocoFrame Docs" }),
+      LiveRegion({ busy: true, children: "Loading results" }),
+    ] }),
+  }) }));
+
+  assert.match(body, /^<div data-coco-theme="dark" class="coco-theme">/);
+  assert.match(body, /class="coco-app-shell coco-app-shell--sidebar"/);
+  assert.match(body, /aria-label="Primary mobile navigation"/);
+  assert.match(body, /aria-current="page">/);
+  assert.match(body, /class="coco-skip-link"/);
+  assert.match(body, /class="coco-safe-area coco-safe-area--bottom"/);
+  assert.match(body, /role="toolbar" aria-label="Page actions"/);
+  assert.match(body, /role="search" aria-label="Filter results"/);
+  assert.match(body, /type="number" value="12" min="1" max="100"/);
+  assert.match(body, /<select id="roles" name="roles" multiple size="3"/);
+  assert.match(body, /name="periodStart" type="date" value="2026-08-01"/);
+  assert.match(body, /aria-current="step"/);
+  assert.match(body, /class="coco-prompt-composer"/);
+  assert.match(body, /role="status" class="coco-thinking"/);
+  assert.match(body, /aria-label="Source 1: Rendering architecture"/);
+  assert.match(body, /aria-live="polite" aria-atomic="true" aria-busy="true"/);
+  assert.doesNotMatch(body, /<script|\sstyle=/);
 });
 
 test("uses bundled Solar icons for built-in component chrome", async () => {
@@ -334,6 +377,7 @@ test("ships the responsive utility-first layer", async () => {
 test("keeps component documentation and overlays responsive from 320px through 4K", async () => {
   const pageCss = await readFile(new URL("../examples/basic/app/styles/80-responsive-components.css", import.meta.url), "utf8");
   const catalogCss = await readFile(new URL("../examples/basic/app/styles/50-official-components.css", import.meta.url), "utf8");
+  const catalogExpansionCss = await readFile(new URL("../examples/basic/app/styles/81-component-catalog-expansion.css", import.meta.url), "utf8");
   const migrationCss = await readFile(new URL("../examples/basic/app/styles/99-framework-migration.css", import.meta.url), "utf8");
   const uiCss = await readFile(new URL("../packages/ui/styles.css", import.meta.url), "utf8");
 
@@ -352,7 +396,13 @@ test("keeps component documentation and overlays responsive from 320px through 4
   assert.match(uiCss, /\.coco-chart__radar-area\{fill:currentColor/);
   assert.match(uiCss, /@media \(max-width:575px\)\{\.coco-chart/);
   assert.match(uiCss, /@media\(max-width:40rem\)[\s\S]*\.coco-sidebar\{width:100%;min-height:0\}/);
+  assert.match(uiCss, /\[data-coco-theme=dark\]/);
+  assert.match(uiCss, /@media\(prefers-color-scheme:dark\)/);
+  assert.match(uiCss, /@media\(forced-colors:active\)/);
+  assert.match(uiCss, /\.coco-safe-area--bottom\{padding-bottom:env\(safe-area-inset-bottom\)\}/);
+  assert.match(uiCss, /\.coco-prompt-composer:focus-within/);
   assert.match(catalogCss, /\.official-component:has\(\.coco-dropdown/);
+  assert.match(catalogExpansionCss, /\.component-category-filter/);
   assert.match(catalogCss, /min-height:340px/);
   assert.match(migrationCss, /aspect-ratio: 3 \/ 2/);
   assert.match(migrationCss, /object-fit: contain/);

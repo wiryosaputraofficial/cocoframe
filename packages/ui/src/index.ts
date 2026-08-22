@@ -9,6 +9,7 @@ export { SyntaxHighlighter } from "./syntax-highlighter.ts";
 export type { SyntaxHighlighterProps, SyntaxLanguage } from "./syntax-highlighter.ts";
 export * from "./advanced.ts";
 export * from "./chart.ts";
+export * from "./patterns.ts";
 
 interface ClassProps {
   readonly class?: string;
@@ -745,7 +746,7 @@ export function VisuallyHidden({ class: className, children }: ClassProps): Coco
 }
 
 export const uiComponents = [
-  "Accordion", "Alert", "AlertDialog", "AspectRatio", "Attachment", "Avatar", "Badge", "BottomSheet", "Breadcrumb", "Bubble", "Button", "ButtonGroup", "Calendar", "Card", "Carousel", "Chart", "Checkbox", "Code", "Collapsible", "Combobox", "Command", "Container", "ContextMenu", "DataTable", "DatePicker", "Details", "Dialog", "Direction", "Divider", "DropdownMenu", "EmptyState", "FileUpload", "FormField", "Grid", "Heading", "HoverCard", "IconButton", "IconInput", "Inline", "Input", "InputGroup", "InputOtp", "Item", "Kbd", "Label", "Marker", "MegaMenu", "Menubar", "Message", "MessageScroller", "NavigationMenu", "Offcanvas", "Pagination", "Popover", "Progress", "Questionnaire", "RadioGroup", "Resizable", "ScrollArea", "SearchField", "Select", "Sidebar", "SiteHeader", "Skeleton", "Slider", "Spinner", "Stack", "Stat", "Switch", "SyntaxHighlighter", "Table", "Tabs", "Text", "Textarea", "Toast", "Toaster", "Toggle", "ToggleGroup", "Tooltip", "VisuallyHidden",
+  "Accordion", "Alert", "AlertDialog", "AppShell", "AspectRatio", "Attachment", "Avatar", "Badge", "BottomNavigation", "BottomSheet", "Breadcrumb", "Bubble", "Button", "ButtonGroup", "Calendar", "Card", "Carousel", "Chart", "Checkbox", "Citation", "Code", "Collapsible", "Combobox", "Command", "Container", "ContextMenu", "DataTable", "DatePicker", "DateRangePicker", "Details", "Dialog", "Direction", "Divider", "DropdownMenu", "EmptyState", "FileUpload", "FilterBar", "FormField", "Grid", "Heading", "HoverCard", "IconButton", "IconInput", "Inline", "Input", "InputGroup", "InputOtp", "Item", "Kbd", "Label", "LiveRegion", "Marker", "MegaMenu", "Menubar", "Message", "MessageScroller", "MultiSelect", "NavigationMenu", "NumberField", "Offcanvas", "PageHeader", "Pagination", "Popover", "Progress", "PromptComposer", "Questionnaire", "RadioGroup", "Resizable", "SafeArea", "ScrollArea", "SearchField", "Select", "Sidebar", "SiteHeader", "Skeleton", "SkipLink", "Slider", "Spinner", "Stack", "Stat", "Stepper", "Switch", "SyntaxHighlighter", "Table", "Tabs", "Text", "Textarea", "Theme", "ThinkingIndicator", "Toast", "Toaster", "Toggle", "ToggleGroup", "Toolbar", "Tooltip", "TreeView", "VisuallyHidden",
 ] as const;
 
 function classes(...values: readonly (string | undefined)[]): string {

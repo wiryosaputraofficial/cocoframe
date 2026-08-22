@@ -35,6 +35,8 @@ test("component catalog live search, sorting, and dialog work with keyboard inpu
   await expect(page.locator('coco-island[data-coco-module*="component-browser"][data-coco-mounted]')).toHaveCount(1, { timeout: 30_000 });
 
   const search = page.getByRole("searchbox", { name: "Search components and icons" });
+  await page.keyboard.press("Control+K");
+  await expect(search).toBeFocused();
   await search.fill("DataTable");
   await expect(page.getByRole("status")).toContainText("1 dari");
   await expect(page.locator(".official-component")).toHaveCount(1);
@@ -58,6 +60,15 @@ test("component catalog live search, sorting, and dialog work with keyboard inpu
   await expect(dialog).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(dialog).not.toBeVisible();
+
+  await search.fill("");
+  await page.getByLabel("Category").selectOption("AI & CHAT");
+  await expect(page.locator(".official-component")).toHaveCount(6);
+  await search.fill("PromptComposer");
+  await expect(page.locator("#prompt-composer")).toBeVisible();
+  await expect(page.locator(".official-component")).toHaveCount(1);
+  await page.getByLabel("Category").selectOption("ALL");
+  await search.fill("");
 
   assertNoClientErrors();
 });

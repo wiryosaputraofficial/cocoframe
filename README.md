@@ -357,7 +357,7 @@ field. Forms remain fully functional without JavaScript. Sensitive fields can be
 declared through `createForm(schema, { sensitiveFields: [...] })`; common secret,
 token, and password names are never retained after validation errors.
 
-`@cocoframe/ui` provides 80 semantic primitives and ready-made patterns for
+`@cocoframe/ui` provides 97 semantic primitives and ready-made patterns for
 layout, typography, forms, navigation, overlays, feedback, data display, and
 AI/chat. The Chart primitive supports line, area, grouped/horizontal/stacked bar,
 pie, doughnut, polar-area, radar, scatter, bubble, and mixed SVG charts. Static

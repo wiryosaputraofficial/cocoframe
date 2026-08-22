@@ -1,0 +1,54 @@
+.component-catalog-controls {
+  display: grid;
+  gap: 10px;
+}
+
+.component-category-filter {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.component-category-filter .coco-select-shell {
+  min-width: 0;
+}
+
+.component-app-shell-preview {
+  min-height: 18rem;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+
+.component-app-shell-preview > .coco-app-shell__header {
+  padding: 12px;
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+
+.component-app-shell-preview > .coco-app-shell__sidebar {
+  padding: 12px;
+  border-right: 1px solid var(--line);
+  background: #fff;
+}
+
+.component-app-shell-preview > .coco-app-shell__main {
+  padding: 12px;
+}
+
+.component-preview-stage > .coco-theme {
+  display: block;
+  padding: 18px;
+  border-radius: 12px;
+}
+
+@media (max-width: 800px) {
+  .component-category-filter {
+    grid-template-columns: 1fr;
+    gap: 5px;
+  }
+}

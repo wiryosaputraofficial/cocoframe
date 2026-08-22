@@ -161,7 +161,7 @@ export default definePage({
         </GuideSection>
 
         <GuideSection id="components" label="FRONTEND" title="Server components and styling" description="Komponen adalah fungsi TSX typed. Secara default komponen tidak mengirim JavaScript ke browser." code={`import type { CocoNode } from "@cocoframe/jsx";\nimport styles from "./feature-card.module.css";\n\nexport function FeatureCard(props: { title: string; children?: CocoNode }) {\n  return <article class={styles.card}>\n    <h2>{props.title}</h2>{props.children}\n  </article>;\n}`}>
-          <p>File <code>*.module.css</code> di-scope dan dibuatkan declaration typed. CSS global di dalam <code>app/</code> diekstrak otomatis. Package <code>@cocoframe/ui</code> menyediakan 80 primitive dan pattern typed untuk layout, form, data display, navigation, overlay, feedback, hingga AI/chat. Seluruh preview, props, dan contoh import tersedia di halaman <a href="/components#catalog">Components</a>.</p>
+          <p>File <code>*.module.css</code> di-scope dan dibuatkan declaration typed. CSS global di dalam <code>app/</code> diekstrak otomatis. Package <code>@cocoframe/ui</code> menyediakan 97 primitive dan pattern typed untuk layout, mobile shell, form, data display, workflow navigation, accessibility, overlay, feedback, hingga AI/chat. Seluruh preview, props, dan contoh import tersedia di halaman <a href="/components#catalog">Components</a>.</p>
         </GuideSection>
 
         <GuideSection id="charts" label="DATA VISUALIZATION" title="Typed server-first charts" description="Chart merender SVG responsif tanpa dependency browser dan mendukung dua belas tipe visualisasi." code={`import { Chart } from "@cocoframe/ui";
@@ -429,7 +429,7 @@ function PackageReferenceTable() {
     ["@cocoframe/jsx", "Typed TSX runtime", "jsx, Fragment, raw, defer, renderToString, renderToChunks"],
     ["@cocoframe/router", "Low-level routing", "Router, normalizePath, HttpMethod"],
     ["@cocoframe/client", "Opt-in browser runtime", "defineIsland, signal, computed, bind, mountReactive"],
-    ["@cocoframe/ui", "Server-first design system", "80 semantic primitives, Chart, SyntaxHighlighter, styles.css, utilities.css"],
+    ["@cocoframe/ui", "Server-first design system", "97 semantic primitives, Chart, SyntaxHighlighter, styles.css, utilities.css"],
     ["@cocoframe/icons", "Solar Linear icon set", "1.246 typed icon subpaths, solarLinearIconNames"],
     ["@cocoframe/schema", "Runtime validation", "schema, ValidationError, Infer"],
     ["@cocoframe/forms", "Progressive forms", "createForm, CsrfField, FormState"],
