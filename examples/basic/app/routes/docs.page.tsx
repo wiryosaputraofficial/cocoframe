@@ -111,29 +111,29 @@ export default definePage({
       </section>
 
       <section class="docs-panel quick-start" id="quick-start">
-        <div class="panel-heading"><div><h2>Quick Start</h2><p>Clone repository resmi dan jalankan CocoFrame dengan Node.js 24 atau lebih baru.</p></div><a href="#project-structure">Pelajari strukturnya <span aria-hidden="true"><ArrowRightIcon size={15} /></span></a></div>
-        <div class="quick-steps"><article><span>1</span><div><h3>Clone repository</h3><p>Ambil source dari GitHub resmi CocoFrame.</p></div><b aria-hidden="true"><ArrowRightIcon size={16} /></b></article><article><span>2</span><div><h3>Install dependencies</h3><p>Jalankan package manager dari root <code>cocoframe</code>.</p></div><b aria-hidden="true"><ArrowRightIcon size={16} /></b></article><article><span>3</span><div><h3>Start development</h3><p>Jalankan build awal, watcher, dan server lokal.</p></div><b aria-hidden="true"><ArrowRightIcon size={16} /></b></article><article><span>4</span><div><h3>Open the app</h3><p>Buka <code>http://127.0.0.1:3000</code>.</p></div></article></div>
+        <div class="panel-heading"><div><h2>Quick Start</h2><p>Buat aplikasi CocoFrame dari npm dan jalankan dengan Node.js 24 atau lebih baru.</p></div><a href="#project-structure">Pelajari strukturnya <span aria-hidden="true"><ArrowRightIcon size={15} /></span></a></div>
+        <div class="quick-steps"><article><span>1</span><div><h3>Create project</h3><p>Jalankan creator resmi dari registry npm.</p></div><b aria-hidden="true"><ArrowRightIcon size={16} /></b></article><article><span>2</span><div><h3>Install otomatis</h3><p>Creator memasang dependency publik yang dibutuhkan.</p></div><b aria-hidden="true"><ArrowRightIcon size={16} /></b></article><article><span>3</span><div><h3>Start development</h3><p>Masuk ke directory project dan jalankan development server.</p></div><b aria-hidden="true"><ArrowRightIcon size={16} /></b></article><article><span>4</span><div><h3>Open the app</h3><p>Buka <code>http://127.0.0.1:3000</code>.</p></div></article></div>
         <PackageCommand />
-        <p class="guide-note"><strong>Project creator tersedia di source:</strong> gunakan <a href="#project-creator"><code>create-cocoframe</code></a> secara lokal dari workspace. Rilis npm publik menunggu pipeline distribusi seluruh package runtime.</p>
+        <p class="guide-note"><strong>Project creator sudah tersedia di npm:</strong> <a href="#project-creator"><code>npm create cocoframe@latest my-app</code></a> memasang runtime publik dan menghasilkan starter server-first yang siap dikembangkan.</p>
       </section>
 
       <section class="docs-panel docs-explore" id="guides"><div class="panel-heading"><div><h2>Explore the Docs</h2><p>Cari area framework yang ingin Anda gunakan.</p></div></div><DocsSearch /></section>
 
       <article class="docs-guide" aria-label="Panduan lengkap CocoFrame">
-        <GuideSection id="installation" label="GET STARTED" title="Installation from GitHub" description="Clone repository resmi, pasang npm workspace dengan Node.js 24+, lalu jalankan example app pada port 3000." language="bash" code={`git clone https://github.com/wiryosaputraofficial/cocoframe.git\ncd cocoframe\nnpm install\nnpm run dev`}>
-          <p>Setelah server menampilkan pesan <code>routes loaded</code>, buka <code>http://127.0.0.1:3000</code>. Perubahan pada file aplikasi dipantau otomatis selama development.</p>
-          <p>Sebelum contribution atau deployment, jalankan <code>npm run check</code>, <code>npm test</code>, <code>npm run inspect</code>, dan <code>npm run build</code>. Gunakan <code>npm start</code> untuk menjalankan bundle production setelah build.</p>
+        <GuideSection id="installation" label="GET STARTED" title="Installation from npm" description="Buat project dari package resmi dengan Node.js 24+, lalu jalankan development server pada port 3000." language="bash" code={`npm create cocoframe@latest my-app\ncd my-app\nnpm run dev`}>
+          <p>Creator memasang dependency secara otomatis. Setelah server siap, buka <code>http://127.0.0.1:3000</code>; perubahan file aplikasi dipantau selama development.</p>
+          <p>Sebelum deployment, jalankan <code>npm run check</code>, <code>npm run inspect</code>, dan <code>npm run build</code>. Gunakan <code>npm start</code> untuk menjalankan bundle production setelah build.</p>
           <p>Untuk penggunaan package internal, import selalu melalui namespace <code>@cocoframe/*</code>. Jangan mengimpor file source package lain dengan path relatif dari aplikasi.</p>
         </GuideSection>
 
-        <GuideSection id="project-creator" label="GET STARTED" title="Project creator" description="Creator dependency-free menghasilkan starter server-first, typed API, island interaktif, CSS responsif, dan konfigurasi TypeScript." language="bash" code={`npm run create -- examples/my-app --skip-install\nnpm install\nnpm run dev --workspace=my-app`}>
-          <p>Perintah lokal dijalankan dari root repository yang sudah di-clone. Target <code>examples/my-app</code> masuk ke npm workspace sehingga package <code>@cocoframe/*</code> diselesaikan dari source lokal.</p>
+        <GuideSection id="project-creator" label="GET STARTED" title="Project creator" description="Creator dependency-free menghasilkan starter server-first, typed API, island interaktif, CSS responsif, dan konfigurasi TypeScript." language="bash" code={`npm create cocoframe@latest my-app\ncd my-app\nnpm run dev`}>
+          <p>Perintah publik mengambil <code>create-cocoframe</code> dan seluruh package <code>@cocoframe/*</code> dari registry npm. Gunakan clone GitHub hanya ketika berkontribusi pada source framework.</p>
           <ul>
             <li>Gunakan <code>--package-manager npm|pnpm|yarn|bun</code> untuk memilih package manager.</li>
             <li>Gunakan <code>--skip-install</code> untuk CI atau workflow AI yang ingin memeriksa file sebelum memasang dependency.</li>
             <li>Creator menolak filesystem root dan directory yang sudah berisi file agar data project lama tidak tertimpa.</li>
           </ul>
-          <p>Setelah package runtime diterbitkan ke npm, command publiknya adalah <code>npm create cocoframe@latest my-app</code>. Saat ini command tersebut belum diiklankan sebagai instalasi registry yang aktif.</p>
+          <p><code>npm create cocoframe@latest my-app</code> adalah jalur instalasi resmi dan sudah diverifikasi melalui type-check, inspect, production build, SSR, dan typed API.</p>
         </GuideSection>
 
         <GuideSection id="project-structure" label="CONVENTION" title="Project structure" description="Struktur sengaja dibuat predictable agar mudah dipelihara dan hemat konteks untuk AI." language="text" code={`my-app/\n├─ app/\n│  ├─ components/          # server components\n│  ├─ islands/             # *.island.tsx\n│  ├─ generated/           # typed client + OpenAPI\n│  ├─ routes/              # pages, APIs, layouts\n│  └─ styles/              # global CSS / CSS modules\n├─ public/                  # aset statis\n├─ cocoframe.config.ts      # konfigurasi aplikasi\n└─ package.json`}>
@@ -373,7 +373,7 @@ npm run build`}>
           <p>Jika masalah tetap terjadi, siapkan versi Node, output <code>npm run inspect</code>, langkah reproduksi minimal, serta error yang sudah disanitasi lalu kirim melalui <a href="/contact">halaman kontak</a>.</p>
         </GuideSection>
 
-        <GuideSection id="versioning" label="RELEASES" title="Versioning and upgrade policy" description="Workspace saat ini berada pada versi 0.0.1 dan berstatus architectural MVP, belum merupakan package release publik.">
+        <GuideSection id="versioning" label="RELEASES" title="Versioning and upgrade policy" description="Rilis publik awal berada pada versi 0.0.1 dan tetap berstatus architectural MVP menuju API yang stabil.">
           <ul class="guide-checklist">
             <li>Public API yang stabil selalu diekspor dari root package <code>@cocoframe/*</code>.</li>
             <li>Generated client, OpenAPI, manifest, dan CSS declaration harus dibuat ulang setelah upgrade.</li>
@@ -381,7 +381,7 @@ npm run build`}>
             <li>Sebelum upgrade, jalankan check, test, inspect, build, lalu simpan output sebagai baseline.</li>
             <li>Breaking change sebelum 1.0 harus dicatat bersama langkah migrasi dan contoh sebelum/sesudah.</li>
           </ul>
-          <p><code>create-cocoframe</code> sudah diimplementasikan dan diuji dari workspace. Publikasi registry tetap menunggu build distribusi package runtime dan autentikasi npm; sampai itu selesai, gunakan command lokal pada bagian Project creator.</p>
+          <p><code>create-cocoframe@0.0.1</code> dan 18 package scoped <code>@cocoframe/*</code> sudah tersedia publik di npm. Gunakan staged publishing untuk rilis lanjutan setelah package bootstrap ini.</p>
         </GuideSection>
 
         <GuideSection id="roadmap" label="ROADMAP" title="Current roadmap" description="Prioritas berikut menjaga framework tetap kecil sambil menutup kebutuhan production yang belum tersedia.">

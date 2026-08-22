@@ -41,14 +41,13 @@ export default definePage({
 The repository is currently an architectural MVP, not a production release.
 See `docs/architecture.md` for scope and invariants.
 
-## Install from GitHub
+## Create an application
 
-Requires Git, npm, and Node.js 24 or newer.
+Requires npm and Node.js 24 or newer.
 
 ```bash
-git clone https://github.com/wiryosaputraofficial/cocoframe.git
-cd cocoframe
-npm install
+npm create cocoframe@latest my-app
+cd my-app
 npm run dev
 ```
 
@@ -56,22 +55,19 @@ Open `http://127.0.0.1:3000` after the development server reports that all
 routes are loaded. The server watches application files and reloads changes
 automatically.
 
-### Create a starter from the workspace
+The dependency-free creator supports `--package-manager npm|pnpm|yarn|bun`
+and `--skip-install`, and refuses to overwrite a non-empty directory.
 
-The dependency-free project creator is included in this repository. Until the
-public runtime packages are released, create the starter inside the cloned
-workspace so npm can resolve the local packages:
+### Contribute from GitHub
+
+Clone the repository when contributing to CocoFrame itself:
 
 ```bash
-npm run create -- examples/my-app --skip-install
+git clone https://github.com/wiryosaputraofficial/cocoframe.git
+cd cocoframe
 npm install
-npm run dev --workspace=my-app
+npm run dev
 ```
-
-The registry command will be `npm create cocoframe@latest my-app` after
-the public `@cocoframe/*` distribution packages are available. The creator
-supports `--package-manager npm|pnpm|yarn|bun` and `--skip-install`, and
-refuses to overwrite a non-empty directory.
 
 Before contributing or deploying, run the complete verification gate:
 
@@ -85,8 +81,8 @@ npm run build
 
 The production server bundle is written to
 `examples/basic/.cocoframe/server.mjs` and can be run with `npm start` after
-`npm run build`. CocoFrame is currently consumed from this GitHub workspace;
-the creator source is ready, while public `@cocoframe/*` packages are not published yet.
+`npm run build`. The public `create-cocoframe` and `@cocoframe/*` packages are
+available from the npm registry.
 
 ## Current milestone
 

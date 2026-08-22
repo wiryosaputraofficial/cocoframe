@@ -62,6 +62,7 @@ test("keeps the public documentation aligned with the complete framework surface
   const header = await readFile(path.resolve("examples/basic/app/islands/site-header.island.tsx"), "utf8");
   const shell = await readFile(path.resolve("examples/basic/app/components/marketing-shell.tsx"), "utf8");
   const guideStyles = await readFile(path.resolve("examples/basic/app/styles/40-documentation-guide.css"), "utf8");
+  const versioning = await readFile(path.resolve("examples/basic/app/routes/versioning.page.tsx"), "utf8");
   const readme = await readFile(path.resolve("README.md"), "utf8");
 
   for (const id of ["project-creator", "charts", "api-reference", "observability", "recipes", "troubleshooting", "versioning", "roadmap", "contributing"]) {
@@ -79,11 +80,14 @@ test("keeps the public documentation aligned with the complete framework surface
   assert.doesNotMatch(shell, /href="#"/);
   assert.match(readme, /80 semantic primitives/);
   assert.match(readme, /twelve chart types/);
+  assert.match(readme, /https:\/\/github\.com\/wiryosaputraofficial\/cocoframe\.git/);
   for (const source of [readme, docs, packageCommand]) {
-    assert.match(source, /https:\/\/github\.com\/wiryosaputraofficial\/cocoframe\.git/);
+    assert.match(source, /npm create cocoframe@latest my-app/);
   }
-  assert.match(docs, /Installation from GitHub/);
-  assert.match(packageCommand, /cd cocoframe/);
+  assert.match(docs, /Installation from npm/);
+  assert.match(versioning, /19 npm packages/);
+  assert.doesNotMatch(versioning, /Not published yet/);
+  assert.match(packageCommand, /cd my-app/);
   assert.equal((docs.match(/<article><span>[1-4]<\/span>/g) ?? []).length, 4);
   assert.match(guideStyles, /\.guide-table>\[role=row\]>\*\{min-width:0;max-width:100%\}/);
   assert.match(guideStyles, /\.guide-table code\{white-space:normal;overflow-wrap:anywhere;word-break:break-word\}/);
