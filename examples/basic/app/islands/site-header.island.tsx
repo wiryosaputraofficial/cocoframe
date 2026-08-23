@@ -28,7 +28,7 @@ export default defineIsland<{ active: "home" | "features" | "docs" | "cocoql" | 
         <a class={active === "icons" ? "active" : undefined} aria-current={active === "icons" ? "page" : undefined} href="/icons">Icons</a>
         <a class={active === "templates" ? "active" : undefined} href="/templates">Templates</a>
       </nav>
-      <div class="header-actions"><a class="github-link" href="/docs#contributing" aria-label="Source and contribution guide"><CodeSquareIcon size={18} /></a><a class="button button-ghost button-small" href="/docs#api-reference">API Reference</a><a class="button button-primary button-small" href="/docs#quick-start">Get Started</a></div>
+      <div class="header-actions"><a class="github-link" href="/docs#contributing" aria-label="Source and contribution guide"><CodeSquareIcon size={18} /></a><a class="button button-ghost button-small" href="/docs/api-reference">API Reference</a><a class="button button-primary button-small" href="/docs/getting-started">Get Started</a></div>
     </header>
   ),
 });

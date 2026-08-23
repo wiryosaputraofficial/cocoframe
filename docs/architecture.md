@@ -48,6 +48,9 @@ HTTP request -> runtime adapter -> router -> page.load -> page.meta/page.view
   limits, database-free mutation previews, and guarded parameterized MySQL and
   PostgreSQL compilation for AI-generated database work.
 - `@cocoframe/server-web`: Fetch export for edge and serverless hosts.
+- `@cocoframe/specs`: provider-independent adaptive discovery, versioned product decisions, completeness checks, and deterministic PRD, flow, data-model, acceptance, decision, and task artifacts.
+- `@cocoframe/cocoref`: provider-independent visual-reference audits, component reuse decisions, explicit candidate consent, preview/revision state, and approval evidence.
+- `@cocoframe/qa`: provider-independent adaptive QA planning, requirement traceability, quality-gate results, defect policy, evidence, and explicit release approval.
 - `@cocoframe/cli`: route discovery, project inspection, and development server.
 - `create-cocoframe`: dependency-free project scaffolding with a server-first starter, typed API, and opt-in island.
 
@@ -197,6 +200,46 @@ names. They do not hydrate or ship browser JavaScript. The build detects explici
 `@cocoframe/ui` imports, includes the small token stylesheet once, and lists used
 components in `cocoframe inspect`. Direct `@cocoframe/icons/linear/*` imports are
 also listed so icon usage remains visible without adding a runtime registry.
+
+## AI-assisted product discovery
+
+CocoSpecs stores one versioned `specs/<feature>/spec.json` source of truth for a
+new application feature. Its question set adapts to authentication, OAuth,
+roles, persistence, migration, integration, and delivery decisions. The project
+snapshot records existing routes, islands, and dependencies so an AI agent can
+reuse existing capabilities instead of adding redundant code.
+
+`cocoframe spec generate` renders a PRD, Mermaid user flow and data model,
+acceptance criteria, decision log, and implementation tasks only after required
+questions are resolved. Generation is reviewable but does not authorize code
+changes. Explicit approval moves the canonical spec to `approved`; changing an
+answer invalidates approval.
+
+## Reference-driven component approval
+
+CocoRef stores one versioned `refs/<name>/ref.json` source of truth for image-
+or website-driven interface work. Its inventory captures `@cocoframe/ui`,
+application components, islands, and previously approved candidates. Every visible
+requirement is recorded as an explicit reuse or missing decision.
+
+Missing components require user consent before candidate files are created. The
+actual temporary TSX candidate is rendered through a local development route; user
+feedback reopens that same candidate until approval or cancellation. Approval
+promotes the previewed source into `app/components/`. Approval and cancellation
+both remove temporary files and routes, and production builds exclude all CocoRef
+preview routes.
+
+## AI quality approval
+
+CocoQA stores one versioned `qa/<feature>/qa.json` source of truth after implementation. It requires an approved CocoSpec and can include a completed CocoRef. Adaptive questions make environments, device coverage, safe test data, accessibility, security, performance, and release-blocking policy explicit before checks run.
+
+Acceptance criteria, reference decisions, and CocoFrame's server-first, accessibility, and responsive baselines become traceable required cases. The CLI executes only recognized npm quality scripts and records status, duration, and exit code without persisting raw output. Open defects or any failed required case or gate prevent approval; changing evidence invalidates prior approval.
+
+## Documentation architecture
+
+The public documentation keeps `/docs` as a compatible complete guide and routes focused topics through `/docs/<topic>`. Topic pages are server-rendered, canonical, independently linkable, and intentionally smaller so users and AI can load only the relevant lifecycle.
+
+`scripts/api-reference.ts` derives package names, versions, public subpaths, export kinds, signatures, JSDoc summaries, deprecation tags, examples, and source locations from package manifests and TypeScript declarations. It writes one checked-in generated module consumed by `/docs/api-reference`; `npm run docs:check` rejects stale output.
 
 ## Build artifacts
 

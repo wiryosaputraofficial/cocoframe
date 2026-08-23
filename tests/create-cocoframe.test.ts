@@ -42,6 +42,10 @@ test("scaffolds a buildable server-first application without installing", async 
     const manifest = JSON.parse(await readFile(path.join(target, "package.json"), "utf8"));
     assert.equal(manifest.name, "my-starter");
     assert.equal(manifest.scripts.dev, "cocoframe dev .");
+    assert.equal(manifest.scripts.spec, "cocoframe spec");
+    assert.equal(manifest.scripts.ref, "cocoframe ref");
+    assert.equal(manifest.scripts.qa, "cocoframe qa");
+    assert.match(await readFile(path.join(target, "AGENTS.md"), "utf8"), /canonical CocoSpec state is `approved`[\s\S]*cocoframe ref[\s\S]*cocoframe qa/);
     assert.equal(manifest.dependencies["@cocoframe/core"], "0.0.4");
     assert.match(await readFile(path.join(target, "app/routes/index.page.tsx"), "utf8"), /my-starter — CocoFrame/);
     await access(path.join(target, ".gitignore"));
@@ -74,6 +78,7 @@ test("scaffolds every official template with CocoFrame components and icons", as
       const target = path.join(fixtureRoot, template);
       const result = await scaffoldProject({ projectDirectory: target, template, install: false });
       assert.equal(result.template, template);
+      assert.match(await readFile(path.join(target, "AGENTS.md"), "utf8"), /cocoframe spec[\s\S]*cocoframe ref/);
       const components = await discoverUiComponents(target);
       const icons = await discoverIcons(target);
       assert.ok(components.length > 0, `${template} must use @cocoframe/ui`);

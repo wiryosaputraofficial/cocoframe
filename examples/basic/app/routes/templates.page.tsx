@@ -34,7 +34,7 @@ export default definePage({
 
     <section class="templates-bottom-cta section-shell">
       <div><span class="eyebrow">BUILD YOUR OWN</span><h2>Cannot find the right template?</h2><p>Start with the CocoFrame foundation or submit your template to the community.</p></div>
-      <div><a class="button button-primary" href="/docs#quick-start">Create from scratch</a><a class="button button-ghost" href="/contact">Submit a template</a></div>
+      <div><a class="button button-primary" href="/docs/getting-started">Create from scratch</a><a class="button button-ghost" href="/contact">Submit a template</a></div>
     </section>
   </main>,
 });

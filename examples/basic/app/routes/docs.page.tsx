@@ -137,7 +137,32 @@ export default definePage({
           <p><code>npm create cocoframe@latest my-app</code> is the official installation path and is verified through type checking, inspection, production builds, SSR, and typed APIs.</p>
         </GuideSection>
 
-        <GuideSection id="project-structure" label="CONVENTION" title="Project structure" description="The structure is intentionally predictable, making it easy to maintain and context-efficient for AI." language="text" code={`my-app/\n├─ app/\n│  ├─ components/          # server components\n│  ├─ islands/             # *.island.tsx\n│  ├─ generated/           # typed client + OpenAPI\n│  ├─ routes/              # pages, APIs, layouts\n│  └─ styles/              # global CSS / CSS modules\n├─ public/                  # static assets\n├─ cocoframe.config.ts      # application configuration\n└─ package.json`}>
+        <GuideSection id="cocospecs" label="AI-FIRST" title="CocoSpecs product discovery" description="Turn an initial feature request into reviewed product requirements, flows, data decisions, acceptance criteria, and implementation tasks before writing code." language="bash" code={`cocoframe spec create login --brief "Users sign in and continue to the dashboard."\ncocoframe spec resume login\ncocoframe spec check login\ncocoframe spec generate login\ncocoframe spec approve login`}>
+          <p>The interview asks no more than four unresolved questions per batch. Authentication, OAuth, role routing, persistence, migration, observability, and delivery questions appear only when the feature and prior answers make them relevant.</p>
+          <p><code>specs/&lt;feature&gt;/spec.json</code> is the source of truth. Generated PRD, Mermaid flow and data model, acceptance criteria, decisions, and tasks are review views. Implementation begins only after the canonical state is <code>approved</code>. See the <a href="/cocospecs">dedicated CocoSpecs overview</a> for the complete product workflow.</p>
+        </GuideSection>
+
+        <GuideSection id="cocoref" label="AI VISUAL WORKFLOW" title="CocoRef adaptive reference components" description="Use an image or website as design evidence, audit existing components, and require approval before a missing component becomes application source." language="bash" code={`cocoframe ref create dashboard --image ./references/dashboard.png
+cocoframe ref audit dashboard --requirements ./requirements.json
+cocoframe ref consent dashboard activity-feed
+cocoframe ref preview dashboard activity-feed
+cocoframe ref feedback dashboard activity-feed "Use denser spacing"
+cocoframe ref approve dashboard activity-feed`}>
+          <p><code>refs/&lt;name&gt;/ref.json</code> is canonical. The audit maps each visual requirement to an existing UI primitive, application component, island, or an explicitly missing component.</p>
+          <p>Missing components stop until the user grants consent. The local preview renders the actual temporary TSX candidate; feedback reopens it for revision. Approval promotes that exact source into <code>app/components/</code>, while approval and cancellation both remove the temporary preview. See the <a href="/cocoref">dedicated CocoRef overview</a>.</p>
+        </GuideSection>
+
+        <GuideSection id="cocoqa" label="AI QUALITY WORKFLOW" title="CocoQA evidence and release approval" description="Turn approved requirements into explicit quality decisions, traceable test cases, allow-listed project gates, defect records, and release approval." language="bash" code={`cocoframe qa create login --spec login --ref login-reference
+cocoframe qa resume login
+cocoframe qa run login
+cocoframe qa record login acceptance-1 pass --evidence "Login E2E passed."
+cocoframe qa check login
+cocoframe qa approve login`}>
+          <p><code>qa/&lt;feature&gt;/qa.json</code> is canonical. CocoQA asks about target environments, devices, safe test data, release blockers, accessibility, security, and—when thorough mode is selected—performance and regression risk.</p>
+          <p>Required cases and gates must pass and every defect must be closed before approval. Raw command output is not persisted. See the <a href="/cocoqa">dedicated CocoQA overview</a>.</p>
+        </GuideSection>
+
+        <GuideSection id="project-structure" label="CONVENTION" title="Project structure" description="The structure is intentionally predictable, making it easy to maintain and context-efficient for AI." language="text" code={`my-app/\n├─ app/\n│  ├─ components/          # server components\n│  ├─ islands/             # *.island.tsx\n│  ├─ generated/           # typed client + OpenAPI\n│  ├─ routes/              # pages, APIs, layouts\n│  └─ styles/              # global CSS / CSS modules\n├─ specs/\n│  └─ feature-name/        # canonical spec + generated review artifacts\n├─ refs/\n│  └─ reference-name/      # CocoRef audit, approvals, and reference evidence\n├─ qa/\n│  └─ feature-name/        # CocoQA evidence, defects, and release approval\n├─ public/                  # static assets\n├─ cocoframe.config.ts      # application configuration\n└─ package.json`}>
           <p>All build output lives in <code>.cocoframe/</code>; development output is isolated in <code>.cocoframe/dev/</code>.</p>
         </GuideSection>
 
@@ -355,7 +380,7 @@ try {
           <p>Health endpoints are available at <code>/_health/live</code> and <code>/_health/ready</code>. Readiness can check databases or dependencies through configuration.</p>
         </GuideSection>
 
-        <GuideSection id="cli" label="REFERENCE" title="CLI reference" description="The CLI accepts a project directory as its final argument and defaults to the current directory." language="bash" code={`cocoframe inspect [project]   # route, island, UI, API, middleware manifest\ncocoframe dev [project]       # development server + watcher\ncocoframe build [project]     # production bundle\ncocoframe start [project]     # run the production bundle\ncocoframe generate [project]  # client, OpenAPI, CSS declarations\ncocoframe openapi [project]   # OpenAPI only`}>
+        <GuideSection id="cli" label="REFERENCE" title="CLI reference" description="The CLI accepts a project directory as its final argument and defaults to the current directory." language="bash" code={`cocoframe inspect [project]   # route, island, UI, API, middleware manifest\ncocoframe dev [project]       # development server + watcher\ncocoframe build [project]     # production bundle\ncocoframe start [project]     # run the production bundle\ncocoframe generate [project]  # client, OpenAPI, CSS declarations\ncocoframe openapi [project]   # OpenAPI only\ncocoframe spec create <feature> --brief "..."\ncocoframe spec resume <feature>\ncocoframe spec check|generate|approve <feature>\ncocoframe ref create|audit|preview|approve <reference>\ncocoframe qa create|run|check|approve <feature>`}>
           <p>The same commands are available in this repository through npm scripts: <code>npm run inspect</code>, <code>npm run dev</code>, <code>npm run build</code>, and <code>npm run generate</code>.</p>
         </GuideSection>
 
@@ -440,9 +465,12 @@ function PackageReferenceTable() {
     ["@cocoframe/security", "HTTP security middleware", "securityHeaders, cors, csrfProtection, rateLimit"],
     ["@cocoframe/observability", "Request telemetry", "requestId, requestLogger, requestIdKey"],
     ["@cocoframe/cocoql", "AI-first query language", "parse, validate, authorize, plan, safety, MySQL/PostgreSQL compilers"],
+    ["@cocoframe/specs", "AI product discovery", "create, answer, check, approve, adaptive questions, PRD and Mermaid artifacts"],
+    ["@cocoframe/cocoref", "Reference component approval", "create, audit, consent, preview, feedback, approve, deterministic reports"],
+    ["@cocoframe/qa", "AI quality approval", "create, answer, run gates, record evidence, defects, check, approve"],
     ["@cocoframe/server-node", "Node HTTP adapter", "createServer, gracefulShutdown, clientAddress"],
     ["@cocoframe/server-web", "Fetch/edge adapter", "webHandler"],
-    ["@cocoframe/cli", "Project tooling", "dev, build, start, inspect, generate, openapi"],
+    ["@cocoframe/cli", "Project tooling", "dev, build, start, inspect, generate, openapi, spec, ref, qa"],
     ["create-cocoframe", "Project scaffolding", "starter template, package-manager selection, safe directory checks, skip-install"],
   ] as const;
   return <div class="guide-table guide-table--packages" role="table" aria-label="Public CocoFrame packages"><div role="row"><strong role="columnheader">Package</strong><strong role="columnheader">Responsibility</strong><strong role="columnheader">Primary API</strong></div>{packages.map(([name, responsibility, api]) => <div role="row"><code>{name}</code><span>{responsibility}</span><code>{api}</code></div>)}</div>;

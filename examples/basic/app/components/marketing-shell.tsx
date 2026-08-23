@@ -21,11 +21,11 @@ export function MarketingFooter() {
             <a href="/docs#contributing" aria-label="Source and contribution guide"><CodeSquareIcon size={17} /></a>
             <a href="/contact" aria-label="Contact support"><ChatRoundDotsIcon size={17} /></a>
             <a href="/docs#roadmap" aria-label="CocoFrame roadmap"><GlobalIcon size={17} /></a>
-            <a href="/docs#quick-start" aria-label="CocoFrame quick start"><VideoFramePlayHorizontalIcon size={17} /></a>
+            <a href="/docs/getting-started" aria-label="CocoFrame quick start"><VideoFramePlayHorizontalIcon size={17} /></a>
           </div>
         </div>
-        <FooterColumn title="Product" links={[["Features", "/features"], ["Docs", "/docs"], ["CocoQL", "/cocoql"], ["Components", "/components"], ["Icons", "/icons"], ["Templates", "/templates"]]} />
-        <FooterColumn title="Resources" links={[["Guides", "/docs#guides"], ["API Reference", "/docs#api-reference"], ["Recipes", "/docs#recipes"], ["Troubleshooting", "/docs#troubleshooting"], ["Roadmap", "/docs#roadmap"]]} />
+        <FooterColumn title="Product" links={[["Features", "/features"], ["CocoSpecs", "/cocospecs"], ["CocoRef", "/cocoref"], ["CocoQA", "/cocoqa"], ["Docs", "/docs"], ["CocoQL", "/cocoql"], ["Components", "/components"], ["Icons", "/icons"], ["Templates", "/templates"]]} />
+        <FooterColumn title="Resources" links={[["Guides", "/docs#guides"], ["API Reference", "/docs/api-reference"], ["Recipes", "/docs#recipes"], ["Troubleshooting", "/docs#troubleshooting"], ["Roadmap", "/docs#roadmap"]]} />
         <FooterColumn title="Community" links={[["Contributing", "/docs#contributing"], ["Support", "/contact"], ["CocoQL", "/cocoql"], ["Component Library", "/components"], ["Icon Library", "/icons"]]} />
         <FooterColumn title="Project" links={[["About", "/about"], ["Versioning", "/versioning"], ["Deployment", "/deployment"], ["Conventions", "/conventions"], ["Contact", "/contact"]]} />
       </div>
@@ -47,5 +47,5 @@ export function FeatureIcon({ children }: { readonly children: CocoNode }) {
 }
 
 export function Cta() {
-  return <section class="cta section-shell" id="get-started"><div><h2>Ready to build something<br />extraordinary?</h2><p>Start your next project with CocoFrame today.</p></div><div class="cta-actions"><a class="button button-light" href="/docs#quick-start">Get Started <span aria-hidden="true"><ArrowRightIcon size={17} /></span></a><a class="button button-outline-light" href="/docs">View Documentation</a></div></section>;
+  return <section class="cta section-shell" id="get-started"><div><h2>Ready to build something<br />extraordinary?</h2><p>Start your next project with CocoFrame today.</p></div><div class="cta-actions"><a class="button button-light" href="/docs/getting-started">Get Started <span aria-hidden="true"><ArrowRightIcon size={17} /></span></a><a class="button button-outline-light" href="/docs">View Documentation</a></div></section>;
 }

@@ -1,10 +1,13 @@
 # @cocoframe/cli
 
 The `cocoframe` executable owns project discovery, inspection, development,
-generation, production builds, asset serving, and startup.
+generation, CocoSpecs discovery, CocoRef component approval, CocoQA evidence and release approval, production builds, asset serving, and startup.
 
 ## Commands
 
+- `cocoframe spec create|resume|answer|check|generate|approve` manages adaptive product discovery and review artifacts under `specs/<feature>/`.
+- `cocoframe ref create|add|audit|status|consent|decline|preview|feedback|approve|cancel` manages reference audits and consent-gated component previews under `refs/<name>/`.
+- `cocoframe qa create|resume|answer|run|record|defect|resolve|check|approve` manages traceable quality evidence and release approval under `qa/<feature>/`.
 - `cocoframe inspect <project>` emits routes, layouts, islands, styles, UI/icon usage, contracts, middleware, and system routes.
 - `cocoframe dev <project>` builds and watches isolated development output.
 - `cocoframe generate <project>` writes typed clients, OpenAPI, and CSS module declarations.

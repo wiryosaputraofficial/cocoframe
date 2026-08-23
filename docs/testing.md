@@ -11,6 +11,7 @@ required by `AGENTS.md` before handoff.
 | Unit/integration | `npm test` | Serial Node tests in `tests/*.test.ts`; package behavior plus CLI/project integration. |
 | Project inspection | `npm run inspect` | Validates the discoverable route, API, middleware, UI, icon, and asset surface of `examples/basic`. |
 | Generation | `npm run generate` | Rebuilds contract client, OpenAPI, and CSS declarations from source. |
+| Documentation API generation | `npm run docs:api` | Rebuilds the checked-in package/export/signature reference rendered at `/docs/api-reference`. |
 | Production build | `npm run build` | Produces the reference application's production server and hashed assets. |
 | Browser E2E | `npm run test:e2e` | Development Chromium, production Chromium/Firefox/WebKit, and five responsive Chromium viewports. |
 | Package smoke | `npm run packages:smoke` | Builds, packs, and exercises publishable package artifacts. |
@@ -67,7 +68,7 @@ forms, CSP, visual behavior, or responsive layout.
 | UI/icon or responsive output | UI/icon/project tests and full E2E |
 | Node request lifecycle/proxy/shutdown | Server-node and core tests; add HTTP benchmark if hot-path performance may change |
 | Performance-sensitive behavior | Behavioral gates plus all relevant baselines; run both required renderer and HTTP benchmarks at minimum |
-| Published package surface | Typecheck, package build/pack smoke, and a representative consumer import |
+| Published package surface | Typecheck, `npm run docs:api`, generated-reference test, package build/pack smoke, and a representative consumer import |
 
 ## Test design rules
 

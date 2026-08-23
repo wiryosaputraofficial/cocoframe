@@ -143,6 +143,7 @@ export async function createRepositoryContext(repositoryRoot = defaultRoot): Pro
       { input: "API contract IDs and schemas", output: "examples/basic/app/generated/cocoframe-client.ts", command: "npm run generate" },
       { input: "API contract manifest and OpenAPI config", output: "examples/basic/app/generated/openapi.json", command: "npm run generate" },
       { input: "*.module.css selectors", output: "adjacent *.module.d.css.ts", command: "npm run generate" },
+      { input: "public package exports, declarations, and JSDoc", output: "examples/basic/app/generated/api-reference.ts", command: "npm run docs:api" },
       { input: "application routes, islands, styles, config, and public files", output: "examples/basic/.cocoframe", command: "npm run build" },
     ],
   };

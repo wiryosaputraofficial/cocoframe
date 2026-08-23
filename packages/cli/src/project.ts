@@ -90,6 +90,16 @@ export async function discoverStyles(projectRoot: string): Promise<readonly Disc
   }));
 }
 
+async function discoverCocoRefStyles(projectRoot: string): Promise<readonly DiscoveredStyle[]> {
+  const directory = path.join(projectRoot, ".cocoframe", "cocoref");
+  const files = await walk(directory).catch((error: unknown) => {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") return [];
+    throw error;
+  });
+  return Promise.all(files.filter((file) => file.endsWith(".module.css")).sort().map(async (file) =>
+    compileCssModule(projectRoot, file, await readFile(file, "utf8"))));
+}
+
 export async function discoverGlobalStyles(projectRoot: string): Promise<readonly string[]> {
   const appDirectory = path.join(projectRoot, "app");
   const files = await walk(appDirectory);
@@ -123,9 +133,15 @@ export function developmentErrorEvent(error: unknown): string {
 }
 
 export async function buildProject(projectRoot: string, development: boolean): Promise<string> {
-  const routes = await discoverRoutes(projectRoot);
+  const discoveredRoutes = await discoverRoutes(projectRoot);
+  const routes = development
+    ? discoveredRoutes
+    : discoveredRoutes.filter(({ file }) => !file.replaceAll("\\", "/").includes("/app/routes/__cocoref/"));
   const islands = await discoverIslands(projectRoot);
-  const styles = await discoverStyles(projectRoot);
+  const styles = [
+    ...await discoverStyles(projectRoot),
+    ...(development ? await discoverCocoRefStyles(projectRoot) : []),
+  ];
   const globalStyles = await discoverGlobalStyles(projectRoot);
   const globalCss = (await Promise.all(globalStyles.map((file) => readFile(file, "utf8")))).join("\n");
   const developmentCss = development
@@ -243,7 +259,7 @@ export default app;
   });
   if (hasStyles) {
     await mkdir(publicDirectory, { recursive: true });
-    const css = [developmentCss, uiCss, globalCss, ...styles.map((style) => style.css)].filter(Boolean).join("\n");
+    const css = [developmentCss, uiCss, globalCss, ...[...stylesByFile.values()].map((style) => style.css)].filter(Boolean).join("\n");
     const cssName = development ? "styles.css" : `styles-${createHash("sha256").update(css).digest("hex").slice(0, 10)}.css`;
     await writeFile(path.join(publicDirectory, cssName), css, "utf8");
   }

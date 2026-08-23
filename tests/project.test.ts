@@ -50,6 +50,7 @@ test("discovers example layouts and islands", async () => {
   const notFound = routes.find((route) => route.pattern === "/*path");
   const templates = routes.find((route) => route.pattern === "/templates");
   const cocoql = routes.find((route) => route.pattern === "/cocoql");
+  const docsTopic = routes.find((route) => route.pattern === "/docs/:topic");
   assert.equal(home?.layouts.length, 1);
   assert.equal(notFound?.kind, "page");
   assert.equal(notFound?.layouts.length, 1);
@@ -58,7 +59,9 @@ test("discovers example layouts and islands", async () => {
   assert.equal(templates?.layouts.length, 1);
   assert.equal(cocoql?.kind, "page");
   assert.equal(cocoql?.layouts.length, 1);
-  for (const projectPage of ["/about", "/versioning", "/deployment", "/conventions", "/contact"]) {
+  assert.equal(docsTopic?.kind, "page");
+  assert.equal(docsTopic?.layouts.length, 1);
+  for (const projectPage of ["/about", "/cocospecs", "/cocoref", "/cocoqa", "/versioning", "/deployment", "/conventions", "/contact"]) {
     const route = routes.find((candidate) => candidate.pattern === projectPage);
     assert.equal(route?.kind, "page");
     assert.equal(route?.layouts.length, 1);
@@ -68,14 +71,21 @@ test("discovers example layouts and islands", async () => {
     "Accordion", "Alert", "AlertDialog", "AppShell", "AspectRatio", "Attachment", "Avatar", "Badge", "BottomNavigation", "BottomSheet", "Breadcrumb", "Bubble", "Button", "ButtonGroup", "Calendar", "Card", "Carousel", "Chart", "Checkbox", "Citation", "Code", "Collapsible", "Combobox", "Command", "Container", "ContextMenu", "DataTable", "DatePicker", "DateRangePicker", "Details", "Dialog", "Direction", "Divider", "DropdownMenu", "EmptyState", "FileUpload", "FilterBar", "FormField", "Grid", "Heading", "HoverCard", "IconButton", "IconInput", "Inline", "Input", "InputGroup", "InputOtp", "Item", "Kbd", "Label", "LiveRegion", "Marker", "MegaMenu", "Menubar", "Message", "MessageScroller", "MultiSelect", "NavigationMenu", "NumberField", "Offcanvas", "PageHeader", "Pagination", "Popover", "Progress", "PromptComposer", "Questionnaire", "RadioGroup", "Resizable", "SafeArea", "ScrollArea", "SearchField", "Select", "Sidebar", "SiteHeader", "Skeleton", "SkipLink", "Slider", "Spinner", "Stack", "Stat", "Stepper", "Switch", "SyntaxHighlighter", "Table", "Tabs", "Text", "Textarea", "Theme", "ThinkingIndicator", "Toast", "Toaster", "Toggle", "ToggleGroup", "Toolbar", "Tooltip", "TreeView", "VisuallyHidden",
   ]);
   assert.deepEqual(await discoverIcons(project), [
-    "*", "accessibility", "add-circle", "align-horizontal-center", "align-left", "align-right", "alt-arrow-down", "arrow-right", "arrow-up", "bell", "bolt", "book-2", "box-minimalistic", "branching-paths-up", "calendar", "camera", "chat-round", "chat-round-dots", "check-circle", "checklist", "clock-circle", "close-circle", "cloud-check", "code-square", "database", "document", "document-text", "folder", "global", "graph-up", "hamburger-menu", "heart", "home", "layers-minimalistic", "letter", "magnifier", "map-point", "palette", "pen", "question-circle", "refresh-circle", "server-square", "settings", "shield-check", "star", "stars-minimalistic", "trash-bin-minimalistic", "user", "users-group-rounded", "video-frame-play-horizontal", "widget-4",
+    "*", "accessibility", "add-circle", "align-horizontal-center", "align-left", "align-right", "alt-arrow-down", "arrow-right", "arrow-up", "bell", "bolt", "book-2", "box-minimalistic", "branching-paths-up", "bug", "calendar", "camera", "chat-round", "chat-round-dots", "check-circle", "checklist", "clock-circle", "close-circle", "cloud-check", "code-square", "database", "document", "document-text", "eye", "folder", "gallery", "global", "graph-up", "hamburger-menu", "heart", "home", "layers-minimalistic", "letter", "link-circle", "magic-wand", "magnifier", "map-point", "palette", "pen", "question-circle", "refresh-circle", "server-square", "settings", "shield-check", "star", "stars-minimalistic", "trash-bin-minimalistic", "user", "users-group-rounded", "video-frame-play-horizontal", "widget-4",
   ]);
 });
 
 test("keeps the public documentation aligned with the complete framework surface", async () => {
   const docs = await readFile(path.resolve("examples/basic/app/routes/docs.page.tsx"), "utf8");
+  const features = await readFile(path.resolve("examples/basic/app/routes/features.page.tsx"), "utf8");
+  const cocospecs = await readFile(path.resolve("examples/basic/app/routes/cocospecs.page.tsx"), "utf8");
+  const cocoref = await readFile(path.resolve("examples/basic/app/routes/cocoref.page.tsx"), "utf8");
+  const cocoqa = await readFile(path.resolve("examples/basic/app/routes/cocoqa.page.tsx"), "utf8");
   const sidebar = await readFile(path.resolve("examples/basic/app/islands/docs-sidebar.island.tsx"), "utf8");
   const search = await readFile(path.resolve("examples/basic/app/islands/docs-search.island.tsx"), "utf8");
+  const topics = await readFile(path.resolve("examples/basic/app/components/docs-topics.tsx"), "utf8");
+  const topicRoute = await readFile(path.resolve("examples/basic/app/routes/docs/[topic].page.tsx"), "utf8");
+  const generatedReference = await readFile(path.resolve("examples/basic/app/generated/api-reference.ts"), "utf8");
   const packageCommand = await readFile(path.resolve("examples/basic/app/islands/package-command.island.tsx"), "utf8");
   const header = await readFile(path.resolve("examples/basic/app/islands/site-header.island.tsx"), "utf8");
   const shell = await readFile(path.resolve("examples/basic/app/components/marketing-shell.tsx"), "utf8");
@@ -83,16 +93,20 @@ test("keeps the public documentation aligned with the complete framework surface
   const versioning = await readFile(path.resolve("examples/basic/app/routes/versioning.page.tsx"), "utf8");
   const readme = await readFile(path.resolve("README.md"), "utf8");
 
-  for (const id of ["project-creator", "charts", "api-reference", "observability", "recipes", "troubleshooting", "versioning", "roadmap", "contributing"]) {
-    assert.match(docs, new RegExp(`id="${id}"`));
-    assert.match(sidebar, new RegExp(`#${id}`));
-  }
-  for (const packageName of ["@cocoframe/core", "@cocoframe/jsx", "@cocoframe/router", "@cocoframe/client", "@cocoframe/ui", "@cocoframe/icons", "@cocoframe/schema", "@cocoframe/forms", "@cocoframe/auth", "@cocoframe/database", "@cocoframe/database-sqlite", "@cocoframe/database-postgres", "@cocoframe/security", "@cocoframe/observability", "@cocoframe/cocoql", "@cocoframe/server-node", "@cocoframe/server-web", "@cocoframe/cli"]) {
+  for (const id of ["project-creator", "cocospecs", "cocoref", "cocoqa", "charts", "api-reference", "observability", "recipes", "troubleshooting", "versioning", "roadmap", "contributing"]) assert.match(docs, new RegExp(`id="${id}"`));
+  for (const topic of ["getting-started", "pages", "islands", "forms", "apis", "database", "security", "components", "testing", "deployment", "cocospecs", "cocoref", "cocoqa", "cocoql", "api-reference"]) assert.match(sidebar + topics, new RegExp(`/docs/${topic}`));
+  for (const packageName of ["@cocoframe/core", "@cocoframe/jsx", "@cocoframe/router", "@cocoframe/client", "@cocoframe/ui", "@cocoframe/icons", "@cocoframe/schema", "@cocoframe/forms", "@cocoframe/auth", "@cocoframe/database", "@cocoframe/database-sqlite", "@cocoframe/database-postgres", "@cocoframe/security", "@cocoframe/observability", "@cocoframe/cocoql", "@cocoframe/specs", "@cocoframe/cocoref", "@cocoframe/qa", "@cocoframe/server-node", "@cocoframe/server-web", "@cocoframe/cli"]) {
     assert.match(docs, new RegExp(packageName.replace("/", "\\/")));
   }
   assert.match(docs, /create-cocoframe/);
   assert.ok((docs.match(/<GuideSection id=/g) ?? []).length >= 33);
   assert.match(search, /Package API Reference/);
+  assert.match(search, /\/docs\/api-reference/);
+  assert.match(topicRoute, /ApiReferenceView/);
+  assert.match(topicRoute, /status:.*404/s);
+  assert.match(topics, /Install CocoFrame and ship useful HTML first/);
+  assert.match(generatedReference, /Generated by scripts\/api-reference\.ts/);
+  assert.match(generatedReference, /"name": "definePage"/);
   assert.match(search, /Versioning & Roadmap/);
   assert.doesNotMatch(header, /href="#(?:signin)?"/);
   assert.doesNotMatch(shell, /href="#"/);
@@ -102,6 +116,21 @@ test("keeps the public documentation aligned with the complete framework surface
   for (const source of [readme, docs, packageCommand]) {
     assert.match(source, /npm create cocoframe@latest my-app/);
   }
+  assert.match(features, /href="\/cocospecs"/);
+  assert.match(features, /Meet CocoSpecs/);
+  assert.match(features, /href="\/cocoref"/);
+  assert.match(features, /Meet CocoRef/);
+  assert.match(features, /href="\/cocoqa"/);
+  assert.match(features, /Meet CocoQA/);
+  assert.match(cocospecs, /One request/);
+  assert.match(cocospecs, /spec\.json/);
+  assert.match(cocospecs, /data-model\.mmd/);
+  assert.match(cocoref, /Show the direction/);
+  assert.match(cocoref, /awaiting-consent/);
+  assert.match(cocoref, /__cocoref/);
+  assert.match(cocoqa, /Define what passing means/);
+  assert.match(cocoqa, /qa\/login\/qa\.json/);
+  assert.match(cocoqa, /cocoframe qa approve/);
   assert.match(docs, /Installation from npm/);
   assert.match(versioning, /19 npm packages/);
   assert.doesNotMatch(versioning, /Not published yet/);
@@ -201,6 +230,11 @@ test("generates OpenAPI, exact CSS types, and deployment metadata", async () => 
   const streamed = await (await builtApp.fetch(new Request("https://example.com/stream"))).text();
   const icons = await (await builtApp.fetch(new Request("https://example.com/icons"))).text();
   const cocoqlPage = await (await builtApp.fetch(new Request("https://example.com/cocoql"))).text();
+  const gettingStartedResponse = await builtApp.fetch(new Request("https://example.com/docs/getting-started"));
+  const gettingStartedPage = await gettingStartedResponse.text();
+  const apiReferenceResponse = await builtApp.fetch(new Request("https://example.com/docs/api-reference?package=%40cocoframe%2Fcore"));
+  const apiReferencePage = await apiReferenceResponse.text();
+  const missingDocsResponse = await builtApp.fetch(new Request("https://example.com/docs/not-a-topic"));
   const projectPages = await Promise.all(["about", "versioning", "deployment", "conventions", "contact"].map(async (route) => [route, await (await builtApp.fetch(new Request(`https://example.com/${route}`))).text()] as const));
   const filteredIcons = await (await builtApp.fetch(new Request("https://example.com/icons?q=wallet"))).text();
   assert.match(home, new RegExp(assetManifest.assets.client.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")));
@@ -228,6 +262,14 @@ test("generates OpenAPI, exact CSS types, and deployment metadata", async () => 
   assert.match(filteredIcons, /class="icons-live-count">3<\/strong>/);
   assert.equal((filteredIcons.match(/id="icon-usage-modal"/g) ?? []).length, 1);
   assert.doesNotMatch(filteredIcons, /value="wallet[^"<]*[<>]/);
+  assert.equal(gettingStartedResponse.status, 200);
+  assert.match(gettingStartedPage, /Install CocoFrame and ship useful HTML first/);
+  assert.match(gettingStartedPage, /aria-current="page" href="\/docs\/getting-started"/);
+  assert.equal(apiReferenceResponse.status, 200);
+  assert.match(apiReferencePage, /@cocoframe\/core/);
+  assert.match(apiReferencePage, /definePage/);
+  assert.match(apiReferencePage, /server-rendered page lifecycle/);
+  assert.equal(missingDocsResponse.status, 404);
   assert.match(cocoqlPage, /id="structured-errors"/);
   assert.match(cocoqlPage, /id="permissions"/);
   assert.match(cocoqlPage, /id="safety"/);

@@ -2,14 +2,39 @@
 import path from "node:path";
 import process from "node:process";
 import { watch } from "node:fs";
+import { mkdir } from "node:fs/promises";
 import { pathToFileURL } from "node:url";
 import { createServer, gracefulShutdown, type NodeServerOptions } from "@cocoframe/server-node";
 import { buildProject, developmentErrorEvent, discoverGlobalStyles, discoverIcons, discoverIslands, discoverRoutes, discoverStyles, discoverUiComponents, generateClient, generateCssTypes, generateOpenApi, serveProjectAsset } from "./project.ts";
+import { runSpecCommand } from "./spec-command.ts";
+import { runRefCommand } from "./ref-command.ts";
+import { runQaCommand } from "./qa-command.ts";
 
-const [command = "help", inputRoot = "."] = process.argv.slice(2);
+const [command = "help", inputRoot = ".", ...commandArguments] = process.argv.slice(2);
 const projectRoot = path.resolve(inputRoot);
 
-if (command === "inspect") {
+if (command === "spec") {
+  try {
+    process.exitCode = await runSpecCommand([inputRoot, ...commandArguments]);
+  } catch (error) {
+    console.error(error instanceof Error ? error.message : error);
+    process.exitCode = 1;
+  }
+} else if (command === "ref") {
+  try {
+    process.exitCode = await runRefCommand([inputRoot, ...commandArguments]);
+  } catch (error) {
+    console.error(error instanceof Error ? error.message : error);
+    process.exitCode = 1;
+  }
+} else if (command === "qa") {
+  try {
+    process.exitCode = await runQaCommand([inputRoot, ...commandArguments]);
+  } catch (error) {
+    console.error(error instanceof Error ? error.message : error);
+    process.exitCode = 1;
+  }
+} else if (command === "inspect") {
   const routes = await discoverRoutes(projectRoot);
   const islands = await discoverIslands(projectRoot);
   const styles = await discoverStyles(projectRoot);
@@ -119,6 +144,9 @@ if (command === "inspect") {
     rebuildTimer = setTimeout(() => void rebuild(), 250);
   };
   const watcher = watch(path.join(projectRoot, "app"), { recursive: true }, scheduleRebuild);
+  const cocoRefDirectory = path.join(projectRoot, ".cocoframe", "cocoref");
+  await mkdir(cocoRefDirectory, { recursive: true });
+  const cocoRefWatcher = watch(cocoRefDirectory, { recursive: true }, scheduleRebuild);
   let publicWatcher: ReturnType<typeof watch> | undefined;
   try {
     publicWatcher = watch(path.join(projectRoot, "public"), { recursive: true }, scheduleRebuild);
@@ -130,6 +158,7 @@ if (command === "inspect") {
   });
   server.on("close", () => {
     watcher.close();
+    cocoRefWatcher.close();
     publicWatcher?.close();
     configWatcher.close();
   });
@@ -170,7 +199,7 @@ if (command === "inspect") {
   const openApiFile = await generateOpenApi(projectRoot);
   console.log(`CocoFrame OpenAPI: ${openApiFile}`);
 } else {
-  console.log("CocoFrame CLI\n\nCommands:\n  cocoframe inspect [project]\n  cocoframe dev [project]\n  cocoframe build [project]\n  cocoframe start [project]\n  cocoframe generate [project]\n  cocoframe openapi [project]");
+  console.log("CocoFrame CLI\n\nCommands:\n  cocoframe inspect [project]\n  cocoframe dev [project]\n  cocoframe build [project]\n  cocoframe start [project]\n  cocoframe generate [project]\n  cocoframe openapi [project]\n  cocoframe spec <command> [options]\n  cocoframe ref <command> [options]\n  cocoframe qa <command> [options]");
 }
 
 function nodeServerOptions(): NodeServerOptions {

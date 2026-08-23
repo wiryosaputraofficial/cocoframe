@@ -30,7 +30,7 @@ export default definePage({
   view: () => <main class="project-page" id="top">
     <ProjectHero active="deployment" eyebrow="DEPLOYMENT" title={<>Build once.<br />Run on a clear boundary.</>} description="Production builds produce a server bundle, hashed browser assets, and a deployment manifest. Choose a runtime target, configure health probes, and let the adapter preserve streaming and AbortSignal propagation end-to-end." icon={<CloudCheckIcon size={86} />}>
       <a class="button button-primary" href="#targets">Choose a target</a>
-      <a class="button button-ghost" href="/docs#deployment">Deployment docs</a>
+      <a class="button button-ghost" href="/docs/deployment">Deployment docs</a>
     </ProjectHero>
 
     <ProjectSection id="targets" eyebrow="RUNTIME TARGETS" title="Three deployment shapes, one web contract." description="Every target uses Web Standard Request and Response objects; only the adapter and process lifecycle differ.">

@@ -20,7 +20,7 @@ Every template uses official `@cocoframe/ui` components and tree-shakeable
 - `--version` prints the creator version.
 
 The creator refuses filesystem roots and non-empty target directories. Each
-starter includes a server-rendered page, typed health API, responsive CSS,
+starter includes a CocoSpecs-, CocoRef-, and CocoQA-aware `AGENTS.md`, server-rendered page, typed health API, responsive CSS,
 TypeScript configuration, and production scripts.
 
 For development from the CocoFrame repository:

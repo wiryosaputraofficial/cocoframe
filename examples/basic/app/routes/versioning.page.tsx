@@ -50,6 +50,6 @@ export default definePage({
       <div class="project-policy-list reveal"><article><strong>Public exports</strong><p>Stable APIs always come from root <code>@cocoframe/*</code> packages, not internal files.</p></article><article><strong>Database migrations</strong><p>Applied migrations are immutable; new changes always use the next ID.</p></article><article><strong>Generated artifacts</strong><p>Clients, OpenAPI, manifests, and CSS declarations are regenerated—not edited manually.</p></article><article><strong>Contract versions</strong><p>CocoQL ASTs, issues, query plans, and mutation plans each have their own format version.</p></article></div>
     </ProjectSection>
 
-    <ProjectCta title="Plan an upgrade before changing dependencies." description="Use the checklist and API documentation as a single source of truth." href="/docs#api-reference" label="Open API reference" />
+    <ProjectCta title="Plan an upgrade before changing dependencies." description="Use the checklist and API documentation as a single source of truth." href="/docs/api-reference" label="Open API reference" />
   </main>,
 });

@@ -7,8 +7,8 @@ test("generates a compact AI manifest from repository sources of truth", async (
   const context = await createAiContext(path.resolve("."));
 
   assert.equal(context.framework, "cocoframe");
-  assert.equal(context.packageCount, 19);
-  assert.equal(context.packages.length, 19);
+  assert.equal(context.packageCount, 22);
+  assert.equal(context.packages.length, 22);
   assert.ok(context.documents.includes("docs/ai-context.md"));
   assert.ok(context.documents.includes("docs/repository-map.md"));
 

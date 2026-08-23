@@ -99,11 +99,15 @@ move.
 
 | Task | Inspect first | Also verify |
 | --- | --- | --- |
+| Product discovery or a new application feature | `@cocoframe/specs`, existing `specs/<feature>/spec.json`, and `cocoframe inspect` | adaptive questions, explicit assumptions, generated review artifacts, approval state |
+| Image- or website-reference implementation | `@cocoframe/cocoref`, existing `refs/<name>/ref.json`, and `cocoframe inspect` | inventory reuse, missing-component consent, actual candidate preview, revision history, temporary-route cleanup |
+| Feature QA or release approval | `@cocoframe/qa`, approved `specs/<feature>/spec.json`, optional completed `refs/<name>/ref.json`, and `qa/<feature>/qa.json` | adaptive QA decisions, traceability, allow-listed gates, sanitized evidence, defects, explicit approval |
 | Routing or pages | Router, page types, request dispatcher | load/meta/view ownership, status codes, streaming |
 | Rendering or streaming | renderer, response writer, error boundaries | abort propagation, headers, buffered error behavior |
 | Islands or reactivity | island registry/compiler, browser runtime | stable names, hydration payload, CSP, e2e |
 | Forms or actions | `createForm`, action dispatch, form primitives | 422 values/errors, 303 success, secrets, CSRF |
 | API contracts | contract definitions, schema integration | generated client/OpenAPI, Fetch compatibility |
+| Public package API or documentation | package exports, declarations, JSDoc, `scripts/api-reference.ts`, and `/docs/api-reference` | generated API reference freshness, focused topic page, links, responsive E2E |
 | Middleware | config loading, middleware composition, context keys | ordering, stable IDs, inspect output |
 | Authentication | session verification and cookie handling | authorization remains explicit; secrets stay server-only |
 | Security | host/proxy/CORS/CSRF/CSP code | negative tests and no sensitive logging |
@@ -193,9 +197,13 @@ manual for the entire framework.
 
 The next useful companion documents are:
 
+- `docs/cocospecs.md`: adaptive discovery, generated product artifacts, and the approval lifecycle.
+- `docs/cocoref.md`: visual-reference audit, candidate consent, preview, revision, promotion, and cleanup.
+- `docs/cocoqa.md`: adaptive quality decisions, traceable coverage, gate execution, defects, evidence, and release approval.
 - `docs/repository-map.md`: package ownership, public entry points, and key tests.
 - `docs/request-lifecycle.md`: one end-to-end request trace, including failures.
 - `docs/generated-artifacts.md`: generators, inputs, outputs, and commands.
+- `/docs/<topic>`: focused public guides; `/docs/api-reference` is generated from package exports and TypeScript declarations.
 - `docs/testing.md`: test layers, fixtures, commands, and selection guidance.
 - `docs/decisions/`: short architecture decision records for non-obvious choices.
 

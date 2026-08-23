@@ -8,7 +8,7 @@ source for system-wide design and invariants.
 
 | Path | Ownership |
 | --- | --- |
-| `packages/` | The 19 publishable framework and creator packages. |
+| `packages/` | The 22 publishable framework and creator packages. |
 | `examples/basic/` | Reference application, live documentation, component catalog, icon explorer, and integration fixture. |
 | `tests/*.test.ts` | Node unit and integration tests, run serially. |
 | `tests/e2e/` | Development, production-browser, and responsive Playwright coverage. |
@@ -30,6 +30,9 @@ and uses `@cocoframe/jsx` as the TSX runtime.
 | `@cocoframe/core` | `packages/core/src/index.ts`; page/API/config contracts, typed request context, middleware dispatch, SEO documents, actions, cache policy, system routes, and `CocoFrameApp.fetch`. | `tests/core.test.ts` |
 | `@cocoframe/server-node` | `packages/server-node/src/index.ts`; Node HTTP to Web Request/Response adapter, limits, timeout, proxy trust, response backpressure, and graceful shutdown. | `tests/server-node.test.ts` |
 | `@cocoframe/server-web` | `packages/server-web/src/index.ts`; minimal Fetch-host export. | `tests/server-web.test.ts` |
+| `@cocoframe/specs` | `packages/specs/src/index.ts`; adaptive product discovery, versioned answers, completeness and approval checks, and deterministic review artifacts. | `tests/specs.test.ts` |
+| `@cocoframe/cocoref` | `packages/cocoref/src/index.ts`; visual-reference inventory audits, reuse and missing decisions, consent-gated candidates, preview/revision state, and approval artifacts. | `tests/cocoref.test.ts` |
+| `@cocoframe/qa` | `packages/qa/src/index.ts`; adaptive QA decisions, traceable cases, allow-listed quality gates, defects, evidence, and explicit release approval. | `tests/qa.test.ts` |
 | `@cocoframe/client` | `packages/client/src/index.ts`; signals, computed values, bindings, island definitions, and asset configuration. `bootstrap.ts`, `stream.ts`, and `dev.ts` are browser entry points. | `tests/client.test.ts`, `tests/e2e/*.spec.ts` |
 | `@cocoframe/schema` | `packages/schema/src/index.ts`; runtime schemas, inference, validation issues, transforms, and serializable schema contracts. | `tests/schema.test.ts` |
 | `@cocoframe/forms` | `packages/forms/src/index.ts`; schema-backed action parsing, retained values, accessible field props, HTTP 422 rerendering, sensitive-value filtering, and `CsrfField`. | `tests/forms.test.ts`, production form E2E |
@@ -93,7 +96,9 @@ changing any symbol.
 - Derived files: `docs/generated-artifacts.md`.
 - Test selection: `docs/testing.md`.
 - CocoQL language and safety contracts: `docs/cocoql-*.md`.
-- Public usage guide and package reference: `examples/basic/app/routes/docs.page.tsx` and the live `/docs` route.
+- Public documentation center: `examples/basic/app/routes/docs.page.tsx`, `app/routes/docs/[topic].page.tsx`, and `app/components/docs-topics.tsx`.
+- Generated package API reference: `scripts/api-reference.ts` → `examples/basic/app/generated/api-reference.ts` → live `/docs/api-reference`.
+- The original `/docs` complete guide and anchors remain compatible while focused `/docs/<topic>` pages provide smaller human and AI context.
 - UI and icon public examples: live `/components` and `/icons`, backed by their corresponding example routes and islands.
 
 If a public contract changes, update the owning source and test first, then all

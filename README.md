@@ -13,9 +13,8 @@ and compact APIs that are easy for developers and AI agents to understand.
 
 ## Documentation
 
-- Run the example and open `/docs` for installation, routing, frontend,
-  forms, APIs, security, database, operations, troubleshooting, and the public
-  package reference.
+- Run the example and open `/docs` for the documentation center. Focused guides live under `/docs/getting-started`, `/docs/pages`, `/docs/islands`, `/docs/forms`, `/docs/apis`, `/docs/database`, `/docs/security`, `/docs/testing`, and `/docs/deployment`.
+- Open `/docs/api-reference` for package exports, signatures, types, deprecations, examples, and source locations generated directly from TypeScript and JSDoc.
 - Open `/components` for the complete typed UI catalog, design tokens,
   utility classes, props, and chart variants.
 - Open `/icons` to search all 1,246 bundled Solar Linear icons and copy their
@@ -272,6 +271,59 @@ a `.cocoframe/deploy.json` manifest consumed by `cocoframe start` and deployment
 
 Run `npm run benchmark:http` for a sequential localhost end-to-end baseline in
 addition to the renderer-only `npm run benchmark` measurement.
+
+## AI-assisted product discovery with CocoSpecs
+
+`@cocoframe/specs` gives AI agents and developers one provider-independent
+discovery contract before implementation. Start with a brief, answer adaptive
+question batches, generate review artifacts, and approve the canonical spec:
+
+```bash
+cocoframe spec create login --brief "Users sign in and continue to the dashboard."
+cocoframe spec resume login
+cocoframe spec check login
+cocoframe spec generate login
+cocoframe spec approve login
+```
+
+The source of truth is `specs/<feature>/spec.json`; generated PRD, Mermaid flow
+and data model, acceptance criteria, decision log, and task files remain derived
+review views. Authentication, OAuth, roles, and persistence activate deeper
+questions only when relevant. See `docs/cocospecs.md` for the complete lifecycle.
+
+## Reference-driven components with CocoRef
+
+`@cocoframe/cocoref` lets an AI accept an image or website reference, audit
+existing components, ask before creating anything missing, preview the actual TSX
+candidate locally, and iterate until explicit approval or cancellation:
+
+```bash
+cocoframe ref create dashboard --image ./references/dashboard.png
+cocoframe ref audit dashboard --requirements ./requirements.json
+cocoframe ref consent dashboard activity-feed
+cocoframe ref preview dashboard activity-feed
+cocoframe ref feedback dashboard activity-feed "Use denser spacing"
+cocoframe ref approve dashboard activity-feed
+```
+
+The source of truth is `refs/<name>/ref.json`. Temporary candidates render
+through local development-only routes and are removed on approval or cancellation.
+See `docs/cocoref.md` for the complete lifecycle and AI safety rules.
+
+## Evidence-based release approval with CocoQA
+
+`@cocoframe/qa` connects an approved CocoSpec and optional completed CocoRef to adaptive quality questions, traceable test cases, known npm quality gates, sanitized evidence, defects, and explicit release approval.
+
+```bash
+cocoframe qa create login --spec login --ref login-reference
+cocoframe qa resume login
+cocoframe qa run login
+cocoframe qa record login acceptance-1 pass --evidence "Login E2E passed."
+cocoframe qa check login
+cocoframe qa approve login
+```
+
+The canonical record is `qa/<feature>/qa.json`. Generated test-plan, traceability, report, and defect Markdown files are review views. Required questions, cases, gates, and open defects block approval. See `docs/cocoqa.md` for the lifecycle and evidence-safety rules.
 
 ## Security and observability
 

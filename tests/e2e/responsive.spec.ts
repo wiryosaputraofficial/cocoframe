@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { captureClientErrors, expectHealthyImages, expectNoHorizontalOverflow } from "./helpers.ts";
 
-const criticalPages = ["/", "/features", "/about", "/versioning", "/deployment", "/conventions", "/docs", "/components", "/templates", "/icons", "/cocoql", "/contact"] as const;
+const criticalPages = ["/", "/features", "/cocospecs", "/cocoref", "/cocoqa", "/about", "/versioning", "/deployment", "/conventions", "/docs", "/docs/getting-started", "/docs/pages", "/docs/api-reference", "/docs/api-reference?package=%40cocoframe%2Fcore", "/components", "/templates", "/icons", "/cocoql", "/contact"] as const;
 
 test("critical pages remain usable from 320px through 4K", async ({ page }) => {
   test.setTimeout(90_000);

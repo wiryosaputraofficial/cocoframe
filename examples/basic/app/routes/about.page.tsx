@@ -23,7 +23,7 @@ export default definePage({
   },
   view: () => <main class="project-page" id="top">
     <ProjectHero active="about" eyebrow="ABOUT COCOFRAME" title={<>A smaller framework<br />for ambitious products.</>} description="CocoFrame is a server-first TypeScript framework for building fast, SEO-friendly web applications, contracted APIs, and clients reusable on mobile—with a deliberately small API surface." icon={<GlobalIcon size={86} />}>
-      <a class="button button-primary" href="/docs#quick-start">Start building</a>
+      <a class="button button-primary" href="/docs/getting-started">Start building</a>
       <a class="button button-ghost" href="/features">Explore features</a>
     </ProjectHero>
 

@@ -9,6 +9,9 @@
     "start": "cocoframe start .",
     "check": "tsc --noEmit",
     "inspect": "cocoframe inspect .",
+    "spec": "cocoframe spec",
+    "ref": "cocoframe ref",
+    "qa": "cocoframe qa",
     "generate": "cocoframe generate ."
   },
   "dependencies": {

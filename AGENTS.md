@@ -4,6 +4,19 @@ Read `docs/ai-context.md` to locate the owning package, relevant lifecycle,
 generated artifacts, and verification required for the task.
 
 - Keep public APIs small, typed, explicit, and dependency-light.
+- For a new user-facing feature, workflow, data model, or integration whose
+  behavior is not already fully specified, create or resume a CocoSpec, ask only
+  its next adaptive question batch, and record reviewed answers. Generate review
+  artifacts and obtain explicit `approved` state before implementation. Small
+  mechanical fixes do not require a full product interview.
+- For image- or website-reference work, create or resume a CocoRef, audit
+  existing UI before proposing new components, and ask for explicit consent for
+  every missing component. Promote only the exact previewed source after approval;
+  remove temporary previews on approval or cancellation.
+- After implementation, create or resume CocoQA from the approved CocoSpec and
+  completed CocoRef when applicable. Ask its adaptive quality questions before
+  execution, run required gates, record sanitized evidence and defects, and do
+  not claim release readiness until the canonical QA state is `approved`.
 - Server rendering is the default. Browser JavaScript must be opt-in.
 - Interactive components live in `app/islands/*.island.tsx` and use one stable,
   lowercase `defineIsland` name matching the filename.
@@ -16,7 +29,9 @@ generated artifacts, and verification required for the task.
 - Contracted APIs have one stable `id`, validate input and output with
   `@cocoframe/schema`, and return plain data unless a custom `Response` is required.
 - Run `npm run generate` after an API contract changes; never edit generated
-  clients, OpenAPI, or CSS module declarations manually.
+  clients, OpenAPI, or CSS module declarations manually. Run `npm run docs:api`
+  after public package exports, signatures, or JSDoc change; never edit the
+  generated API reference manually.
 - Use `defer` only for supplementary content. Keep SEO-critical copy and
   structured metadata immediate, and provide an accessible fallback.
 - Keep session secrets server-only. `@cocoframe/auth` verifies session integrity but
