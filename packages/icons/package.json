@@ -1,6 +1,6 @@
 {
   "name": "@cocoframe/icons",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "license": "MIT",
   "type": "module",
   "exports": {
@@ -12,6 +12,6 @@
     "generate": "node scripts/generate-solar-linear.mjs"
   },
   "dependencies": {
-    "@cocoframe/jsx": "0.0.2"
+    "@cocoframe/jsx": "0.0.3"
   }
 }

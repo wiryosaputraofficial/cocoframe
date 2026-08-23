@@ -9,6 +9,9 @@ export interface CocoQLToken {
   readonly column: number;
 }
 
+/**
+ * Tokenizes Coco QL with stable source locations.
+ */
 export function lexCocoQL(source: string): readonly CocoQLToken[] {
   const tokens: CocoQLToken[] = [];
   let index = 0;

@@ -12,15 +12,15 @@
     "generate": "cocoframe generate ."
   },
   "dependencies": {
-    "@cocoframe/client": "0.0.3",
-    "@cocoframe/core": "0.0.3",
-    "@cocoframe/icons": "0.0.2",
-    "@cocoframe/jsx": "0.0.2",
-    "@cocoframe/schema": "0.0.2",
-    "@cocoframe/ui": "0.0.2"
+    "@cocoframe/client": "0.0.4",
+    "@cocoframe/core": "0.0.4",
+    "@cocoframe/icons": "0.0.3",
+    "@cocoframe/jsx": "0.0.3",
+    "@cocoframe/schema": "0.0.3",
+    "@cocoframe/ui": "0.0.3"
   },
   "devDependencies": {
-    "@cocoframe/cli": "0.0.3",
+    "@cocoframe/cli": "0.0.4",
     "@types/node": "^24.0.0",
     "typescript": "^5.9.0"
   }

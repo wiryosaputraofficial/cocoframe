@@ -3,7 +3,7 @@ import { readFile } from "node:fs/promises";
 import test from "node:test";
 import { jsx, renderToString } from "../packages/jsx/src/index.ts";
 import {
-  Accordion, Alert, AlertDialog, AppShell, Attachment, Avatar, Badge, BottomNavigation, BottomSheet, Breadcrumb, Button, Calendar, Card, Chart, Checkbox, Citation, Code, Collapsible, Combobox, Container, ContextMenu,
+  Accordion, Alert, AlertDialog, AppShell, Attachment, Avatar, Badge, BottomNavigation, BottomSheet, Breadcrumb, Button, Calendar, Card, Carousel, Chart, Checkbox, Citation, Code, Collapsible, Combobox, Container, ContextMenu,
   DataTable, DateRangePicker, Details, Dialog, Divider, DropdownMenu, EmptyState, FileUpload, FilterBar, FormField, Grid, Heading,
   IconButton, IconInput, Inline, Input, InputGroup, InputOtp, MegaMenu, Message, MessageScroller, Offcanvas, Pagination, Popover, Progress, Questionnaire,
   LiveRegion, Menubar, MultiSelect, NavigationMenu, NumberField, PageHeader, PromptComposer, RadioGroup, SafeArea, SearchField, Select, SiteHeader, Skeleton, SkipLink, Spinner, Stack, Stat, Stepper, Switch, Table,
@@ -188,6 +188,7 @@ test("renders the extended component coverage as accessible server-first HTML", 
     Accordion({ id: "faq", openIds: ["one"], items: [{ id: "one", title: "First", content: "Answer" }, { id: "two", title: "Second", content: "More" }] }),
     AlertDialog({ id: "danger", title: "Delete?", description: "Cannot be undone", action: Button({ variant: "danger", children: "Delete" }) }),
     Calendar({ id: "date", year: 2026, month: 8, selected: "2026-08-21" }),
+    Carousel({ id: "features", items: [{ id: "one", content: "Fast" }, { id: "two", content: "Typed" }] }),
     Chart({ label: "Requests", data: [{ label: "Mon", value: 20 }, { label: "Tue", value: 40 }] }),
     Combobox({ id: "framework", name: "framework", label: "Framework", options: [{ label: "CocoFrame", value: "cocoframe" }] }),
     Combobox({ id: "interactive-framework", name: "interactive-framework", label: "Interactive framework", interactive: true, options: [{ label: "CocoFrame", value: "cocoframe" }, { label: "Disabled", value: "disabled", disabled: true }] }),
@@ -203,6 +204,10 @@ test("renders the extended component coverage as accessible server-first HTML", 
   assert.match(body, /<details name="faq" open class="coco-accordion__item">/);
   assert.match(body, /role="alertdialog"/);
   assert.match(body, /value="2026-08-21" class="coco-calendar__day coco-calendar__day--selected" aria-pressed="true"/);
+  assert.match(body, /<strong>August 2026<\/strong>/);
+  assert.match(body, /class="coco-calendar__weekdays"><span>Mon<\/span><span>Tue<\/span>/);
+  assert.match(body, /aria-label="1 of 2">Fast<\/article>/);
+  assert.match(body, /aria-label="Go to slide 2">2<\/a>/);
   assert.match(body, /data-chart-type="bar"/);
   assert.match(body, /<svg viewBox="0 0 720 360" role="img" aria-label="Requests">/);
   assert.match(body, /<table class="coco-visually-hidden">/);

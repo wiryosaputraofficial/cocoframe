@@ -1,5 +1,8 @@
 import { createContextKey, defineMiddleware, type Middleware, type RequestContext } from "@cocoframe/core";
 
+/**
+ * Provides the public request Id Key API for @cocoframe/observability.
+ */
 export const requestIdKey = createContextKey<string>("request-id");
 
 export interface RequestLogEvent {
@@ -19,6 +22,9 @@ export interface RequestIdOptions {
   readonly create?: () => string;
 }
 
+/**
+ * Creates middleware that validates request IDs, propagates them, and emits safe structured timing events.
+ */
 export function requestId(options: RequestIdOptions = {}): Middleware {
   const headerName = options.headerName ?? "x-request-id";
   return defineMiddleware("observability.request-id", async (context, next) => {
@@ -38,6 +44,9 @@ export interface RequestLoggerOptions {
   readonly sample?: (context: RequestContext) => boolean;
 }
 
+/**
+ * Provides the public request Logger API for @cocoframe/observability.
+ */
 export function requestLogger(options: RequestLoggerOptions = {}): Middleware {
   const write = options.write ?? ((event: RequestLogEvent) => console.log(JSON.stringify(event)));
   return defineMiddleware("observability.request-logger", async (context, next) => {

@@ -4,7 +4,7 @@
     {
       "id": "starter",
       "name": "CocoFrame Starter",
-      "description": "Fondasi minimal server-first dengan typed API dan counter island.",
+      "description": "A minimal server-first foundation with a typed API and counter island.",
       "category": "Starter Kits",
       "technology": ["TypeScript", "CocoFrame"],
       "components": ["Badge", "Button", "Card", "Heading", "Stack", "Text"],
@@ -13,7 +13,7 @@
     {
       "id": "marketing",
       "name": "Marketing Launch",
-      "description": "Landing page SEO-ready dengan hero, feature cards, metrics, dan CTA.",
+      "description": "An SEO-ready landing page with a hero, feature cards, metrics, and CTA.",
       "category": "Web Applications",
       "technology": ["TypeScript", "CocoFrame", "CSS"],
       "components": ["Badge", "Card", "Container", "Heading", "Inline", "Stack", "Stat", "Text"],
@@ -22,7 +22,7 @@
     {
       "id": "dashboard",
       "name": "Orbit Dashboard",
-      "description": "Dashboard admin responsif dengan sidebar, analytics, data table, dan status.",
+      "description": "A responsive admin dashboard with a sidebar, analytics, data table, and statuses.",
       "category": "Dashboards",
       "technology": ["TypeScript", "CocoFrame", "Charts"],
       "components": ["Badge", "Card", "Chart", "DataTable", "Heading", "Inline", "Sidebar", "Stat", "Text"],
@@ -31,7 +31,7 @@
     {
       "id": "documentation",
       "name": "Atlas Documentation",
-      "description": "Dokumentasi server-first dengan sidebar, code samples, alert, dan route table.",
+      "description": "Server-first documentation with a sidebar, code samples, alerts, and a route table.",
       "category": "Documentation",
       "technology": ["TypeScript", "CocoFrame"],
       "components": ["Alert", "Badge", "Card", "Heading", "Sidebar", "SyntaxHighlighter", "Table", "Text"],

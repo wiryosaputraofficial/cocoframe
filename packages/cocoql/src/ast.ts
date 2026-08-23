@@ -1,3 +1,6 @@
+/**
+ * Identifies the stable cocoql version contract used by @cocoframe/cocoql.
+ */
 export const COCOQL_VERSION = "0.1" as const;
 
 export type CocoQLScalar = string | number | boolean | null;

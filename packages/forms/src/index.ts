@@ -36,6 +36,9 @@ export interface CreateFormOptions<Input> {
   readonly sensitiveFields?: readonly Extract<keyof Input, string>[];
 }
 
+/**
+ * Creates one schema-backed controller for form parsing, retained values, accessible errors, and HTTP 422 rerendering.
+ */
 export function createForm<Input>(schema: Schema<Input>, options: CreateFormOptions<Input> = {}): FormController<Input> {
   const stateKey = createContextKey<FormState<Input>>("form-state");
   const sensitiveFields = new Set<string>(options.sensitiveFields ?? []);
@@ -90,6 +93,9 @@ export interface CsrfFieldProps {
   readonly name?: string;
 }
 
+/**
+ * Renders the hidden CSRF field installed by matching security middleware.
+ */
 export function CsrfField({ context, name = "_csrf" }: CsrfFieldProps): CocoNode {
   const token = context.get(csrfTokenKey);
   return token ? jsx("input", { type: "hidden", name, value: token }) : null;

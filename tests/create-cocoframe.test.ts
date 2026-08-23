@@ -42,7 +42,7 @@ test("scaffolds a buildable server-first application without installing", async 
     const manifest = JSON.parse(await readFile(path.join(target, "package.json"), "utf8"));
     assert.equal(manifest.name, "my-starter");
     assert.equal(manifest.scripts.dev, "cocoframe dev .");
-    assert.equal(manifest.dependencies["@cocoframe/core"], "0.0.3");
+    assert.equal(manifest.dependencies["@cocoframe/core"], "0.0.4");
     assert.match(await readFile(path.join(target, "app/routes/index.page.tsx"), "utf8"), /my-starter — CocoFrame/);
     await access(path.join(target, ".gitignore"));
     await assert.rejects(access(path.join(target, "_gitignore")));
@@ -59,6 +59,12 @@ test("scaffolds a buildable server-first application without installing", async 
 test("scaffolds every official template with CocoFrame components and icons", async () => {
   const catalog = JSON.parse(await readFile(path.resolve("packages/create-cocoframe/templates/catalog.json"), "utf8"));
   assert.deepEqual(catalog.templates.map((item: { id: string }) => item.id), availableTemplates);
+  assert.deepEqual(catalog.templates.map((item: { description: string }) => item.description), [
+    "A minimal server-first foundation with a typed API and counter island.",
+    "An SEO-ready landing page with a hero, feature cards, metrics, and CTA.",
+    "A responsive admin dashboard with a sidebar, analytics, data table, and statuses.",
+    "Server-first documentation with a sidebar, code samples, alerts, and a route table.",
+  ]);
   const temporaryRoot = path.resolve(".tmp-tests");
   await mkdir(temporaryRoot, { recursive: true });
   const fixtureRoot = await mkdtemp(path.join(temporaryRoot, "create-cocoframe-templates-"));

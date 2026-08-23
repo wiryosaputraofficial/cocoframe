@@ -135,28 +135,46 @@ type RegisteredHandler =
   | { readonly kind: "action"; readonly page: PageDefinition<unknown> }
   | { readonly kind: "api"; readonly api: ApiDefinition<ApiInputSchemas, unknown> };
 
+/**
+ * Defines one typed server-rendered page lifecycle containing load, metadata, view, action, and error behavior.
+ */
 export function definePage<Data = undefined>(definition: PageDefinition<Data>): PageDefinition<Data> {
   return Object.freeze(definition);
 }
 
+/**
+ * Defines a typed API handler with optional runtime input and output contracts.
+ */
 export function defineApi<const Definitions extends ApiInputSchemas = ApiInputSchemas, Output = unknown>(
   definition: ApiDefinition<Definitions, Output>,
 ): ApiDefinition<Definitions, Output> {
   return Object.freeze(definition);
 }
 
+/**
+ * Defines a server-rendered layout inherited through route-directory nesting.
+ */
 export function defineLayout(definition: LayoutDefinition): LayoutDefinition {
   return definition;
 }
 
+/**
+ * Defines one typed application configuration without adding runtime behavior.
+ */
 export function defineConfig<const Options extends AppOptions>(options: Options): Options {
   return Object.freeze(options);
 }
 
+/**
+ * Creates an identity-based typed key for request-scoped context state.
+ */
 export function createContextKey<Value>(name: string): ContextKey<Value> {
   return Object.freeze({ name });
 }
 
+/**
+ * Defines middleware with an optional stable ID for inspect output and execution tracing.
+ */
 export function defineMiddleware(id: string, middleware: Middleware): Middleware;
 export function defineMiddleware(middleware: Middleware): Middleware;
 export function defineMiddleware(idOrMiddleware: string | Middleware, input?: Middleware): Middleware {
@@ -166,6 +184,9 @@ export function defineMiddleware(idOrMiddleware: string | Middleware, input?: Mi
   return middleware;
 }
 
+/**
+ * Defines the typed Form Action contract for @cocoframe/core.
+ */
 export function defineFormAction<Input>(
   input: Schema<Input>,
   handle: (input: Input, context: RequestContext) => Response | void | Promise<Response | void>,
@@ -180,11 +201,17 @@ export function defineFormAction<Input>(
   };
 }
 
+/**
+ * Requests that a page action rerender the page with an explicit status, normally HTTP 422.
+ */
 export function rerender(status = 422): ActionRender {
   if (!Number.isInteger(status) || status < 400 || status > 599) throw new TypeError("Action render status must be between 400 and 599");
   return Object.freeze({ kind: "action-render", status });
 }
 
+/**
+ * Wraps a page view with inherited layouts from inner to outer scope.
+ */
 export function withLayouts<Data>(
   page: PageDefinition<Data>,
   layouts: readonly LayoutDefinition[],
@@ -201,6 +228,9 @@ export function withLayouts<Data>(
   };
 }
 
+/**
+ * Registers pages, actions, APIs, middleware, and system routes behind one Web Standard fetch handler.
+ */
 export class CocoFrameApp {
   readonly #router = new Router<RegisteredHandler>();
   readonly #contracts: ApiContractManifest[] = [];
@@ -537,6 +567,9 @@ interface DocumentOptions {
   readonly assets?: RuntimeAssets;
 }
 
+/**
+ * Renders a complete SEO HTML document around an already-rendered body.
+ */
 export function renderDocument(options: DocumentOptions): string {
   return `${documentStart(options)}${options.body}${documentEnd(options.body.includes("<coco-island "), options.development ?? false, options.assets)}`;
 }
@@ -634,12 +667,18 @@ function renderDevelopmentError(error: unknown, phase: string): string {
   </div>`;
 }
 
+/**
+ * Creates a JSON response with the correct UTF-8 content type.
+ */
 export function json(data: unknown, init: ResponseInit = {}): Response {
   const headers = new Headers(init.headers);
   headers.set("content-type", "application/json; charset=utf-8");
   return new Response(JSON.stringify(data), { ...init, headers });
 }
 
+/**
+ * Creates an empty redirect response with a validated redirect status.
+ */
 export function redirect(location: string, status: 301 | 302 | 303 | 307 | 308 = 302): Response {
   return new Response(null, { status, headers: { location } });
 }

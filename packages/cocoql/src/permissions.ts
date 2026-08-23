@@ -6,6 +6,9 @@ import { getCocoQLSourceMap } from "./source-map.ts";
 import { getCocoQLMutationSourceMap } from "./mutation-source-map.ts";
 import { validateCocoQLMutation } from "./mutation.ts";
 
+/**
+ * Identifies the stable cocoql permission version contract used by @cocoframe/cocoql.
+ */
 export const COCOQL_PERMISSION_VERSION = "0.1" as const;
 
 export interface CocoQLEntityReadPermission {
@@ -29,6 +32,9 @@ interface PermissionTarget {
 
 const AGGREGATE_FUNCTIONS = new Set<CocoQLAggregateFunction>(["count", "sum", "avg", "min", "max"]);
 
+/**
+ * Defines an explicit default-deny CocoQL permission policy against a public schema.
+ */
 export function defineCocoQLPermissions(policy: CocoQLPermissionPolicy): CocoQLPermissionPolicy {
   assertPolicyShape(policy);
   const entities = Object.fromEntries(Object.entries(policy.entities).map(([entity, rule]) => [entity, Object.freeze({

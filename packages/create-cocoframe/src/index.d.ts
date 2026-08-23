@@ -35,8 +35,23 @@ export interface CreatorOptions extends Omit<ScaffoldOptions, "projectDirectory"
   output?: Pick<Console, "log">;
 }
 
+/**
+ * Provides the help Text operation used by the dependency-free project creator.
+ */
 export const helpText: string;
+/**
+ * Provides the available Templates operation used by the dependency-free project creator.
+ */
 export const availableTemplates: readonly TemplateName[];
+/**
+ * Parses dependency-free create-cocoframe CLI arguments into validated creator options.
+ */
 export function parseArguments(args: string[], userAgent?: string): CreatorArguments;
+/**
+ * Creates a validated CocoFrame project from an official template without overwriting non-empty directories.
+ */
 export function scaffoldProject(options: ScaffoldOptions): Promise<ScaffoldResult>;
+/**
+ * Provides the run Creator operation used by the dependency-free project creator.
+ */
 export function runCreator(args: string[], options?: CreatorOptions): Promise<ScaffoldResult | undefined>;

@@ -5,6 +5,9 @@ import { planCocoQL, validateCocoQLPlan, type CocoQLPlanFieldRef, type CocoQLPla
 import type { CocoQLSchema } from "./schema.ts";
 import { resolveCocoQLFieldPath, validateCocoQL, validateCocoQLFilterValue } from "./semantic.ts";
 
+/**
+ * Identifies the stable cocoql mutation plan version contract used by @cocoframe/cocoql.
+ */
 export const COCOQL_MUTATION_PLAN_VERSION = "0.1" as const;
 
 export interface CocoQLPlanAssignment {
@@ -34,6 +37,9 @@ export interface CocoQLMutationPreview {
   readonly plan: CocoQLMutationPlan;
 }
 
+/**
+ * Validates Coco QL Mutation and returns a typed value or structured diagnostic.
+ */
 export function validateCocoQLMutation(mutation: CocoQLMutation, schema: CocoQLSchema): CocoQLMutation {
   assertMutationShape(mutation);
   const sourceMap = getCocoQLMutationSourceMap(mutation);
@@ -59,6 +65,9 @@ export function validateCocoQLMutation(mutation: CocoQLMutation, schema: CocoQLS
   return mutation;
 }
 
+/**
+ * Builds a deterministic, database-independent Coco QL Mutation plan.
+ */
 export function planCocoQLMutation(mutation: CocoQLMutation, schema: CocoQLSchema, options: CocoQLPlanOptions = {}): CocoQLMutationPlan {
   validateCocoQLMutation(mutation, schema);
   const entity = schema.entities[mutation.entity]!;
@@ -122,6 +131,9 @@ export function previewCocoQLMutation(mutation: CocoQLMutation, schema: CocoQLSc
   });
 }
 
+/**
+ * Formats Coco QL Mutation Plan into deterministic canonical text.
+ */
 export function formatCocoQLMutationPlan(plan: CocoQLMutationPlan): string {
   return `${JSON.stringify(plan, null, 2)}\n`;
 }

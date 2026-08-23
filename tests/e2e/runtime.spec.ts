@@ -22,7 +22,7 @@ test("production hydrates reactive islands with a strict CSP and no client error
   );
   expect(executableInlineScripts).toBe(0);
 
-  await page.getByRole("button", { name: "Tampilkan testimonial 2" }).click();
+  await page.getByRole("button", { name: "Show testimonial 2" }).click();
   await expect(page.locator(".testimonial-card.active")).toContainText("Dewi Lestari");
   await expect(page.locator("[data-coco-dev-overlay]")).toHaveCount(0);
   assertNoClientErrors();
@@ -48,7 +48,7 @@ test("component catalog live search, sorting, and dialog work with keyboard inpu
   await page.keyboard.press("Control+K");
   await expect(search).toBeFocused();
   await search.fill("DataTable");
-  await expect(page.getByRole("status")).toContainText("1 dari");
+  await expect(page.getByRole("status")).toContainText("1 of");
   await expect(page.locator(".official-component")).toHaveCount(1);
 
   const serviceHeader = page.locator("#data-table th").filter({ hasText: "Service" });
@@ -79,6 +79,54 @@ test("component catalog live search, sorting, and dialog work with keyboard inpu
   await expect(page.locator(".official-component")).toHaveCount(1);
   await page.getByLabel("Category").selectOption("ALL");
   await search.fill("");
+
+  assertNoClientErrors();
+});
+
+test("template catalog filters and opens an accessible preview", async ({ page }) => {
+  test.setTimeout(60_000);
+  const assertNoClientErrors = captureClientErrors(page);
+  await page.goto("/templates#catalog", { waitUntil: "domcontentloaded" });
+  await expect(page.locator('coco-island[data-coco-module*="template-catalog"][data-coco-mounted]')).toHaveCount(1, { timeout: 30_000 });
+
+  const search = page.getByRole("searchbox", { name: "Search templates" });
+  await expect(page.getByRole("status")).toContainText("4 npm-ready templates");
+  await search.fill("dashboard");
+  await expect(page.getByRole("status")).toContainText("1 npm-ready template");
+  await expect(page.locator(".template-card")).toHaveCount(1);
+
+  await page.getByRole("button", { name: "Preview" }).click();
+  const dialog = page.getByRole("dialog", { name: "Orbit Dashboard" });
+  await expect(dialog).toBeVisible();
+  await expect(dialog).toContainText("--template dashboard");
+  await page.getByRole("button", { name: "Close preview" }).click();
+  await expect(dialog).not.toBeVisible();
+
+  await search.fill("no-such-template");
+  await expect(page.getByRole("heading", { name: "No matching templates" })).toBeVisible();
+  await page.getByRole("button", { name: "Reset filters" }).click();
+  await expect(page.locator(".template-card")).toHaveCount(4);
+
+  assertNoClientErrors();
+});
+
+test("icon catalog searches live and opens an accessible usage dialog", async ({ page }) => {
+  test.setTimeout(60_000);
+  const assertNoClientErrors = captureClientErrors(page);
+  await page.goto("/icons#icon-catalog", { waitUntil: "domcontentloaded" });
+  await expect(page.locator('coco-island[data-coco-module*="icon-explorer"][data-coco-mounted]')).toHaveCount(1, { timeout: 30_000 });
+
+  const search = page.getByRole("searchbox", { name: "Search by icon name" });
+  await search.fill("home");
+  await expect(page.getByRole("heading", { name: "Results for “home”" })).toBeVisible();
+  await expect(page.getByRole("status")).toContainText("icons shown");
+
+  await page.getByRole("link", { name: "View how to use the Home icon", exact: true }).click();
+  const dialog = page.getByRole("dialog", { name: "Home" });
+  await expect(dialog).toBeVisible();
+  await expect(dialog).toContainText("@cocoframe/icons/linear/home");
+  await page.getByRole("button", { name: "Close dialog" }).click();
+  await expect(dialog).not.toBeVisible();
 
   assertNoClientErrors();
 });
@@ -144,5 +192,7 @@ test("unknown routes render the product 404 page", async ({ page }) => {
   const response = await page.goto("/this-route-does-not-exist");
   expect(response?.status()).toBe(404);
   await expect(page.getByRole("heading", { name: /Page not found/i })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "You may be looking for" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Still need help?" })).toBeVisible();
   await expect(page.getByRole("link", { name: /Back to Home/i })).toBeVisible();
 });

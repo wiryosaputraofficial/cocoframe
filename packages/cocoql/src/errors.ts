@@ -18,6 +18,9 @@ export type CocoQLErrorCode =
   | "INVALID_LIMIT"
   | "UNSAFE_MUTATION";
 
+/**
+ * Identifies the stable cocoql issue version contract used by @cocoframe/cocoql.
+ */
 export const COCOQL_ISSUE_VERSION = "0.1" as const;
 
 export type CocoQLErrorStage = "lexer" | "parser" | "semantic" | "permission" | "safety" | "planner" | "compiler";
@@ -55,6 +58,9 @@ export interface CocoQLIssue {
 
 export type CocoQLIssueInput = Omit<CocoQLIssue, "type" | "version">;
 
+/**
+ * Represents a versioned, structured CocoQL diagnostic with a stage, code, path, and source location.
+ */
 export class CocoQLError extends Error {
   readonly issue: CocoQLIssue;
 

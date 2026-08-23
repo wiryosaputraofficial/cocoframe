@@ -36,6 +36,9 @@ export type Component<Props = Record<string, unknown>> = (
   props: Props & { children?: CocoNode },
 ) => CocoNode;
 
+/**
+ * Groups sibling CocoFrame nodes without emitting an HTML wrapper.
+ */
 export const Fragment = Symbol.for("fast.fragment");
 
 const VOID_ELEMENTS = new Set([
@@ -88,14 +91,23 @@ const ATTRIBUTE_ALIASES: Readonly<Record<string, string>> = {
   httpEquiv: "http-equiv",
 };
 
+/**
+ * Marks trusted HTML for explicit unescaped rendering; never pass untrusted input.
+ */
 export function raw(value: string): RawHtml {
   return { kind: "raw", value };
 }
 
+/**
+ * Emits an immediate fallback boundary and streams supplementary content when its promise settles.
+ */
 export function defer(content: Promise<unknown>, fallback: CocoNode): CocoDeferred {
   return { kind: "deferred", content, fallback };
 }
 
+/**
+ * Escapes a dynamic value for safe placement in HTML text content.
+ */
 export function escapeText(value: unknown): string {
   return String(value)
     .replaceAll("&", "&amp;")
@@ -103,10 +115,16 @@ export function escapeText(value: unknown): string {
     .replaceAll(">", "&gt;");
 }
 
+/**
+ * Escapes a dynamic value for safe placement in an HTML attribute.
+ */
 export function escapeAttribute(value: unknown): string {
   return escapeText(value).replaceAll('"', "&quot;").replaceAll("'", "&#39;");
 }
 
+/**
+ * Provides the public jsx API for @cocoframe/core.
+ */
 export function jsx<Props extends object = Record<string, unknown>>(
   type: string | Component<Props> | typeof Fragment,
   inputProps: (Props & { children?: CocoNode }) | null,
@@ -128,6 +146,9 @@ export function jsx<Props extends object = Record<string, unknown>>(
   return { kind: "element", tag: type, props: props as Record<string, unknown> };
 }
 
+/**
+ * Provides the public jsxs API for @cocoframe/jsx.
+ */
 export const jsxs = jsx;
 
 export interface RenderOptions {
@@ -135,12 +156,18 @@ export interface RenderOptions {
   readonly onDeferred?: (content: Promise<unknown>) => string;
 }
 
+/**
+ * Buffers an escaped CocoFrame node tree into one HTML string.
+ */
 export async function renderToString(node: CocoNode, options: RenderOptions = {}): Promise<string> {
   const chunks: string[] = [];
   for await (const chunk of renderToChunks(node, options)) chunks.push(chunk);
   return chunks.join("");
 }
 
+/**
+ * Streams escaped CocoFrame nodes as ordered HTML chunks without buffering the complete tree.
+ */
 export async function* renderToChunks(node: unknown, options: RenderOptions = {}): AsyncGenerator<string> {
   const resolved: unknown = await node;
 

@@ -9,6 +9,9 @@ export interface SecurityHeadersOptions {
 
 const defaultCsp = "default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; form-action 'self'; script-src 'self'; style-src 'self'; img-src 'self' data: https:; connect-src 'self'";
 
+/**
+ * Creates middleware that adds CSP and browser-hardening headers without buffering the response body.
+ */
 export function securityHeaders(options: SecurityHeadersOptions = {}): Middleware {
   return defineMiddleware("security.headers", async (_context, next) => {
     const response = await next();
@@ -33,6 +36,9 @@ export interface CorsOptions {
   readonly match?: (context: RequestContext) => boolean;
 }
 
+/**
+ * Creates streaming-safe CORS middleware with an explicit origin and method policy.
+ */
 export function cors(options: CorsOptions): Middleware {
   const methods = options.methods ?? ["GET", "HEAD", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"];
   return defineMiddleware("security.cors", async (context, next) => {
@@ -59,6 +65,9 @@ export function cors(options: CorsOptions): Middleware {
   });
 }
 
+/**
+ * Provides the public csrf Token Key API for @cocoframe/security.
+ */
 export const csrfTokenKey = createContextKey<string>("csrf-token");
 
 export interface CsrfOptions {
@@ -70,6 +79,9 @@ export interface CsrfOptions {
   readonly match?: (context: RequestContext) => boolean;
 }
 
+/**
+ * Creates trusted-origin double-submit CSRF middleware for unsafe requests.
+ */
 export function csrfProtection(options: CsrfOptions = {}): Middleware {
   const cookieName = options.cookieName ?? "fast_csrf";
   const headerName = options.headerName ?? "x-csrf-token";
@@ -106,6 +118,9 @@ export interface RateLimitOptions {
   readonly maxKeys?: number;
 }
 
+/**
+ * Creates a bounded in-process rate limiter keyed by verified application identity.
+ */
 export function rateLimit(options: RateLimitOptions): Middleware {
   if (!Number.isInteger(options.limit) || options.limit < 1) throw new TypeError("Rate limit must be a positive integer");
   if (!Number.isFinite(options.windowMs) || options.windowMs < 1) throw new TypeError("Rate limit window must be positive");

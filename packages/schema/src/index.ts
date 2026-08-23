@@ -5,6 +5,9 @@ export interface ValidationIssue {
   readonly received: string;
 }
 
+/**
+ * Aggregates schema validation issues with machine-readable paths.
+ */
 export class ValidationError extends Error {
   readonly issues: readonly ValidationIssue[];
 
@@ -52,6 +55,9 @@ export interface DateOptions {
   readonly coerce?: boolean;
 }
 
+/**
+ * Provides the public string API for @cocoframe/schema.
+ */
 export function string(options: StringOptions = {}): Schema<string> {
   return makeSchema("string", false, (input, path) => {
     if (typeof input !== "string") fail(path, "Expected a string", "string", input);
@@ -69,6 +75,9 @@ export function string(options: StringOptions = {}): Schema<string> {
   }, () => compactJson({ type: "string", minLength: options.min, maxLength: options.max, pattern: options.pattern?.source, format: options.format }));
 }
 
+/**
+ * Provides the public number API for @cocoframe/schema.
+ */
 export function number(options: NumberOptions = {}): Schema<number> {
   return makeSchema("number", false, (input, path) => {
     const value = options.coerce && typeof input === "string" && input.trim() !== "" ? Number(input) : input;
@@ -80,6 +89,9 @@ export function number(options: NumberOptions = {}): Schema<number> {
   }, () => compactJson({ type: options.integer ? "integer" : "number", minimum: options.min, maximum: options.max, "x-coerce": options.coerce }));
 }
 
+/**
+ * Provides the public boolean API for @cocoframe/schema.
+ */
 export function boolean(options: BooleanOptions = {}): Schema<boolean> {
   return makeSchema("boolean", false, (input, path) => {
     if (options.coerce && (input === "true" || input === "1")) return true;
@@ -89,6 +101,9 @@ export function boolean(options: BooleanOptions = {}): Schema<boolean> {
   }, () => compactJson({ type: "boolean", "x-coerce": options.coerce }));
 }
 
+/**
+ * Provides the public literal API for @cocoframe/schema.
+ */
 export function literal<const Value extends string | number | boolean | null>(value: Value): Schema<Value> {
   return makeSchema("literal", false, (input, path) => {
     if (!Object.is(input, value)) fail(path, `Expected literal ${JSON.stringify(value)}`, JSON.stringify(value), input);
@@ -96,6 +111,9 @@ export function literal<const Value extends string | number | boolean | null>(va
   }, () => ({ const: value }));
 }
 
+/**
+ * Provides the public enumeration API for @cocoframe/schema.
+ */
 export function enumeration<const Values extends readonly [string, ...string[]]>(values: Values): Schema<Values[number]> {
   const allowed = new Set<string>(values);
   return makeSchema("enum", false, (input, path) => {
@@ -104,6 +122,9 @@ export function enumeration<const Values extends readonly [string, ...string[]]>
   }, () => ({ type: "string", enum: values }));
 }
 
+/**
+ * Provides the public union API for @cocoframe/schema.
+ */
 export function union<const Variants extends readonly [Schema<unknown>, ...Schema<unknown>[]]>(variants: Variants): Schema<Infer<Variants[number]>> {
   return makeSchema("union", false, (input, path) => {
     for (const variant of variants) {
@@ -115,6 +136,9 @@ export function union<const Variants extends readonly [Schema<unknown>, ...Schem
   }, () => ({ anyOf: variants.map((variant) => variant.json()) }));
 }
 
+/**
+ * Provides the public array API for @cocoframe/schema.
+ */
 export function array<Item>(item: Schema<Item>): Schema<Item[]> {
   return makeSchema("array", false, (input, path) => {
     if (!Array.isArray(input)) fail(path, "Expected an array", "array", input);
@@ -122,6 +146,9 @@ export function array<Item>(item: Schema<Item>): Schema<Item[]> {
   }, () => ({ type: "array", items: item.json() }));
 }
 
+/**
+ * Provides the public record API for @cocoframe/schema.
+ */
 export function record<Value>(valueSchema: Schema<Value>): Schema<Record<string, Value>> {
   return makeSchema("record", false, (input, path) => {
     if (typeof input !== "object" || input === null || Array.isArray(input)) fail(path, "Expected a record", "record", input);
@@ -139,6 +166,9 @@ export function record<Value>(valueSchema: Schema<Value>): Schema<Record<string,
   }, () => ({ type: "object", additionalProperties: valueSchema.json() }));
 }
 
+/**
+ * Provides the public date API for @cocoframe/schema.
+ */
 export function date(options: DateOptions = {}): Schema<Date> {
   return makeSchema("date", false, (input, path) => {
     const value = options.coerce && typeof input === "string" ? new Date(input) : input;
@@ -147,10 +177,16 @@ export function date(options: DateOptions = {}): Schema<Date> {
   }, () => compactJson({ type: "string", format: "date-time", "x-coerce": options.coerce, "x-runtime": "Date" }));
 }
 
+/**
+ * Provides the public transform API for @cocoframe/schema.
+ */
 export function transform<Input, Output>(input: Schema<Input>, mapper: (value: Input) => Output): Schema<Output> {
   return makeSchema("transform", input.optional, (value, path) => mapper(input._parse(value, path)), () => ({ ...input.json(), "x-transform": true }));
 }
 
+/**
+ * Provides the public optional API for @cocoframe/schema.
+ */
 export function optional<Value>(schema: Schema<Value>): OptionalSchema<Value> {
   return makeSchema("optional", true, (input, path) => input === undefined ? undefined : schema._parse(input, path), () => schema.json()) as OptionalSchema<Value>;
 }
@@ -164,6 +200,9 @@ export type ObjectOutput<Definition extends Shape> =
   { [Key in RequiredKeys<Definition>]: Infer<Definition[Key]> } &
   { [Key in OptionalKeys<Definition>]?: Exclude<Infer<Definition[Key]>, undefined> };
 
+/**
+ * Provides the public object API for @cocoframe/schema.
+ */
 export function object<const Definition extends Shape>(shape: Definition): Schema<ObjectOutput<Definition>> {
   return makeSchema("object", false, (input, path) => {
     if (typeof input !== "object" || input === null || Array.isArray(input)) fail(path, "Expected an object", "object", input);
@@ -189,6 +228,9 @@ export function object<const Definition extends Shape>(shape: Definition): Schem
   }));
 }
 
+/**
+ * Provides the public schema API for @cocoframe/schema.
+ */
 export const schema = {
   string,
   number,

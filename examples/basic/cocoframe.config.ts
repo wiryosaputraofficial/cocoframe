@@ -3,7 +3,7 @@ import { requestId } from "@cocoframe/observability";
 import { csrfProtection, securityHeaders } from "@cocoframe/security";
 
 export default defineConfig({
-  language: "id",
+  language: "en",
   siteName: "CocoFrame Example",
   stylesheets: [
     "https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap",

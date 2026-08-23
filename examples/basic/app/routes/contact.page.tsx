@@ -37,17 +37,17 @@ export default definePage({
     const email = contactForm.field("email", state, { id: "email" });
     const message = contactForm.field("message", state, { id: "message", describedBy: ["message-hint"] });
     return <main class="project-page contact-page" id="top">
-        <ProjectHero active="contact" eyebrow="CONTACT" title={<>Tell us what<br />you are building.</>} description="Ajukan pertanyaan, kirim feedback, atau laporkan masalah yang dapat direproduksi. Form ini dirender dan divalidasi di server, bekerja tanpa JavaScript browser, dan dilindungi CSRF." icon={<ChatRoundDotsIcon size={86} />}>
+        <ProjectHero active="contact" eyebrow="CONTACT" title={<>Tell us what<br />you are building.</>} description="Ask a question, send feedback, or report a reproducible issue. This form is rendered and validated on the server, works without browser JavaScript, and is protected by CSRF." icon={<ChatRoundDotsIcon size={86} />}>
           <a class="button button-ghost" href="/docs#troubleshooting">Troubleshooting first</a>
         </ProjectHero>
         <section class="contact-layout section-shell">
           <div class="contact-copy reveal">
             <span class="eyebrow">BEFORE YOU SEND</span>
             <h2>Context helps us help you.</h2>
-            <p>Sertakan tujuan, versi runtime, langkah reproduksi minimal, dan output error yang sudah disanitasi. Jangan kirim secret, cookie, token, authorization header, atau data pengguna.</p>
-            <div class="contact-detail"><span><ClockCircleIcon size={21} /></span><div><strong>Response expectation</strong><p>Halaman contoh ini mensimulasikan alur submit. Hubungkan action ke kanal support Anda saat production.</p></div></div>
-            <div class="contact-detail"><span><ShieldCheckIcon size={21} /></span><div><strong>Safe diagnostics</strong><p>Gunakan request ID dan pesan error publik; simpan detail sensitif hanya pada log server yang terkontrol.</p></div></div>
-            <div class="contact-detail"><span><LetterIcon size={21} /></span><div><strong>Documentation feedback</strong><p>Sebutkan URL section dan hasil yang Anda harapkan agar perubahan tetap fokus.</p></div></div>
+            <p>Include your goal, runtime version, minimal reproduction steps, and sanitized error output. Do not send secrets, cookies, tokens, authorization headers, or user data.</p>
+            <div class="contact-detail"><span><ClockCircleIcon size={21} /></span><div><strong>Response expectation</strong><p>This example page simulates the submission flow. Connect the action to your support channel in production.</p></div></div>
+            <div class="contact-detail"><span><ShieldCheckIcon size={21} /></span><div><strong>Safe diagnostics</strong><p>Use request IDs and public error messages; keep sensitive details only in controlled server logs.</p></div></div>
+            <div class="contact-detail"><span><LetterIcon size={21} /></span><div><strong>Documentation feedback</strong><p>Mention the section URL and your expected result so the change stays focused.</p></div></div>
           </div>
           <div class="contact-form-card reveal">
             <header><span><LetterIcon size={20} /></span><div><h2>Send a message</h2><p>All fields are required.</p></div></header>

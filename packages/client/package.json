@@ -1,6 +1,6 @@
 {
   "name": "@cocoframe/client",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "type": "module",
   "exports": {
     ".": "./src/index.ts",
@@ -10,6 +10,6 @@
     "./stream": "./src/stream.ts"
   },
   "dependencies": {
-    "@cocoframe/jsx": "0.0.2"
+    "@cocoframe/jsx": "0.0.3"
   }
 }

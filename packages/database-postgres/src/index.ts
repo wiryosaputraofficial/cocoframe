@@ -34,6 +34,9 @@ interface InternalConnection extends PostgresConnection {
   readonly client: PostgresPoolClient;
 }
 
+/**
+ * Creates a driver-neutral adapter around a structurally compatible PostgreSQL pool.
+ */
 export function createPostgresAdapter(pool: PostgresPool): DatabaseAdapter<PostgresConnection> {
   return defineDatabaseAdapter<PostgresConnection>({
     async acquire() {
@@ -60,10 +63,16 @@ export function createPostgresAdapter(pool: PostgresPool): DatabaseAdapter<Postg
   });
 }
 
+/**
+ * Creates a database facade backed by a PostgreSQL connection pool.
+ */
 export function openPostgres(pool: PostgresPool): Database<PostgresConnection> {
   return createDatabase(createPostgresAdapter(pool));
 }
 
+/**
+ * Runs ordered idempotent PostgreSQL migrations under a transaction-scoped advisory lock.
+ */
 export async function migratePostgres(
   database: Database<PostgresConnection>,
   migrations: readonly PostgresMigration[],

@@ -24,6 +24,9 @@ const bashKeywords = new Set(["case", "do", "done", "elif", "else", "esac", "fi"
 const cocoqlKeywords = new Set(["affected", "after", "as", "avg", "before", "confirm", "contains", "count", "create", "days", "delete", "ends_with", "filter", "from", "group", "in", "last", "last_month", "last_week", "last_year", "max", "min", "next", "not", "preview", "select", "skip", "sort", "starts_with", "sum", "take", "this_month", "this_week", "this_year", "today", "update", "with", "yesterday"]);
 const literals = new Set(["false", "Infinity", "NaN", "null", "true", "undefined"]);
 
+/**
+ * Provides the public tokenize Syntax API for @cocoframe/ui.
+ */
 export function tokenizeSyntax(code: string, language: SyntaxLanguage = "tsx"): readonly SyntaxToken[] {
   if (language === "text" || code.length === 0) return [{ kind: "plain", value: code }];
   if (language === "html") return tokenizeMarkup(code);
@@ -31,6 +34,9 @@ export function tokenizeSyntax(code: string, language: SyntaxLanguage = "tsx"): 
   return tokenizeScript(code, language);
 }
 
+/**
+ * Renders the Syntax Highlighter server-first UI primitive with semantic markup and no required browser runtime.
+ */
 export function SyntaxHighlighter({ code, language = "tsx", label, showLineNumbers = false, class: className }: SyntaxHighlighterProps): CocoNode {
   const tokens = tokenizeSyntax(code, language);
   const content = showLineNumbers

@@ -22,6 +22,9 @@ interface DynamicRoute<Handler> {
   readonly handler: Handler;
 }
 
+/**
+ * Matches normalized static, parameterized, and catch-all routes by HTTP method.
+ */
 export class Router<Handler> {
   readonly #staticRoutes = new Map<string, { pattern: string; handler: Handler }>();
   readonly #dynamicRoutes: DynamicRoute<Handler>[] = [];
@@ -77,6 +80,9 @@ export class Router<Handler> {
   }
 }
 
+/**
+ * Normalizes a route path to one leading slash and no trailing slash except at the root.
+ */
 export function normalizePath(pathname: string): string {
   const withLeadingSlash = pathname.startsWith("/") ? pathname : `/${pathname}`;
   if (withLeadingSlash === "/") return "/";

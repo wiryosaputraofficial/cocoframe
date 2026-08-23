@@ -1,4 +1,7 @@
 // Generated from @solar-icons/static. Do not edit manually.
+/**
+ * Provides the public solar Linear Icon Names API for @cocoframe/icons.
+ */
 export const solarLinearIconNames = [
   "accessibility",
   "add-circle",

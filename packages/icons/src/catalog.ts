@@ -1252,6 +1252,9 @@ export interface SolarLinearCatalogEntry {
   readonly Icon: SolarIconComponent;
 }
 
+/**
+ * Provides the public solar Linear Icons API for @cocoframe/icons.
+ */
 export const solarLinearIcons: readonly SolarLinearCatalogEntry[] = [
   { name: "accessibility", Icon: SolarAccessibilityIcon },
   { name: "add-circle", Icon: SolarAddCircleIcon },

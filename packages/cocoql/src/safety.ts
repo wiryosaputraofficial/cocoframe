@@ -6,6 +6,9 @@ import { getCocoQLSourceMap } from "./source-map.ts";
 import { getCocoQLMutationSourceMap } from "./mutation-source-map.ts";
 import { validateCocoQLMutation } from "./mutation.ts";
 
+/**
+ * Identifies the stable cocoql safety version contract used by @cocoframe/cocoql.
+ */
 export const COCOQL_SAFETY_VERSION = "0.1" as const;
 
 export interface CocoQLReadSafetyLimits {
@@ -72,11 +75,17 @@ interface SafetyTarget {
   readonly path: CocoQLIssuePath;
 }
 
+/**
+ * Defines deterministic read and mutation safety limits for CocoQL planning.
+ */
 export function defineCocoQLSafetyPolicy(policy: CocoQLSafetyPolicy): CocoQLSafetyPolicy {
   assertSafetyPolicy(policy);
   return Object.freeze({ version: COCOQL_SAFETY_VERSION, read: Object.freeze({ ...policy.read }), mutation: Object.freeze({ ...policy.mutation }) });
 }
 
+/**
+ * Applies deterministic read limits to a validated CocoQL query plan.
+ */
 export function enforceCocoQLSafety(query: CocoQLQuery, schema: CocoQLSchema, policy: CocoQLSafetyPolicy): CocoQLSafetyReport {
   validateCocoQL(query, schema);
   assertSafetyPolicy(policy);
@@ -108,6 +117,9 @@ export function enforceCocoQLSafety(query: CocoQLQuery, schema: CocoQLSchema, po
   return Object.freeze({ type: "SafetyReport", version: COCOQL_SAFETY_VERSION, operation: "read", allowed: true, metrics: Object.freeze(metrics) });
 }
 
+/**
+ * Rejects unsafe CocoQL mutation plans before SQL compilation.
+ */
 export function enforceCocoQLMutationSafety(mutation: CocoQLMutation, schema: CocoQLSchema, policy: CocoQLSafetyPolicy): CocoQLMutationSafetyReport {
   validateCocoQLMutation(mutation, schema);
   assertSafetyPolicy(policy);

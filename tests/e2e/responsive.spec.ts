@@ -1,7 +1,7 @@
 import { expect, test } from "@playwright/test";
 import { captureClientErrors, expectHealthyImages, expectNoHorizontalOverflow } from "./helpers.ts";
 
-const criticalPages = ["/", "/features", "/docs", "/components", "/templates", "/icons", "/cocoql", "/contact"] as const;
+const criticalPages = ["/", "/features", "/about", "/versioning", "/deployment", "/conventions", "/docs", "/components", "/templates", "/icons", "/cocoql", "/contact"] as const;
 
 test("critical pages remain usable from 320px through 4K", async ({ page }) => {
   test.setTimeout(90_000);
@@ -20,14 +20,14 @@ test("critical pages remain usable from 320px through 4K", async ({ page }) => {
   }
 
   await page.goto("/");
-  const menuToggle = page.getByRole("button", { name: "Buka menu" });
+  const menuToggle = page.getByRole("button", { name: "Open menu" });
   if (await menuToggle.isVisible()) {
     await menuToggle.click();
-    await expect(page.getByRole("button", { name: "Tutup menu" })).toHaveAttribute("aria-expanded", "true");
-    await expect(page.getByRole("navigation", { name: "Navigasi utama" })).toHaveClass(/open/);
+    await expect(page.getByRole("button", { name: "Close menu" })).toHaveAttribute("aria-expanded", "true");
+    await expect(page.getByRole("navigation", { name: "Primary navigation" })).toHaveClass(/open/);
     await expectNoHorizontalOverflow(page);
   } else {
-    await expect(page.getByRole("navigation", { name: "Navigasi utama" })).toBeVisible();
+    await expect(page.getByRole("navigation", { name: "Primary navigation" })).toBeVisible();
   }
 
   assertNoClientErrors();

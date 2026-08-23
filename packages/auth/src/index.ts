@@ -34,6 +34,9 @@ interface SessionPayload<Data> {
   readonly exp: number;
 }
 
+/**
+ * Creates typed signed-cookie session operations using HMAC SHA-256 through Web Crypto.
+ */
 export function createSessionAuth<Data extends Readonly<Record<string, unknown>>>(
   options: SessionOptions,
 ): SessionAuth<Data> {
@@ -86,6 +89,9 @@ export function createSessionAuth<Data extends Readonly<Record<string, unknown>>
   };
 }
 
+/**
+ * Loads a verified signed session into typed request context.
+ */
 export function sessionMiddleware<Data>(auth: SessionAuth<Data>, key: ContextKey<Session<Data>>): Middleware {
   return defineMiddleware("auth.session", async (context, next) => {
     const session = await auth.read(context.request);
@@ -94,6 +100,9 @@ export function sessionMiddleware<Data>(auth: SessionAuth<Data>, key: ContextKey
   });
 }
 
+/**
+ * Creates route-selective middleware that requires a verified session without replacing authorization checks.
+ */
 export function protectSession<Data>(key: ContextKey<Session<Data>>, options: SessionProtection<Data> = {}): Middleware {
   return defineMiddleware("auth.protect-session", async (context, next) => {
     if (options.match && !options.match(context)) return next();

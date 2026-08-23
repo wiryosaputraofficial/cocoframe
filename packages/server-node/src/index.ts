@@ -16,6 +16,9 @@ export interface GracefulShutdownOptions {
   readonly beforeClose?: () => void | Promise<void>;
 }
 
+/**
+ * Reports that the Node adapter stopped reading a request body after its configured byte limit.
+ */
 export class RequestBodyTooLargeError extends Error {
   readonly limit: number;
   constructor(limit: number) {
@@ -25,6 +28,9 @@ export class RequestBodyTooLargeError extends Error {
   }
 }
 
+/**
+ * Reports that the shared Node request lifecycle exceeded its configured deadline.
+ */
 export class RequestTimeoutError extends Error {
   readonly timeoutMs: number;
   constructor(timeoutMs: number) {
@@ -34,6 +40,9 @@ export class RequestTimeoutError extends Error {
   }
 }
 
+/**
+ * Adapts a Web Standard handler to Node HTTP with body limits, abort propagation, and streamed backpressure.
+ */
 export function createServer(handler: FetchHandler, options: NodeServerOptions = {}): Server {
   const maxBodyBytes = options.maxBodyBytes ?? 1_048_576;
   const requestTimeoutMs = options.requestTimeoutMs ?? 30_000;
@@ -60,6 +69,9 @@ export function createServer(handler: FetchHandler, options: NodeServerOptions =
   });
 }
 
+/**
+ * Stops accepting Node connections, drains active responses, and force-closes only after the deadline.
+ */
 export async function gracefulShutdown(server: Server, options: GracefulShutdownOptions = {}): Promise<{ forced: boolean }> {
   await options.beforeClose?.();
   let forced = false;
@@ -85,6 +97,9 @@ export async function gracefulShutdown(server: Server, options: GracefulShutdown
   return { forced };
 }
 
+/**
+ * Returns the client address verified by the Node adapter's trusted-proxy policy.
+ */
 export function clientAddress(request: Request): string | null {
   return request.headers.get("x-cocoframe-client-address");
 }

@@ -8,10 +8,10 @@ import Widget4Icon from "@cocoframe/icons/linear/widget-4";
 import { ProjectCard, ProjectCta, ProjectHero, ProjectSection } from "../components/project-page.tsx";
 
 const milestones = [
-  ["01", "Useful HTML first", "Setiap halaman menghasilkan HTML lengkap, metadata SEO, dan status HTTP yang benar tanpa menunggu JavaScript browser."],
-  ["02", "Interactivity by intent", "JavaScript hanya dikirim untuk island yang memang interaktif; halaman statis tidak menghidrasi seluruh dokumen."],
-  ["03", "One explicit path", "Page, API contract, form, database adapter, dan middleware memiliki satu konvensi utama agar mudah dipahami manusia maupun AI."],
-  ["04", "Portable contracts", "Web dan mobile memakai generated Fetch client yang sama tanpa mengimpor runtime UI atau server."],
+  ["01", "Useful HTML first", "Every page produces complete HTML, SEO metadata, and the correct HTTP status without waiting for browser JavaScript."],
+  ["02", "Interactivity by intent", "JavaScript is sent only for genuinely interactive islands; static pages do not hydrate the entire document."],
+  ["03", "One explicit path", "Pages, API contracts, forms, database adapters, and middleware each follow one primary convention that is easy for both humans and AI to understand."],
+  ["04", "Portable contracts", "Web and mobile use the same generated Fetch client without importing UI or server runtimes."],
 ] as const;
 
 export default definePage({
@@ -22,31 +22,31 @@ export default definePage({
     image: "/assets/cocoframe-hero-isometric.png",
   },
   view: () => <main class="project-page" id="top">
-    <ProjectHero active="about" eyebrow="ABOUT COCOFRAME" title={<>A smaller framework<br />for ambitious products.</>} description="CocoFrame adalah framework TypeScript server-first untuk membangun web cepat, SEO-friendly, API terkontrak, dan client yang dapat dipakai ulang pada mobile—dengan permukaan API yang sengaja dibuat kecil." icon={<GlobalIcon size={86} />}>
+    <ProjectHero active="about" eyebrow="ABOUT COCOFRAME" title={<>A smaller framework<br />for ambitious products.</>} description="CocoFrame is a server-first TypeScript framework for building fast, SEO-friendly web applications, contracted APIs, and clients reusable on mobile—with a deliberately small API surface." icon={<GlobalIcon size={86} />}>
       <a class="button button-primary" href="/docs#quick-start">Start building</a>
       <a class="button button-ghost" href="/features">Explore features</a>
     </ProjectHero>
 
-    <ProjectSection eyebrow="WHY IT EXISTS" title="Framework should reduce decisions, not add rituals." description="CocoFrame dibangun untuk menjaga request path sederhana, output mudah diperiksa, dan konteks implementasi tetap kecil saat proyek tumbuh.">
+    <ProjectSection eyebrow="WHY IT EXISTS" title="Framework should reduce decisions, not add rituals." description="CocoFrame is built to keep request paths simple, output easy to inspect, and implementation context small as projects grow.">
       <div class="project-card-grid project-card-grid--three">
-        <ProjectCard icon={<StarsMinimalisticIcon size={25} />} title="AI-friendly by structure"><p>Satu lifecycle page, API yang typed, manifest inspectable, dan generated contract mengurangi file serta token yang perlu dibaca AI.</p></ProjectCard>
-        <ProjectCard icon={<ShieldCheckIcon size={25} />} title="Server-first by default"><p>Rendering, escaping, metadata, form validation, dan security boundary berada di server. Browser runtime selalu opt-in.</p></ProjectCard>
-        <ProjectCard icon={<DatabaseIcon size={25} />} title="Data without lock-in"><p>Adapter database, CocoQL, dan Fetch-standard client menjaga kontrak data tetap eksplisit tanpa mengikat aplikasi ke UI framework.</p></ProjectCard>
+        <ProjectCard icon={<StarsMinimalisticIcon size={25} />} title="AI-friendly by structure"><p>A single page lifecycle, typed APIs, an inspectable manifest, and generated contracts reduce the files and tokens AI needs to read.</p></ProjectCard>
+        <ProjectCard icon={<ShieldCheckIcon size={25} />} title="Server-first by default"><p>Rendering, escaping, metadata, form validation, and security boundaries live on the server. The browser runtime is always opt-in.</p></ProjectCard>
+        <ProjectCard icon={<DatabaseIcon size={25} />} title="Data without lock-in"><p>Database adapters, CocoQL, and Fetch-standard clients keep data contracts explicit without binding applications to a UI framework.</p></ProjectCard>
       </div>
     </ProjectSection>
 
-    <ProjectSection eyebrow="DESIGN PRINCIPLES" title="Four decisions shape every package." description="Prinsip ini menjadi batas saat menambah fitur baru dan membantu menjaga pemeliharaan tetap konsisten.">
+    <ProjectSection eyebrow="DESIGN PRINCIPLES" title="Four decisions shape every package." description="These principles set boundaries for new features and help keep maintenance consistent.">
       <div class="project-milestones">{milestones.map(([number, title, description]) => <article class="reveal"><span>{number}</span><div><h3>{title}</h3><p>{description}</p></div></article>)}</div>
     </ProjectSection>
 
-    <ProjectSection eyebrow="CURRENT SCOPE" title="An architectural MVP with real foundations." description="Workspace saat ini sudah memiliki runtime, routing, streaming, forms, security, observability, UI, icons, database adapters, generated clients, dan CocoQL. Package publishing publik masih menjadi milestone berikutnya.">
+    <ProjectSection eyebrow="CURRENT SCOPE" title="An architectural MVP with real foundations." description="The current workspace already includes runtime, routing, streaming, forms, security, observability, UI, icons, database adapters, generated clients, and CocoQL. Public package publishing remains the next milestone.">
       <div class="project-card-grid project-card-grid--three">
-        <ProjectCard icon={<CodeSquareIcon size={25} />} title="Typed framework"><p>Public APIs diekspor dari paket <code>@cocoframe/*</code> dan diverifikasi melalui TypeScript serta test suite.</p></ProjectCard>
-        <ProjectCard icon={<Widget4Icon size={25} />} title="Complete web surface"><p>Pages, layouts, APIs, forms, middleware, islands, UI primitives, charts, icons, SEO, dan error boundaries tersedia dalam satu stack.</p></ProjectCard>
-        <ProjectCard icon={<GlobalIcon size={25} />} title="Web standards"><p>Request, Response, Fetch, URL, Headers, AbortSignal, dan streaming menjadi boundary utama agar deployment dan mobile tetap portabel.</p></ProjectCard>
+        <ProjectCard icon={<CodeSquareIcon size={25} />} title="Typed framework"><p>Public APIs are exported from <code>@cocoframe/*</code> packages and verified through TypeScript and the test suite.</p></ProjectCard>
+        <ProjectCard icon={<Widget4Icon size={25} />} title="Complete web surface"><p>Pages, layouts, APIs, forms, middleware, islands, UI primitives, charts, icons, SEO, and error boundaries are available in one stack.</p></ProjectCard>
+        <ProjectCard icon={<GlobalIcon size={25} />} title="Web standards"><p>Request, Response, Fetch, URL, Headers, AbortSignal, and streaming are the primary boundaries that keep deployments and mobile clients portable.</p></ProjectCard>
       </div>
     </ProjectSection>
 
-    <ProjectCta title="See how the pieces fit together." description="Mulai dari dokumentasi arsitektur dan bangun halaman pertama Anda." href="/docs#architecture" label="Read architecture" />
+    <ProjectCta title="See how the pieces fit together." description="Start with the architecture documentation and build your first page." href="/docs#architecture" label="Read architecture" />
   </main>,
 });

@@ -27,7 +27,7 @@ export default definePage({
   }),
   meta: ({ slug }) => ({
     title: slug,
-    description: "Artikel " + slug,
+    description: "Article " + slug,
   }),
   cache: { browser: 60, edge: 300 },
   view: ({ slug, preview }) => (
@@ -43,7 +43,7 @@ export default defineIsland<{ initial: number }>({
     const count = signal(initial);
     return () => (
       <button onClick={() => count.value++}>
-        Diklik {bind(count)} kali
+        Clicked {bind(count)} times
       </button>
     );
   },
@@ -96,75 +96,75 @@ export default defineApi({
 export default definePage({
   meta: {
     title: "Documentation — CocoFrame",
-    description: "Panduan lengkap penggunaan CocoFrame: pages, routing, components, islands, forms, API, database, security, testing, dan deployment.",
+    description: "Complete CocoFrame guide covering pages, routing, components, islands, forms, APIs, databases, security, testing, and deployment.",
     canonical: "https://cocoframe.dev/docs",
     image: "/assets/cocoframe-hero-isometric.png",
     type: "article",
-    jsonLd: { "@context": "https://schema.org", "@type": "TechArticle", headline: "CocoFrame Documentation", inLanguage: "id" },
+    jsonLd: { "@context": "https://schema.org", "@type": "TechArticle", headline: "CocoFrame Documentation", inLanguage: "en" },
   },
   view: () => <main id="top" class="docs-layout">
     <DocsSidebar kind="documentation" />
     <div class="docs-content">
       <section class="docs-hero" id="introduction">
-        <div class="docs-hero-copy reveal"><span class="eyebrow">DOCUMENTATION</span><h1>Build smarter with<br /><span>CocoFrame</span></h1><p>Panduan penggunaan API CocoFrame yang tersedia pada versi MVP saat ini—dari halaman pertama sampai production runtime.</p></div>
-        <div class="docs-hero-art reveal"><div class="hero-art-glow"></div><img src="/assets/cocoframe-hero-isometric.png" alt="Ilustrasi isometrik CocoFrame" width="768" height="512" /></div>
+        <div class="docs-hero-copy reveal"><span class="eyebrow">DOCUMENTATION</span><h1>Build smarter with<br /><span>CocoFrame</span></h1><p>A guide to the CocoFrame APIs available in the current MVP—from your first page to the production runtime.</p></div>
+        <div class="docs-hero-art reveal"><div class="hero-art-glow"></div><img src="/assets/cocoframe-hero-isometric.png" alt="CocoFrame isometric illustration" width="768" height="512" /></div>
       </section>
 
       <section class="docs-panel quick-start" id="quick-start">
-        <div class="panel-heading"><div><h2>Quick Start</h2><p>Buat aplikasi CocoFrame dari npm dan jalankan dengan Node.js 24 atau lebih baru.</p></div><a href="#project-structure">Pelajari strukturnya <span aria-hidden="true"><ArrowRightIcon size={15} /></span></a></div>
-        <div class="quick-steps"><article><span>1</span><div><h3>Create project</h3><p>Jalankan creator resmi dari registry npm.</p></div><b aria-hidden="true"><ArrowRightIcon size={16} /></b></article><article><span>2</span><div><h3>Install otomatis</h3><p>Creator memasang dependency publik yang dibutuhkan.</p></div><b aria-hidden="true"><ArrowRightIcon size={16} /></b></article><article><span>3</span><div><h3>Start development</h3><p>Masuk ke directory project dan jalankan development server.</p></div><b aria-hidden="true"><ArrowRightIcon size={16} /></b></article><article><span>4</span><div><h3>Open the app</h3><p>Buka <code>http://127.0.0.1:3000</code>.</p></div></article></div>
+        <div class="panel-heading"><div><h2>Quick Start</h2><p>Create a CocoFrame application from npm and run it with Node.js 24 or newer.</p></div><a href="#project-structure">Explore the structure <span aria-hidden="true"><ArrowRightIcon size={15} /></span></a></div>
+        <div class="quick-steps"><article><span>1</span><div><h3>Create project</h3><p>Run the official creator from the npm registry.</p></div><b aria-hidden="true"><ArrowRightIcon size={16} /></b></article><article><span>2</span><div><h3>Automatic installation</h3><p>The creator installs the required public dependencies.</p></div><b aria-hidden="true"><ArrowRightIcon size={16} /></b></article><article><span>3</span><div><h3>Start development</h3><p>Enter the project directory and start the development server.</p></div><b aria-hidden="true"><ArrowRightIcon size={16} /></b></article><article><span>4</span><div><h3>Open the app</h3><p>Open <code>http://127.0.0.1:3000</code>.</p></div></article></div>
         <PackageCommand />
-        <p class="guide-note"><strong>Project creator sudah tersedia di npm:</strong> <a href="#project-creator"><code>npm create cocoframe@latest my-app</code></a> memasang runtime publik dan menghasilkan starter server-first yang siap dikembangkan.</p>
+        <p class="guide-note"><strong>The project creator is available on npm:</strong> <a href="#project-creator"><code>npm create cocoframe@latest my-app</code></a> installs the public runtime and generates a server-first starter ready for development.</p>
       </section>
 
-      <section class="docs-panel docs-explore" id="guides"><div class="panel-heading"><div><h2>Explore the Docs</h2><p>Cari area framework yang ingin Anda gunakan.</p></div></div><DocsSearch /></section>
+      <section class="docs-panel docs-explore" id="guides"><div class="panel-heading"><div><h2>Explore the Docs</h2><p>Find the framework area you want to use.</p></div></div><DocsSearch /></section>
 
-      <article class="docs-guide" aria-label="Panduan lengkap CocoFrame">
-        <GuideSection id="installation" label="GET STARTED" title="Installation from npm" description="Buat project dari package resmi dengan Node.js 24+, lalu jalankan development server pada port 3000." language="bash" code={`npm create cocoframe@latest my-app\ncd my-app\nnpm run dev`}>
-          <p>Creator memasang dependency secara otomatis. Setelah server siap, buka <code>http://127.0.0.1:3000</code>; perubahan file aplikasi dipantau selama development.</p>
-          <p>Sebelum deployment, jalankan <code>npm run check</code>, <code>npm run inspect</code>, dan <code>npm run build</code>. Gunakan <code>npm start</code> untuk menjalankan bundle production setelah build.</p>
-          <p>Untuk penggunaan package internal, import selalu melalui namespace <code>@cocoframe/*</code>. Jangan mengimpor file source package lain dengan path relatif dari aplikasi.</p>
+      <article class="docs-guide" aria-label="Complete CocoFrame guide">
+        <GuideSection id="installation" label="GET STARTED" title="Installation from npm" description="Create a project from the official package with Node.js 24+, then run the development server on port 3000." language="bash" code={`npm create cocoframe@latest my-app\ncd my-app\nnpm run dev`}>
+          <p>The creator installs dependencies automatically. When the server is ready, open <code>http://127.0.0.1:3000</code>; application file changes are watched during development.</p>
+          <p>Before deployment, run <code>npm run check</code>, <code>npm run inspect</code>, and <code>npm run build</code>. Use <code>npm start</code> to run the production bundle after the build.</p>
+          <p>Always import internal packages through the <code>@cocoframe/*</code> namespace. Do not import another package source file through a relative application path.</p>
         </GuideSection>
 
-        <GuideSection id="project-creator" label="GET STARTED" title="Project creator" description="Creator dependency-free menghasilkan empat template resmi yang server-first, responsif, dan memakai UI serta icons CocoFrame." language="bash" code={`# Starter (default)\nnpm create cocoframe@latest my-app\n\n# Pilih template resmi\nnpm create cocoframe@latest my-dashboard -- --template dashboard\ncd my-dashboard\nnpm run dev`}>
-          <p>Perintah publik mengambil <code>create-cocoframe</code> dan seluruh package <code>@cocoframe/*</code> dari registry npm. Gunakan clone GitHub hanya ketika berkontribusi pada source framework.</p>
+        <GuideSection id="project-creator" label="GET STARTED" title="Project creator" description="The dependency-free creator generates four official server-first, responsive templates using CocoFrame UI and icons." language="bash" code={`# Starter (default)\nnpm create cocoframe@latest my-app\n\n# Choose an official template\nnpm create cocoframe@latest my-dashboard -- --template dashboard\ncd my-dashboard\nnpm run dev`}>
+          <p>The public command downloads <code>create-cocoframe</code> and every <code>@cocoframe/*</code> package from the npm registry. Clone GitHub only when contributing to the framework source.</p>
           <ul>
-            <li>Gunakan <code>--template starter|marketing|dashboard|documentation</code> untuk memilih fondasi aplikasi. Semuanya memakai <code>@cocoframe/ui</code> dan <code>@cocoframe/icons</code>.</li>
-            <li>Gunakan <code>--package-manager npm|pnpm|yarn|bun</code> untuk memilih package manager.</li>
-            <li>Gunakan <code>--skip-install</code> untuk CI atau workflow AI yang ingin memeriksa file sebelum memasang dependency.</li>
-            <li>Creator menolak filesystem root dan directory yang sudah berisi file agar data project lama tidak tertimpa.</li>
+            <li>Use <code>--template starter|marketing|dashboard|documentation</code> to select an application foundation. Every template uses <code>@cocoframe/ui</code> and <code>@cocoframe/icons</code>.</li>
+            <li>Use <code>--package-manager npm|pnpm|yarn|bun</code> to select a package manager.</li>
+            <li>Use <code>--skip-install</code> for CI or AI workflows that inspect files before installing dependencies.</li>
+            <li>The creator rejects filesystem roots and non-empty directories to protect existing project data.</li>
           </ul>
-          <p><code>npm create cocoframe@latest my-app</code> adalah jalur instalasi resmi dan sudah diverifikasi melalui type-check, inspect, production build, SSR, dan typed API.</p>
+          <p><code>npm create cocoframe@latest my-app</code> is the official installation path and is verified through type checking, inspection, production builds, SSR, and typed APIs.</p>
         </GuideSection>
 
-        <GuideSection id="project-structure" label="CONVENTION" title="Project structure" description="Struktur sengaja dibuat predictable agar mudah dipelihara dan hemat konteks untuk AI." language="text" code={`my-app/\n├─ app/\n│  ├─ components/          # server components\n│  ├─ islands/             # *.island.tsx\n│  ├─ generated/           # typed client + OpenAPI\n│  ├─ routes/              # pages, APIs, layouts\n│  └─ styles/              # global CSS / CSS modules\n├─ public/                  # aset statis\n├─ cocoframe.config.ts      # konfigurasi aplikasi\n└─ package.json`}>
-          <p>Semua output build berada di <code>.cocoframe/</code>; output development terpisah di <code>.cocoframe/dev/</code>.</p>
+        <GuideSection id="project-structure" label="CONVENTION" title="Project structure" description="The structure is intentionally predictable, making it easy to maintain and context-efficient for AI." language="text" code={`my-app/\n├─ app/\n│  ├─ components/          # server components\n│  ├─ islands/             # *.island.tsx\n│  ├─ generated/           # typed client + OpenAPI\n│  ├─ routes/              # pages, APIs, layouts\n│  └─ styles/              # global CSS / CSS modules\n├─ public/                  # static assets\n├─ cocoframe.config.ts      # application configuration\n└─ package.json`}>
+          <p>All build output lives in <code>.cocoframe/</code>; development output is isolated in <code>.cocoframe/dev/</code>.</p>
         </GuideSection>
 
-        <GuideSection id="configuration" label="CONFIG" title="Application configuration" description="Konfigurasi global berada di satu file dan divalidasi oleh TypeScript." code={`import { defineConfig } from "@cocoframe/core";\nimport { requestId } from "@cocoframe/observability";\nimport { securityHeaders } from "@cocoframe/security";\n\nexport default defineConfig({\n  language: "id",\n  siteName: "My App",\n  siteUrl: "https://example.com",\n  allowedHosts: ["example.com", "www.example.com"],\n  openapi: { title: "My App API", version: "1.0.0" },\n  middleware: [requestId(), securityHeaders()],\n  health: { readiness: async () => true },\n});`}>
-          <p>Opsi utama: <code>language</code>, <code>siteName</code>, <code>siteUrl</code>, <code>allowedHosts</code>, <code>stylesheets</code>, <code>openapi</code>, <code>middleware</code>, <code>health</code>, dan asset runtime.</p>
-          <p><code>allowedHosts</code> memvalidasi host sebelum routing dan middleware pada production. Gunakan hostname eksplisit beserta port jika diperlukan; wildcard ditolak. Pemeriksaan dilewati saat development agar tooling lokal tetap berjalan.</p>
+        <GuideSection id="configuration" label="CONFIG" title="Application configuration" description="Global configuration lives in one file and is validated by TypeScript." code={`import { defineConfig } from "@cocoframe/core";\nimport { requestId } from "@cocoframe/observability";\nimport { securityHeaders } from "@cocoframe/security";\n\nexport default defineConfig({\n  language: "en",\n  siteName: "My App",\n  siteUrl: "https://example.com",\n  allowedHosts: ["example.com", "www.example.com"],\n  openapi: { title: "My App API", version: "1.0.0" },\n  middleware: [requestId(), securityHeaders()],\n  health: { readiness: async () => true },\n});`}>
+          <p>Primary options: <code>language</code>, <code>siteName</code>, <code>siteUrl</code>, <code>allowedHosts</code>, <code>stylesheets</code>, <code>openapi</code>, <code>middleware</code>, <code>health</code>, and runtime assets.</p>
+          <p><code>allowedHosts</code> validates the host before production routing and middleware. Use explicit hostnames with ports when needed; wildcards are rejected. Development skips this check so local tooling continues to work.</p>
         </GuideSection>
 
-        <GuideSection id="routing" label="ROUTING" title="Pages and file-based routing" description="Nama file menentukan URL. Route statis diprioritaskan sebelum parameter dinamis." code={pageExample}>
+        <GuideSection id="routing" label="ROUTING" title="Pages and file-based routing" description="Filenames determine URLs. Static routes take priority over dynamic parameters." code={pageExample}>
           <RouteTable />
-          <p><code>load(context)</code> berjalan di server. Hasilnya diteruskan ke <code>meta(data, context)</code> dan <code>view(data, context)</code>. Request context menyediakan <code>request</code>, <code>url</code>, <code>params</code>, <code>query</code>, serta context store typed.</p>
-          <p>Gunakan <code>[...path].page.tsx</code> untuk catch-all route dan deklarasikan <code>status: 404</code> agar halaman not-found kustom tetap mengirim status HTTP serta metadata SEO yang akurat.</p>
+          <p><code>load(context)</code> runs on the server. Its result is passed to <code>meta(data, context)</code> and <code>view(data, context)</code>. Request context provides <code>request</code>, <code>url</code>, <code>params</code>, <code>query</code>, and a typed context store.</p>
+          <p>Use <code>[...path].page.tsx</code> for catch-all routes and declare <code>status: 404</code> so a custom not-found page still sends an accurate HTTP status and SEO metadata.</p>
         </GuideSection>
 
-        <GuideSection id="layouts" label="LAYOUTS" title="Nested layouts" description="File _layout.tsx membungkus semua page pada directory yang sama dan turunannya." code={`import { defineLayout } from "@cocoframe/core";\n\nexport default defineLayout(({ children, context }) => (\n  <>\n    <header><a href="/">My App</a></header>\n    <main data-path={context.url.pathname}>{children}</main>\n    <footer>Built with CocoFrame</footer>\n  </>\n));`}>
-          <p>Layout root berada di <code>app/routes/_layout.tsx</code>. Tambahkan layout lain di subdirectory route untuk nesting otomatis.</p>
+        <GuideSection id="layouts" label="LAYOUTS" title="Nested layouts" description="An _layout.tsx file wraps every page in its directory and descendants." code={`import { defineLayout } from "@cocoframe/core";\n\nexport default defineLayout(({ children, context }) => (\n  <>\n    <header><a href="/">My App</a></header>\n    <main data-path={context.url.pathname}>{children}</main>\n    <footer>Built with CocoFrame</footer>\n  </>\n));`}>
+          <p>The root layout lives at <code>app/routes/_layout.tsx</code>. Add layouts in route subdirectories for automatic nesting.</p>
         </GuideSection>
 
-        <GuideSection id="data-fetching" label="SERVER FIRST" title="Data loading, cache, and errors" description="Data utama dimuat sebelum render. Cache policy menghasilkan header browser dan edge yang sesuai." code={`export default definePage({\n  load: async ({ params }) => findPost(params.slug),\n  meta: (post) => ({ title: post.title, type: "article" }),\n  cache: { browser: 60, edge: 300, staleWhileRevalidate: 600 },\n  error: (error) => <main><h1>Unable to load post</h1></main>,\n  view: (post) => <article><h1>{post.title}</h1></article>,\n});`}>
-          <p>Gunakan <code>cache.private: true</code> untuk halaman personal. Untuk form atau data sensitif, gunakan <code>browser: 0</code>.</p>
+        <GuideSection id="data-fetching" label="SERVER FIRST" title="Data loading, cache, and errors" description="Primary data loads before rendering. The cache policy generates the appropriate browser and edge headers." code={`export default definePage({\n  load: async ({ params }) => findPost(params.slug),\n  meta: (post) => ({ title: post.title, type: "article" }),\n  cache: { browser: 60, edge: 300, staleWhileRevalidate: 600 },\n  error: (error) => <main><h1>Unable to load post</h1></main>,\n  view: (post) => <article><h1>{post.title}</h1></article>,\n});`}>
+          <p>Use <code>cache.private: true</code> for personal pages. For forms or sensitive data, use <code>browser: 0</code>.</p>
         </GuideSection>
 
-        <GuideSection id="components" label="FRONTEND" title="Server components and styling" description="Komponen adalah fungsi TSX typed. Secara default komponen tidak mengirim JavaScript ke browser." code={`import type { CocoNode } from "@cocoframe/jsx";\nimport styles from "./feature-card.module.css";\n\nexport function FeatureCard(props: { title: string; children?: CocoNode }) {\n  return <article class={styles.card}>\n    <h2>{props.title}</h2>{props.children}\n  </article>;\n}`}>
-          <p>File <code>*.module.css</code> di-scope dan dibuatkan declaration typed. CSS global di dalam <code>app/</code> diekstrak otomatis. Package <code>@cocoframe/ui</code> menyediakan 97 primitive dan pattern typed untuk layout, mobile shell, form, data display, workflow navigation, accessibility, overlay, feedback, hingga AI/chat. Seluruh preview, props, dan contoh import tersedia di halaman <a href="/components#catalog">Components</a>.</p>
+        <GuideSection id="components" label="FRONTEND" title="Server components and styling" description="Components are typed TSX functions. By default, they send no JavaScript to the browser." code={`import type { CocoNode } from "@cocoframe/jsx";\nimport styles from "./feature-card.module.css";\n\nexport function FeatureCard(props: { title: string; children?: CocoNode }) {\n  return <article class={styles.card}>\n    <h2>{props.title}</h2>{props.children}\n  </article>;\n}`}>
+          <p>Files named <code>*.module.css</code> are scoped and receive typed declarations. Global CSS inside <code>app/</code> is extracted automatically. The <code>@cocoframe/ui</code> package provides 97 typed primitives and patterns for layout, mobile shells, forms, data display, workflow navigation, accessibility, overlays, feedback, and AI/chat. Every preview, prop, and import example is available on the <a href="/components#catalog">Components</a>.</p>
         </GuideSection>
 
-        <GuideSection id="charts" label="DATA VISUALIZATION" title="Typed server-first charts" description="Chart merender SVG responsif tanpa dependency browser dan mendukung dua belas tipe visualisasi." code={`import { Chart } from "@cocoframe/ui";
+        <GuideSection id="charts" label="DATA VISUALIZATION" title="Typed server-first charts" description="Chart renders responsive SVG without browser dependencies and supports twelve visualization types." code={`import { Chart } from "@cocoframe/ui";
 
 const months = ["Jan", "Feb", "Mar", "Apr"];
 const datasets = [
@@ -182,45 +182,45 @@ export function Analytics() {
     showLegend
   />;
 }`}>
-          <p>Tipe yang tersedia: <code>line</code>, <code>area</code>, <code>bar</code>, <code>horizontal-bar</code>, <code>stacked-bar</code>, <code>pie</code>, <code>doughnut</code>, <code>polar-area</code>, <code>radar</code>, <code>scatter</code>, <code>bubble</code>, dan <code>mixed</code>.</p>
-          <p>Setiap chart mempunyai caption, SVG berlabel, tooltip native, legend opsional, empty state, serta tabel data tersembunyi untuk pembaca layar. Lihat seluruh varian dan props di <a href="/components#chart">Chart Components</a>.</p>
+          <p>Available types: <code>line</code>, <code>area</code>, <code>bar</code>, <code>horizontal-bar</code>, <code>stacked-bar</code>, <code>pie</code>, <code>doughnut</code>, <code>polar-area</code>, <code>radar</code>, <code>scatter</code>, <code>bubble</code>, and <code>mixed</code>.</p>
+          <p>Every chart includes a caption, labeled SVG, native tooltip, optional legend, empty state, and a hidden data table for screen readers. Explore every variant and prop in <a href="/components#chart">Chart Components</a>.</p>
         </GuideSection>
 
-        <GuideSection id="icons" label="ICONOGRAPHY" title="Solar Linear icon library" description="Sebanyak 1.246 ikon tersedia sebagai server component typed, tanpa JavaScript browser dan tanpa stylesheet bawaan." code={`import HomeIcon from "@cocoframe/icons/linear/home";\nimport BellIcon from "@cocoframe/icons/linear/bell";\n\nexport function Navigation() {\n  return <nav>\n    <a href="/"><HomeIcon label="Home" size={24} /> Home</a>\n    <button aria-label="Notifications"><BellIcon /></button>\n  </nav>;\n}`}>
-          <p>Impor ikon melalui subpath langsung agar build hanya memuat ikon yang dipakai. Ikon dekoratif otomatis memakai <code>aria-hidden</code>; berikan <code>label</code> ketika ikon menyampaikan makna tanpa teks pendamping. Warna mengikuti <code>currentColor</code>, sedangkan ukuran, ketebalan garis, class, dan arah cermin dapat diatur melalui props.</p>
-          <p>Artwork Solar Icons dibuat oleh 480 Design dan dilisensikan di bawah CC BY 4.0. Pertahankan atribusi yang tersedia dalam <code>@cocoframe/icons/THIRD_PARTY_NOTICE.md</code> saat mendistribusikan produk.</p>
+        <GuideSection id="icons" label="ICONOGRAPHY" title="Solar Linear icon library" description="1,246 icons are available as typed server components with no browser JavaScript or bundled stylesheet." code={`import HomeIcon from "@cocoframe/icons/linear/home";\nimport BellIcon from "@cocoframe/icons/linear/bell";\n\nexport function Navigation() {\n  return <nav>\n    <a href="/"><HomeIcon label="Home" size={24} /> Home</a>\n    <button aria-label="Notifications"><BellIcon /></button>\n  </nav>;\n}`}>
+          <p>Import icons through direct subpaths so the build loads only the icons you use. Decorative icons automatically use <code>aria-hidden</code>; provide a <code>label</code> when an icon conveys meaning without accompanying text. Color follows <code>currentColor</code>, while size, stroke width, class, and mirroring are controlled through props.</p>
+          <p>Solar Icons artwork was created by 480 Design and is licensed under CC BY 4.0. Preserve the attribution in <code>@cocoframe/icons/THIRD_PARTY_NOTICE.md</code> when distributing a product.</p>
         </GuideSection>
 
-        <GuideSection id="islands" label="INTERACTIVITY" title="Interactive islands and signals" description="Gunakan island hanya pada bagian yang membutuhkan event atau state browser." code={islandExample}>
-          <p>File island harus berada di <code>app/islands/*.island.tsx</code>, mempunyai nama unik lowercase, dan props-nya harus JSON-serializable. <code>bind(signal)</code> dan <code>bind(computed(...))</code> memperbarui text node secara langsung serta mengikuti dependency dinamis; membaca <code>signal.value</code> di view akan merender ulang island.</p>
+        <GuideSection id="islands" label="INTERACTIVITY" title="Interactive islands and signals" description="Use islands only where browser events or state are required." code={islandExample}>
+          <p>Island files must live in <code>app/islands/*.island.tsx</code>, have a unique lowercase name, and use JSON-serializable props. Reactive bindings update text nodes directly; reading <code>signal.value</code> in a view rerenders the island.</p>
         </GuideSection>
 
-        <GuideSection id="forms" label="FORMS" title="Server-validated forms" description="Form tetap berfungsi tanpa JavaScript, mempertahankan nilai aman, dan merender ulang dengan status 422 saat invalid." code={formExample}>
-          <p>Daftarkan <code>csrfProtection()</code> pada config dan sertakan <code>CsrfField</code>. Password, token, passcode, dan secret tidak pernah dipertahankan setelah error; field lain dapat ditandai lewat <code>sensitiveFields</code>.</p>
+        <GuideSection id="forms" label="FORMS" title="Server-validated forms" description="Forms work without JavaScript, preserve safe values, and rerender invalid submissions with status 422." code={formExample}>
+          <p>Register <code>csrfProtection()</code> in configuration and include <code>CsrfField</code>. Passwords, tokens, passcodes, and secrets are never preserved after errors; mark other fields through <code>sensitiveFields</code>.</p>
         </GuideSection>
 
-        <GuideSection id="validation" label="SCHEMA" title="Runtime validation" description="Satu schema memberi type inference, validasi runtime, dokumentasi kontrak, dan input form/API." code={`import { schema, type Infer } from "@cocoframe/schema";\n\nconst userSchema = schema.object({\n  name: schema.string({ min: 2, max: 80 }),\n  age: schema.number({ integer: true, min: 18, coerce: true }),\n  role: schema.enumeration(["admin", "member"]),\n  website: schema.optional(schema.string({ format: "url" })),\n});\n\ntype UserInput = Infer<typeof userSchema>;`}>
-          <p>Tersedia: string, number, boolean, literal, enumeration, union, array, record, date, object, optional, dan transform. <code>ValidationError.issues</code> berisi path, message, expected, dan received.</p>
+        <GuideSection id="validation" label="SCHEMA" title="Runtime validation" description="One schema provides type inference, runtime validation, contract documentation, and form/API input." code={`import { schema, type Infer } from "@cocoframe/schema";\n\nconst userSchema = schema.object({\n  name: schema.string({ min: 2, max: 80 }),\n  age: schema.number({ integer: true, min: 18, coerce: true }),\n  role: schema.enumeration(["admin", "member"]),\n  website: schema.optional(schema.string({ format: "url" })),\n});\n\ntype UserInput = Infer<typeof userSchema>;`}>
+          <p>Available builders: string, number, boolean, literal, enumeration, union, array, record, date, object, optional, and transform. <code>ValidationError.issues</code> contains path, message, expected, and received.</p>
         </GuideSection>
 
-        <GuideSection id="api-routes" label="API" title="Typed API routes" description="File *.route.ts mendefinisikan method, schema input/output, dan handler dalam satu kontrak." code={apiExample}>
-          <p>Input mendukung <code>params</code>, <code>query</code>, dan JSON <code>body</code>. Validasi gagal menghasilkan HTTP 400; output schema juga divalidasi agar server tidak mengirim bentuk data yang salah.</p>
+        <GuideSection id="api-routes" label="API" title="Typed API routes" description="A *.route.ts file defines its method, input/output schemas, and handler in one contract." code={apiExample}>
+          <p>Input supports <code>params</code>, <code>query</code>, and a JSON <code>body</code>. Invalid input returns HTTP 400; output is also validated to prevent malformed data.</p>
         </GuideSection>
 
-        <GuideSection id="api" label="CLIENT" title="Generated client and OpenAPI" description="Generator membaca kontrak API dan menghasilkan Fetch client yang dapat dipakai web maupun mobile." code={`npm run generate\n# menghasilkan:\n# app/generated/cocoframe-client.ts\n# app/generated/openapi.json\n# app/**/*.module.d.css.ts\n\nimport { createCocoFrameClient } from "./generated/cocoframe-client.ts";\n\nconst api = createCocoFrameClient({\n  baseUrl: "https://api.example.com",\n  headers: { authorization: "Bearer token" },\n});\nconst result = await api.greetPerson({\n  params: { name: "Coco" },\n  query: { excited: true },\n});`}>
-          <p>Client hanya bergantung pada Fetch standards dan menerima custom <code>fetch</code>, headers, serta credentials—cocok untuk browser, React Native, Capacitor, atau runtime mobile lain.</p>
+        <GuideSection id="api" label="CLIENT" title="Generated client and OpenAPI" description="The generator reads API contracts and produces a Fetch client for web and mobile." code={`npm run generate\n# generates:\n# app/generated/cocoframe-client.ts\n# app/generated/openapi.json\n# app/**/*.module.d.css.ts\n\nimport { createCocoFrameClient } from "./generated/cocoframe-client.ts";\n\nconst api = createCocoFrameClient({\n  baseUrl: "https://api.example.com",\n  headers: { authorization: "Bearer token" },\n});\nconst result = await api.greetPerson({\n  params: { name: "Coco" },\n  query: { excited: true },\n});`}>
+          <p>The client depends only on Fetch standards and accepts custom <code>fetch</code>, headers, and credentials for browsers and mobile runtimes.</p>
         </GuideSection>
 
-        <GuideSection id="api-reference" label="REFERENCE" title="Public package API reference" description="Gunakan package root yang stabil berikut. Import internal source atau generated file package lain bukan bagian dari public API.">
+        <GuideSection id="api-reference" label="REFERENCE" title="Public package API reference" description="Use the stable package roots below. Internal source and generated files from other packages are not public API.">
           <PackageReferenceTable />
-          <p>Props lengkap setiap primitive UI tersedia di <a href="/components#catalog">Component Reference</a>. Nama dan cara import seluruh ikon tersedia di <a href="/icons">Icon Explorer</a>. Detail grammar serta safety CocoQL tersedia di <a href="/cocoql#language">CocoQL Reference</a>.</p>
+          <p>Complete props for every UI primitive are available in <a href="/components#catalog">Component Reference</a>. Names and import instructions for every icon are available in <a href="/icons">Icon Explorer</a>. CocoQL grammar and safety details are available in <a href="/cocoql#language">CocoQL Reference</a>.</p>
         </GuideSection>
 
-        <GuideSection id="middleware" label="MIDDLEWARE" title="Request context and middleware" description="Middleware berjalan sesuai urutan config dan dapat berbagi nilai request-scoped melalui ContextKey typed." code={`import { createContextKey, defineMiddleware } from "@cocoframe/core";\n\nexport const userKey = createContextKey<{ id: string }>("user");\n\nexport const loadUser = defineMiddleware("app.load-user", async (context, next) => {\n  const user = await authenticate(context.request);\n  if (user) context.set(userKey, user);\n  return next();\n});`}>
-          <p>Middleware bawaan mempunyai ID stabil dan terlihat pada <code>cocoframe inspect</code>. Jangan menyimpan state request pada global variable.</p>
+        <GuideSection id="middleware" label="MIDDLEWARE" title="Request context and middleware" description="Middleware runs in configuration order and shares request-scoped values through typed ContextKey instances." code={`import { createContextKey, defineMiddleware } from "@cocoframe/core";\n\nexport const userKey = createContextKey<{ id: string }>("user");\n\nexport const loadUser = defineMiddleware("app.load-user", async (context, next) => {\n  const user = await authenticate(context.request);\n  if (user) context.set(userKey, user);\n  return next();\n});`}>
+          <p>Built-in middleware has stable IDs visible in <code>cocoframe inspect</code>. Never store request state in global variables.</p>
         </GuideSection>
 
-        <GuideSection id="observability" label="OBSERVABILITY" title="Request IDs and structured logs" description="Observability middleware memvalidasi request ID, meneruskannya ke response, dan mencatat timing tanpa mengunci aplikasi ke vendor telemetry." code={`import { requestId, requestLogger } from "@cocoframe/observability";
+        <GuideSection id="observability" label="OBSERVABILITY" title="Request IDs and structured logs" description="Observability middleware validates request IDs, forwards them to responses, and records timing without locking the application to a telemetry vendor." code={`import { requestId, requestLogger } from "@cocoframe/observability";
 
 const middleware = [
   requestId({ headerName: "x-request-id", trustIncoming: false }),
@@ -231,22 +231,22 @@ const middleware = [
     },
   }),
 ];`}>
-          <p>Event log hanya berisi method, path, status, durasi, dan request ID. Jangan menambahkan cookie, authorization header, CSRF token, body request, atau data rahasia ke writer.</p>
+          <p>Log events contain only method, path, status, duration, and request ID. Never add cookies, authorization headers, CSRF tokens, request bodies, or secrets to the writer.</p>
         </GuideSection>
 
-        <GuideSection id="security" label="SECURITY" title="Security defaults" description="Security package menyediakan browser headers, CORS allowlist, double-submit CSRF, dan rate limit in-memory." code={`import { cors, csrfProtection, rateLimit, securityHeaders } from "@cocoframe/security";\n\nconst middleware = [\n  securityHeaders(),\n  cors({ origins: ["https://mobile.example"], credentials: true }),\n  csrfProtection({ match: ({ url }) => url.pathname.startsWith("/account") }),\n  rateLimit({ limit: 100, windowMs: 60_000, key: ({ request }) => verifiedUserId(request) }),\n];`}>
-          <p>Rate limiter bawaan bersifat per-process; gunakan store bersama untuk deployment terdistribusi. Identitas proxy tidak dipercaya kecuali alamat proxy dikonfigurasi secara eksplisit.</p>
+        <GuideSection id="security" label="SECURITY" title="Security defaults" description="The security package provides browser headers, CORS allowlists, double-submit CSRF, and in-memory rate limiting." code={`import { cors, csrfProtection, rateLimit, securityHeaders } from "@cocoframe/security";\n\nconst middleware = [\n  securityHeaders(),\n  cors({ origins: ["https://mobile.example"], credentials: true }),\n  csrfProtection({ match: ({ url }) => url.pathname.startsWith("/account") }),\n  rateLimit({ limit: 100, windowMs: 60_000, key: ({ request }) => verifiedUserId(request) }),\n];`}>
+          <p>The built-in rate limiter is per process; use shared storage for distributed deployments. Proxy identity is trusted only when proxy addresses are configured explicitly.</p>
         </GuideSection>
 
-        <GuideSection id="authentication" label="AUTH" title="Signed cookie sessions" description="Auth package menangani integritas dan masa berlaku session, bukan OAuth, hashing password, atau sistem identitas lengkap." code={`import { createContextKey } from "@cocoframe/core";\nimport { createSessionAuth, protectSession, sessionMiddleware, type Session } from "@cocoframe/auth";\n\nconst sessionKey = createContextKey<Session<{ userId: string }>>("session");\nconst auth = createSessionAuth<{ userId: string }>({\n  secret: process.env.SESSION_SECRET!, // minimal 32 byte\n  cookieName: "app_session",\n  secure: true,\n});\n\nconst middleware = [\n  sessionMiddleware(auth, sessionKey),\n  protectSession(sessionKey, { match: ({ url }) => url.pathname.startsWith("/admin") }),\n];`}>
-          <p><code>auth.commit(data)</code> menghasilkan header Set-Cookie, <code>auth.read(request)</code> membaca session, dan <code>auth.clear()</code> menghapusnya.</p>
+        <GuideSection id="authentication" label="AUTH" title="Signed cookie sessions" description="The auth package handles session integrity and expiration, not OAuth, password hashing, or a complete identity system." code={`import { createContextKey } from "@cocoframe/core";\nimport { createSessionAuth, protectSession, sessionMiddleware, type Session } from "@cocoframe/auth";\n\nconst sessionKey = createContextKey<Session<{ userId: string }>>("session");\nconst auth = createSessionAuth<{ userId: string }>({\n  secret: process.env.SESSION_SECRET!, // minimum 32 bytes\n  cookieName: "app_session",\n  secure: true,\n});\n\nconst middleware = [\n  sessionMiddleware(auth, sessionKey),\n  protectSession(sessionKey, { match: ({ url }) => url.pathname.startsWith("/admin") }),\n];`}>
+          <p><code>auth.commit(data)</code> produces a Set-Cookie header, <code>auth.read(request)</code> reads the session, and <code>auth.clear()</code> removes it.</p>
         </GuideSection>
 
-        <GuideSection id="database" label="DATABASE" title="SQLite and PostgreSQL adapters" description="Core database menyediakan lifecycle acquire/release dan transaction tanpa mengunci aplikasi ke ORM." code={`import { openSqlite } from "@cocoframe/database-sqlite";\n\nconst database = openSqlite({ filename: "app.db" });\nconst users = await database.run((db) =>\n  db.all<{ id: number; name: string }>(\n    "SELECT id, name FROM users WHERE active = ?", [1],\n  ),\n);\n\nawait database.transaction(async (db) => {\n  await db.run("UPDATE users SET active = ? WHERE id = ?", [0, 42]);\n});`}>
-          <p><code>@cocoframe/database-postgres</code> menerima pool yang structurally compatible. Kedua adapter mendukung query parameterized, transactions, dan ordered idempotent migrations.</p>
+        <GuideSection id="database" label="DATABASE" title="SQLite and PostgreSQL adapters" description="The database core provides acquisition, release, and transaction lifecycles without locking applications to an ORM." code={`import { openSqlite } from "@cocoframe/database-sqlite";\n\nconst database = openSqlite({ filename: "app.db" });\nconst users = await database.run((db) =>\n  db.all<{ id: number; name: string }>(\n    "SELECT id, name FROM users WHERE active = ?", [1],\n  ),\n);\n\nawait database.transaction(async (db) => {\n  await db.run("UPDATE users SET active = ? WHERE id = ?", [0, 42]);\n});`}>
+          <p><code>@cocoframe/database-postgres</code> accepts a structurally compatible pool. Both adapters support parameterized queries, transactions, and ordered idempotent migrations.</p>
         </GuideSection>
 
-        <GuideSection id="recipes" label="END TO END" title="Recipe: validated CRUD page" description="Contoh berikut menghubungkan schema, form action, database, status 422, dan redirect 303 dalam satu page convention." code={`import { definePage, redirect } from "@cocoframe/core";
+        <GuideSection id="recipes" label="END TO END" title="Recipe: validated CRUD page" description="This example connects a schema, form action, database, status 422, and redirect 303 in one page convention." code={`import { definePage, redirect } from "@cocoframe/core";
 import { openSqlite } from "@cocoframe/database-sqlite";
 import { createForm, CsrfField } from "@cocoframe/forms";
 import { schema } from "@cocoframe/schema";
@@ -284,11 +284,11 @@ export default definePage({
     </main>;
   },
 });`}>
-          <p>Pasang <code>csrfProtection()</code> untuk route cookie-authenticated. Buat migration immutable untuk tabel <code>tasks</code>, gunakan authorization terpisah dari session verification, dan jangan menyimpan database handle request-scoped di global mutable state.</p>
-          <p>Untuk mobile, expose operasi yang sama sebagai <code>defineApi</code>, jalankan <code>npm run generate</code>, lalu gunakan Fetch client yang dihasilkan. UI mobile tidak perlu bergantung pada renderer CocoFrame.</p>
+          <p>Install <code>csrfProtection()</code> for cookie-authenticated routes. Create an immutable migration for the <code>tasks</code> table, keep authorization separate from session verification, and never store request-scoped database handles in mutable global state.</p>
+          <p>For mobile, expose the same operation with <code>defineApi</code>, run <code>npm run generate</code>, and use the generated Fetch client. Mobile UI does not depend on the CocoFrame renderer.</p>
         </GuideSection>
 
-        <GuideSection id="cocoql" label="AI DATABASE" title="CocoQL and Query Plan" description="CocoQL mengubah bahasa read-only yang kecil menjadi Query Plan tervalidasi sebelum compiler dialect menghasilkan SQL parameterized." language="typescript" code={`import {
+        <GuideSection id="cocoql" label="AI DATABASE" title="CocoQL and Query Plan" description="CocoQL turns a small read-only language into a validated Query Plan before a dialect compiler produces parameterized SQL." language="typescript" code={`import {
   authorizeCocoQL,
   CocoQLError,
   compileCocoQLToMySql,
@@ -324,87 +324,87 @@ try {
 } catch (error) {
   if (error instanceof CocoQLError) console.log(JSON.stringify(error));
 }`}>
-          <p>Query Plan 0.1 bersifat database-independent: isinya hanya entity dan field publik, relation path, filter terstruktur, sorting, serta limit. Nama tabel, kolom fisik, dan kondisi join tetap berada di schema tepercaya dan baru dipakai oleh compiler dialect.</p>
-          <p>Gunakan <code>with customer</code> sebelum mengakses <code>customer.name</code>. Nested path seperti <code>with projects.invoices</code> otomatis direncanakan parent-first. CocoQL tidak pernah menebak relation dari nama entity.</p>
-          <p>Field <code>date</code> dan <code>datetime</code> menerima semantic range seperti <code>today</code>, <code>this_month</code>, atau <code>last 7 days</code>. Planner mengubahnya menjadi rentang UTC half-open; gunakan opsi <code>{`{ now }`}</code> untuk testing dan replay yang deterministik.</p>
-          <p>Grouped read memakai <code>group customer.name</code> dan expression ber-alias seperti <code>sum(total) as revenue</code>. Semua field biasa yang dipilih wajib di-group; <code>sort revenue desc</code> kemudian mengacu ke alias aggregate secara eksplisit.</p>
-          <p>Semua kegagalan menggunakan envelope <code>CocoQLIssue 0.1</code>. Gunakan <code>error</code> untuk branching, <code>stage</code> untuk mengetahui bagian pipeline, serta <code>location</code> dan <code>path</code> untuk memperbaiki clause yang tepat. <code>JSON.stringify(error)</code> tidak menyertakan stack trace.</p>
-          <p><code>authorizeCocoQL</code> dan <code>authorizeCocoQLMutation</code> menerapkan policy default-deny setelah semantic validation dan sebelum plan. Read field, relation, aggregate, serta field <code>create</code>/<code>update</code> dan izin <code>delete</code> harus dinyatakan eksplisit.</p>
-          <p><code>defineCocoQLSafetyPolicy</code> membatasi read dan mutation secara deterministik. Gunakan <code>previewCocoQLMutation</code> untuk memeriksa intent tanpa SQL; update/delete wajib memiliki filter, dan write executable wajib memakai <code>confirm affected &lt;= N</code>.</p>
-          <p><code>compileCocoQLMutation</code> menghasilkan SQL berparameter beserta <code>verifyBeforeCommit</code>. Compiler tidak mengeksekusi database; adapter wajib memeriksa affected rows di transaksi yang sama dan rollback ketika melebihi konfirmasi.</p>
-          <p>Gunakan <code>compileCocoQLPostgres</code> dan <code>compileCocoQLMutationPostgres</code> untuk PostgreSQL. Keduanya mengonsumsi plan yang sama, memakai placeholder <code>$1</code>, <code>$2</code>, dan seterusnya, serta tetap memvalidasi forged plan sebelum menghasilkan SQL.</p>
-          <p>Gunakan <code>compileCocoQL(source, schema)</code> sebagai shortcut pipeline lengkap. Plan yang dibuat di luar <code>planCocoQL</code> tetap divalidasi compiler; operator palsu, referensi lintas entity, rentang tanggal rusak, dan join yang tidak cocok dengan schema gagal dengan <code>INVALID_PLAN</code>. Validasi plan tidak menggantikan authorization aplikasi.</p>
-          <p>Lihat contoh pada <a href="/cocoql#permissions">Permissions</a>, <a href="/cocoql#safety">Safety Policy</a>, <a href="/cocoql#mutation-preview">Mutation Preview</a>, <a href="/cocoql#mutations">Guarded Mutations</a>, <a href="/cocoql#postgresql">PostgreSQL</a>, dan <a href="/cocoql#query-plan">Query Plan</a>.</p>
+          <p>Query Plan 0.1 is database-independent: it contains only public entities and fields, relation paths, structured filters, sorting, and limits. Table names, physical columns, and join conditions remain in the trusted schema and are used only by dialect compilers.</p>
+          <p>Use <code>with customer</code> before accessing <code>customer.name</code>. Nested paths such as <code>with projects.invoices</code> are planned parent-first. CocoQL never guesses relations from entity names.</p>
+          <p>Fields of type <code>date</code> and <code>datetime</code> accept semantic ranges such as <code>today</code>, <code>this_month</code>, and <code>last 7 days</code>. The planner converts them into half-open UTC ranges; use <code>{`{ now }`}</code> for deterministic testing and replay.</p>
+          <p>Grouped reads use <code>group customer.name</code> and aliased expressions such as <code>sum(total) as revenue</code>. Every selected non-aggregate field must be grouped; <code>sort revenue desc</code> then refers explicitly to the aggregate alias.</p>
+          <p>Every failure uses the <code>CocoQLIssue 0.1</code> envelope. Use <code>error</code> for branching, <code>stage</code> to identify the pipeline phase, and <code>location</code> and <code>path</code> to correct the exact clause. <code>JSON.stringify(error)</code> omits the stack trace.</p>
+          <p><code>authorizeCocoQL</code> and <code>authorizeCocoQLMutation</code> apply default-deny policies after semantic validation and before planning. Read fields, relations, aggregates, <code>create</code>/<code>update</code> fields, and <code>delete</code> permission must be explicit.</p>
+          <p><code>defineCocoQLSafetyPolicy</code> limits reads and mutations deterministically. Use <code>previewCocoQLMutation</code> to inspect intent without SQL; updates and deletes require filters, and executable writes require <code>confirm affected &lt;= N</code>.</p>
+          <p><code>compileCocoQLMutation</code> produces parameterized SQL with <code>verifyBeforeCommit</code>. The compiler never executes the database; adapters must check affected rows in the same transaction and roll back when the confirmation limit is exceeded.</p>
+          <p>Use <code>compileCocoQLPostgres</code> and <code>compileCocoQLMutationPostgres</code> for PostgreSQL. Both consume the same plan, use <code>$1</code>, <code>$2</code>, and subsequent placeholders, and validate forged plans before producing SQL.</p>
+          <p>Use <code>compileCocoQL(source, schema)</code> as a complete pipeline shortcut. The compiler still validates plans created outside <code>planCocoQL</code>; forged operators, cross-entity references, malformed date ranges, and schema-incompatible joins fail with <code>INVALID_PLAN</code>. Plan validation does not replace application authorization.</p>
+          <p>See examples in <a href="/cocoql#permissions">Permissions</a>, <a href="/cocoql#safety">Safety Policy</a>, <a href="/cocoql#mutation-preview">Mutation Preview</a>, <a href="/cocoql#mutations">Guarded Mutations</a>, <a href="/cocoql#postgresql">PostgreSQL</a>, and <a href="/cocoql#query-plan">Query Plan</a>.</p>
         </GuideSection>
 
-        <GuideSection id="performance" label="SSR" title="Streaming, defer, SEO, and caching" description="HTML utama selalu server-rendered. Konten non-kritis dapat diselesaikan belakangan tanpa inline executable script." code={`import { defer } from "@cocoframe/core";\n\nconst Recommendations = () => defer(\n  loadRecommendations(),\n  <p>Loading recommendations...</p>,\n);\n\nexport default definePage({\n  meta: { title: "Product", description: "Product detail" },\n  cache: { browser: 60, edge: 300, staleWhileRevalidate: 600 },\n  view: () => <main><h1>Product</h1><Recommendations /></main>,\n});`}>
-          <p>Jangan menaruh title, copy utama, structured data, atau konten SEO penting di dalam <code>defer</code>. Hanya static pages yang masuk otomatis ke <code>/sitemap.xml</code>; API, action, dan system routes tidak disertakan. <code>/robots.txt</code> menunjuk ke sitemap.</p>
+        <GuideSection id="performance" label="SSR" title="Streaming, defer, SEO, and caching" description="Primary HTML is always server-rendered. Non-critical content can resolve later without inline executable scripts." code={`import { defer } from "@cocoframe/core";\n\nconst Recommendations = () => defer(\n  loadRecommendations(),\n  <p>Loading recommendations...</p>,\n);\n\nexport default definePage({\n  meta: { title: "Product", description: "Product detail" },\n  cache: { browser: 60, edge: 300, staleWhileRevalidate: 600 },\n  view: () => <main><h1>Product</h1><Recommendations /></main>,\n});`}>
+          <p>Never place titles, primary copy, structured data, or important SEO content inside <code>defer</code>. Only static pages enter <code>/sitemap.xml</code> automatically; API, action, and system routes are excluded. <code>/robots.txt</code> points to the sitemap.</p>
         </GuideSection>
 
-        <GuideSection id="testing" label="QUALITY" title="Testing and inspection" description="Gunakan compiler, Node test runner, inspection, production build, dan browser E2E sebagai quality gate." language="bash" code={`npm run check\nnpm test\nnpm run inspect\nnpm run build\n\n# install browser sekali, lalu jalankan seluruh E2E\nnpx playwright install chromium firefox webkit\nnpm run test:e2e\n\n# Chromium-only untuk iterasi lokal yang lebih cepat\nnpm run test:e2e:chromium\n\n# benchmark ops renderer / HTTP lokal\nnpm run benchmark\nnpm run benchmark:http\nnpm run benchmark:http:concurrent`}>
-          <p>Test aplikasi dapat memanggil <code>app.fetch(new Request(url))</code> langsung tanpa membuka port. Suite E2E menyalakan server development dan production terpisah, lalu menguji islands, overlay error development, CSP, form 422/303, streaming, 404, live search, sorting, dialog keyboard, dan console browser di Chromium, Firefox, serta WebKit.</p>
-          <p>Project responsif mengunjungi halaman kritis pada 320px, ponsel 390px, tablet, laptop, dan 4K. Pemeriksaan mencakup overflow horizontal, keyboard focus, mobile menu, asset gambar, dan aspect ratio.</p>
+        <GuideSection id="testing" label="QUALITY" title="Testing and inspection" description="Use the compiler, Node test runner, inspection, production build, and browser E2E as quality gates." language="bash" code={`npm run check\nnpm test\nnpm run inspect\nnpm run build\n\n# install browsers once, then run all E2E tests\nnpx playwright install chromium firefox webkit\nnpm run test:e2e\n\n# Chromium only for faster local iteration\nnpm run test:e2e:chromium\n\n# benchmark renderer operations / local HTTP\nnpm run benchmark\nnpm run benchmark:http\nnpm run benchmark:http:concurrent`}>
+          <p>Application tests can call <code>app.fetch(new Request(url))</code> directly without opening a port. The E2E suite starts separate development and production servers, then tests islands, the development error overlay, CSP, forms, streaming, 404 pages, live search, sorting, keyboard dialogs, and browser consoles in Chromium, Firefox, and WebKit.</p>
+          <p>Responsive projects visit critical pages at 320px, 390px phones, tablets, laptops, and 4K. Checks cover horizontal overflow, keyboard focus, mobile menus, image assets, and aspect ratios.</p>
         </GuideSection>
-        <GuideSection id="deployment" label="PRODUCTION" title="Build and deployment" description="Production build menghasilkan server bundle, public assets, manifest asset, dan deployment metadata." language="bash" code={`npm run build\nnpm start\n\n# output utama\n.cocoframe/server.mjs\n.cocoframe/public/\n.cocoframe/assets.json\n.cocoframe/deploy.json`}>
+        <GuideSection id="deployment" label="PRODUCTION" title="Build and deployment" description="Production builds produce a server bundle, public assets, an asset manifest, and deployment metadata." language="bash" code={`npm run build\nnpm start\n\n# primary output\n.cocoframe/server.mjs\n.cocoframe/public/\n.cocoframe/assets.json\n.cocoframe/deploy.json`}>
           <DeploymentTargetTable />
-          <p>Node server mendukung body limit, request timeout, trusted proxies, liveness/readiness probes, dan graceful shutdown. Untuk platform Fetch/edge gunakan <code>webHandler(app)</code> dari <code>@cocoframe/server-web</code>.</p>
+          <p>The Node server supports body limits, request timeouts, trusted proxies, liveness/readiness probes, and graceful shutdown. For Fetch or edge platforms, use <code>webHandler(app)</code> from <code>@cocoframe/server-web</code>.</p>
         </GuideSection>
 
-        <GuideSection id="environment" label="RUNTIME" title="Environment variables and health" description="Runtime Node membaca environment variable eksplisit berikut." >
+        <GuideSection id="environment" label="RUNTIME" title="Environment variables and health" description="The Node runtime reads the following explicit environment variables." >
           <EnvironmentTable />
-          <p>Health endpoints tersedia di <code>/_health/live</code> dan <code>/_health/ready</code>. Readiness dapat memeriksa database atau dependency melalui config.</p>
+          <p>Health endpoints are available at <code>/_health/live</code> and <code>/_health/ready</code>. Readiness can check databases or dependencies through configuration.</p>
         </GuideSection>
 
-        <GuideSection id="cli" label="REFERENCE" title="CLI reference" description="CLI menerima project directory sebagai argumen terakhir; default-nya current directory." language="bash" code={`cocoframe inspect [project]   # route, island, UI, API, middleware manifest\ncocoframe dev [project]       # development server + watcher\ncocoframe build [project]     # production bundle\ncocoframe start [project]     # jalankan production bundle\ncocoframe generate [project]  # client, OpenAPI, CSS declarations\ncocoframe openapi [project]   # hanya OpenAPI`}>
-          <p>Dalam repository ini command yang sama tersedia melalui script npm: <code>npm run inspect</code>, <code>npm run dev</code>, <code>npm run build</code>, dan <code>npm run generate</code>.</p>
+        <GuideSection id="cli" label="REFERENCE" title="CLI reference" description="The CLI accepts a project directory as its final argument and defaults to the current directory." language="bash" code={`cocoframe inspect [project]   # route, island, UI, API, middleware manifest\ncocoframe dev [project]       # development server + watcher\ncocoframe build [project]     # production bundle\ncocoframe start [project]     # run the production bundle\ncocoframe generate [project]  # client, OpenAPI, CSS declarations\ncocoframe openapi [project]   # OpenAPI only`}>
+          <p>The same commands are available in this repository through npm scripts: <code>npm run inspect</code>, <code>npm run dev</code>, <code>npm run build</code>, and <code>npm run generate</code>.</p>
         </GuideSection>
 
-        <GuideSection id="troubleshooting" label="SUPPORT" title="Troubleshooting checklist" description="Mulai dari pemeriksaan deterministik berikut sebelum mengubah konfigurasi atau menambah dependency." language="bash" code={`npm run check
+        <GuideSection id="troubleshooting" label="SUPPORT" title="Troubleshooting checklist" description="Start with these deterministic checks before changing configuration or adding dependencies." language="bash" code={`npm run check
 npm test
 npm run inspect
 npm run generate
 npm run build`}>
           <ul class="guide-checklist">
-            <li><strong>Route tidak ditemukan:</strong> periksa pola dan urutan route melalui <code>npm run inspect</code>; pastikan suffix file adalah <code>.page.tsx</code> atau <code>.route.ts</code>.</li>
-            <li><strong>Island tidak aktif:</strong> pastikan file berada di <code>app/islands</code>, nama <code>defineIsland</code> lowercase cocok dengan filename, dan props JSON-serializable.</li>
-            <li><strong>Generated client berubah:</strong> jalankan <code>npm run generate</code>; jangan edit client, OpenAPI, atau CSS declarations secara manual.</li>
-            <li><strong>Form selalu 403:</strong> cocokkan <code>CsrfField</code> dengan middleware CSRF dan jangan cache halaman form personal sebagai public.</li>
-            <li><strong>Readiness gagal:</strong> periksa dependency dari server log. Endpoint readiness hanya mengembalikan status availability dan sengaja tidak membocorkan error internal.</li>
-            <li><strong>Asset tidak ditemukan setelah build:</strong> gunakan URL dari asset manifest; production filename memakai content hash.</li>
+            <li><strong>Route not found:</strong> check route patterns and order with <code>npm run inspect</code>; ensure the file suffix is <code>.page.tsx</code> or <code>.route.ts</code>.</li>
+            <li><strong>Island inactive:</strong> ensure the file is in <code>app/islands</code>, its lowercase <code>defineIsland</code> name matches the filename, and props are JSON-serializable.</li>
+            <li><strong>Generated client changed:</strong> run <code>npm run generate</code>; never edit the client, OpenAPI, or CSS declarations manually.</li>
+            <li><strong>Form always returns 403:</strong> pair <code>CsrfField</code> with CSRF middleware and never cache personal form pages publicly.</li>
+            <li><strong>Readiness failed:</strong> inspect dependencies in server logs. The readiness endpoint returns availability only and intentionally hides internal errors.</li>
+            <li><strong>Asset missing after build:</strong> use the URL from the asset manifest; production filenames use content hashes.</li>
           </ul>
-          <p>Jika masalah tetap terjadi, siapkan versi Node, output <code>npm run inspect</code>, langkah reproduksi minimal, serta error yang sudah disanitasi lalu kirim melalui <a href="/contact">halaman kontak</a>.</p>
+          <p>If the issue persists, provide the Node version, <code>npm run inspect</code> output, minimal reproduction steps, and a sanitized error through the <a href="/contact">contact page</a>.</p>
         </GuideSection>
 
-        <GuideSection id="versioning" label="RELEASES" title="Versioning and upgrade policy" description="Rilis framework saat ini berada pada versi 0.0.2 dan tetap berstatus architectural MVP menuju API yang stabil.">
+        <GuideSection id="versioning" label="RELEASES" title="Versioning and upgrade policy" description="The current framework release is version 0.0.4 and remains an architectural MVP progressing toward a stable API.">
           <ul class="guide-checklist">
-            <li>Public API yang stabil selalu diekspor dari root package <code>@cocoframe/*</code>.</li>
-            <li>Generated client, OpenAPI, manifest, dan CSS declaration harus dibuat ulang setelah upgrade.</li>
-            <li>Migration database yang sudah diterapkan bersifat immutable; perubahan baru memakai migration ID berikutnya.</li>
-            <li>Sebelum upgrade, jalankan check, test, inspect, build, lalu simpan output sebagai baseline.</li>
-            <li>Breaking change sebelum 1.0 harus dicatat bersama langkah migrasi dan contoh sebelum/sesudah.</li>
+            <li>Stable public APIs are always exported from <code>@cocoframe/*</code> package roots.</li>
+            <li>Regenerate clients, OpenAPI, manifests, and CSS declarations after upgrades.</li>
+            <li>Applied database migrations are immutable; new changes use the next migration ID.</li>
+            <li>Before upgrading, run check, test, inspect, and build, then save the output as a baseline.</li>
+            <li>Breaking changes before 1.0 must include migration steps and before/after examples.</li>
           </ul>
-          <p><code>create-cocoframe@0.0.3</code> serta package runtime Tahap 1 tersedia publik di npm. Package yang tidak berubah mempertahankan versinya agar dependency graph tetap kecil dan eksplisit.</p>
+          <p><code>create-cocoframe@0.0.5</code> and the coordinated runtime package set are publicly available on npm. Internal package dependencies are pinned to the versions released together.</p>
         </GuideSection>
 
-        <GuideSection id="roadmap" label="ROADMAP" title="Current roadmap" description="Prioritas berikut menjaga framework tetap kecil sambil menutup kebutuhan production yang belum tersedia.">
+        <GuideSection id="roadmap" label="ROADMAP" title="Current roadmap" description="These priorities keep the framework small while addressing remaining production needs.">
           <RoadmapTable />
         </GuideSection>
 
-        <GuideSection id="contributing" label="CONTRIBUTING" title="Contribution workflow" description="Perubahan framework harus kecil, typed, memiliki test fokus, dan tidak memperbesar browser runtime tanpa kebutuhan nyata." language="bash" code={`npm install
+        <GuideSection id="contributing" label="CONTRIBUTING" title="Contribution workflow" description="Framework changes must be small, typed, covered by focused tests, and must not expand the browser runtime without a genuine need." language="bash" code={`npm install
 npm run check
 npm test
 npm run inspect
 npm run build
 
-# benchmark bila perubahan memengaruhi performa
+# benchmark when changes affect performance
 npm run benchmark
 npm run benchmark:http`}>
-          <p>Baca <code>docs/architecture.md</code> sebelum mengubah behavior. Gunakan Web Standard <code>Request</code>/<code>Response</code> pada boundary, server rendering sebagai default, dan island hanya untuk interaksi browser.</p>
-          <p>Perubahan API contract wajib diikuti <code>npm run generate</code>. Jangan mengedit output generated, migration lama, atau scoped CSS name secara manual.</p>
+          <p>Read <code>docs/architecture.md</code> before changing behavior. Use Web Standard <code>Request</code>/<code>Response</code> at boundaries, default to server rendering, and use islands only for browser interaction.</p>
+          <p>API contract changes require <code>npm run generate</code>. Never edit generated output, existing migrations, or scoped CSS names manually.</p>
         </GuideSection>
 
-        <GuideSection id="conventions" label="AI-FRIENDLY" title="Conventions and maintenance" description="Pilih satu tempat untuk setiap concern agar perubahan tetap lokal dan konteks untuk AI tetap kecil.">
-          <ul class="guide-checklist"><li>Satu page atau API contract per route file.</li><li>Komponen statis di <code>components/</code>; state browser hanya di <code>islands/</code>.</li><li>Schema menjadi sumber kebenaran untuk form dan API.</li><li>ContextKey untuk state request; tidak memakai global mutable state.</li><li>Generated files tidak diedit manual.</li><li>Jalankan check, test, dan build sebelum merge.</li></ul>
+        <GuideSection id="conventions" label="AI-FRIENDLY" title="Conventions and maintenance" description="Choose one location for each concern so changes remain local and AI context stays small.">
+          <ul class="guide-checklist"><li>One page or API contract per route file.</li><li>Static components belong in <code>components/</code>; browser state belongs only in <code>islands/</code>.</li><li>Schemas are the source of truth for forms and APIs.</li><li>Use ContextKey for request state; never use mutable global state.</li><li>Generated files are never edited manually.</li><li>Run check, test, and build before merging.</li></ul>
         </GuideSection>
       </article>
     </div>
@@ -412,15 +412,15 @@ npm run benchmark:http`}>
 });
 
 function GuideSection({ id, label, title, description, code, language = "tsx", children }: GuideSectionProps) {
-  return <section class="guide-section" id={id}><header><span class="eyebrow">{label}</span><h2>{title}</h2><p>{description}</p></header>{code ? <SyntaxHighlighter class="guide-code" code={code} language={language} label={`${title} code example`} /> : null}<div class="guide-body">{children}</div><a class="guide-top" href="#top">Kembali ke atas <span aria-hidden="true"><ArrowUpIcon size={14} /></span></a></section>;
+  return <section class="guide-section" id={id}><header><span class="eyebrow">{label}</span><h2>{title}</h2><p>{description}</p></header>{code ? <SyntaxHighlighter class="guide-code" code={code} language={language} label={`${title} code example`} /> : null}<div class="guide-body">{children}</div><a class="guide-top" href="#top">Back to top <span aria-hidden="true"><ArrowUpIcon size={14} /></span></a></section>;
 }
 
 function RouteTable() {
-  return <div class="guide-table" role="table" aria-label="Konvensi file routing"><div role="row"><strong role="columnheader">File</strong><strong role="columnheader">URL</strong></div><div role="row"><code>index.page.tsx</code><code>/</code></div><div role="row"><code>about.page.tsx</code><code>/about</code></div><div role="row"><code>blog/[slug].page.tsx</code><code>/blog/:slug</code></div><div role="row"><code>docs/[...rest].page.tsx</code><code>/docs/*rest</code></div><div role="row"><code>api/users.route.ts</code><code>/api/users</code></div></div>;
+  return <div class="guide-table" role="table" aria-label="Routing file conventions"><div role="row"><strong role="columnheader">File</strong><strong role="columnheader">URL</strong></div><div role="row"><code>index.page.tsx</code><code>/</code></div><div role="row"><code>about.page.tsx</code><code>/about</code></div><div role="row"><code>blog/[slug].page.tsx</code><code>/blog/:slug</code></div><div role="row"><code>docs/[...rest].page.tsx</code><code>/docs/*rest</code></div><div role="row"><code>api/users.route.ts</code><code>/api/users</code></div></div>;
 }
 
 function EnvironmentTable() {
-  return <div class="guide-table env-table" role="table" aria-label="Environment variables"><div role="row"><strong role="columnheader">Variable</strong><strong role="columnheader">Default</strong></div><div role="row"><code>COCOFRAME_MAX_BODY_BYTES</code><code>1048576</code></div><div role="row"><code>COCOFRAME_REQUEST_TIMEOUT_MS</code><code>30000</code></div><div role="row"><code>COCOFRAME_TRUSTED_PROXIES</code><span>kosong</span></div><div role="row"><code>COCOFRAME_SHUTDOWN_DELAY_MS</code><code>0</code></div><div role="row"><code>COCOFRAME_SHUTDOWN_TIMEOUT_MS</code><code>10000</code></div><div role="row"><code>PORT</code><code>3000</code></div><div role="row"><code>HOST</code><code>0.0.0.0 (start)</code></div></div>;
+  return <div class="guide-table env-table" role="table" aria-label="Environment variables"><div role="row"><strong role="columnheader">Variable</strong><strong role="columnheader">Default</strong></div><div role="row"><code>COCOFRAME_MAX_BODY_BYTES</code><code>1048576</code></div><div role="row"><code>COCOFRAME_REQUEST_TIMEOUT_MS</code><code>30000</code></div><div role="row"><code>COCOFRAME_TRUSTED_PROXIES</code><span>empty</span></div><div role="row"><code>COCOFRAME_SHUTDOWN_DELAY_MS</code><code>0</code></div><div role="row"><code>COCOFRAME_SHUTDOWN_TIMEOUT_MS</code><code>10000</code></div><div role="row"><code>PORT</code><code>3000</code></div><div role="row"><code>HOST</code><code>0.0.0.0 (start)</code></div></div>;
 }
 
 function PackageReferenceTable() {
@@ -449,17 +449,17 @@ function PackageReferenceTable() {
 }
 
 function DeploymentTargetTable() {
-  return <div class="guide-table guide-table--three" role="table" aria-label="Deployment targets"><div role="row"><strong role="columnheader">Target</strong><strong role="columnheader">Entry</strong><strong role="columnheader">Notes</strong></div><div role="row"><strong>Node server</strong><code>.cocoframe/server.mjs</code><span>Body limit, timeout, trusted proxy, health, dan graceful shutdown.</span></div><div role="row"><strong>Fetch / edge</strong><code>webHandler(app)</code><span>Gunakan Web Standard Request dan Response; verifikasi dukungan streaming platform.</span></div><div role="row"><strong>Container</strong><code>npm start</code><span>Expose PORT, pasang health probes, dan kirim signal shutdown ke process.</span></div></div>;
+  return <div class="guide-table guide-table--three" role="table" aria-label="Deployment targets"><div role="row"><strong role="columnheader">Target</strong><strong role="columnheader">Entry</strong><strong role="columnheader">Notes</strong></div><div role="row"><strong>Node server</strong><code>.cocoframe/server.mjs</code><span>Body limits, timeouts, trusted proxies, health, and graceful shutdown.</span></div><div role="row"><strong>Fetch / edge</strong><code>webHandler(app)</code><span>Use Web Standard Request and Response; verify platform streaming support.</span></div><div role="row"><strong>Container</strong><code>npm start</code><span>Expose PORT, install health probes, and send shutdown signals to the process.</span></div></div>;
 }
 
 function RoadmapTable() {
   const items = [
-    ["Package publishing", "Available", "19 package publik memakai staged build, exact dependency pins, tarball validation, dan template smoke test."],
-    ["Distributed rate limiting", "Planned", "Store interface untuk deployment multi-instance."],
-    ["Telemetry exporters", "Planned", "Adapter vendor-neutral di atas structured request events."],
-    ["CSP nonce & integrity helpers", "Planned", "Security enhancement tanpa mengekspos bundler internals."],
-    ["Compression", "Planned", "Streaming-safe response compression pada adapter runtime."],
-    ["Deployment adapters", "Planned", "Target tambahan berbasis Fetch standards dan deployment manifest."],
+    ["Package publishing", "Available", "19 public packages use staged builds, exact dependency pins, tarball validation, and template smoke tests."],
+    ["Distributed rate limiting", "Planned", "A storage interface for multi-instance deployments."],
+    ["Telemetry exporters", "Planned", "A vendor-neutral adapter over structured request events."],
+    ["CSP nonce & integrity helpers", "Planned", "Security enhancements without exposing bundler internals."],
+    ["Compression", "Planned", "Streaming-safe response compression in runtime adapters."],
+    ["Deployment adapters", "Planned", "Additional targets based on Fetch standards and the deployment manifest."],
   ] as const;
   return <div class="guide-table guide-table--roadmap" role="table" aria-label="CocoFrame roadmap"><div role="row"><strong role="columnheader">Capability</strong><strong role="columnheader">Status</strong><strong role="columnheader">Scope</strong></div>{items.map(([capability, status, scope]) => <div role="row"><strong>{capability}</strong><span class="guide-status">{status}</span><span>{scope}</span></div>)}</div>;
 }

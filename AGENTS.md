@@ -1,6 +1,7 @@
 # CocoFrame AI guide
 
-Read `docs/architecture.md` before changing framework behavior.
+Read `docs/ai-context.md` to locate the owning package, relevant lifecycle,
+generated artifacts, and verification required for the task.
 
 - Keep public APIs small, typed, explicit, and dependency-light.
 - Server rendering is the default. Browser JavaScript must be opt-in.

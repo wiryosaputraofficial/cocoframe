@@ -10,6 +10,9 @@ export interface CompiledCocoQL {
   readonly parameters: readonly CocoQLScalar[];
 }
 
+/**
+ * Compiles Coco QL To My Sql into guarded parameterized output.
+ */
 export function compileCocoQLToMySql(plan: CocoQLQueryPlan, schema: CocoQLSchema): CompiledCocoQL {
   validateCocoQLPlan(plan, schema);
   const entity = schema.entities[plan.rootEntity]!;

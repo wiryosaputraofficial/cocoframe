@@ -10,6 +10,9 @@ const MUTATION_COMMANDS = new Set(["create", "update", "delete", "preview", "con
 const FILTER_WORD_OPERATORS = new Set<CocoQLFilterOperator>(["in", "contains", "starts_with", "ends_with", "before", "after"]);
 const AGGREGATE_FUNCTIONS = new Set<CocoQLAggregateFunction>(["count", "sum", "avg", "min", "max"]);
 
+/**
+ * Parses Coco QL into its typed public representation.
+ */
 export function parseCocoQL(source: string): CocoQLQuery {
   const cursor = new TokenCursor(lexCocoQL(source));
   let entity: string | undefined;

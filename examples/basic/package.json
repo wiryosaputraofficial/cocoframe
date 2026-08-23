@@ -4,14 +4,14 @@
   "private": true,
   "type": "module",
   "dependencies": {
-    "@cocoframe/client": "0.0.3",
-    "@cocoframe/core": "0.0.3",
-    "@cocoframe/forms": "0.0.3",
-    "@cocoframe/icons": "0.0.2",
-    "@cocoframe/jsx": "0.0.2",
-    "@cocoframe/observability": "0.0.3",
-    "@cocoframe/schema": "0.0.2",
-    "@cocoframe/security": "0.0.3",
-    "@cocoframe/ui": "0.0.2"
+    "@cocoframe/client": "0.0.4",
+    "@cocoframe/core": "0.0.4",
+    "@cocoframe/forms": "0.0.4",
+    "@cocoframe/icons": "0.0.3",
+    "@cocoframe/jsx": "0.0.3",
+    "@cocoframe/observability": "0.0.4",
+    "@cocoframe/schema": "0.0.3",
+    "@cocoframe/security": "0.0.4",
+    "@cocoframe/ui": "0.0.3"
   }
 }

@@ -12,8 +12,8 @@ interface IconExplorerProps extends Record<string, unknown> {
 export default defineIsland<IconExplorerProps>({
   name: "icon-explorer",
   setup: ({ initialSearch, initialVisible, total }) => () => <div class="icons-catalog-bar">
-    <div><span class="eyebrow">ICON CATALOG</span><h2 class="icons-live-heading" id="icon-catalog-title">{initialSearch ? `Hasil untuk “${initialSearch}”` : "All Solar Linear icons"}</h2><p role="status" aria-live="polite"><strong class="icons-live-count">{initialVisible.toLocaleString("id-ID")}</strong> dari {total.toLocaleString("id-ID")} ikon ditampilkan.</p></div>
-    <form class="icons-search" method="get" action="/icons"><label for="icon-search">Cari berdasarkan nama ikon</label><div><span aria-hidden="true"><MagnifierIcon size={18} /></span><input id="icon-search" name="q" type="search" value={initialSearch} placeholder="Contoh: arrow, user, wallet..." autocomplete="off" /><button type="submit">Search</button></div></form>
+    <div><span class="eyebrow">ICON CATALOG</span><h2 class="icons-live-heading" id="icon-catalog-title">{initialSearch ? `Results for “${initialSearch}”` : "All Solar Linear icons"}</h2><p role="status" aria-live="polite"><strong class="icons-live-count">{initialVisible.toLocaleString("en-US")}</strong> of {total.toLocaleString("en-US")} icons shown.</p></div>
+    <form class="icons-search" method="get" action="/icons"><label for="icon-search">Search by icon name</label><div><span aria-hidden="true"><MagnifierIcon size={18} /></span><input id="icon-search" name="q" type="search" value={initialSearch} placeholder="Example: arrow, user, wallet..." autocomplete="off" /><button type="submit">Search</button></div></form>
   </div>,
   enhance: (root, props) => {
     const document = root.ownerDocument;
@@ -35,8 +35,8 @@ export default defineIsland<IconExplorerProps>({
         card.hidden = !matches;
         if (matches) visible++;
       }
-      if (count) count.textContent = visible.toLocaleString("id-ID");
-      if (heading) heading.textContent = query ? `Hasil untuk “${query}”` : "All Solar Linear icons";
+      if (count) count.textContent = visible.toLocaleString("en-US");
+      if (heading) heading.textContent = query ? `Results for “${query}”` : "All Solar Linear icons";
       if (empty) empty.hidden = visible > 0;
       if (updateUrl && window) {
         const url = new URL(window.location.href);

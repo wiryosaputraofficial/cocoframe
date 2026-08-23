@@ -2,9 +2,18 @@ import type { CocoQLAggregate, CocoQLFilter, CocoQLMutation, CocoQLQuery, CocoQL
 import { parseCocoQLMutation } from "./mutation-parser.ts";
 import { parseCocoQL } from "./parser.ts";
 
+/**
+ * Formats Coco QL into deterministic canonical text.
+ */
 export function formatCocoQL(source: string): string { return formatCocoQLAst(parseCocoQL(source)); }
+/**
+ * Formats Coco QL Mutation into deterministic canonical text.
+ */
 export function formatCocoQLMutation(source: string): string { return formatCocoQLMutationAst(parseCocoQLMutation(source)); }
 
+/**
+ * Formats Coco QL Mutation Ast into deterministic canonical text.
+ */
 export function formatCocoQLMutationAst(mutation: CocoQLMutation): string {
   const blocks: string[] = mutation.preview ? ["preview"] : [];
   if (mutation.operation === "create") blocks.push(`create ${mutation.entity}`);
@@ -18,6 +27,9 @@ export function formatCocoQLMutationAst(mutation: CocoQLMutation): string {
   return `${blocks.join("\n\n")}\n`;
 }
 
+/**
+ * Formats Coco QL Ast into deterministic canonical text.
+ */
 export function formatCocoQLAst(query: CocoQLQuery): string {
   const blocks = [`from ${query.source.entity}`];
   for (const relation of query.with) blocks.push(`with ${relation}`);

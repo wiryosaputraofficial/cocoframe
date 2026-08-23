@@ -7,14 +7,14 @@ export default defineIsland<{ active: "home" | "features" | "docs" | "cocoql" | 
   setup: ({ active }) => () => (
     <header class="site-header">
       <a class="brand" href="/#top" aria-label="CocoFrame home"><img src="/assets/cocoframe-icon.png" alt="" /><span>cocoframe</span></a>
-      <button class="menu-toggle" type="button" aria-label="Buka menu" aria-expanded="false" onClick={(event: Event) => {
+      <button class="menu-toggle" type="button" aria-label="Open menu" aria-expanded="false" onClick={(event: Event) => {
         const button = event.currentTarget as HTMLButtonElement;
         const nav = button.parentElement?.querySelector(".main-nav");
         const open = nav?.classList.toggle("open") ?? false;
         button.setAttribute("aria-expanded", String(open));
-        button.setAttribute("aria-label", open ? "Tutup menu" : "Buka menu");
+        button.setAttribute("aria-label", open ? "Close menu" : "Open menu");
       }}><HamburgerMenuIcon size={24} /></button>
-      <nav class="main-nav" aria-label="Navigasi utama" onClick={(event: Event) => {
+      <nav class="main-nav" aria-label="Primary navigation" onClick={(event: Event) => {
         if (!(event.target instanceof HTMLAnchorElement)) return;
         const nav = event.currentTarget as HTMLElement;
         nav.classList.remove("open");

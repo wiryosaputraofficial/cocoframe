@@ -28,34 +28,34 @@ export default definePage({
     canonical: "https://cocoframe.dev/deployment",
   },
   view: () => <main class="project-page" id="top">
-    <ProjectHero active="deployment" eyebrow="DEPLOYMENT" title={<>Build once.<br />Run on a clear boundary.</>} description="Production builds menghasilkan server bundle, hashed browser assets, dan deployment manifest. Pilih runtime target, pasang health probes, lalu biarkan adapter mempertahankan streaming dan AbortSignal end-to-end." icon={<CloudCheckIcon size={86} />}>
+    <ProjectHero active="deployment" eyebrow="DEPLOYMENT" title={<>Build once.<br />Run on a clear boundary.</>} description="Production builds produce a server bundle, hashed browser assets, and a deployment manifest. Choose a runtime target, configure health probes, and let the adapter preserve streaming and AbortSignal propagation end-to-end." icon={<CloudCheckIcon size={86} />}>
       <a class="button button-primary" href="#targets">Choose a target</a>
       <a class="button button-ghost" href="/docs#deployment">Deployment docs</a>
     </ProjectHero>
 
-    <ProjectSection id="targets" eyebrow="RUNTIME TARGETS" title="Three deployment shapes, one web contract." description="Semua target memakai Web Standard Request dan Response; perbedaannya berada pada adapter dan lifecycle process.">
+    <ProjectSection id="targets" eyebrow="RUNTIME TARGETS" title="Three deployment shapes, one web contract." description="Every target uses Web Standard Request and Response objects; only the adapter and process lifecycle differ.">
       <div class="project-card-grid project-card-grid--three">
-        <ProjectCard icon={<ServerSquareIcon size={25} />} title="Node server"><p>Jalankan <code>.cocoframe/server.mjs</code> melalui <code>npm start</code>. Adapter menangani body limit, timeout, health, proxy trust, dan graceful shutdown.</p></ProjectCard>
-        <ProjectCard icon={<CloudCheckIcon size={25} />} title="Container"><p>Gunakan production start command, expose <code>PORT</code>, teruskan termination signal, dan arahkan probes ke endpoint health bawaan.</p></ProjectCard>
-        <ProjectCard icon={<GlobalIcon size={25} />} title="Fetch / edge"><p>Gunakan <code>webHandler(app)</code> pada runtime Fetch-compatible dan verifikasi dukungan streaming serta batas platform sebelum production.</p></ProjectCard>
+        <ProjectCard icon={<ServerSquareIcon size={25} />} title="Node server"><p>Run <code>.cocoframe/server.mjs</code> through <code>npm start</code>. The adapter handles body limits, timeouts, health checks, proxy trust, and graceful shutdown.</p></ProjectCard>
+        <ProjectCard icon={<CloudCheckIcon size={25} />} title="Container"><p>Use the production start command, expose <code>PORT</code>, forward termination signals, and point probes to the built-in health endpoints.</p></ProjectCard>
+        <ProjectCard icon={<GlobalIcon size={25} />} title="Fetch / edge"><p>Use <code>webHandler(app)</code> on a Fetch-compatible runtime and verify streaming support and platform limits before production.</p></ProjectCard>
       </div>
     </ProjectSection>
 
-    <ProjectSection eyebrow="BUILD OUTPUT" title="Artifacts are explicit and inspectable." description="Production filename memakai content hash dan harus diselesaikan melalui asset manifest, bukan path yang ditebak aplikasi.">
+    <ProjectSection eyebrow="BUILD OUTPUT" title="Artifacts are explicit and inspectable." description="Production filenames use content hashes and must be resolved through the asset manifest instead of application-guessed paths.">
       <div class="project-artifact-table reveal" role="table" aria-label="CocoFrame deployment artifacts"><div role="row"><strong role="columnheader">Artifact</strong><strong role="columnheader">Purpose</strong><strong role="columnheader">Policy</strong></div><div role="row"><code>.cocoframe/server.mjs</code><span>Production server bundle</span><span>Run through the configured start command</span></div><div role="row"><code>.cocoframe/assets.json</code><span>Hashed browser asset mapping</span><span>Source of truth for deployed asset URLs</span></div><div role="row"><code>.cocoframe/deploy.json</code><span>Deployment target metadata</span><span>Consumed by hosting and operations tooling</span></div><div role="row"><code>/coco-assets/*</code><span>Client, stream, island, and CSS assets</span><span>Serve hashed production files with immutable caching</span></div></div>
     </ProjectSection>
 
-    <ProjectSection eyebrow="RELEASE GATE" title="Verify before traffic moves." description="Build hanya menjadi kandidat release setelah contract, route manifest, security pipeline, dan production output lolos pemeriksaan.">
+    <ProjectSection eyebrow="RELEASE GATE" title="Verify before traffic moves." description="A build becomes a release candidate only after its contracts, route manifest, security pipeline, and production output pass verification.">
       <div class="project-split">
         <div class="project-code reveal"><div><CodeSquareIcon size={17} /><span>production build</span><small>Node</small></div><SyntaxHighlighter code={deployCommands} language="bash" label="CocoFrame production build commands" /></div>
         <div class="project-code reveal"><div><ShieldCheckIcon size={17} /><span>environment</span><small>example</small></div><SyntaxHighlighter code={environment} language="bash" label="CocoFrame deployment environment example" /></div>
       </div>
     </ProjectSection>
 
-    <ProjectSection eyebrow="OPERATIONS CHECKLIST" title="Ready means more than process alive." description="Health responses sengaja hanya mengungkap availability, bukan dependency error atau credential.">
-      <div class="project-policy-list reveal"><article><strong>Liveness</strong><p>Probe <code>/_health/live</code> untuk memastikan process dapat merespons.</p></article><article><strong>Readiness</strong><p>Probe <code>/_health/ready</code>; shutdown menandainya false sebelum request draining.</p></article><article><strong>Trusted proxy</strong><p>Jangan percaya forwarded host, protocol, atau client IP sebelum direct peer dikonfigurasi.</p></article><article><strong>Observability</strong><p>Kirim request ID, timing, status, dan field aplikasi yang aman—tanpa cookie, authorization, atau request body.</p></article></div>
+    <ProjectSection eyebrow="OPERATIONS CHECKLIST" title="Ready means more than process alive." description="Health responses intentionally expose availability only, never dependency errors or credentials.">
+      <div class="project-policy-list reveal"><article><strong>Liveness</strong><p>Probe <code>/_health/live</code> to confirm that the process can respond.</p></article><article><strong>Readiness</strong><p>Probe <code>/_health/ready</code>; shutdown marks it false before draining requests.</p></article><article><strong>Trusted proxy</strong><p>Do not trust forwarded hosts, protocols, or client IPs until the direct peer is explicitly configured.</p></article><article><strong>Observability</strong><p>Record request IDs, timing, status, and safe application fields—never cookies, authorization headers, or request bodies.</p></article></div>
     </ProjectSection>
 
-    <ProjectCta title="Inspect the application before deployment." description="Route, island, middleware, UI, icon, dan contract manifest tersedia dalam satu command." href="/docs#inspection" label="Learn cocoframe inspect" />
+    <ProjectCta title="Inspect the application before deployment." description="Route, island, middleware, UI, icon, and contract manifests are available through a single command." href="/docs#inspection" label="Learn cocoframe inspect" />
   </main>,
 });

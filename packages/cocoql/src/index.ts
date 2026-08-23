@@ -41,10 +41,16 @@ import { compileCocoQLMutationToMySql, type CompiledCocoQLMutation } from "./com
 import { compileCocoQLToPostgres, type CompiledCocoQLPostgres } from "./compiler/postgres.ts";
 import { compileCocoQLMutationToPostgres, type CompiledCocoQLPostgresMutation } from "./compiler/postgres-mutation.ts";
 
+/**
+ * Compiles Coco QL into guarded parameterized output.
+ */
 export function compileCocoQL(source: string, schema: CocoQLSchema, options: CocoQLPlanOptions = {}): CompiledCocoQL {
   return compileCocoQLToMySql(planCocoQL(parseCocoQL(source), schema, options), schema);
 }
 
+/**
+ * Compiles Coco QL Postgres into guarded parameterized output.
+ */
 export function compileCocoQLPostgres(source: string, schema: CocoQLSchema, options: CocoQLPlanOptions = {}): CompiledCocoQLPostgres {
   return compileCocoQLToPostgres(planCocoQL(parseCocoQL(source), schema, options), schema);
 }

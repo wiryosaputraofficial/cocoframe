@@ -24,6 +24,9 @@ export interface SqliteConnection {
   readonly migrate: (migrations: readonly SqliteMigration[]) => void;
 }
 
+/**
+ * Creates a serialized adapter around Node's built-in SQLite connection.
+ */
 export function createSqliteAdapter(options: SqliteOptions): DatabaseAdapter<SqliteConnection> {
   const native = new DatabaseSync(options.filename);
   if (options.foreignKeys ?? true) native.exec("PRAGMA foreign_keys = ON");
@@ -97,6 +100,9 @@ export function createSqliteAdapter(options: SqliteOptions): DatabaseAdapter<Sql
   });
 }
 
+/**
+ * Opens a serialized SQLite database facade using Node's built-in driver.
+ */
 export function openSqlite(options: SqliteOptions): Database<SqliteConnection> {
   return createDatabase(createSqliteAdapter(options));
 }

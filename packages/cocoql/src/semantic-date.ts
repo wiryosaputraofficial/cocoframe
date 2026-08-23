@@ -7,6 +7,9 @@ export interface CocoQLDateRange {
   readonly timeZone: "UTC";
 }
 
+/**
+ * Identifies the stable cocoql named dates contract used by @cocoframe/cocoql.
+ */
 export const COCOQL_NAMED_DATES: readonly CocoQLNamedDate[] = Object.freeze([
   "today", "yesterday",
   "this_week", "last_week",
@@ -21,6 +24,9 @@ export function isCocoQLNamedDate(value: string): value is CocoQLNamedDate {
   return NAMED_DATE_SET.has(value);
 }
 
+/**
+ * Resolves Coco QL Date Range into its deterministic public value.
+ */
 export function resolveCocoQLDateRange(expression: CocoQLSemanticDateExpression, now: Date): CocoQLDateRange {
   if (!Number.isFinite(now.getTime())) cocoQLError({ error: "INVALID_VALUE", stage: "planner", message: "CocoQL planning requires a valid 'now' date.", path: ["options", "now"] });
   const today = startOfUtcDay(now);

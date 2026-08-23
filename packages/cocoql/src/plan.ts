@@ -11,6 +11,9 @@ import type { CocoQLSchema } from "./schema.ts";
 import { isCocoQLNamedDate, resolveCocoQLDateRange } from "./semantic-date.ts";
 import { resolveCocoQLFieldPath, resolveCocoQLRelationPath, validateCocoQL } from "./semantic.ts";
 
+/**
+ * Identifies the stable cocoql plan version contract used by @cocoframe/cocoql.
+ */
 export const COCOQL_PLAN_VERSION = "0.1" as const;
 
 export interface CocoQLPlanFieldRef {
@@ -87,6 +90,9 @@ const FILTER_OPERATORS = new Set<CocoQLFilterOperator>([
   "starts_with", "ends_with", "before", "after",
 ]);
 
+/**
+ * Builds a deterministic, database-independent Coco QL plan.
+ */
 export function planCocoQL(query: CocoQLQuery, schema: CocoQLSchema, options: CocoQLPlanOptions = {}): CocoQLQueryPlan {
   validateCocoQL(query, schema);
   const now = options.now ?? new Date();
@@ -141,6 +147,9 @@ export function planCocoQL(query: CocoQLQuery, schema: CocoQLSchema, options: Co
   return Object.freeze(plan);
 }
 
+/**
+ * Validates Coco QL Plan and returns a typed value or structured diagnostic.
+ */
 export function validateCocoQLPlan(plan: CocoQLQueryPlan, schema: CocoQLSchema): CocoQLQueryPlan {
   assertPlanShape(plan);
   const joins = new Map<string, CocoQLPlanJoin>();
@@ -177,6 +186,9 @@ export function validateCocoQLPlan(plan: CocoQLQueryPlan, schema: CocoQLSchema):
   return plan;
 }
 
+/**
+ * Formats Coco QL Plan into deterministic canonical text.
+ */
 export function formatCocoQLPlan(plan: CocoQLQueryPlan): string {
   assertPlanShape(plan);
   return `${JSON.stringify(plan, null, 2)}\n`;

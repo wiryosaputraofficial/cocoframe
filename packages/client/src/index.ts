@@ -5,6 +5,9 @@ const SVG_NAMESPACE = "http://www.w3.org/2000/svg";
 
 type DomNamespace = "html" | "svg";
 
+/**
+ * Configures the built browser-module URL for each stable island name.
+ */
 export function configureIslandAssets(assets: Readonly<Record<string, string>>): void {
   islandAssetUrls = Object.freeze({ ...assets });
 }
@@ -24,6 +27,9 @@ export interface Signal<T> {
   readonly subscribe: (subscriber: Subscriber<T>) => Unsubscribe;
 }
 
+/**
+ * Creates mutable reactive state that notifies subscribers only when its value changes.
+ */
 export function signal<T>(initialValue: T): Signal<T> {
   let currentValue = initialValue;
   const subscribers = new Set<Subscriber<T>>();
@@ -60,6 +66,9 @@ export interface ReadonlySignal<T> {
   readonly subscribe: (subscriber: Subscriber<T>) => Unsubscribe;
 }
 
+/**
+ * Creates a read-only signal that tracks and updates its dynamic signal dependencies.
+ */
 export function computed<T>(compute: () => T): ReadonlySignal<T> {
   let initialized = false;
   let currentValue: T;
@@ -134,6 +143,9 @@ export function computed<T>(compute: () => T): ReadonlySignal<T> {
   };
 }
 
+/**
+ * Binds a signal or computed value to one text node without rerendering its parent island.
+ */
 export function bind(source: ReadonlySignal<PrimitiveNode> & { subscribe?: (subscriber: () => void) => Unsubscribe }): CocoBinding {
   return {
     kind: "binding",
@@ -156,6 +168,9 @@ export interface IslandComponent<Props> extends Component<Props> {
   readonly mount: (root: Element, props: Props) => Promise<void>;
 }
 
+/**
+ * Defines a stable opt-in browser boundary with server-rendered initial HTML.
+ */
 export function defineIsland<Props extends Record<string, unknown>>(
   options: IslandOptions<Props>,
 ): IslandComponent<Props> {
@@ -186,6 +201,9 @@ export function defineIsland<Props extends Record<string, unknown>>(
   return component;
 }
 
+/**
+ * Mounts a reactive island view and disposes subscriptions when rendered nodes are replaced.
+ */
 export async function mountReactive(root: Element, view: () => CocoNode): Promise<void> {
   let cleanups: Unsubscribe[] = [];
   let scheduled = false;
@@ -224,6 +242,9 @@ export async function mountReactive(root: Element, view: () => CocoNode): Promis
   await update();
 }
 
+/**
+ * Renders a CocoFrame node into DOM nodes while preserving HTML and SVG namespaces.
+ */
 export async function renderToDom(node: unknown, document: Document, cleanups: Unsubscribe[] = [], namespace: DomNamespace = "html"): Promise<Node> {
   const resolved: unknown = await node;
   if (resolved === null || resolved === undefined || typeof resolved === "boolean") return document.createDocumentFragment();

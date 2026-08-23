@@ -44,6 +44,9 @@ const PLOT = { left: 62, top: 25, width: 632, height: 278 } as const;
 const TONES: readonly ChartTone[] = ["primary", "blue", "amber", "violet", "emerald", "red", "cyan", "slate"];
 const RADIAL = new Set<ChartType>(["pie", "doughnut", "polar-area", "radar"]);
 
+/**
+ * Renders the Chart server-first UI primitive with semantic markup and no required browser runtime.
+ */
 export function Chart({
   id, type = "bar", label, description, labels: providedLabels, datasets: providedDatasets,
   data, aspect = "wide", showLegend, showGrid = true, showValues = false,

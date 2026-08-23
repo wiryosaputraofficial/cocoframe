@@ -28,6 +28,9 @@ export interface CocoQLSchema {
   readonly entities: Readonly<Record<string, CocoQLEntitySchema>>;
 }
 
+/**
+ * Defines the public entities, fields, types, and relations available to CocoQL.
+ */
 export function defineCocoQLSchema(schema: CocoQLSchema): CocoQLSchema {
   return Object.freeze({ ...schema, entities: Object.freeze({ ...schema.entities }) });
 }

@@ -1,6 +1,6 @@
 {
   "name": "cocoframe",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "private": true,
   "type": "module",
   "workspaces": [
@@ -8,7 +8,9 @@
     "examples/*"
   ],
   "scripts": {
-    "check": "tsc --noEmit",
+    "check": "tsc --noEmit && npm run docs:check",
+    "docs:check": "node scripts/public-docs.ts",
+    "docs:write": "node scripts/public-docs.ts --write",
     "test:e2e": "playwright test",
     "test:e2e:runtime": "playwright test tests/e2e/runtime.spec.ts",
     "test:e2e:chromium": "playwright test --project=development-chromium --project=production-chromium --project=viewport-320 --project=phone-6-inch --project=tablet --project=laptop --project=4k",

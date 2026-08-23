@@ -123,7 +123,7 @@ test("keeps the template website aligned with every buildable creator template",
     for (const icon of template.icons) assert.match(island, new RegExp(icon));
   }
   assert.match(island, /--template \$\{template\}/);
-  assert.match(page, /Setiap template memakai komponen UI dan Solar icons bawaan CocoFrame/);
+  assert.match(page, /Every template uses the built-in CocoFrame UI components and Solar icons/);
   assert.doesNotMatch(island, /SaaS Starter|E-Commerce Store|Portfolio/);
 });
 test("keeps every CocoQL cookbook snippet valid and copy-ready", async () => {
@@ -222,7 +222,7 @@ test("generates OpenAPI, exact CSS types, and deployment metadata", async () => 
   assert.equal((icons.match(/class="icon-catalog-card"/g) ?? []).length, 1246);
   assert.match(icons, /aria-current="page" href="\/icons"/);
   assert.match(icons, /@cocoframe\/icons\/linear\/home/);
-  assert.match(icons, /1\.246 icons/);
+  assert.match(icons, /1,246 icons/);
   assert.equal((filteredIcons.match(/class="icon-catalog-card"/g) ?? []).length, 1246);
   assert.equal((filteredIcons.match(/class="icon-catalog-card" data-icon-name="[^"]+" hidden/g) ?? []).length, 1243);
   assert.match(filteredIcons, /class="icons-live-count">3<\/strong>/);

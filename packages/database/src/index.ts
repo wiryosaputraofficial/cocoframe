@@ -11,10 +11,16 @@ export interface Database<Connection> {
   readonly close: () => Promise<void>;
 }
 
+/**
+ * Preserves a typed database adapter contract for acquisition, release, and optional transactions.
+ */
 export function defineDatabaseAdapter<Connection>(adapter: DatabaseAdapter<Connection>): DatabaseAdapter<Connection> {
   return Object.freeze(adapter);
 }
 
+/**
+ * Creates a database facade that always releases acquired connections and exposes transactions only when supported.
+ */
 export function createDatabase<Connection>(adapter: DatabaseAdapter<Connection>): Database<Connection> {
   return {
     async run(operation) {

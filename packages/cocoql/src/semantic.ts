@@ -24,6 +24,9 @@ export interface CocoQLResolvedField {
   readonly schema: CocoQLFieldSchema;
 }
 
+/**
+ * Validates Coco QL and returns a typed value or structured diagnostic.
+ */
 export function validateCocoQL(query: CocoQLQuery, schema: CocoQLSchema): CocoQLQuery {
   const sourceMap = getCocoQLSourceMap(query);
   const entity = Object.hasOwn(schema.entities, query.source.entity) ? schema.entities[query.source.entity] : undefined;
