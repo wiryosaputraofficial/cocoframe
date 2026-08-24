@@ -15,9 +15,9 @@ test("discovers versioned read-only Agent Bridge tools over MCP", async () => {
   assert.deepEqual(bridge.tools.map(({ name }) => name), ["project.inspect", "docs.search", "component.find", "api.lookup", "workflow.status", "cocospecs.next", "cocoref.audit", "cocoqa.trace", "mutation.plan", "mutation.execute"]);
   for (const tool of bridge.tools) {
     assert.equal(tool.permission, tool.name.startsWith("mutation.") ? "write" : "read");
-    assert.equal(tool.protocolVersion, 1);
-    assert.equal(tool.inputSchemaVersion, 1);
-    assert.equal(tool.outputSchemaVersion, 1);
+    assert.equal(tool.protocolVersion, 2);
+    assert.equal(tool.inputSchemaVersion, tool.name.startsWith("mutation.") ? 2 : 1);
+    assert.equal(tool.outputSchemaVersion, tool.name.startsWith("mutation.") ? 2 : 1);
     assert.equal(tool.inputSchema.type, "object");
     assert.equal(tool.outputSchema.type, "object");
   }

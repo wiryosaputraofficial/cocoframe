@@ -1,0 +1,22 @@
+# Acceptance Criteria: Agent Bridge Workflow Guardrails
+
+- [ ] Given a user-facing creation or change request, when Agent Bridge begins the workflow, then project inspection and CocoSpecs start or resume before implementation planning or mutation.
+- [ ] Given an existing CocoSpec, when the workflow resumes, then only the next adaptive question batch is returned and canonical answers are preserved.
+- [ ] Given a read-only explanation, audit, or recommendation, when no mutation is requested, then the workflow may stop after inspect and search without requiring lifecycle approval or changing state.
+- [ ] Given visual work, when the CocoSpec is approved, then a visual-reference decision is required before implementation.
+- [ ] Given an image or website reference, when the reference decision is recorded, then CocoRef audits existing components before any missing component is proposed or implemented.
+- [ ] Given no visual reference, when the user confirms its absence, then a canonical no-reference decision is recorded and the AI may propose a direction using the approved Design Profile and reusable components.
+- [ ] Given an existing route, API, framework component, or application component that satisfies the requirement, when discovery runs, then it is returned for reuse before a new implementation is proposed.
+- [ ] Given an unmet required lifecycle prerequisite, when mutation.plan or mutation.execute is requested, then Agent Bridge refuses it with a stable machine-readable diagnostic and leaves all targets unchanged.
+- [ ] Given a new or changed internal link, CTA, route, page, anchor, or API reference, when implementation is planned and verified, then its target exists in the inspected route or document graph.
+- [ ] Given a newly created navigation target, when runtime verification runs, then the target returns a successful or intentional redirect response and does not render a 404, empty destination, or inert action.
+- [ ] Given a link or interactive control, when accessibility verification runs, then it has an accessible name, keyboard behavior, visible focus, and an action matching its label.
+- [ ] Given an external link that Agent Bridge cannot verify directly, when completion is attempted, then provider-supplied evidence or an explicit unresolved-target diagnostic is required instead of claiming the link works.
+- [ ] Given a visual interface, when CocoQA runs, then grid and container alignment, text baselines, icon-label alignment, card and column alignment, spacing rhythm, contrast, overflow, and responsive consistency are measured.
+- [ ] Given approved viewports and text zoom, when visual alignment is measured, then related elements remain aligned without unintended drift, clipping, overlap, or broken reading order.
+- [ ] Given a completed CocoRef, when visual QA runs, then alignment and fidelity are compared against every approved reference criterion and viewport.
+- [ ] Given no CocoRef, when visual QA runs, then alignment and design-system checks still execute against the approved Design Profile and component rules while fidelity is explicitly not applicable.
+- [ ] Given missing route evidence, inert links, destructive alignment defects, inaccessible controls, or failed required visual gates, when release approval is attempted, then CocoQA refuses approval.
+- [ ] Given generated routes, clients, OpenAPI, CSS declarations, or API documentation are affected, when implementation completes, then only the owning generators refresh those artifacts and verification checks their freshness.
+- [ ] Given two supported AI providers, when they perform the workflow, then the same provider-independent contracts, prerequisite checks, diagnostics, and result structures are used.
+- [ ] Given a completed workflow, when the AI reports completion, then it lists lifecycle states, reference decisions, reused components, approved mutations, verified links and targets, visual-alignment evidence, quality gates, defects, and unresolved risks.

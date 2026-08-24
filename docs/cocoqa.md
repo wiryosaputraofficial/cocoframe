@@ -56,7 +56,8 @@ data, release blockers, accessibility, and security or abuse cases. Thorough
 mode also asks for measurable performance thresholds, integration and migration
 regressions, and an exploratory charter. When a Design Profile is present,
 adaptive questions also bind theme and inventory scope, visual evidence, exact
-viewports and zoom states, and design waiver authority.
+viewports and zoom states, and design waiver authority. Required Product Design
+cases include grid/container, baseline, icon-label, card, and column alignment.
 
 Answers may be `answered`, `assumed`, `deferred`, or `not-applicable`. Assumptions
 remain visible. Deferred questions block approval. Never place passwords, tokens,
@@ -73,7 +74,11 @@ cookies, production personal data, or other secrets in QA answers or evidence.
 
 Changing an answer, case, gate, or defect invalidates an earlier approval. A
 record can become `approved` only when every required question is resolved,
-every required case and gate has passed, and no defect remains open.
+every required case and gate has passed, and no defect remains open. Universal
+framework cases require every changed internal destination to return successful
+content or an intentional redirect, external destinations to have sanitized
+provider evidence, and every changed link/control to have an accessible name,
+keyboard behavior, visible focus, and an action matching its label.
 
 ## AI orchestration rules
 

@@ -2,7 +2,7 @@ import type { McpServer } from "@modelcontextprotocol/server";
 import type { AgentApprovalDecision, RecordApprovalInput } from "./mutation.ts";
 
 /** Version of CocoFrame's provider-independent Agent Bridge contract. */
-export const AGENT_BRIDGE_PROTOCOL_VERSION = 1 as const;
+export const AGENT_BRIDGE_PROTOCOL_VERSION = 2 as const;
 
 /** Permission class advertised for every Agent Bridge tool. */
 export type AgentPermission = "read" | "write" | "execute" | "external";
@@ -15,6 +15,12 @@ export type AgentDiagnosticCode =
   | "WORKSPACE_ACCESS_DENIED"
   | "INVALID_TOOL_INPUT"
   | "CAPABILITY_UNAVAILABLE"
+  | "WORKFLOW_CONTEXT_REQUIRED"
+  | "SPECIFICATION_REQUIRED"
+  | "SPECIFICATION_NOT_APPROVED"
+  | "REFERENCE_DECISION_REQUIRED"
+  | "COCOREF_REQUIRED"
+  | "COMPONENT_AUDIT_REQUIRED"
   | "APPROVAL_REQUIRED"
   | "APPROVAL_EXPIRED"
   | "STATE_CONFLICT"
@@ -24,6 +30,12 @@ export type AgentDiagnosticCode =
   | "OPERATION_CANCELLED"
   | "INVALID_CANONICAL_STATE"
   | "QUALITY_GATE_FAILED"
+  | "LINK_TARGET_MISSING"
+  | "TARGET_NOT_REACHABLE"
+  | "INERT_INTERACTION"
+  | "VISUAL_ALIGNMENT_FAILED"
+  | "VISUAL_EVIDENCE_REQUIRED"
+  | "GENERATED_ARTIFACT_STALE"
   | "EXTERNAL_SERVICE_UNAVAILABLE"
   | "SENSITIVE_OUTPUT_BLOCKED";
 
@@ -104,10 +116,23 @@ export interface AgentProjectSnapshot {
 /** Read-only project inspection adapter injected by a CocoFrame host such as the CLI. */
 export type AgentProjectInspector = (projectRoot: string, signal?: AbortSignal) => Promise<AgentProjectSnapshot>;
 
+export interface AgentProposedFile {
+  readonly path: string;
+  readonly content: string;
+}
+
+/** Canonical host adapter that derives routes from proposed files without writing them. */
+export type AgentProposedRouteInspector = (
+  projectRoot: string,
+  changes: readonly AgentProposedFile[],
+) => readonly AgentRoute[] | Promise<readonly AgentRoute[]>;
+
 /** Configuration for one local Agent Bridge instance. */
 export interface AgentBridgeOptions {
   readonly workspaceRoot: string;
   readonly inspectProject: AgentProjectInspector;
+  /** Uses the host's canonical route convention to validate planned destinations before writes. */
+  readonly inspectProposedRoutes?: AgentProposedRouteInspector;
   /** Optional stable session identifier supplied by an editor host. */
   readonly sessionId?: string;
   /** Testable clock used for approval expiry and audit timestamps. */
@@ -121,9 +146,9 @@ export interface AgentToolDescriptor {
   readonly name: string;
   readonly description: string;
   readonly permission: AgentPermission;
-  readonly protocolVersion: 1;
-  readonly inputSchemaVersion: 1;
-  readonly outputSchemaVersion: 1;
+  readonly protocolVersion: typeof AGENT_BRIDGE_PROTOCOL_VERSION;
+  readonly inputSchemaVersion: number;
+  readonly outputSchemaVersion: number;
   readonly inputSchema: Readonly<Record<string, unknown>>;
   readonly outputSchema: Readonly<Record<string, unknown>>;
 }

@@ -165,6 +165,15 @@ export async function readCocoQaTrace(
   const canonicalFile = `qa/${feature}/qa.json`;
   const existing = await readOptionalCanonical(root, canonicalFile, signal);
   const acceptanceCriteria = stringList(spec.answers["acceptance-criteria"]?.value);
+  const refFile = "refs/" + feature + "/ref.json";
+  const refValue = await readOptionalCanonical(root, refFile, signal);
+  const ref = refValue === undefined ? undefined : parseCanonical("CocoRef", refFile, refValue, parseCocoRef);
+  if (ref && ref.state !== "ready") {
+    throw diagnosticError("COCOREF_REQUIRED", "CocoQA requires a ready CocoRef when " + refFile + " exists; it is " + ref.state + ".", "Complete or cancel the reference lifecycle explicitly before creating CocoQA.");
+  }
+  const referenceCriteria = ref?.requirements
+    .filter(({ status }) => status === "reused" || status === "approved")
+    .map(({ id, description }) => ({ id, description })) ?? [];
   const designFile = "cocoframe.design.json";
   const designValue = await readOptionalCanonical(root, designFile, signal);
   const designProfile = designValue === undefined
@@ -178,10 +187,12 @@ export async function readCocoQaTrace(
       mode: input.mode,
       sources: [
         { kind: "cocospec", id: feature, file: specFile, state: spec.state },
+        ...(ref ? [{ kind: "cocoref" as const, id: ref.name, file: refFile, state: ref.state }] : []),
         ...(designProfile && designHash ? [{ kind: "design-profile" as const, id: designProfile.id, file: designFile, state: "sha256:" + designHash }] : []),
       ],
       acceptanceCriteria,
-      ...(designProfile ? { designCriteria: productDesignCriteria(designProfile) } : {}),
+      ...(referenceCriteria.length ? { referenceCriteria } : {}),
+      ...(designProfile ? { designCriteria: productDesignCriteria(designProfile, { hasReference: Boolean(ref) }) } : {}),
     })
     : parseCanonical("CocoQA", canonicalFile, existing, parseCocoQa);
   const qaDesignSource = qa.sources.find(({ kind }) => kind === "design-profile");

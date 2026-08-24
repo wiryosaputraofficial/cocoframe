@@ -53,13 +53,17 @@ component contracts stay server-first.
 ## Required CocoQA design cases
 
 A Design Profile adds required cases for component reuse, semantic tokens,
-spacing, color, WCAG 2.2 AA contrast, typography, radius, elevation,
+grid/container alignment, text baselines, icon-label alignment, card/column
+alignment, spacing, color, WCAG 2.2 AA contrast, typography, radius, elevation,
 iconography, overflow, responsive reflow, accessibility, and optional CocoRef
 fidelity.
 
 Normal text must meet 4.5:1 contrast. Large text, meaningful graphics, controls,
-and focus indicators must meet 3:1. Responsive evidence covers 320, 390, 768,
-1366, and 3840 pixels plus applicable text zoom, theme, and interaction states.
+and focus indicators must meet 3:1. Alignment evidence must measure shared edges,
+baselines, icon-label pairs, cards, and columns without drift, clipping, overlap,
+or broken reading order. Responsive evidence covers 320x568, 390x844, 768x1024,
+1366x768, and 3840x2160 plus 200% text zoom, long content, light/dark themes,
+forced colors, reduced motion, and applicable interaction states.
 
 ## AI workflow
 
@@ -69,8 +73,11 @@ and focus indicators must meet 3:1. Responsive evidence covers 320, 390, 768,
 4. Bind the profile fingerprint and component inventory to CocoQA.
 5. Ask only the next adaptive design quality question batch.
 6. Collect sanitized browser or provider evidence for every required case.
-7. Record defects and rerun failed gates.
-8. Request explicit QA approval only after all required cases and gates pass.
+7. Verify every changed link, CTA, route, anchor, and control at runtime; record
+   target, keyboard, focus, and action evidence.
+8. Measure visual alignment at every approved viewport and state.
+9. Record defects and rerun failed gates.
+10. Request explicit QA approval only after all required cases and gates pass.
 
 Agent Bridge exposes the profile as a read-only capability and includes its hash
 in proposed CocoQA traceability. Mutations still use the existing explicit,
@@ -80,7 +87,7 @@ role-aware approval boundary.
 
 The contract provides `INVALID_DESIGN_PROFILE`,
 `UNRESOLVED_TOKEN_REFERENCE`, `COMPONENT_REUSE_NOT_AUDITED`,
-`CONTRAST_FAILED`, `OVERFLOW_DETECTED`, `INCONSISTENT_SPACING`,
+`CONTRAST_FAILED`, `OVERFLOW_DETECTED`, `VISUAL_ALIGNMENT_FAILED`, `INCONSISTENT_SPACING`,
 `INCONSISTENT_ICONOGRAPHY`, `REFERENCE_UNAVAILABLE`,
 `VISUAL_FIDELITY_FAILED`, `EVIDENCE_UNAVAILABLE`,
 `SENSITIVE_VISUAL_EVIDENCE_BLOCKED`, `DESIGN_STATE_CONFLICT`,

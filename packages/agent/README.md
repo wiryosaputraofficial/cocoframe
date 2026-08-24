@@ -11,12 +11,21 @@ Start local MCP stdio with `cocoframe agent <project>`. The tool surface is:
   `cocoqa.trace`.
 - Controlled mutation: `mutation.plan` and `mutation.execute`.
 
+Protocol v2 requires every mutation plan to include a workflow binding. A
+user-facing binding is accepted only after project inspection, an approved
+CocoSpec, an explicit `reference`, `no-reference`, or `not-applicable` decision,
+and a ready CocoRef when a reference is used. Visual work also binds the current
+component inventory and Design Profile and requires post-write CocoQA evidence.
+Protocol v1 remains available for read-only tools but cannot mutate.
+
 `mutation.plan` declares at most twenty workspace-relative file writes, validates
-confinement and secret rules, records current and proposed SHA-256 hashes, and
-keeps proposal content only in the active process memory. It never changes a
-declared target. `mutation.execute` succeeds only after an unexpired human or
-host approval is bound to the same operation, session, reviewed hashes, role,
-and selected target subset.
+confinement and secret rules, verifies changed static links and actions against
+the existing or proposed route graph, records current and proposed SHA-256
+hashes, and keeps proposal content only in active process memory. It never
+changes a declared target. `mutation.execute` succeeds only after an unexpired
+human or host approval is bound to the same operation, workflow, session,
+reviewed hashes, role, and selected target subset. Its result explicitly reports
+whether CocoQA is still required before release readiness.
 
 Modern MCP clients receive a native elicitation form whose retry state is
 HMAC-protected. Editor hosts may call the non-MCP `decideOperation` method. A

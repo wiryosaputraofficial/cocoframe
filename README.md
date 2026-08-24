@@ -329,8 +329,9 @@ The canonical record is `qa/<feature>/qa.json`. Generated test-plan, traceabilit
 
 Projects can add `cocoframe.design.json` to customize semantic color, spacing,
 radius, typography, elevation, breakpoints, and icon policy without forking UI
-components. CocoQA then requires reuse-first, contrast, spacing, iconography,
-overflow, responsive, accessibility, and optional CocoRef fidelity evidence.
+components. CocoQA then requires reuse-first, alignment, contrast, spacing,
+iconography, overflow, responsive, accessibility, reachable interaction targets,
+and optional CocoRef fidelity evidence.
 The profile fingerprint invalidates stale approval when design decisions change.
 See `docs/product-design-quality.md`.
 
@@ -346,13 +347,17 @@ cocoframe agent .
 ```
 
 Ten versioned tools cover project discovery, read-only CocoSpecs/CocoRef/CocoQA
-preparation, and controlled file writes. `mutation.plan` hashes exact targets
-without changing them; `mutation.execute` requires a role-valid, unexpired,
-single-use human approval bound to the same session and reviewed hashes. Partial
-approval changes only its selected target subset, conflicts fail closed, and
-multi-file failures roll back. No shell, Git, publish, deploy, database, external,
-or outside-workspace mutation capability is exposed. See
-`docs/agent-bridge.md` for MCP and CLI approval workflows.
+preparation, and controlled file writes. Protocol v2 requires user-facing
+mutations to bind an approved CocoSpec, an explicit visual-reference decision,
+the current component/design state, and verified static navigation targets.
+`mutation.plan` hashes exact workflow and file evidence without changing source;
+`mutation.execute` requires a role-valid, unexpired, single-use human approval
+and reports when CocoQA runtime and visual-alignment evidence is still required.
+Protocol v1 remains read-only. Partial approval changes only its selected target
+subset, conflicts fail closed, and multi-file failures roll back. No shell, Git,
+publish, deploy, database, browser automation, or outside-workspace mutation
+capability is exposed. See `docs/agent-bridge.md` for MCP and CLI approval
+workflows.
 
 ## Security and observability
 

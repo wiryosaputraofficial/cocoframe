@@ -2,6 +2,7 @@ import { createHash, randomUUID } from "node:crypto";
 import { access, mkdir, open, readFile, realpath, rename, rm, stat, writeFile } from "node:fs/promises";
 import path from "node:path";
 import type { AgentDiagnostic } from "./types.ts";
+import type { AgentWorkflowBinding, AgentWorkflowRequest } from "./workflow.ts";
 import { diagnosticError, sanitizeAgentOutput, throwIfCancelled } from "./workspace.ts";
 
 const AGENT_RECORD_VERSION = 1 as const;
@@ -37,6 +38,7 @@ export interface AgentOperationPlan {
   readonly action: "files.write";
   readonly permissionLevel: "write";
   readonly requiredRole: AgentApprovalRole;
+  readonly workflow: AgentWorkflowBinding;
   readonly declaredTargets: readonly AgentMutationTarget[];
   readonly reviewedHashes: string;
   readonly status: "pending";
@@ -68,6 +70,14 @@ export interface AgentExecutionRecord {
   readonly completedAt: string;
   readonly affectedTargets: readonly string[];
   readonly diagnosticCodes: readonly string[];
+  readonly workflow: {
+    readonly featureId?: string;
+    readonly referenceDecision?: AgentWorkflowBinding["referenceDecision"];
+    readonly verifiedTargetCount: number;
+    readonly visualQaRequired: boolean;
+    readonly qualityState: "required" | "not-required";
+    readonly nextAction: string;
+  };
 }
 
 export interface RecordApprovalInput {
@@ -80,6 +90,7 @@ export interface RecordApprovalInput {
 interface HeldOperation {
   readonly plan: AgentOperationPlan;
   readonly content: ReadonlyMap<string, string>;
+  readonly workflowRequest: AgentWorkflowRequest;
 }
 
 interface AgentMutationManagerOptions {
@@ -87,6 +98,12 @@ interface AgentMutationManagerOptions {
   readonly sessionId?: string;
   readonly now?: () => Date;
   readonly approvalMinutes?: number;
+  readonly validateWorkflow?: (
+    request: AgentWorkflowRequest,
+    expected: AgentWorkflowBinding,
+    changes: readonly AgentFileChange[],
+    signal?: AbortSignal,
+  ) => Promise<void>;
 }
 
 /** Owns one Agent Bridge session's hash-bound, serialized mutation lifecycle. */
@@ -95,6 +112,7 @@ export class AgentMutationManager {
   readonly #root: string;
   readonly #now: () => Date;
   readonly #approvalMinutes: number;
+  readonly #validateWorkflow?: AgentMutationManagerOptions["validateWorkflow"];
   readonly #held = new Map<string, HeldOperation>();
 
   constructor(options: AgentMutationManagerOptions) {
@@ -102,9 +120,15 @@ export class AgentMutationManager {
     this.sessionId = options.sessionId ?? randomUUID();
     this.#now = options.now ?? (() => new Date());
     this.#approvalMinutes = options.approvalMinutes ?? APPROVAL_MINUTES;
+    this.#validateWorkflow = options.validateWorkflow;
   }
 
-  async planFiles(changes: readonly AgentFileChange[], signal?: AbortSignal): Promise<AgentOperationPlan> {
+  async planFiles(
+    changes: readonly AgentFileChange[],
+    workflow: AgentWorkflowBinding,
+    workflowRequest: AgentWorkflowRequest,
+    signal?: AbortSignal,
+  ): Promise<AgentOperationPlan> {
     throwIfCancelled(signal);
     if (changes.length < 1 || changes.length > MAX_TARGETS) {
       throw diagnosticError("INVALID_TOOL_INPUT", `A mutation plan requires 1-${MAX_TARGETS} declared file targets.`, "Split the proposal into a smaller explicit operation.");
@@ -148,8 +172,9 @@ export class AgentMutationManager {
       action: "files.write",
       permissionLevel: "write",
       requiredRole: await requiredRole(this.#root),
+      workflow,
       declaredTargets: targets,
-      reviewedHashes: reviewedHash(targets),
+      reviewedHashes: reviewedHash(targets, workflow),
       status: "pending",
       createdAt: now.toISOString(),
       expiresAt: expiresAt.toISOString(),
@@ -162,7 +187,7 @@ export class AgentMutationManager {
       targetCount: targets.length,
       reviewedHashes: plan.reviewedHashes,
     }, now);
-    this.#held.set(plan.id, { plan, content });
+    this.#held.set(plan.id, { plan, content, workflowRequest });
     return plan;
   }
 
@@ -215,6 +240,13 @@ export class AgentMutationManager {
         throw error;
       }
       throwIfCancelled(signal);
+      if (this.#validateWorkflow) {
+        const changes = plan.declaredTargets.map(({ path: target }) => ({
+          path: target,
+          content: held.content.get(target) ?? "",
+        }));
+        await this.#validateWorkflow(held.workflowRequest, plan.workflow, changes, signal);
+      }
       for (const target of selected) {
         const absolute = await resolveMutationTarget(this.#root, target.path);
         const current = await readCurrent(absolute);
@@ -286,6 +318,16 @@ export class AgentMutationManager {
       completedAt,
       affectedTargets,
       diagnosticCodes,
+      workflow: {
+        ...(plan.workflow.featureId ? { featureId: plan.workflow.featureId } : {}),
+        ...(plan.workflow.referenceDecision ? { referenceDecision: plan.workflow.referenceDecision } : {}),
+        verifiedTargetCount: plan.workflow.verifiedTargetCount,
+        visualQaRequired: plan.workflow.visualQaRequired,
+        qualityState: plan.workflow.visualQaRequired || plan.workflow.verifiedTargetCount > 0 ? "required" : "not-required",
+        nextAction: plan.workflow.visualQaRequired || plan.workflow.verifiedTargetCount > 0
+          ? "Run CocoQA, record runtime target and visual evidence, and obtain explicit QA approval before claiming release readiness."
+          : "Report the approved mechanical mutation and verification evidence.",
+      },
     };
     await writeRecord(executionFile(this.#root, plan.id), record, true);
     await writeAudit(this.#root, this.sessionId, "operation-executed", {
@@ -324,7 +366,7 @@ export async function recordAgentApproval(
     ...(input.actorLabel?.trim() ? { actorLabel: String(sanitizeAgentOutput(input.actorLabel.trim())).slice(0, 100) } : {}),
     decision: input.decision,
     approvedTargets: selected,
-    approvedHashes: reviewedHash(plan.declaredTargets.filter(({ path: target }) => selected.includes(target))),
+    approvedHashes: reviewedHash(plan.declaredTargets.filter(({ path: target }) => selected.includes(target)), plan.workflow),
     decidedAt: now.toISOString(),
     expiresAt: plan.expiresAt,
   };
@@ -350,12 +392,13 @@ export async function readAgentOperationPlan(root: string, operationId: string):
   const value = await readJsonRecord(planFile(root, operationId), "operation plan");
   if (!isRecord(value) || value.version !== 1 || value.id !== operationId || value.action !== "files.write" || value.permissionLevel !== "write"
     || value.toolId !== "mutation.execute" || value.status !== "pending" || !Array.isArray(value.declaredTargets)
+    || !isWorkflowBinding(value.workflow)
     || typeof value.sessionId !== "string" || typeof value.reviewedHashes !== "string" || typeof value.createdAt !== "string"
     || typeof value.expiresAt !== "string" || (value.requiredRole !== "application-developer" && value.requiredRole !== "framework-maintainer")) {
     throw diagnosticError("INVALID_CANONICAL_STATE", "The Agent Bridge operation plan is invalid or corrupted.", "Preserve the record, inspect it, and prepare a new operation.");
   }
   const targets = value.declaredTargets.map(parseTarget);
-  if (reviewedHash(targets) !== value.reviewedHashes) {
+  if (reviewedHash(targets, value.workflow) !== value.reviewedHashes) {
     throw diagnosticError("INVALID_CANONICAL_STATE", "The operation plan reviewed hash is inconsistent.", "Preserve the record and prepare a new operation.");
   }
   return { ...value, declaredTargets: targets } as unknown as AgentOperationPlan;
@@ -378,7 +421,7 @@ function validateApproval(plan: AgentOperationPlan, approval: AgentApprovalDecis
     throw diagnosticError("APPROVAL_EXPIRED", "The approval is no longer valid.", "Inspect current targets and request a new approval.");
   }
   const selected = plan.declaredTargets.filter(({ path: target }) => approval.approvedTargets.includes(target));
-  if (reviewedHash(selected) !== approval.approvedHashes) {
+  if (reviewedHash(selected, plan.workflow) !== approval.approvedHashes) {
     throw diagnosticError("STATE_CONFLICT", "The approval hashes do not match the reviewed target subset.", "Prepare a new plan and approval.");
   }
 }
@@ -475,7 +518,7 @@ async function ensureSession(root: string, sessionId: string, now: Date): Promis
     await writeRecord(file, {
       version: 1,
       id: sessionId,
-      protocolVersion: 1,
+      protocolVersion: 2,
       workspaceIdentity: digest(root),
       permissions: ["read", "write"],
       createdAt: now.toISOString(),
@@ -517,8 +560,21 @@ async function readJsonRecord(file: string, label: string): Promise<unknown> {
   }
 }
 
-function reviewedHash(targets: readonly AgentMutationTarget[]): string {
-  return digest(JSON.stringify(targets.map(({ path: target, currentHash, proposedHash }) => ({ path: target, currentHash, proposedHash })).sort((a, b) => a.path.localeCompare(b.path))));
+function reviewedHash(targets: readonly AgentMutationTarget[], workflow: AgentWorkflowBinding): string {
+  return digest(JSON.stringify({
+    targets: targets.map(({ path: target, currentHash, proposedHash }) => ({ path: target, currentHash, proposedHash })).sort((a, b) => a.path.localeCompare(b.path)),
+    workflow,
+  }));
+}
+
+function isWorkflowBinding(value: unknown): value is AgentWorkflowBinding {
+  if (!isRecord(value) || value.version !== 1 || (value.intent !== "mechanical" && value.intent !== "user-facing")
+    || typeof value.inspectionHash !== "string" || typeof value.componentInventoryHash !== "string"
+    || typeof value.targetVerificationHash !== "string" || !Number.isSafeInteger(value.verifiedTargetCount)
+    || !Number.isSafeInteger(value.externalTargetCount) || typeof value.visualQaRequired !== "boolean"
+    || !Array.isArray(value.requiredVisualPrinciples) || value.requiredVisualPrinciples.some((item) => typeof item !== "string")) return false;
+  if (value.intent === "user-facing" && (typeof value.featureId !== "string" || typeof value.specificationHash !== "string")) return false;
+  return true;
 }
 
 function digest(value: string | Uint8Array): string {

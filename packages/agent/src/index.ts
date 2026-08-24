@@ -20,6 +20,16 @@ import {
   type RecordApprovalInput,
 } from "./mutation.ts";
 import {
+  assertAgentWorkflowCurrent,
+  validateAgentWorkflow,
+  type AgentReferenceDecision,
+  type AgentTargetRequirement,
+  type AgentTargetVerification,
+  type AgentWorkflowBinding,
+  type AgentWorkflowIntent,
+  type AgentWorkflowRequest,
+} from "./workflow.ts";
+import {
   AGENT_BRIDGE_PROTOCOL_VERSION,
   type AgentBridge,
   type AgentBridgeOptions,
@@ -55,6 +65,8 @@ export {
   type AgentPermission,
   type AgentProjectInspector,
   type AgentProjectSnapshot,
+  type AgentProposedFile,
+  type AgentProposedRouteInspector,
   type AgentRoute,
   type AgentToolDescriptor,
 } from "./types.ts";
@@ -71,13 +83,24 @@ export {
   type AgentOperationPlan,
   type RecordApprovalInput,
 } from "./mutation.ts";
+export {
+  type AgentReferenceDecision,
+  type AgentTargetRequirement,
+  type AgentTargetVerification,
+  type AgentWorkflowBinding,
+  type AgentWorkflowIntent,
+  type AgentWorkflowRequest,
+} from "./workflow.ts";
 
 const diagnosticSchema = z.object({
   code: z.enum([
     "CONNECTION_FAILED", "UNSUPPORTED_PROTOCOL_VERSION", "INVALID_WORKSPACE", "WORKSPACE_ACCESS_DENIED",
-    "INVALID_TOOL_INPUT", "CAPABILITY_UNAVAILABLE", "APPROVAL_REQUIRED", "APPROVAL_EXPIRED", "STATE_CONFLICT",
-    "MUTATION_FAILED", "PARTIAL_MUTATION", "OPERATION_TIMEOUT", "OPERATION_CANCELLED", "INVALID_CANONICAL_STATE",
-    "QUALITY_GATE_FAILED", "EXTERNAL_SERVICE_UNAVAILABLE", "SENSITIVE_OUTPUT_BLOCKED",
+    "INVALID_TOOL_INPUT", "CAPABILITY_UNAVAILABLE", "WORKFLOW_CONTEXT_REQUIRED", "SPECIFICATION_REQUIRED",
+    "SPECIFICATION_NOT_APPROVED", "REFERENCE_DECISION_REQUIRED", "COCOREF_REQUIRED", "COMPONENT_AUDIT_REQUIRED",
+    "APPROVAL_REQUIRED", "APPROVAL_EXPIRED", "STATE_CONFLICT", "MUTATION_FAILED", "PARTIAL_MUTATION",
+    "OPERATION_TIMEOUT", "OPERATION_CANCELLED", "INVALID_CANONICAL_STATE", "QUALITY_GATE_FAILED",
+    "LINK_TARGET_MISSING", "TARGET_NOT_REACHABLE", "INERT_INTERACTION", "VISUAL_ALIGNMENT_FAILED",
+    "VISUAL_EVIDENCE_REQUIRED", "GENERATED_ARTIFACT_STALE", "EXTERNAL_SERVICE_UNAVAILABLE", "SENSITIVE_OUTPUT_BLOCKED",
   ]),
   message: z.string(),
   recovery: z.string(),
@@ -122,9 +145,32 @@ const cocoQaInputSchema = baseInputSchema.extend({
   path: z.string().trim().min(1).max(500),
   content: z.string().max(256 * 1024),
 });
+const targetRequirementSchema = z.object({
+  source: z.string().trim().min(1).max(500),
+  target: z.string().trim().min(1).max(2_000),
+  accessibleName: z.string().trim().min(1).max(300),
+  keyboard: z.literal(true),
+  visibleFocus: z.literal(true),
+  actionMatchesLabel: z.literal(true),
+  externalEvidence: z.object({
+    provider: z.string().trim().min(1).max(100),
+    status: z.literal("verified"),
+    summary: z.string().trim().min(1).max(1_000),
+  }).optional(),
+});
+const workflowRequestSchema = z.object({
+  version: z.literal(1),
+  intent: z.enum(["mechanical", "user-facing"]),
+  feature: z.string().trim().min(1).max(100).optional(),
+  visual: z.boolean(),
+  referenceDecision: z.enum(["reference", "no-reference", "not-applicable"]).optional(),
+  cocoRef: z.string().trim().min(1).max(100).optional(),
+  targets: z.array(targetRequirementSchema).max(100).default([]),
+});
 const mutationPlanInputSchema = baseInputSchema.extend({
   action: z.literal("files.write"),
   changes: z.array(fileChangeSchema).min(1).max(20),
+  workflow: workflowRequestSchema.optional(),
 });
 const mutationExecuteInputSchema = baseInputSchema.extend({
   operationId: z.string().uuid(),
@@ -201,19 +247,39 @@ const cocoQaDataSchema = z.object({
 });const mutationTargetSchema = z.object({
   path: z.string(), mode: z.enum(["create", "update"]), currentHash: z.string(), proposedHash: z.string(), size: z.number().int().nonnegative(),
 });
+const workflowBindingSchema = z.object({
+  version: z.literal(1), intent: z.enum(["mechanical", "user-facing"]), featureId: z.string().optional(),
+  inspectionHash: z.string(), specificationHash: z.string().optional(),
+  referenceDecision: z.enum(["reference", "no-reference", "not-applicable"]).optional(),
+  cocoRefHash: z.string().optional(), componentInventoryHash: z.string(), designProfileHash: z.string().optional(),
+  targetVerificationHash: z.string(), verifiedTargetCount: z.number().int().nonnegative(),
+  externalTargetCount: z.number().int().nonnegative(), visualQaRequired: z.boolean(),
+  requiredVisualPrinciples: z.array(z.string()),
+});
+const targetVerificationSchema = z.object({
+  source: z.string(), target: z.string(), kind: z.enum(["internal-route", "internal-anchor", "api", "external"]),
+  evidence: z.enum(["inspected", "planned", "document", "provider"]),
+});
 const operationPlanSchema = z.object({
   version: z.literal(1), id: z.string(), sessionId: z.string(), toolId: z.literal("mutation.execute"), action: z.literal("files.write"),
   permissionLevel: z.literal("write"), requiredRole: z.enum(["application-developer", "framework-maintainer"]),
-  declaredTargets: z.array(mutationTargetSchema), reviewedHashes: z.string(), status: z.literal("pending"), createdAt: z.string(), expiresAt: z.string(),
+  workflow: workflowBindingSchema, declaredTargets: z.array(mutationTargetSchema), reviewedHashes: z.string(),
+  status: z.literal("pending"), createdAt: z.string(), expiresAt: z.string(),
 });
 const mutationPlanDataSchema = z.object({
   operation: operationPlanSchema,
+  verifiedTargets: z.array(targetVerificationSchema),
   approval: z.object({ required: z.literal(true), channel: z.literal("mcp-elicitation-or-host"), roles: z.array(z.enum(["application-developer", "framework-maintainer"])) }),
 });
 const executionDataSchema = z.object({
   version: z.literal(1), id: z.string(), operationId: z.string(), sessionId: z.string(),
   outcome: z.enum(["completed", "cancelled", "failed", "rolled-back", "partial"]), startedAt: z.string(), completedAt: z.string(),
   affectedTargets: z.array(z.string()), diagnosticCodes: z.array(z.string()),
+  workflow: z.object({
+    featureId: z.string().optional(), referenceDecision: z.enum(["reference", "no-reference", "not-applicable"]).optional(),
+    verifiedTargetCount: z.number().int().nonnegative(), visualQaRequired: z.boolean(),
+    qualityState: z.enum(["required", "not-required"]), nextAction: z.string(),
+  }),
 });
 
 function resultSchema<Data extends z.ZodType>(data: Data, permission: AgentPermission = "read") {
@@ -234,6 +300,8 @@ interface ToolDefinition {
   readonly permission?: AgentPermission;
   readonly inputSchema: z.ZodType<Record<string, unknown>>;
   readonly outputSchema: z.ZodType<Record<string, unknown>>;
+  readonly inputSchemaVersion?: number;
+  readonly outputSchemaVersion?: number;
   readonly run: (input: Record<string, unknown>, signal?: AbortSignal) => Promise<unknown>;
 }
 
@@ -243,11 +311,20 @@ interface ToolDefinition {
  */
 export async function createAgentBridge(options: AgentBridgeOptions): Promise<AgentBridge> {
   const workspaceRoot = await resolveWorkspaceRoot(options.workspaceRoot);
-  const mutation = new AgentMutationManager({ root: workspaceRoot, ...(options.sessionId ? { sessionId: options.sessionId } : {}), ...(options.now ? { now: options.now } : {}), ...(options.approvalMinutes === undefined ? {} : { approvalMinutes: options.approvalMinutes }) });
   const inspect = async (signal?: AbortSignal) => {
     await assertSafeTree(workspaceRoot, "app", signal);
     return options.inspectProject(workspaceRoot, signal);
   };
+  const inspectProposedRoutes = async (changes: readonly AgentFileChange[]) =>
+    options.inspectProposedRoutes ? await options.inspectProposedRoutes(workspaceRoot, changes) : [];
+  const mutation = new AgentMutationManager({
+    root: workspaceRoot,
+    ...(options.sessionId ? { sessionId: options.sessionId } : {}),
+    ...(options.now ? { now: options.now } : {}),
+    ...(options.approvalMinutes === undefined ? {} : { approvalMinutes: options.approvalMinutes }),
+    validateWorkflow: async (request, expected, changes, signal) =>
+      assertAgentWorkflowCurrent(workspaceRoot, await inspect(signal), changes, request, expected, await inspectProposedRoutes(changes), signal),
+  });
   const definitions: readonly ToolDefinition[] = [
     {
       name: "project.inspect",
@@ -336,10 +413,19 @@ export async function createAgentBridge(options: AgentBridgeOptions): Promise<Ag
       permission: "write",
       inputSchema: mutationPlanInputSchema,
       outputSchema: resultSchema(mutationPlanDataSchema, "write"),
+      inputSchemaVersion: 2,
+      outputSchemaVersion: 2,
       run: async (input, signal) => {
-        assertProtocolVersion(input.protocolVersion);
-        const operation = await mutation.planFiles(input.changes as unknown as readonly AgentFileChange[], signal);
-        return { operation, approval: { required: true as const, channel: "mcp-elicitation-or-host" as const, roles: [operation.requiredRole] } };
+        assertProtocolVersion(input.protocolVersion, "write");
+        const changes = input.changes as unknown as readonly AgentFileChange[];
+        const request = input.workflow as unknown as AgentWorkflowRequest | undefined;
+        const validated = await validateAgentWorkflow(workspaceRoot, await inspect(signal), changes, request, await inspectProposedRoutes(changes), signal);
+        const operation = await mutation.planFiles(changes, validated.binding, request!, signal);
+        return {
+          operation,
+          verifiedTargets: validated.targets,
+          approval: { required: true as const, channel: "mcp-elicitation-or-host" as const, roles: [operation.requiredRole] },
+        };
       },
     },
     {
@@ -348,8 +434,10 @@ export async function createAgentBridge(options: AgentBridgeOptions): Promise<Ag
       permission: "write",
       inputSchema: mutationExecuteInputSchema,
       outputSchema: resultSchema(executionDataSchema, "write"),
+      inputSchemaVersion: 2,
+      outputSchemaVersion: 2,
       run: async (input, signal) => {
-        assertProtocolVersion(input.protocolVersion);
+        assertProtocolVersion(input.protocolVersion, "write");
         return mutation.execute(input.operationId as string, signal);
       },
     },
@@ -382,7 +470,7 @@ export async function createAgentBridge(options: AgentBridgeOptions): Promise<Ag
   const server = new McpServer(
     { name: "cocoframe-agent-bridge", version: "0.0.1" },
     {
-      instructions: "Inspect and reuse existing CocoFrame capabilities first. Lifecycle preparation is read-only. Mutations require exact hash-bound plans and MCP elicitation or a host-only approval decision; an AI agent cannot approve its own operation.",
+      instructions: "Inspect and reuse existing CocoFrame capabilities first. User-facing work must complete approved CocoSpecs, an explicit visual-reference decision, CocoRef when applicable, verified interaction targets, and required visual QA. Mutations require exact workflow- and hash-bound plans plus human approval; an AI agent cannot approve its own operation.",
       requestState: { verify: approvalState.verify },
     },
   );
@@ -395,8 +483,8 @@ export async function createAgentBridge(options: AgentBridgeOptions): Promise<Ag
       _meta: {
         "io.cocoframe/agent": {
           protocolVersion: AGENT_BRIDGE_PROTOCOL_VERSION,
-          inputSchemaVersion: 1,
-          outputSchemaVersion: 1,
+          inputSchemaVersion: definition.inputSchemaVersion ?? 1,
+          outputSchemaVersion: definition.outputSchemaVersion ?? 1,
           permission: definition.permission ?? "read",
         },
       },
@@ -452,8 +540,8 @@ export async function createAgentBridge(options: AgentBridgeOptions): Promise<Ag
     description: definition.description,
     permission: definition.permission ?? "read",
     protocolVersion: AGENT_BRIDGE_PROTOCOL_VERSION,
-    inputSchemaVersion: 1,
-    outputSchemaVersion: 1,
+    inputSchemaVersion: definition.inputSchemaVersion ?? 1,
+    outputSchemaVersion: definition.outputSchemaVersion ?? 1,
     inputSchema: z.toJSONSchema(definition.inputSchema) as Record<string, unknown>,
     outputSchema: z.toJSONSchema(definition.outputSchema) as Record<string, unknown>,
   }));
@@ -476,7 +564,8 @@ function pageSnapshot(snapshot: AgentProjectSnapshot, offset: number, limit: num
   };
 }
 
-function assertProtocolVersion(value: unknown): void {
+function assertProtocolVersion(value: unknown, permission: AgentPermission = "read"): void {
+  if (value === 1 && permission === "read") return;
   if (value !== undefined && value !== AGENT_BRIDGE_PROTOCOL_VERSION) {
     throw Object.assign(new Error("Unsupported Agent Bridge protocol version."), {
       agentDiagnostic: {

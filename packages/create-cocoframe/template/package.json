@@ -23,7 +23,7 @@
     "@cocoframe/ui": "0.0.4"
   },
   "devDependencies": {
-    "@cocoframe/cli": "0.0.7",
+    "@cocoframe/cli": "0.0.8",
     "@types/node": "^24.0.0",
     "typescript": "^5.9.0"
   }

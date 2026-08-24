@@ -1,0 +1,70 @@
+flowchart TD
+    start([Start: Agent Bridge Workflow Guardrails])
+    step1["The user connects a supported AI client to Agent Bridge and submits a request."]
+    start --> step1
+    step2["Agent Bridge validates the workspace, protocol version, permissions, and supported capabilities."]
+    step1 --> step2
+    step3["The AI classifies the request as read-only assistance or a user-facing mutation."]
+    step2 --> step3
+    step4["The AI calls project.inspect and searches documentation, components, routes, and APIs."]
+    step3 --> step4
+    step5["For a user-facing mutation, the AI creates or resumes CocoSpecs before implementation planning or mutation."]
+    step4 --> step5
+    step6["The AI asks only the next adaptive CocoSpecs question batch until the specification is complete."]
+    step5 --> step6
+    step7["The user reviews and explicitly approves the CocoSpec."]
+    step6 --> step7
+    step8["For visual work, the AI asks whether an image or website reference exists and records the decision."]
+    step7 --> step8
+    step9["When a reference exists, the AI runs CocoRef, audits existing components, requests consent for missing components, previews them, and waits for approval."]
+    step8 --> step9
+    step10["When no reference exists, the AI records no-reference and proposes a direction from the Design Profile and reusable components."]
+    step9 --> step10
+    step11["The AI produces an implementation plan tied to approved acceptance criteria and lifecycle states."]
+    step10 --> step11
+    step12["Agent Bridge requests explicit approval for the exact mutation targets."]
+    step11 --> step12
+    step13["The AI executes only approved targets and refreshes generated artifacts through their owning commands when required."]
+    step12 --> step13
+    step14["The AI inspects every created or changed link, CTA, route, anchor, page, and API reference against the project route graph."]
+    step13 --> step14
+    step15["The AI verifies target reachability, accessible names, keyboard operation, and intended navigation or action through runtime or E2E evidence."]
+    step14 --> step15
+    step16["The AI runs CocoQA with Product Design Quality, including alignment, spacing, contrast, overflow, responsive states, text zoom, and reference fidelity when applicable."]
+    step15 --> step16
+    step17["The user reviews and explicitly approves the final QA state."]
+    step16 --> step17
+    step18["The AI reports lifecycle decisions, reused components, mutations, link evidence, visual evidence, defects, and unresolved risks."]
+    step17 --> step18
+    success([A supported AI client cannot silently skip the required workflow for user-facing creation or change. It inspects the workspace, completes and receives approval for CocoSpecs, records a visual-reference decision and completes CocoRef when ap])
+    step18 --> success
+    error1["{'code':'WORKFLOW_CONTEXT_REQUIRED','message':'The requested mutation is not bound to a validated workflow context.','recovery':'Begin or resume the feature workflow and bind the operation to its inspected workspace and lifecycle records.'}"]
+    step18 -. failure .-> error1
+    error2["{'code':'SPECIFICATION_REQUIRED','message':'A user-facing mutation requires a canonical CocoSpec.','recovery':'Create or resume CocoSpecs and answer only the next adaptive question batch.'}"]
+    step18 -. failure .-> error2
+    error3["{'code':'SPECIFICATION_NOT_APPROVED','message':'The bound CocoSpec is not approved.','recovery':'Complete, generate, review, and explicitly approve the specification.'}"]
+    step18 -. failure .-> error3
+    error4["{'code':'REFERENCE_DECISION_REQUIRED','message':'Visual work has no recorded reference decision.','recovery':'Ask whether an image or website reference exists and record reference, no-reference, or not-applicable.'}"]
+    step18 -. failure .-> error4
+    error5["{'code':'COCOREF_REQUIRED','message':'A provided visual reference has not completed CocoRef.','recovery':'Audit reusable components and complete the reference consent, preview, and approval lifecycle.'}"]
+    step18 -. failure .-> error5
+    error6["{'code':'COMPONENT_AUDIT_REQUIRED','message':'Reusable capabilities were not audited before a new component was proposed.','recovery':'Run project inspection, documentation search, and component discovery before revising the proposal.'}"]
+    step18 -. failure .-> error6
+    error7["{'code':'APPROVAL_REQUIRED','message':'The declared mutation has not received valid human approval.','recovery':'Present exact targets and wait for approve, revise, partial approval, or deny.'}"]
+    step18 -. failure .-> error7
+    error8["{'code':'LINK_TARGET_MISSING','message':'An internal link, CTA, route, anchor, page, or API reference has no matching target.','recovery':'Create or select a real accessible target, inspect the route graph again, and rerun link verification"]
+    step18 -. failure .-> error8
+    error9["{'code':'TARGET_NOT_REACHABLE','message':'A declared navigation target does not return an expected successful or redirect response.','recovery':'Repair the route or target and repeat runtime or E2E verification.'}"]
+    step18 -. failure .-> error9
+    error10["{'code':'INERT_INTERACTION','message':'A visible link or control does not perform the action communicated by its label.','recovery':'Implement the intended navigation or action and verify keyboard and pointer operation.'}"]
+    step18 -. failure .-> error10
+    error11["{'code':'VISUAL_ALIGNMENT_FAILED','message':'Required grid, container, baseline, icon-label, card, or column alignment is outside the approved rules.','recovery':'Record a visual defect, correct the layout using approved tokens or component"]
+    step18 -. failure .-> error11
+    error12["{'code':'VISUAL_EVIDENCE_REQUIRED','message':'Required visual or alignment evidence is missing.','recovery':'Capture sanitized computed measurements, screenshots, accessibility results, and reviewer evidence for the declared states.'}"]
+    step18 -. failure .-> error12
+    error13["{'code':'GENERATED_ARTIFACT_STALE','message':'A generated route, client, OpenAPI, CSS declaration, or API reference is stale.','recovery':'Run the owning CocoFrame generator and verify freshness without editing generated output manually.'}"]
+    step18 -. failure .-> error13
+    error14["{'code':'STATE_CONFLICT','message':'The workspace or lifecycle source changed after review.','recovery':'Cancel execution, inspect current state, rebuild the plan, and request approval again.'}"]
+    step18 -. failure .-> error14
+    error15["{'code':'CAPABILITY_UNAVAILABLE','message':'Agent Bridge cannot perform a required verification or operation.','recovery':'Return the structured capability gap and ask the user whether to provide external evidence, use a supported path, or "]
+    step18 -. failure .-> error15

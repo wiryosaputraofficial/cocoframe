@@ -7,6 +7,8 @@ import { createAgentBridge, type AgentOperationPlan } from "../packages/agent/sr
 import { runAgentCommand } from "../packages/cli/src/agent-command.ts";
 import { inspectProjectReadOnly } from "../packages/cli/src/inspect-readonly.ts";
 
+const mechanicalWorkflow = { version: 1 as const, intent: "mechanical" as const, visual: false };
+
 test("executes only a human-approved target subset and keeps records hash-only", async (context) => {
   const root = await fixtureWorkspace();
   context.after(async () => rm(root, { recursive: true, force: true }));
@@ -15,6 +17,7 @@ test("executes only a human-approved target subset and keeps records hash-only",
 
   const planned = await bridge.execute("mutation.plan", {
     action: "files.write",
+    workflow: mechanicalWorkflow,
     changes: [
       { path: "app/approved.ts", content: "export const approved = true;\n" },
       { path: "app/not-approved.ts", content: "export const untouched = true;\n" },
@@ -135,16 +138,18 @@ test("blocks traversal, linked parents, secret files, literal secrets, and undec
     [".env", "VALUE=safe", "SENSITIVE_OUTPUT_BLOCKED"],
     ["app/secret.ts", "const token = \"super-secret-token\";", "SENSITIVE_OUTPUT_BLOCKED"],
   ] as const) {
-    const result = await bridge.execute("mutation.plan", { action: "files.write", changes: [{ path: target, content }] });
+    const result = await bridge.execute("mutation.plan", { action: "files.write", workflow: mechanicalWorkflow, changes: [{ path: target, content }] });
     assert.equal((result.diagnostic as { code: string }).code, code);
   }
 
   await symlink(outside, path.join(root, "app", "linked"), process.platform === "win32" ? "junction" : "dir");
   const linked = await bridge.execute("mutation.plan", {
     action: "files.write",
+    workflow: mechanicalWorkflow,
     changes: [{ path: "app/linked/escape.ts", content: "safe" }],
   });
   assert.equal((linked.diagnostic as { code: string }).code, "WORKSPACE_ACCESS_DENIED");
+  await rm(path.join(root, "app", "linked"), { recursive: true, force: true });
 
   const plan = await planOne(bridge, "app/declared.ts", "safe");
   await assert.rejects(
@@ -163,6 +168,7 @@ test("rolls back every changed target when an approved multi-file mutation fails
   const bridge = await createAgentBridge({ workspaceRoot: root, inspectProject: inspectProjectReadOnly });
   const planned = await bridge.execute("mutation.plan", {
     action: "files.write",
+    workflow: mechanicalWorkflow,
     changes: [
       { path: "app/first.ts", content: "first\n" },
       { path: "app/blocked/second.ts", content: "second\n" },
@@ -185,7 +191,7 @@ async function planOne(
   target: string,
   content: string,
 ): Promise<AgentOperationPlan> {
-  const result = await bridge.execute("mutation.plan", { action: "files.write", changes: [{ path: target, content }] });
+  const result = await bridge.execute("mutation.plan", { action: "files.write", workflow: mechanicalWorkflow, changes: [{ path: target, content }] });
   assert.equal(result.ok, true);
   return (result.data as { operation: AgentOperationPlan }).operation;
 }

@@ -7,7 +7,7 @@ import {
   type AgentApprovalRole,
 } from "@cocoframe/agent";
 import { serveAgentBridgeStdio } from "@cocoframe/agent/stdio";
-import { inspectProjectReadOnly } from "./inspect-readonly.ts";
+import { inspectProjectReadOnly, inspectProposedRoutesReadOnly } from "./inspect-readonly.ts";
 
 interface AgentCommandIo {
   readonly log: (message: string) => void;
@@ -28,7 +28,7 @@ export async function runAgentCommand(
     if (first === "serve" && rest.length > 1) throw new Error("cocoframe agent serve accepts one project path.");
     if (first !== "serve" && rest.length > 0) throw new Error("cocoframe agent accepts one project path, or an approval command.");
     const projectRoot = path.resolve(currentDirectory, projectInput);
-    const handle = serveAgentBridgeStdio({ workspaceRoot: projectRoot, inspectProject: inspectProjectReadOnly });
+    const handle = serveAgentBridgeStdio({ workspaceRoot: projectRoot, inspectProject: inspectProjectReadOnly, inspectProposedRoutes: inspectProposedRoutesReadOnly });
     const close = () => { void handle.close(); };
     process.once("SIGINT", close);
     process.once("SIGTERM", close);

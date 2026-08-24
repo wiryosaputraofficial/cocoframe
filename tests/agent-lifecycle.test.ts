@@ -4,6 +4,7 @@ import os from "node:os";
 import path from "node:path";
 import test from "node:test";
 import { approveCocoSpec, answerCocoSpec, createCocoSpec, nextQuestions, type CocoSpecQuestion, type CocoSpecValue } from "@cocoframe/specs";
+import { auditCocoRef, createCocoRef } from "@cocoframe/cocoref";
 import { answerCocoQa, createCocoQa, nextCocoQaQuestions, recordCocoQaCase } from "@cocoframe/qa";
 import { createAgentBridge } from "../packages/agent/src/index.ts";
 import { inspectProjectReadOnly } from "../packages/cli/src/inspect-readonly.ts";
@@ -124,6 +125,48 @@ test("keeps CocoQA acceptance, evidence, defects, gates, and approval state trac
   assert.deepEqual(await fileState(root), before);
 });
 
+test("carries a completed CocoRef into Agent Bridge CocoQA fidelity traceability", async (context) => {
+  const root = await fixtureWorkspace();
+  context.after(async () => rm(root, { recursive: true, force: true }));
+
+  let spec = createCocoSpec({ feature: "reference-navigation", brief: "Create reference-driven navigation.", mode: "quick", now: "2026-08-24T00:00:00.000Z" });
+  for (let iteration = 0; iteration < 50; iteration++) {
+    const [question] = nextQuestions(spec, 1);
+    if (!question) break;
+    spec = answerCocoSpec(spec, question.id, answerFor(question), { now: "2026-08-24T00:00:00.000Z" });
+  }
+  spec = approveCocoSpec(spec, "2026-08-24T00:00:00.000Z");
+  await mkdir(path.join(root, "specs", "reference-navigation"), { recursive: true });
+  await writeFile(path.join(root, "specs", "reference-navigation", "spec.json"), JSON.stringify(spec, null, 2));
+
+  let ref = createCocoRef({
+    name: "reference-navigation",
+    references: [{ kind: "image", source: "sanitized-login-reference.png" }],
+    now: "2026-08-24T00:00:00.000Z",
+  });
+  ref = auditCocoRef(ref, {
+    inventory: [{ id: "ui:Button", kind: "ui", name: "Button" }],
+    requirements: [{
+      id: "login-action",
+      description: "Approved login action",
+      decision: "reuse",
+      existingComponent: "ui:Button",
+      rationale: "The existing semantic Button satisfies the reference.",
+    }],
+  }, "2026-08-24T00:00:00.000Z");
+  assert.equal(ref.state, "ready");
+  await mkdir(path.join(root, "refs", "reference-navigation"), { recursive: true });
+  await writeFile(path.join(root, "refs", "reference-navigation", "ref.json"), JSON.stringify(ref, null, 2));
+  await writeFile(path.join(root, "cocoframe.design.json"), await readFile(path.resolve("examples/basic/cocoframe.design.json")));
+
+  const bridge = await createAgentBridge({ workspaceRoot: root, inspectProject: inspectProjectReadOnly });
+  const result = await bridge.execute("cocoqa.trace", { feature: "reference-navigation", limit: 4 });
+  assert.equal(result.ok, true);
+  const data = result.data as { sources: readonly { kind: string; state: string }[]; cases: readonly { id: string }[] };
+  assert.ok(data.sources.some(({ kind, state }) => kind === "cocoref" && state === "ready"));
+  assert.ok(data.cases.some(({ id }) => id === "reference-login-action"));
+  assert.ok(data.cases.some(({ id }) => id === "design-fidelity"));
+});
 test("returns stable canonical-state diagnostics without modifying invalid lifecycle files", async (context) => {
   const root = await fixtureWorkspace();
   context.after(async () => rm(root, { recursive: true, force: true }));

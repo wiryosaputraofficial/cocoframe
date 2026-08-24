@@ -1,0 +1,40 @@
+erDiagram
+    WorkflowBinding {
+        integer version
+        slug featureId
+        enum_read_only_user_facing_mutation_mechanical_mutation_ requestKind
+        sha256 inspectionHash
+        slug specId "nullable"
+        enum_draft_ready_approved_ specState "nullable"
+        sha256 specHash "nullable"
+        enum_reference_no_reference_not_applicable_ referenceDecision
+        slug refId "nullable"
+        string refState "nullable"
+        sha256 refHash "nullable"
+        boolean componentAuditCompleted
+        sha256 componentInventoryHash
+        sha256 designProfileHash "nullable"
+        timestamp createdAt
+    }
+    TargetVerificationRequirement {
+        slug id
+        enum_link_route_page_anchor_api_action_external_link_ kind
+        workspace_relative_path sourcePath
+        sanitized_target target
+        string_array requiredEvidence
+        enum_pending_passed_failed_blocked_not_applicable_ status
+        sha256 evidenceHash "nullable"
+    }
+    VisualQaRequirement {
+        slug id
+        enum_alignment_spacing_contrast_overflow_responsive_accessibility_fidelity_ principle
+        viewport_array viewports
+        string_array states
+        boolean required
+        enum_pending_passed_failed_blocked_not_applicable_ status
+        sha256 evidenceHash "nullable"
+    }
+    AgentOperationPlan ||--o{ WorkflowBinding : "is authorized by"
+    WorkflowBinding ||--o{ CanonicalLifecycleSource : "references by ID and hash"
+    WorkflowBinding ||--o{ TargetVerificationRequirement : "requires"
+    WorkflowBinding ||--o{ VisualQaRequirement : "requires"

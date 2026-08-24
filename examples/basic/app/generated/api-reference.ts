@@ -2,11 +2,11 @@
 export const apiReference = {
   "version": 1,
   "generatedBy": "scripts/api-reference.ts",
-  "packageVersion": "0.0.6",
+  "packageVersion": "0.0.8",
   "packages": [
     {
       "name": "@cocoframe/agent",
-      "version": "0.0.2",
+      "version": "0.0.3",
       "description": "Provider-independent, approval-aware Agent Bridge contracts for CocoFrame.",
       "readme": "packages/agent/README.md",
       "entries": [
@@ -18,7 +18,7 @@ export const apiReference = {
             {
               "name": "AGENT_BRIDGE_PROTOCOL_VERSION",
               "kind": "variable",
-              "signature": "variable AGENT_BRIDGE_PROTOCOL_VERSION = 1",
+              "signature": "variable AGENT_BRIDGE_PROTOCOL_VERSION = 2",
               "summary": "Version of CocoFrame's provider-independent Agent Bridge contract.",
               "deprecated": false,
               "examples": [],
@@ -33,7 +33,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/agent/src/types.ts",
-              "line": 46
+              "line": 58
             },
             {
               "name": "AgentApprovalDecision",
@@ -43,7 +43,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/agent/src/mutation.ts",
-              "line": 47
+              "line": 49
             },
             {
               "name": "AgentApprovalDecisionKind",
@@ -53,7 +53,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/agent/src/mutation.ts",
-              "line": 17
+              "line": 18
             },
             {
               "name": "AgentApprovalRole",
@@ -63,7 +63,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/agent/src/mutation.ts",
-              "line": 16
+              "line": 17
             },
             {
               "name": "AgentBridge",
@@ -73,17 +73,17 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/agent/src/types.ts",
-              "line": 132
+              "line": 157
             },
             {
               "name": "AgentBridgeOptions",
               "kind": "interface",
-              "signature": "interface AgentBridgeOptions {\n  workspaceRoot: string;\n  inspectProject: AgentProjectInspector;\n  sessionId?: string;\n  now?: () => Date;\n  approvalMinutes?: number\n}",
+              "signature": "interface AgentBridgeOptions {\n  workspaceRoot: string;\n  inspectProject: AgentProjectInspector;\n  inspectProposedRoutes?: AgentProposedRouteInspector;\n  sessionId?: string;\n  now?: () => Date;\n  approvalMinutes?: number\n}",
               "summary": "Configuration for one local Agent Bridge instance.",
               "deprecated": false,
               "examples": [],
               "source": "packages/agent/src/types.ts",
-              "line": 108
+              "line": 131
             },
             {
               "name": "AgentComponent",
@@ -93,7 +93,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/agent/src/types.ts",
-              "line": 55
+              "line": 67
             },
             {
               "name": "AgentDependency",
@@ -103,7 +103,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/agent/src/types.ts",
-              "line": 76
+              "line": 88
             },
             {
               "name": "AgentDiagnostic",
@@ -113,7 +113,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/agent/src/types.ts",
-              "line": 31
+              "line": 43
             },
             {
               "name": "AgentDiagnosticCode",
@@ -128,12 +128,12 @@ export const apiReference = {
             {
               "name": "AgentExecutionRecord",
               "kind": "interface",
-              "signature": "interface AgentExecutionRecord {\n  version: 1;\n  id: string;\n  operationId: string;\n  sessionId: string;\n  outcome: \"completed\" | \"cancelled\" | \"failed\" | \"rolled-back\" | \"partial\";\n  startedAt: string;\n  completedAt: string;\n  affectedTargets: readonly string[];\n  diagnosticCodes: readonly string[]\n}",
+              "signature": "interface AgentExecutionRecord {\n  version: 1;\n  id: string;\n  operationId: string;\n  sessionId: string;\n  outcome: \"completed\" | \"cancelled\" | \"failed\" | \"rolled-back\" | \"partial\";\n  startedAt: string;\n  completedAt: string;\n  affectedTargets: readonly string[];\n  diagnosticCodes: readonly string[];\n  workflow: {    readonly featureId?: string;    readonly referenceDecision?: AgentWorkflowBinding[\"referenceDecision\"];    readonly verifiedTargetCount: number;    readonly visualQaRequired: boolean;    readonly qualityState: \"required\" | \"not-required\";    readonly nextAction: string;}\n}",
               "summary": "Public interface AgentExecutionRecord exported by CocoFrame.",
               "deprecated": false,
               "examples": [],
               "source": "packages/agent/src/mutation.ts",
-              "line": 61
+              "line": 63
             },
             {
               "name": "AgentFileChange",
@@ -143,7 +143,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/agent/src/mutation.ts",
-              "line": 19
+              "line": 20
             },
             {
               "name": "AgentGeneratedCapability",
@@ -153,7 +153,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/agent/src/types.ts",
-              "line": 83
+              "line": 95
             },
             {
               "name": "AgentIsland",
@@ -163,7 +163,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/agent/src/types.ts",
-              "line": 63
+              "line": 75
             },
             {
               "name": "AgentMiddleware",
@@ -173,17 +173,17 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/agent/src/types.ts",
-              "line": 69
+              "line": 81
             },
             {
               "name": "AgentMutationManager",
               "kind": "class",
-              "signature": "class AgentMutationManager {\n  sessionId: string;\n  #root: string;\n  #now: () => Date;\n  #approvalMinutes: number;\n  #held: Map<string, HeldOperation>;\n  planFiles: (changes: readonly AgentFileChange[], signal?: AbortSignal) => Promise<AgentOperationPlan>;\n  decide: (operationId: string, input: RecordApprovalInput) => Promise<AgentApprovalDecision>;\n  execute: (operationId: string, signal?: AbortSignal) => Promise<AgentExecutionRecord>;\n  #record: (plan: AgentOperationPlan, outcome: AgentExecutionRecord[\"outcome\"], startedAt: string, affectedTargets: readonly string[], diagnosticCodes: readonly string[]) => Promise<AgentExecutionRecord>\n}",
+              "signature": "class AgentMutationManager {\n  sessionId: string;\n  #root: string;\n  #now: () => Date;\n  #approvalMinutes: number;\n  #validateWorkflow?: ((request: AgentWorkflowRequest, expected: AgentWorkflowBinding, changes: readonly AgentFileChange[], signal?: AbortSignal) => Promise<void>) | undefined;\n  #held: Map<string, HeldOperation>;\n  planFiles: (changes: readonly AgentFileChange[], workflow: AgentWorkflowBinding, workflowRequest: AgentWorkflowRequest, signal?: AbortSignal) => Promise<AgentOperationPlan>;\n  decide: (operationId: string, input: RecordApprovalInput) => Promise<AgentApprovalDecision>;\n  execute: (operationId: string, signal?: AbortSignal) => Promise<AgentExecutionRecord>;\n  #record: (plan: AgentOperationPlan, outcome: AgentExecutionRecord[\"outcome\"], startedAt: string, affectedTargets: readonly string[], diagnosticCodes: readonly string[]) => Promise<AgentExecutionRecord>\n}",
               "summary": "Owns one Agent Bridge session's hash-bound, serialized mutation lifecycle.",
               "deprecated": false,
               "examples": [],
               "source": "packages/agent/src/mutation.ts",
-              "line": 93
+              "line": 110
             },
             {
               "name": "AgentMutationTarget",
@@ -193,17 +193,17 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/agent/src/mutation.ts",
-              "line": 24
+              "line": 25
             },
             {
               "name": "AgentOperationPlan",
               "kind": "interface",
-              "signature": "interface AgentOperationPlan {\n  version: 1;\n  id: string;\n  sessionId: string;\n  toolId: \"mutation.execute\";\n  action: \"files.write\";\n  permissionLevel: \"write\";\n  requiredRole: AgentApprovalRole;\n  declaredTargets: readonly AgentMutationTarget[];\n  reviewedHashes: string;\n  status: \"pending\";\n  createdAt: string;\n  expiresAt: string\n}",
+              "signature": "interface AgentOperationPlan {\n  version: 1;\n  id: string;\n  sessionId: string;\n  toolId: \"mutation.execute\";\n  action: \"files.write\";\n  permissionLevel: \"write\";\n  requiredRole: AgentApprovalRole;\n  workflow: AgentWorkflowBinding;\n  declaredTargets: readonly AgentMutationTarget[];\n  reviewedHashes: string;\n  status: \"pending\";\n  createdAt: string;\n  expiresAt: string\n}",
               "summary": "Public interface AgentOperationPlan exported by CocoFrame.",
               "deprecated": false,
               "examples": [],
               "source": "packages/agent/src/mutation.ts",
-              "line": 32
+              "line": 33
             },
             {
               "name": "AgentPermission",
@@ -223,7 +223,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/agent/src/types.ts",
-              "line": 105
+              "line": 117
             },
             {
               "name": "AgentProjectSnapshot",
@@ -233,7 +233,37 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/agent/src/types.ts",
-              "line": 89
+              "line": 101
+            },
+            {
+              "name": "AgentProposedFile",
+              "kind": "interface",
+              "signature": "interface AgentProposedFile {\n  path: string;\n  content: string\n}",
+              "summary": "Public interface AgentProposedFile exported by CocoFrame.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/agent/src/types.ts",
+              "line": 119
+            },
+            {
+              "name": "AgentProposedRouteInspector",
+              "kind": "type",
+              "signature": "type AgentProposedRouteInspector",
+              "summary": "Canonical host adapter that derives routes from proposed files without writing them.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/agent/src/types.ts",
+              "line": 125
+            },
+            {
+              "name": "AgentReferenceDecision",
+              "kind": "type",
+              "signature": "type AgentReferenceDecision",
+              "summary": "Public type AgentReferenceDecision exported by CocoFrame.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/agent/src/workflow.ts",
+              "line": 12
             },
             {
               "name": "AgentRoute",
@@ -243,17 +273,67 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/agent/src/types.ts",
-              "line": 38
+              "line": 50
+            },
+            {
+              "name": "AgentTargetRequirement",
+              "kind": "interface",
+              "signature": "interface AgentTargetRequirement {\n  source: string;\n  target: string;\n  accessibleName: string;\n  keyboard: true;\n  visibleFocus: true;\n  actionMatchesLabel: true;\n  externalEvidence?: {    readonly provider: string;    readonly status: \"verified\";    readonly summary: string;}\n}",
+              "summary": "Public interface AgentTargetRequirement exported by CocoFrame.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/agent/src/workflow.ts",
+              "line": 14
+            },
+            {
+              "name": "AgentTargetVerification",
+              "kind": "interface",
+              "signature": "interface AgentTargetVerification {\n  source: string;\n  target: string;\n  kind: \"external\" | \"api\" | \"internal-route\" | \"internal-anchor\";\n  evidence: \"inspected\" | \"planned\" | \"document\" | \"provider\"\n}",
+              "summary": "Public interface AgentTargetVerification exported by CocoFrame.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/agent/src/workflow.ts",
+              "line": 57
             },
             {
               "name": "AgentToolDescriptor",
               "kind": "interface",
-              "signature": "interface AgentToolDescriptor {\n  name: string;\n  description: string;\n  permission: AgentPermission;\n  protocolVersion: 1;\n  inputSchemaVersion: 1;\n  outputSchemaVersion: 1;\n  inputSchema: Readonly<Record<string, unknown>>;\n  outputSchema: Readonly<Record<string, unknown>>\n}",
+              "signature": "interface AgentToolDescriptor {\n  name: string;\n  description: string;\n  permission: AgentPermission;\n  protocolVersion: 2;\n  inputSchemaVersion: number;\n  outputSchemaVersion: number;\n  inputSchema: Readonly<Record<string, unknown>>;\n  outputSchema: Readonly<Record<string, unknown>>\n}",
               "summary": "Discoverable contract metadata for one provider-independent Agent Bridge tool.",
               "deprecated": false,
               "examples": [],
               "source": "packages/agent/src/types.ts",
-              "line": 120
+              "line": 145
+            },
+            {
+              "name": "AgentWorkflowBinding",
+              "kind": "interface",
+              "signature": "interface AgentWorkflowBinding {\n  version: 1;\n  intent: AgentWorkflowIntent;\n  featureId?: string;\n  inspectionHash: string;\n  specificationHash?: string;\n  referenceDecision?: AgentReferenceDecision;\n  cocoRefHash?: string;\n  componentInventoryHash: string;\n  designProfileHash?: string;\n  targetVerificationHash: string;\n  verifiedTargetCount: number;\n  externalTargetCount: number;\n  visualQaRequired: boolean;\n  requiredVisualPrinciples: readonly string[]\n}",
+              "summary": "Hash-only workflow evidence persisted with an operation plan.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/agent/src/workflow.ts",
+              "line": 40
+            },
+            {
+              "name": "AgentWorkflowIntent",
+              "kind": "type",
+              "signature": "type AgentWorkflowIntent",
+              "summary": "Public type AgentWorkflowIntent exported by CocoFrame.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/agent/src/workflow.ts",
+              "line": 11
+            },
+            {
+              "name": "AgentWorkflowRequest",
+              "kind": "interface",
+              "signature": "interface AgentWorkflowRequest {\n  version: 1;\n  intent: AgentWorkflowIntent;\n  feature?: string;\n  visual: boolean;\n  referenceDecision?: AgentReferenceDecision;\n  cocoRef?: string;\n  targets?: readonly AgentTargetRequirement[]\n}",
+              "summary": "Client-declared workflow context. Canonical state is always re-read by Agent Bridge.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/agent/src/workflow.ts",
+              "line": 29
             },
             {
               "name": "createAgentBridge",
@@ -263,7 +343,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/agent/src/index.ts",
-              "line": 244
+              "line": 312
             },
             {
               "name": "readAgentOperationPlan",
@@ -273,7 +353,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/agent/src/mutation.ts",
-              "line": 348
+              "line": 390
             },
             {
               "name": "recordAgentApproval",
@@ -283,7 +363,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/agent/src/mutation.ts",
-              "line": 302
+              "line": 344
             },
             {
               "name": "RecordApprovalInput",
@@ -293,7 +373,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/agent/src/mutation.ts",
-              "line": 73
+              "line": 83
             }
           ]
         },
@@ -403,7 +483,7 @@ export const apiReference = {
     },
     {
       "name": "@cocoframe/cli",
-      "version": "0.0.7",
+      "version": "0.0.8",
       "description": "The `cocoframe` executable owns project discovery, inspection, development, generation, CocoSpecs discovery, CocoRef component approval, CocoQA evidence and release approval, local Agent Bridge MCP serving, production builds, asset serving, and startup.",
       "readme": "packages/cli/README.md",
       "entries": [
@@ -2577,7 +2657,7 @@ export const apiReference = {
             {
               "name": "SolarIconProps",
               "kind": "interface",
-              "signature": "interface SolarIconProps {\n  size?: number;\n  color?: string;\n  strokeWidth?: 1 | 1.5 | 2;\n  mirrored?: boolean;\n  label?: string;\n  class?: string\n}",
+              "signature": "interface SolarIconProps {\n  size?: number;\n  color?: string;\n  strokeWidth?: 2 | 1 | 1.5;\n  mirrored?: boolean;\n  label?: string;\n  class?: string\n}",
               "summary": "Public interface SolarIconProps exported by CocoFrame.",
               "deprecated": false,
               "examples": [],
@@ -2587,7 +2667,7 @@ export const apiReference = {
             {
               "name": "SolarLinearIconName",
               "kind": "type",
-              "signature": "type SolarLinearIconName = \"route\" | \"accessibility\" | \"add-circle\" | \"add-folder\" | \"add-square\" | \"adhesive-plaster\" | \"adhesive-plaster-2\" | \"airbuds\" | \"airbuds-case\" | \"airbuds-case-charge\" | \"airbuds-case-minimalistic\" | \"airbuds-case-open\" | \"airbuds-charge\" | \"airbuds-check\" | \"airbuds-left\" | \"airbuds-remove\" | \"airbuds-right\" | \"alarm\" | \"alarm-add\" | \"alarm-pause\" | \"alarm-play\" | \"alarm-remove\" | \"alarm-sleep\" | \"alarm-turn-off\" | \"album\" | \"align-bottom\" | \"align-horizontal-center\" | \"align-horizontal-spacing\" | \"align-left\" | \"align-right\" | \"align-top\" | \"align-vertical-center\" | \"align-vertical-spacing\" | \"alt-arrow-down\" | \"alt-arrow-left\" | \"alt-arrow-right\" | \"alt-arrow-up\" | \"archive\" | \"archive-check\" | \"archive-down\" | \"archive-down-minimalistic\" | \"archive-minimalistic\" | \"archive-up\" | \"archive-up-minimalistic\" | \"armchair\" | \"armchair-2\" | \"arrow-down\" | \"arrow-left\" | \"arrow-left-down\" | \"arrow-left-up\" | \"arrow-right\" | \"arrow-right-down\" | \"arrow-right-up\" | \"arrow-to-down-left\" | \"arrow-to-down-right\" | \"arrow-to-top-left\" | \"arrow-to-top-right\" | \"arrow-up\" | \"asteroid\" | \"atom\" | \"augmented-reality\" | \"backpack\" | \"backspace\" | \"bacteria\" | \"bag\" | \"bag-2\" | \"bag-3\" | \"bag-4\" | \"bag-5\" | \"bag-check\" | \"bag-cross\" | \"bag-heart\" | \"bag-music\" | \"bag-music-2\" | \"bag-smile\" | \"balloon\" | \"balls\" | \"banknote\" | \"banknote-2\" | \"bar-chair\" | \"basketball\" | \"bath\" | \"battery-charge\" | \"battery-charge-minimalistic\" | \"battery-full\" | \"battery-full-minimalistic\" | \"battery-half\" | \"battery-half-minimalistic\" | \"battery-low\" | \"battery-low-minimalistic\" | \"bed\" | \"bedside-table\" | \"bedside-table-2\" | \"bedside-table-3\" | \"bedside-table-4\" | \"bell\" | \"bell-off\" | \"bell-ring\" | \"benzene-ring\" | \"bicycling\" | \"bicycling-round\" | \"bill\" | \"bill-2\" | \"bill-check\" | \"bill-cross\" | \"bill-list\" | \"black-hole\" | \"black-hole-2\" | \"black-hole-3\" | \"bluetooth\" | \"bluetooth-circle\" | \"bluetooth-square\" | \"bluetooth-wave\" | \"body\" | \"body-shape\" | \"body-shape-minimalistic\" | \"bolt\" | \"bolt-circle\" | \"bomb\" | \"bomb-emoji\" | \"bomb-minimalistic\" | \"bone\" | \"bone-crack\" | \"bone-fracture\" | \"bones\" | \"bonfire\" | \"book\" | \"book-2\" | \"book-bookmark\" | \"book-bookmark-minimalistic\" | \"book-minimalistic\" | \"bookmark\" | \"bookmark-circle\" | \"bookmark-opened\" | \"bookmark-square\" | \"bookmark-square-minimalistic\" | \"boombox\" | \"bottle\" | \"bowling\" | \"box\" | \"box-minimalistic\" | \"branching-paths-down\" | \"branching-paths-up\" | \"broom\" | \"bug\" | \"bug-minimalistic\" | \"buildings\" | \"buildings-2\" | \"buildings-3\" | \"bus\" | \"calculator\" | \"calculator-minimalistic\" | \"calendar\" | \"calendar-add\" | \"calendar-date\" | \"calendar-mark\" | \"calendar-minimalistic\" | \"calendar-search\" | \"call-cancel\" | \"call-cancel-rounded\" | \"call-chat\" | \"call-chat-rounded\" | \"call-dropped\" | \"call-dropped-rounded\" | \"call-medicine\" | \"call-medicine-rounded\" | \"camera\" | \"camera-add\" | \"camera-minimalistic\" | \"camera-rotate\" | \"camera-square\" | \"car-battery\" | \"card\" | \"card-2\" | \"card-receive\" | \"card-search\" | \"card-send\" | \"card-transfer\" | \"cardholder\" | \"cart\" | \"cart-2\" | \"cart-3\" | \"cart-4\" | \"cart-5\" | \"cart-check\" | \"cart-cross\" | \"cart-large\" | \"cart-large-2\" | \"cart-large-3\" | \"cart-large-4\" | \"cart-large-minimalistic\" | \"cart-plus\" | \"case\" | \"case-minimalistic\" | \"case-round\" | \"case-round-minimalistic\" | \"cash-out\" | \"cassette\" | \"cassette-2\" | \"cat\" | \"chair\" | \"chair-2\" | \"chandelier\" | \"chart\" | \"chart-2\" | \"chart-square\" | \"chat-dots\" | \"chat-line\" | \"chat-round\" | \"chat-round-call\" | \"chat-round-check\" | \"chat-round-dots\" | \"chat-round-like\" | \"chat-round-line\" | \"chat-round-money\" | \"chat-round-unread\" | \"chat-round-video\" | \"chat-square\" | \"chat-square-2\" | \"chat-square-arrow\" | \"chat-square-call\" | \"chat-square-check\" | \"chat-square-code\" | \"chat-square-like\" | \"chat-unread\" | \"check-circle\" | \"check-read\" | \"check-square\" | \"checklist\" | \"checklist-minimalistic\" | \"chef-hat\" | \"chef-hat-heart\" | \"chef-hat-minimalistic\" | \"circle-bottom-down\" | \"circle-bottom-up\" | \"circle-top-down\" | \"circle-top-up\" | \"city\" | \"clapperboard\" | \"clapperboard-edit\" | \"clapperboard-open\" | \"clapperboard-open-play\" | \"clapperboard-play\" | \"clapperboard-text\" | \"clipboard\" | \"clipboard-add\" | \"clipboard-check\" | \"clipboard-heart\" | \"clipboard-list\" | \"clipboard-remove\" | \"clipboard-text\" | \"clock-circle\" | \"clock-square\" | \"close-circle\" | \"close-square\" | \"closet\" | \"closet-2\" | \"cloud\" | \"cloud-bolt\" | \"cloud-bolt-minimalistic\" | \"cloud-check\" | \"cloud-cross\" | \"cloud-download\" | \"cloud-file\" | \"cloud-minus\" | \"cloud-plus\" | \"cloud-rain\" | \"cloud-snowfall\" | \"cloud-snowfall-minimalistic\" | \"cloud-storage\" | \"cloud-storm\" | \"cloud-sun\" | \"cloud-sun-2\" | \"cloud-upload\" | \"cloud-waterdrop\" | \"cloud-waterdrops\" | \"clouds\" | \"cloudy-moon\" | \"code\" | \"code-2\" | \"code-circle\" | \"code-file\" | \"code-scan\" | \"code-square\" | \"colour-tuning\" | \"command\" | \"compass\" | \"compass-big\" | \"compass-square\" | \"conditioner\" | \"conditioner-2\" | \"confetti\" | \"confetti-minimalistic\" | \"confounded-circle\" | \"confounded-square\" | \"copy\" | \"copyright\" | \"corkscrew\" | \"cosmetic\" | \"course-down\" | \"course-up\" | \"cpu\" | \"cpu-bolt\" | \"creative-commons\" | \"crop\" | \"crop-minimalistic\" | \"crown\" | \"crown-line\" | \"crown-minimalistic\" | \"crown-star\" | \"cup\" | \"cup-first\" | \"cup-hot\" | \"cup-music\" | \"cup-paper\" | \"cup-star\" | \"cursor\" | \"cursor-square\" | \"danger\" | \"danger-circle\" | \"danger-square\" | \"danger-triangle\" | \"database\" | \"delivery\" | \"devices\" | \"diagram-down\" | \"diagram-up\" | \"dialog\" | \"dialog-2\" | \"diploma\" | \"diploma-verified\" | \"diskette\" | \"dislike\" | \"display\" | \"dna\" | \"document\" | \"document-2\" | \"document-add\" | \"document-medicine\" | \"document-text\" | \"documents\" | \"documents-minimalistic\" | \"dollar\" | \"dollar-minimalistic\" | \"donut\" | \"donut-bitten\" | \"double-alt-arrow-down\" | \"double-alt-arrow-left\" | \"double-alt-arrow-right\" | \"double-alt-arrow-up\" | \"download\" | \"download-minimalistic\" | \"download-square\" | \"download-twice-square\" | \"dropper\" | \"dropper-2\" | \"dropper-3\" | \"dropper-minimalistic\" | \"dropper-minimalistic-2\" | \"dumbbell\" | \"dumbbell-large\" | \"dumbbell-large-minimalistic\" | \"dumbbell-small\" | \"dumbbells\" | \"dumbbells-2\" | \"earth\" | \"electric-refueling\" | \"emoji-funny-circle\" | \"emoji-funny-square\" | \"end-call\" | \"end-call-rounded\" | \"eraser\" | \"eraser-circle\" | \"eraser-square\" | \"euro\" | \"exit\" | \"explicit\" | \"export\" | \"expressionless-circle\" | \"expressionless-square\" | \"eye\" | \"eye-closed\" | \"eye-scan\" | \"face-scan-circle\" | \"face-scan-square\" | \"facemask-circle\" | \"facemask-square\" | \"feed\" | \"ferris-wheel\" | \"figma\" | \"figma-file\" | \"file\" | \"file-check\" | \"file-corrupted\" | \"file-download\" | \"file-favorite\" | \"file-left\" | \"file-remove\" | \"file-right\" | \"file-send\" | \"file-smile\" | \"file-text\" | \"filter\" | \"filters\" | \"fire\" | \"fire-minimalistic\" | \"fire-square\" | \"flag\" | \"flag-2\" | \"flame\" | \"flash-drive\" | \"flashlight\" | \"flashlight-on\" | \"flip-horizontal\" | \"flip-vertical\" | \"floor-lamp\" | \"floor-lamp-minimalistic\" | \"fog\" | \"folder\" | \"folder-2\" | \"folder-check\" | \"folder-cloud\" | \"folder-error\" | \"folder-favorite-bookmark\" | \"folder-favorite-star\" | \"folder-open\" | \"folder-path-connect\" | \"folder-security\" | \"folder-with-files\" | \"football\" | \"forbidden\" | \"forbidden-circle\" | \"forward\" | \"forward-2\" | \"forward-right\" | \"four-k\" | \"fridge\" | \"fuel\" | \"full-screen\" | \"full-screen-circle\" | \"full-screen-square\" | \"gallery\" | \"gallery-add\" | \"gallery-check\" | \"gallery-circle\" | \"gallery-download\" | \"gallery-edit\" | \"gallery-favorite\" | \"gallery-minimalistic\" | \"gallery-remove\" | \"gallery-round\" | \"gallery-send\" | \"gallery-wide\" | \"gameboy\" | \"gamepad\" | \"gamepad-charge\" | \"gamepad-minimalistic\" | \"gamepad-no-charge\" | \"gamepad-old\" | \"garage\" | \"gas-station\" | \"ghost\" | \"ghost-smile\" | \"gift\" | \"glasses\" | \"global\" | \"globe\" | \"golf\" | \"gps\" | \"graph\" | \"graph-down\" | \"graph-down-new\" | \"graph-new\" | \"graph-new-up\" | \"graph-up\" | \"hamburger-menu\" | \"hand-heart\" | \"hand-money\" | \"hand-pills\" | \"hand-shake\" | \"hand-stars\" | \"hanger\" | \"hanger-2\" | \"hashtag\" | \"hashtag-chat\" | \"hashtag-circle\" | \"hashtag-square\" | \"headphones-round\" | \"headphones-round-sound\" | \"headphones-square\" | \"headphones-square-sound\" | \"health\" | \"heart\" | \"heart-angle\" | \"heart-crack\" | \"heart-lock\" | \"heart-pulse\" | \"heart-pulse-2\" | \"heart-shine\" | \"heart-unlock\" | \"hearts\" | \"help\" | \"high-definition\" | \"high-quality\" | \"hiking\" | \"hiking-minimalistic\" | \"hiking-round\" | \"history\" | \"history-2\" | \"history-3\" | \"home\" | \"home-2\" | \"home-add\" | \"home-add-angle\" | \"home-angle\" | \"home-angle-2\" | \"home-smile\" | \"home-smile-angle\" | \"home-wi-fi\" | \"home-wi-fi-angle\" | \"hospital\" | \"hourglass\" | \"hourglass-line\" | \"house\" | \"i-phone\" | \"import\" | \"inbox\" | \"inbox-archive\" | \"inbox-in\" | \"inbox-line\" | \"inbox-out\" | \"inbox-unread\" | \"incognito\" | \"incoming-call\" | \"incoming-call-rounded\" | \"infinite\" | \"info-circle\" | \"info-square\" | \"jar-of-pills\" | \"jar-of-pills-2\" | \"key\" | \"key-minimalistic\" | \"key-minimalistic-2\" | \"key-minimalistic-square\" | \"key-minimalistic-square-2\" | \"key-minimalistic-square-3\" | \"key-square\" | \"key-square-2\" | \"keyboard\" | \"kick-scooter\" | \"ladle\" | \"lamp\" | \"laptop\" | \"laptop-2\" | \"laptop-3\" | \"laptop-minimalistic\" | \"layers\" | \"layers-minimalistic\" | \"leaf\" | \"letter\" | \"letter-opened\" | \"letter-unread\" | \"library\" | \"lightbulb\" | \"lightbulb-bolt\" | \"lightbulb-minimalistic\" | \"lightning\" | \"like\" | \"link\" | \"link-circle\" | \"link-minimalistic\" | \"link-minimalistic-2\" | \"link-round\" | \"link-round-angle\" | \"link-square\" | \"list\" | \"list-arrow-down\" | \"list-arrow-down-minimalistic\" | \"list-arrow-up\" | \"list-arrow-up-minimalistic\" | \"list-check\" | \"list-check-minimalistic\" | \"list-cross\" | \"list-cross-minimalistic\" | \"list-down\" | \"list-down-minimalistic\" | \"list-heart\" | \"list-heart-minimalistic\" | \"list-up\" | \"list-up-minimalistic\" | \"list-vertical\" | \"lock\" | \"lock-keyhole\" | \"lock-keyhole-minimalistic\" | \"lock-keyhole-minimalistic-unlocked\" | \"lock-keyhole-unlocked\" | \"lock-password\" | \"lock-password-unlocked\" | \"lock-unlocked\" | \"login\" | \"login-2\" | \"login-3\" | \"logout\" | \"logout-2\" | \"logout-3\" | \"magic-wand\" | \"magic-wand-2\" | \"magic-wand-3\" | \"magnet\" | \"magnet-wave\" | \"magnifier\" | \"magnifier-bug\" | \"magnifier-zoom-in\" | \"magnifier-zoom-out\" | \"mailbox\" | \"map\" | \"map-arrow-down\" | \"map-arrow-left\" | \"map-arrow-right\" | \"map-arrow-square\" | \"map-arrow-up\" | \"map-point\" | \"map-point-add\" | \"map-point-favorite\" | \"map-point-hospital\" | \"map-point-remove\" | \"map-point-rotate\" | \"map-point-school\" | \"map-point-search\" | \"map-point-wave\" | \"mask-happy\" | \"mask-sad\" | \"masks\" | \"maximize\" | \"maximize-square\" | \"maximize-square-2\" | \"maximize-square-3\" | \"maximize-square-minimalistic\" | \"medal-ribbon\" | \"medal-ribbon-star\" | \"medal-ribbons-star\" | \"medal-star\" | \"medal-star-circle\" | \"medal-star-square\" | \"medical-kit\" | \"meditation\" | \"meditation-round\" | \"men\" | \"mention-circle\" | \"mention-square\" | \"menu-dots\" | \"menu-dots-circle\" | \"menu-dots-square\" | \"microphone\" | \"microphone-2\" | \"microphone-3\" | \"microphone-large\" | \"minimalistic-magnifier\" | \"minimalistic-magnifier-bug\" | \"minimalistic-magnifier-zoom-in\" | \"minimalistic-magnifier-zoom-out\" | \"minimize\" | \"minimize-square\" | \"minimize-square-2\" | \"minimize-square-3\" | \"minimize-square-minimalistic\" | \"minus-circle\" | \"minus-square\" | \"mirror\" | \"mirror-2\" | \"mirror-left\" | \"mirror-right\" | \"money-bag\" | \"money-roll\" | \"monitor\" | \"monitor-camera\" | \"monitor-smartphone\" | \"moon\" | \"moon-fog\" | \"moon-sleep\" | \"moon-stars\" | \"mouse\" | \"mouse-circle\" | \"mouse-minimalistic\" | \"move-to-folder\" | \"mug\" | \"multiple-forward-left\" | \"multiple-forward-right\" | \"music-library\" | \"music-library-2\" | \"music-note\" | \"music-note-2\" | \"music-note-3\" | \"music-note-4\" | \"music-note-slider\" | \"music-note-slider-2\" | \"music-notes\" | \"muted\" | \"notebook\" | \"notebook-2\" | \"notebook-bookmark\" | \"notebook-minimalistic\" | \"notebook-square\" | \"notes\" | \"notes-minimalistic\" | \"notification-lines-remove\" | \"notification-remove\" | \"notification-unread\" | \"notification-unread-lines\" | \"object-scan\" | \"outgoing-call\" | \"outgoing-call-rounded\" | \"oven-mitts\" | \"oven-mitts-minimalistic\" | \"paint-roller\" | \"palette\" | \"palette-2\" | \"palette-round\" | \"panorama\" | \"paper-bin\" | \"paperclip\" | \"paperclip-2\" | \"paperclip-rounded\" | \"paperclip-rounded-2\" | \"paragraph-spacing\" | \"passport\" | \"passport-minimalistic\" | \"password\" | \"password-minimalistic\" | \"password-minimalistic-input\" | \"pause\" | \"pause-circle\" | \"paw\" | \"pen\" | \"pen-2\" | \"pen-new-round\" | \"pen-new-square\" | \"people-nearby\" | \"perfume\" | \"phone\" | \"phone-calling\" | \"phone-calling-rounded\" | \"phone-rounded\" | \"pie-chart\" | \"pie-chart-2\" | \"pie-chart-3\" | \"pill\" | \"pills\" | \"pills-2\" | \"pills-3\" | \"pin\" | \"pin-circle\" | \"pin-list\" | \"pip\" | \"pip-2\" | \"pipette\" | \"plane\" | \"plane-2\" | \"plane-3\" | \"planet\" | \"planet-2\" | \"planet-3\" | \"planet-4\" | \"plate\" | \"play\" | \"play-circle\" | \"play-stream\" | \"playback-speed\" | \"playlist\" | \"playlist-2\" | \"playlist-minimalistic\" | \"playlist-minimalistic-2\" | \"playlist-minimalistic-3\" | \"plug-circle\" | \"plus-minus\" | \"podcast\" | \"point-on-map\" | \"point-on-map-perspective\" | \"posts-carousel-horizontal\" | \"posts-carousel-vertical\" | \"power\" | \"presentation-graph\" | \"printer\" | \"printer-2\" | \"printer-minimalistic\" | \"programming\" | \"projector\" | \"pulse\" | \"pulse-2\" | \"qr-code\" | \"question-circle\" | \"question-square\" | \"quit-full-screen\" | \"quit-full-screen-circle\" | \"quit-full-screen-square\" | \"quit-pip\" | \"radar\" | \"radar-2\" | \"radial-blur\" | \"radio\" | \"radio-minimalistic\" | \"ranking\" | \"receive-square\" | \"receive-twice-square\" | \"record\" | \"record-audio-circle\" | \"record-circle\" | \"record-minimalistic\" | \"record-square\" | \"reel\" | \"reel-2\" | \"refresh\" | \"refresh-circle\" | \"refresh-square\" | \"remote-controller\" | \"remote-controller-2\" | \"remote-controller-minimalistic\" | \"remove-folder\" | \"reorder\" | \"reorder-2\" | \"repeat\" | \"repeat-one\" | \"repeat-one-minimalistic\" | \"reply\" | \"reply-2\" | \"restart\" | \"restart-circle\" | \"restart-square\" | \"revote\" | \"rewind-10-seconds-back\" | \"rewind-10-seconds-forward\" | \"rewind-15-seconds-back\" | \"rewind-15-seconds-forward\" | \"rewind-5-seconds-back\" | \"rewind-5-seconds-forward\" | \"rewind-back\" | \"rewind-back-circle\" | \"rewind-forward\" | \"rewind-forward-circle\" | \"rocket\" | \"rocket-2\" | \"rolling-pin\" | \"round-alt-arrow-down\" | \"round-alt-arrow-left\" | \"round-alt-arrow-right\" | \"round-alt-arrow-up\" | \"round-arrow-down\" | \"round-arrow-left\" | \"round-arrow-left-down\" | \"round-arrow-left-up\" | \"round-arrow-right\" | \"round-arrow-right-down\" | \"round-arrow-right-up\" | \"round-arrow-up\" | \"round-double-alt-arrow-down\" | \"round-double-alt-arrow-left\" | \"round-double-alt-arrow-right\" | \"round-double-alt-arrow-up\" | \"round-graph\" | \"round-sort-horizontal\" | \"round-sort-vertical\" | \"round-transfer-diagonal\" | \"round-transfer-horizontal\" | \"round-transfer-vertical\" | \"rounded-magnifier\" | \"rounded-magnifier-bug\" | \"rounded-magnifier-zoom-in\" | \"rounded-magnifier-zoom-out\" | \"routing\" | \"routing-2\" | \"routing-3\" | \"ruble\" | \"rugby\" | \"ruler\" | \"ruler-angular\" | \"ruler-cross-pen\" | \"ruler-pen\" | \"running\" | \"running-2\" | \"running-round\" | \"sad-circle\" | \"sad-square\" | \"safe-2\" | \"safe-circle\" | \"safe-square\" | \"sale\" | \"sale-square\" | \"satellite\" | \"scale\" | \"scaling\" | \"scanner\" | \"scanner-2\" | \"scissors\" | \"scissors-square\" | \"scooter\" | \"screen-share\" | \"screencast\" | \"screencast-2\" | \"sd-card\" | \"send-square\" | \"send-twice-square\" | \"server\" | \"server-2\" | \"server-minimalistic\" | \"server-path\" | \"server-square\" | \"server-square-cloud\" | \"server-square-update\" | \"settings\" | \"settings-minimalistic\" | \"share\" | \"share-circle\" | \"shield\" | \"shield-check\" | \"shield-cross\" | \"shield-keyhole\" | \"shield-keyhole-minimalistic\" | \"shield-minimalistic\" | \"shield-minus\" | \"shield-network\" | \"shield-plus\" | \"shield-star\" | \"shield-up\" | \"shield-user\" | \"shield-warning\" | \"shock-absorber\" | \"shop\" | \"shop-2\" | \"shop-minimalistic\" | \"shuffle\" | \"sidebar\" | \"sidebar-code\" | \"sidebar-minimalistic\" | \"signpost\" | \"signpost-2\" | \"sim-card\" | \"sim-card-minimalistic\" | \"sim-cards\" | \"siren\" | \"siren-rounded\" | \"skateboard\" | \"skateboarding\" | \"skateboarding-round\" | \"skip-next\" | \"skip-previous\" | \"skirt\" | \"slash-circle\" | \"slash-square\" | \"sledgehammer\" | \"sleeping\" | \"sleeping-circle\" | \"sleeping-square\" | \"slider-horizontal\" | \"slider-minimalistic-horizontal\" | \"slider-vertical\" | \"slider-vertical-minimalistic\" | \"smart-home\" | \"smart-home-angle\" | \"smart-speaker\" | \"smart-speaker-2\" | \"smart-speaker-minimalistic\" | \"smart-vacuum-cleaner\" | \"smart-vacuum-cleaner-2\" | \"smartphone\" | \"smartphone-2\" | \"smartphone-rotate-2\" | \"smartphone-rotate-angle\" | \"smartphone-rotate-orientation\" | \"smartphone-update\" | \"smartphone-vibration\" | \"smile-circle\" | \"smile-square\" | \"snowflake\" | \"socket\" | \"sofa\" | \"sofa-2\" | \"sofa-3\" | \"sort\" | \"sort-alphabetically\" | \"sort-by-time\" | \"sort-from-bottom-to-top\" | \"sort-from-top-to-bottom\" | \"sort-horizontal\" | \"sort-vertical\" | \"soundwave\" | \"soundwave-circle\" | \"soundwave-square\" | \"speaker\" | \"speaker-minimalistic\" | \"special-effects\" | \"speedometer-low\" | \"speedometer-max\" | \"speedometer-middle\" | \"square-academic-cap\" | \"square-academic-cap-2\" | \"square-alt-arrow-down\" | \"square-alt-arrow-left\" | \"square-alt-arrow-right\" | \"square-alt-arrow-up\" | \"square-arrow-down\" | \"square-arrow-left\" | \"square-arrow-left-down\" | \"square-arrow-left-up\" | \"square-arrow-right\" | \"square-arrow-right-down\" | \"square-arrow-right-up\" | \"square-arrow-up\" | \"square-bottom-down\" | \"square-bottom-up\" | \"square-double-alt-arrow-down\" | \"square-double-alt-arrow-left\" | \"square-double-alt-arrow-right\" | \"square-double-alt-arrow-up\" | \"square-forward\" | \"square-share-line\" | \"square-sort-horizontal\" | \"square-sort-vertical\" | \"square-top-down\" | \"square-top-up\" | \"square-transfer-horizontal\" | \"square-transfer-vertical\" | \"ssd-round\" | \"ssd-square\" | \"star\" | \"star-2\" | \"star-angle\" | \"star-circle\" | \"star-fall\" | \"star-fall-2\" | \"star-fall-minimalistic\" | \"star-fall-minimalistic-2\" | \"star-rainbow\" | \"star-ring\" | \"star-rings\" | \"star-shine\" | \"stars\" | \"stars-2\" | \"stars-line\" | \"stars-minimalistic\" | \"station\" | \"station-minimalistic\" | \"stethoscope\" | \"sticker-circle\" | \"sticker-smile-circle\" | \"sticker-smile-circle-2\" | \"sticker-smile-square\" | \"sticker-square\" | \"stop\" | \"stop-circle\" | \"stopwatch\" | \"stopwatch-pause\" | \"stopwatch-play\" | \"stream\" | \"streets\" | \"streets-map-point\" | \"streets-navigation\" | \"stretching\" | \"stretching-round\" | \"structure\" | \"subtitles\" | \"suitcase\" | \"suitcase-lines\" | \"suitcase-tag\" | \"sun\" | \"sun-2\" | \"sun-fog\" | \"sunrise\" | \"sunset\" | \"suspension\" | \"suspension-bolt\" | \"suspension-cross\" | \"swimming\" | \"syringe\" | \"t-shirt\" | \"tablet\" | \"tag\" | \"tag-horizontal\" | \"tag-price\" | \"target\" | \"tea-cup\" | \"telescope\" | \"temperature\" | \"tennis\" | \"tennis-2\" | \"test-tube\" | \"test-tube-minimalistic\" | \"text-bold\" | \"text-bold-circle\" | \"text-bold-square\" | \"text-circle\" | \"text-cross\" | \"text-cross-circle\" | \"text-cross-square\" | \"text-field\" | \"text-field-focus\" | \"text-format\" | \"text-italic\" | \"text-italic-circle\" | \"text-italic-square\" | \"text-selection\" | \"text-square\" | \"text-square-2\" | \"text-underline\" | \"text-underline-circle\" | \"text-underline-cross\" | \"thermometer\" | \"three-squares\" | \"ticket\" | \"ticket-sale\" | \"ticket-star\" | \"to-pip\" | \"tornado\" | \"tornado-small\" | \"traffic\" | \"traffic-economy\" | \"tram\" | \"transfer-horizontal\" | \"transfer-vertical\" | \"translation\" | \"translation-2\" | \"transmission\" | \"transmission-circle\" | \"transmission-square\" | \"trash-bin-2\" | \"trash-bin-minimalistic\" | \"trash-bin-minimalistic-2\" | \"trash-bin-trash\" | \"treadmill\" | \"treadmill-round\" | \"tuning\" | \"tuning-2\" | \"tuning-3\" | \"tuning-4\" | \"tuning-square\" | \"tuning-square-2\" | \"turntable\" | \"turntable-minimalistic\" | \"turntable-music-note\" | \"tv\" | \"ufo\" | \"ufo-2\" | \"ufo-3\" | \"umbrella\" | \"undo-left\" | \"undo-left-round\" | \"undo-left-round-square\" | \"undo-left-square\" | \"undo-right\" | \"undo-right-round\" | \"undo-right-round-square\" | \"undo-right-square\" | \"unlink\" | \"unlink-minimalistic\" | \"unread\" | \"upload\" | \"upload-minimalistic\" | \"upload-square\" | \"upload-track\" | \"upload-track-2\" | \"upload-twice-square\" | \"usb\" | \"usb-circle\" | \"usb-square\" | \"user\" | \"user-block\" | \"user-block-rounded\" | \"user-check\" | \"user-check-rounded\" | \"user-circle\" | \"user-cross\" | \"user-cross-rounded\" | \"user-hand-up\" | \"user-hands\" | \"user-heart\" | \"user-heart-rounded\" | \"user-id\" | \"user-minus\" | \"user-minus-rounded\" | \"user-plus\" | \"user-plus-rounded\" | \"user-rounded\" | \"user-speak\" | \"user-speak-rounded\" | \"users-group-rounded\" | \"users-group-two-rounded\" | \"vanity\" | \"verified-check\" | \"video-frame\" | \"video-frame-2\" | \"video-frame-cut\" | \"video-frame-cut-2\" | \"video-frame-play-horizontal\" | \"video-frame-play-vertical\" | \"video-frame-replace\" | \"video-library\" | \"videocamera\" | \"videocamera-add\" | \"videocamera-record\" | \"vinyl\" | \"vinyl-record\" | \"virus\" | \"volleyball\" | \"volleyball-2\" | \"volume\" | \"volume-cross\" | \"volume-knob\" | \"volume-loud\" | \"volume-small\" | \"walking\" | \"walking-round\" | \"wallet\" | \"wallet-2\" | \"wallet-money\" | \"wallpaper\" | \"washing-machine\" | \"washing-machine-minimalistic\" | \"watch-round\" | \"watch-square\" | \"watch-square-minimalistic\" | \"watch-square-minimalistic-charge\" | \"water\" | \"water-sun\" | \"waterdrop\" | \"waterdrops\" | \"wheel\" | \"wheel-angle\" | \"whisk\" | \"wi-fi-router\" | \"wi-fi-router-minimalistic\" | \"wi-fi-router-round\" | \"widget\" | \"widget-2\" | \"widget-3\" | \"widget-4\" | \"widget-5\" | \"widget-6\" | \"widget-add\" | \"win-rar\" | \"wind\" | \"window-frame\" | \"wineglass\" | \"wineglass-triangle\" | \"wireless-charge\" | \"women\" | \"xxx\" | \"zip-file\"",
+              "signature": "type SolarLinearIconName = \"route\" | \"document\" | \"accessibility\" | \"add-circle\" | \"add-folder\" | \"add-square\" | \"adhesive-plaster\" | \"adhesive-plaster-2\" | \"airbuds\" | \"airbuds-case\" | \"airbuds-case-charge\" | \"airbuds-case-minimalistic\" | \"airbuds-case-open\" | \"airbuds-charge\" | \"airbuds-check\" | \"airbuds-left\" | \"airbuds-remove\" | \"airbuds-right\" | \"alarm\" | \"alarm-add\" | \"alarm-pause\" | \"alarm-play\" | \"alarm-remove\" | \"alarm-sleep\" | \"alarm-turn-off\" | \"album\" | \"align-bottom\" | \"align-horizontal-center\" | \"align-horizontal-spacing\" | \"align-left\" | \"align-right\" | \"align-top\" | \"align-vertical-center\" | \"align-vertical-spacing\" | \"alt-arrow-down\" | \"alt-arrow-left\" | \"alt-arrow-right\" | \"alt-arrow-up\" | \"archive\" | \"archive-check\" | \"archive-down\" | \"archive-down-minimalistic\" | \"archive-minimalistic\" | \"archive-up\" | \"archive-up-minimalistic\" | \"armchair\" | \"armchair-2\" | \"arrow-down\" | \"arrow-left\" | \"arrow-left-down\" | \"arrow-left-up\" | \"arrow-right\" | \"arrow-right-down\" | \"arrow-right-up\" | \"arrow-to-down-left\" | \"arrow-to-down-right\" | \"arrow-to-top-left\" | \"arrow-to-top-right\" | \"arrow-up\" | \"asteroid\" | \"atom\" | \"augmented-reality\" | \"backpack\" | \"backspace\" | \"bacteria\" | \"bag\" | \"bag-2\" | \"bag-3\" | \"bag-4\" | \"bag-5\" | \"bag-check\" | \"bag-cross\" | \"bag-heart\" | \"bag-music\" | \"bag-music-2\" | \"bag-smile\" | \"balloon\" | \"balls\" | \"banknote\" | \"banknote-2\" | \"bar-chair\" | \"basketball\" | \"bath\" | \"battery-charge\" | \"battery-charge-minimalistic\" | \"battery-full\" | \"battery-full-minimalistic\" | \"battery-half\" | \"battery-half-minimalistic\" | \"battery-low\" | \"battery-low-minimalistic\" | \"bed\" | \"bedside-table\" | \"bedside-table-2\" | \"bedside-table-3\" | \"bedside-table-4\" | \"bell\" | \"bell-off\" | \"bell-ring\" | \"benzene-ring\" | \"bicycling\" | \"bicycling-round\" | \"bill\" | \"bill-2\" | \"bill-check\" | \"bill-cross\" | \"bill-list\" | \"black-hole\" | \"black-hole-2\" | \"black-hole-3\" | \"bluetooth\" | \"bluetooth-circle\" | \"bluetooth-square\" | \"bluetooth-wave\" | \"body\" | \"body-shape\" | \"body-shape-minimalistic\" | \"bolt\" | \"bolt-circle\" | \"bomb\" | \"bomb-emoji\" | \"bomb-minimalistic\" | \"bone\" | \"bone-crack\" | \"bone-fracture\" | \"bones\" | \"bonfire\" | \"book\" | \"book-2\" | \"book-bookmark\" | \"book-bookmark-minimalistic\" | \"book-minimalistic\" | \"bookmark\" | \"bookmark-circle\" | \"bookmark-opened\" | \"bookmark-square\" | \"bookmark-square-minimalistic\" | \"boombox\" | \"bottle\" | \"bowling\" | \"box\" | \"box-minimalistic\" | \"branching-paths-down\" | \"branching-paths-up\" | \"broom\" | \"bug\" | \"bug-minimalistic\" | \"buildings\" | \"buildings-2\" | \"buildings-3\" | \"bus\" | \"calculator\" | \"calculator-minimalistic\" | \"calendar\" | \"calendar-add\" | \"calendar-date\" | \"calendar-mark\" | \"calendar-minimalistic\" | \"calendar-search\" | \"call-cancel\" | \"call-cancel-rounded\" | \"call-chat\" | \"call-chat-rounded\" | \"call-dropped\" | \"call-dropped-rounded\" | \"call-medicine\" | \"call-medicine-rounded\" | \"camera\" | \"camera-add\" | \"camera-minimalistic\" | \"camera-rotate\" | \"camera-square\" | \"car-battery\" | \"card\" | \"card-2\" | \"card-receive\" | \"card-search\" | \"card-send\" | \"card-transfer\" | \"cardholder\" | \"cart\" | \"cart-2\" | \"cart-3\" | \"cart-4\" | \"cart-5\" | \"cart-check\" | \"cart-cross\" | \"cart-large\" | \"cart-large-2\" | \"cart-large-3\" | \"cart-large-4\" | \"cart-large-minimalistic\" | \"cart-plus\" | \"case\" | \"case-minimalistic\" | \"case-round\" | \"case-round-minimalistic\" | \"cash-out\" | \"cassette\" | \"cassette-2\" | \"cat\" | \"chair\" | \"chair-2\" | \"chandelier\" | \"chart\" | \"chart-2\" | \"chart-square\" | \"chat-dots\" | \"chat-line\" | \"chat-round\" | \"chat-round-call\" | \"chat-round-check\" | \"chat-round-dots\" | \"chat-round-like\" | \"chat-round-line\" | \"chat-round-money\" | \"chat-round-unread\" | \"chat-round-video\" | \"chat-square\" | \"chat-square-2\" | \"chat-square-arrow\" | \"chat-square-call\" | \"chat-square-check\" | \"chat-square-code\" | \"chat-square-like\" | \"chat-unread\" | \"check-circle\" | \"check-read\" | \"check-square\" | \"checklist\" | \"checklist-minimalistic\" | \"chef-hat\" | \"chef-hat-heart\" | \"chef-hat-minimalistic\" | \"circle-bottom-down\" | \"circle-bottom-up\" | \"circle-top-down\" | \"circle-top-up\" | \"city\" | \"clapperboard\" | \"clapperboard-edit\" | \"clapperboard-open\" | \"clapperboard-open-play\" | \"clapperboard-play\" | \"clapperboard-text\" | \"clipboard\" | \"clipboard-add\" | \"clipboard-check\" | \"clipboard-heart\" | \"clipboard-list\" | \"clipboard-remove\" | \"clipboard-text\" | \"clock-circle\" | \"clock-square\" | \"close-circle\" | \"close-square\" | \"closet\" | \"closet-2\" | \"cloud\" | \"cloud-bolt\" | \"cloud-bolt-minimalistic\" | \"cloud-check\" | \"cloud-cross\" | \"cloud-download\" | \"cloud-file\" | \"cloud-minus\" | \"cloud-plus\" | \"cloud-rain\" | \"cloud-snowfall\" | \"cloud-snowfall-minimalistic\" | \"cloud-storage\" | \"cloud-storm\" | \"cloud-sun\" | \"cloud-sun-2\" | \"cloud-upload\" | \"cloud-waterdrop\" | \"cloud-waterdrops\" | \"clouds\" | \"cloudy-moon\" | \"code\" | \"code-2\" | \"code-circle\" | \"code-file\" | \"code-scan\" | \"code-square\" | \"colour-tuning\" | \"command\" | \"compass\" | \"compass-big\" | \"compass-square\" | \"conditioner\" | \"conditioner-2\" | \"confetti\" | \"confetti-minimalistic\" | \"confounded-circle\" | \"confounded-square\" | \"copy\" | \"copyright\" | \"corkscrew\" | \"cosmetic\" | \"course-down\" | \"course-up\" | \"cpu\" | \"cpu-bolt\" | \"creative-commons\" | \"crop\" | \"crop-minimalistic\" | \"crown\" | \"crown-line\" | \"crown-minimalistic\" | \"crown-star\" | \"cup\" | \"cup-first\" | \"cup-hot\" | \"cup-music\" | \"cup-paper\" | \"cup-star\" | \"cursor\" | \"cursor-square\" | \"danger\" | \"danger-circle\" | \"danger-square\" | \"danger-triangle\" | \"database\" | \"delivery\" | \"devices\" | \"diagram-down\" | \"diagram-up\" | \"dialog\" | \"dialog-2\" | \"diploma\" | \"diploma-verified\" | \"diskette\" | \"dislike\" | \"display\" | \"dna\" | \"document-2\" | \"document-add\" | \"document-medicine\" | \"document-text\" | \"documents\" | \"documents-minimalistic\" | \"dollar\" | \"dollar-minimalistic\" | \"donut\" | \"donut-bitten\" | \"double-alt-arrow-down\" | \"double-alt-arrow-left\" | \"double-alt-arrow-right\" | \"double-alt-arrow-up\" | \"download\" | \"download-minimalistic\" | \"download-square\" | \"download-twice-square\" | \"dropper\" | \"dropper-2\" | \"dropper-3\" | \"dropper-minimalistic\" | \"dropper-minimalistic-2\" | \"dumbbell\" | \"dumbbell-large\" | \"dumbbell-large-minimalistic\" | \"dumbbell-small\" | \"dumbbells\" | \"dumbbells-2\" | \"earth\" | \"electric-refueling\" | \"emoji-funny-circle\" | \"emoji-funny-square\" | \"end-call\" | \"end-call-rounded\" | \"eraser\" | \"eraser-circle\" | \"eraser-square\" | \"euro\" | \"exit\" | \"explicit\" | \"export\" | \"expressionless-circle\" | \"expressionless-square\" | \"eye\" | \"eye-closed\" | \"eye-scan\" | \"face-scan-circle\" | \"face-scan-square\" | \"facemask-circle\" | \"facemask-square\" | \"feed\" | \"ferris-wheel\" | \"figma\" | \"figma-file\" | \"file\" | \"file-check\" | \"file-corrupted\" | \"file-download\" | \"file-favorite\" | \"file-left\" | \"file-remove\" | \"file-right\" | \"file-send\" | \"file-smile\" | \"file-text\" | \"filter\" | \"filters\" | \"fire\" | \"fire-minimalistic\" | \"fire-square\" | \"flag\" | \"flag-2\" | \"flame\" | \"flash-drive\" | \"flashlight\" | \"flashlight-on\" | \"flip-horizontal\" | \"flip-vertical\" | \"floor-lamp\" | \"floor-lamp-minimalistic\" | \"fog\" | \"folder\" | \"folder-2\" | \"folder-check\" | \"folder-cloud\" | \"folder-error\" | \"folder-favorite-bookmark\" | \"folder-favorite-star\" | \"folder-open\" | \"folder-path-connect\" | \"folder-security\" | \"folder-with-files\" | \"football\" | \"forbidden\" | \"forbidden-circle\" | \"forward\" | \"forward-2\" | \"forward-right\" | \"four-k\" | \"fridge\" | \"fuel\" | \"full-screen\" | \"full-screen-circle\" | \"full-screen-square\" | \"gallery\" | \"gallery-add\" | \"gallery-check\" | \"gallery-circle\" | \"gallery-download\" | \"gallery-edit\" | \"gallery-favorite\" | \"gallery-minimalistic\" | \"gallery-remove\" | \"gallery-round\" | \"gallery-send\" | \"gallery-wide\" | \"gameboy\" | \"gamepad\" | \"gamepad-charge\" | \"gamepad-minimalistic\" | \"gamepad-no-charge\" | \"gamepad-old\" | \"garage\" | \"gas-station\" | \"ghost\" | \"ghost-smile\" | \"gift\" | \"glasses\" | \"global\" | \"globe\" | \"golf\" | \"gps\" | \"graph\" | \"graph-down\" | \"graph-down-new\" | \"graph-new\" | \"graph-new-up\" | \"graph-up\" | \"hamburger-menu\" | \"hand-heart\" | \"hand-money\" | \"hand-pills\" | \"hand-shake\" | \"hand-stars\" | \"hanger\" | \"hanger-2\" | \"hashtag\" | \"hashtag-chat\" | \"hashtag-circle\" | \"hashtag-square\" | \"headphones-round\" | \"headphones-round-sound\" | \"headphones-square\" | \"headphones-square-sound\" | \"health\" | \"heart\" | \"heart-angle\" | \"heart-crack\" | \"heart-lock\" | \"heart-pulse\" | \"heart-pulse-2\" | \"heart-shine\" | \"heart-unlock\" | \"hearts\" | \"help\" | \"high-definition\" | \"high-quality\" | \"hiking\" | \"hiking-minimalistic\" | \"hiking-round\" | \"history\" | \"history-2\" | \"history-3\" | \"home\" | \"home-2\" | \"home-add\" | \"home-add-angle\" | \"home-angle\" | \"home-angle-2\" | \"home-smile\" | \"home-smile-angle\" | \"home-wi-fi\" | \"home-wi-fi-angle\" | \"hospital\" | \"hourglass\" | \"hourglass-line\" | \"house\" | \"i-phone\" | \"import\" | \"inbox\" | \"inbox-archive\" | \"inbox-in\" | \"inbox-line\" | \"inbox-out\" | \"inbox-unread\" | \"incognito\" | \"incoming-call\" | \"incoming-call-rounded\" | \"infinite\" | \"info-circle\" | \"info-square\" | \"jar-of-pills\" | \"jar-of-pills-2\" | \"key\" | \"key-minimalistic\" | \"key-minimalistic-2\" | \"key-minimalistic-square\" | \"key-minimalistic-square-2\" | \"key-minimalistic-square-3\" | \"key-square\" | \"key-square-2\" | \"keyboard\" | \"kick-scooter\" | \"ladle\" | \"lamp\" | \"laptop\" | \"laptop-2\" | \"laptop-3\" | \"laptop-minimalistic\" | \"layers\" | \"layers-minimalistic\" | \"leaf\" | \"letter\" | \"letter-opened\" | \"letter-unread\" | \"library\" | \"lightbulb\" | \"lightbulb-bolt\" | \"lightbulb-minimalistic\" | \"lightning\" | \"like\" | \"link\" | \"link-circle\" | \"link-minimalistic\" | \"link-minimalistic-2\" | \"link-round\" | \"link-round-angle\" | \"link-square\" | \"list\" | \"list-arrow-down\" | \"list-arrow-down-minimalistic\" | \"list-arrow-up\" | \"list-arrow-up-minimalistic\" | \"list-check\" | \"list-check-minimalistic\" | \"list-cross\" | \"list-cross-minimalistic\" | \"list-down\" | \"list-down-minimalistic\" | \"list-heart\" | \"list-heart-minimalistic\" | \"list-up\" | \"list-up-minimalistic\" | \"list-vertical\" | \"lock\" | \"lock-keyhole\" | \"lock-keyhole-minimalistic\" | \"lock-keyhole-minimalistic-unlocked\" | \"lock-keyhole-unlocked\" | \"lock-password\" | \"lock-password-unlocked\" | \"lock-unlocked\" | \"login\" | \"login-2\" | \"login-3\" | \"logout\" | \"logout-2\" | \"logout-3\" | \"magic-wand\" | \"magic-wand-2\" | \"magic-wand-3\" | \"magnet\" | \"magnet-wave\" | \"magnifier\" | \"magnifier-bug\" | \"magnifier-zoom-in\" | \"magnifier-zoom-out\" | \"mailbox\" | \"map\" | \"map-arrow-down\" | \"map-arrow-left\" | \"map-arrow-right\" | \"map-arrow-square\" | \"map-arrow-up\" | \"map-point\" | \"map-point-add\" | \"map-point-favorite\" | \"map-point-hospital\" | \"map-point-remove\" | \"map-point-rotate\" | \"map-point-school\" | \"map-point-search\" | \"map-point-wave\" | \"mask-happy\" | \"mask-sad\" | \"masks\" | \"maximize\" | \"maximize-square\" | \"maximize-square-2\" | \"maximize-square-3\" | \"maximize-square-minimalistic\" | \"medal-ribbon\" | \"medal-ribbon-star\" | \"medal-ribbons-star\" | \"medal-star\" | \"medal-star-circle\" | \"medal-star-square\" | \"medical-kit\" | \"meditation\" | \"meditation-round\" | \"men\" | \"mention-circle\" | \"mention-square\" | \"menu-dots\" | \"menu-dots-circle\" | \"menu-dots-square\" | \"microphone\" | \"microphone-2\" | \"microphone-3\" | \"microphone-large\" | \"minimalistic-magnifier\" | \"minimalistic-magnifier-bug\" | \"minimalistic-magnifier-zoom-in\" | \"minimalistic-magnifier-zoom-out\" | \"minimize\" | \"minimize-square\" | \"minimize-square-2\" | \"minimize-square-3\" | \"minimize-square-minimalistic\" | \"minus-circle\" | \"minus-square\" | \"mirror\" | \"mirror-2\" | \"mirror-left\" | \"mirror-right\" | \"money-bag\" | \"money-roll\" | \"monitor\" | \"monitor-camera\" | \"monitor-smartphone\" | \"moon\" | \"moon-fog\" | \"moon-sleep\" | \"moon-stars\" | \"mouse\" | \"mouse-circle\" | \"mouse-minimalistic\" | \"move-to-folder\" | \"mug\" | \"multiple-forward-left\" | \"multiple-forward-right\" | \"music-library\" | \"music-library-2\" | \"music-note\" | \"music-note-2\" | \"music-note-3\" | \"music-note-4\" | \"music-note-slider\" | \"music-note-slider-2\" | \"music-notes\" | \"muted\" | \"notebook\" | \"notebook-2\" | \"notebook-bookmark\" | \"notebook-minimalistic\" | \"notebook-square\" | \"notes\" | \"notes-minimalistic\" | \"notification-lines-remove\" | \"notification-remove\" | \"notification-unread\" | \"notification-unread-lines\" | \"object-scan\" | \"outgoing-call\" | \"outgoing-call-rounded\" | \"oven-mitts\" | \"oven-mitts-minimalistic\" | \"paint-roller\" | \"palette\" | \"palette-2\" | \"palette-round\" | \"panorama\" | \"paper-bin\" | \"paperclip\" | \"paperclip-2\" | \"paperclip-rounded\" | \"paperclip-rounded-2\" | \"paragraph-spacing\" | \"passport\" | \"passport-minimalistic\" | \"password\" | \"password-minimalistic\" | \"password-minimalistic-input\" | \"pause\" | \"pause-circle\" | \"paw\" | \"pen\" | \"pen-2\" | \"pen-new-round\" | \"pen-new-square\" | \"people-nearby\" | \"perfume\" | \"phone\" | \"phone-calling\" | \"phone-calling-rounded\" | \"phone-rounded\" | \"pie-chart\" | \"pie-chart-2\" | \"pie-chart-3\" | \"pill\" | \"pills\" | \"pills-2\" | \"pills-3\" | \"pin\" | \"pin-circle\" | \"pin-list\" | \"pip\" | \"pip-2\" | \"pipette\" | \"plane\" | \"plane-2\" | \"plane-3\" | \"planet\" | \"planet-2\" | \"planet-3\" | \"planet-4\" | \"plate\" | \"play\" | \"play-circle\" | \"play-stream\" | \"playback-speed\" | \"playlist\" | \"playlist-2\" | \"playlist-minimalistic\" | \"playlist-minimalistic-2\" | \"playlist-minimalistic-3\" | \"plug-circle\" | \"plus-minus\" | \"podcast\" | \"point-on-map\" | \"point-on-map-perspective\" | \"posts-carousel-horizontal\" | \"posts-carousel-vertical\" | \"power\" | \"presentation-graph\" | \"printer\" | \"printer-2\" | \"printer-minimalistic\" | \"programming\" | \"projector\" | \"pulse\" | \"pulse-2\" | \"qr-code\" | \"question-circle\" | \"question-square\" | \"quit-full-screen\" | \"quit-full-screen-circle\" | \"quit-full-screen-square\" | \"quit-pip\" | \"radar\" | \"radar-2\" | \"radial-blur\" | \"radio\" | \"radio-minimalistic\" | \"ranking\" | \"receive-square\" | \"receive-twice-square\" | \"record\" | \"record-audio-circle\" | \"record-circle\" | \"record-minimalistic\" | \"record-square\" | \"reel\" | \"reel-2\" | \"refresh\" | \"refresh-circle\" | \"refresh-square\" | \"remote-controller\" | \"remote-controller-2\" | \"remote-controller-minimalistic\" | \"remove-folder\" | \"reorder\" | \"reorder-2\" | \"repeat\" | \"repeat-one\" | \"repeat-one-minimalistic\" | \"reply\" | \"reply-2\" | \"restart\" | \"restart-circle\" | \"restart-square\" | \"revote\" | \"rewind-10-seconds-back\" | \"rewind-10-seconds-forward\" | \"rewind-15-seconds-back\" | \"rewind-15-seconds-forward\" | \"rewind-5-seconds-back\" | \"rewind-5-seconds-forward\" | \"rewind-back\" | \"rewind-back-circle\" | \"rewind-forward\" | \"rewind-forward-circle\" | \"rocket\" | \"rocket-2\" | \"rolling-pin\" | \"round-alt-arrow-down\" | \"round-alt-arrow-left\" | \"round-alt-arrow-right\" | \"round-alt-arrow-up\" | \"round-arrow-down\" | \"round-arrow-left\" | \"round-arrow-left-down\" | \"round-arrow-left-up\" | \"round-arrow-right\" | \"round-arrow-right-down\" | \"round-arrow-right-up\" | \"round-arrow-up\" | \"round-double-alt-arrow-down\" | \"round-double-alt-arrow-left\" | \"round-double-alt-arrow-right\" | \"round-double-alt-arrow-up\" | \"round-graph\" | \"round-sort-horizontal\" | \"round-sort-vertical\" | \"round-transfer-diagonal\" | \"round-transfer-horizontal\" | \"round-transfer-vertical\" | \"rounded-magnifier\" | \"rounded-magnifier-bug\" | \"rounded-magnifier-zoom-in\" | \"rounded-magnifier-zoom-out\" | \"routing\" | \"routing-2\" | \"routing-3\" | \"ruble\" | \"rugby\" | \"ruler\" | \"ruler-angular\" | \"ruler-cross-pen\" | \"ruler-pen\" | \"running\" | \"running-2\" | \"running-round\" | \"sad-circle\" | \"sad-square\" | \"safe-2\" | \"safe-circle\" | \"safe-square\" | \"sale\" | \"sale-square\" | \"satellite\" | \"scale\" | \"scaling\" | \"scanner\" | \"scanner-2\" | \"scissors\" | \"scissors-square\" | \"scooter\" | \"screen-share\" | \"screencast\" | \"screencast-2\" | \"sd-card\" | \"send-square\" | \"send-twice-square\" | \"server\" | \"server-2\" | \"server-minimalistic\" | \"server-path\" | \"server-square\" | \"server-square-cloud\" | \"server-square-update\" | \"settings\" | \"settings-minimalistic\" | \"share\" | \"share-circle\" | \"shield\" | \"shield-check\" | \"shield-cross\" | \"shield-keyhole\" | \"shield-keyhole-minimalistic\" | \"shield-minimalistic\" | \"shield-minus\" | \"shield-network\" | \"shield-plus\" | \"shield-star\" | \"shield-up\" | \"shield-user\" | \"shield-warning\" | \"shock-absorber\" | \"shop\" | \"shop-2\" | \"shop-minimalistic\" | \"shuffle\" | \"sidebar\" | \"sidebar-code\" | \"sidebar-minimalistic\" | \"signpost\" | \"signpost-2\" | \"sim-card\" | \"sim-card-minimalistic\" | \"sim-cards\" | \"siren\" | \"siren-rounded\" | \"skateboard\" | \"skateboarding\" | \"skateboarding-round\" | \"skip-next\" | \"skip-previous\" | \"skirt\" | \"slash-circle\" | \"slash-square\" | \"sledgehammer\" | \"sleeping\" | \"sleeping-circle\" | \"sleeping-square\" | \"slider-horizontal\" | \"slider-minimalistic-horizontal\" | \"slider-vertical\" | \"slider-vertical-minimalistic\" | \"smart-home\" | \"smart-home-angle\" | \"smart-speaker\" | \"smart-speaker-2\" | \"smart-speaker-minimalistic\" | \"smart-vacuum-cleaner\" | \"smart-vacuum-cleaner-2\" | \"smartphone\" | \"smartphone-2\" | \"smartphone-rotate-2\" | \"smartphone-rotate-angle\" | \"smartphone-rotate-orientation\" | \"smartphone-update\" | \"smartphone-vibration\" | \"smile-circle\" | \"smile-square\" | \"snowflake\" | \"socket\" | \"sofa\" | \"sofa-2\" | \"sofa-3\" | \"sort\" | \"sort-alphabetically\" | \"sort-by-time\" | \"sort-from-bottom-to-top\" | \"sort-from-top-to-bottom\" | \"sort-horizontal\" | \"sort-vertical\" | \"soundwave\" | \"soundwave-circle\" | \"soundwave-square\" | \"speaker\" | \"speaker-minimalistic\" | \"special-effects\" | \"speedometer-low\" | \"speedometer-max\" | \"speedometer-middle\" | \"square-academic-cap\" | \"square-academic-cap-2\" | \"square-alt-arrow-down\" | \"square-alt-arrow-left\" | \"square-alt-arrow-right\" | \"square-alt-arrow-up\" | \"square-arrow-down\" | \"square-arrow-left\" | \"square-arrow-left-down\" | \"square-arrow-left-up\" | \"square-arrow-right\" | \"square-arrow-right-down\" | \"square-arrow-right-up\" | \"square-arrow-up\" | \"square-bottom-down\" | \"square-bottom-up\" | \"square-double-alt-arrow-down\" | \"square-double-alt-arrow-left\" | \"square-double-alt-arrow-right\" | \"square-double-alt-arrow-up\" | \"square-forward\" | \"square-share-line\" | \"square-sort-horizontal\" | \"square-sort-vertical\" | \"square-top-down\" | \"square-top-up\" | \"square-transfer-horizontal\" | \"square-transfer-vertical\" | \"ssd-round\" | \"ssd-square\" | \"star\" | \"star-2\" | \"star-angle\" | \"star-circle\" | \"star-fall\" | \"star-fall-2\" | \"star-fall-minimalistic\" | \"star-fall-minimalistic-2\" | \"star-rainbow\" | \"star-ring\" | \"star-rings\" | \"star-shine\" | \"stars\" | \"stars-2\" | \"stars-line\" | \"stars-minimalistic\" | \"station\" | \"station-minimalistic\" | \"stethoscope\" | \"sticker-circle\" | \"sticker-smile-circle\" | \"sticker-smile-circle-2\" | \"sticker-smile-square\" | \"sticker-square\" | \"stop\" | \"stop-circle\" | \"stopwatch\" | \"stopwatch-pause\" | \"stopwatch-play\" | \"stream\" | \"streets\" | \"streets-map-point\" | \"streets-navigation\" | \"stretching\" | \"stretching-round\" | \"structure\" | \"subtitles\" | \"suitcase\" | \"suitcase-lines\" | \"suitcase-tag\" | \"sun\" | \"sun-2\" | \"sun-fog\" | \"sunrise\" | \"sunset\" | \"suspension\" | \"suspension-bolt\" | \"suspension-cross\" | \"swimming\" | \"syringe\" | \"t-shirt\" | \"tablet\" | \"tag\" | \"tag-horizontal\" | \"tag-price\" | \"target\" | \"tea-cup\" | \"telescope\" | \"temperature\" | \"tennis\" | \"tennis-2\" | \"test-tube\" | \"test-tube-minimalistic\" | \"text-bold\" | \"text-bold-circle\" | \"text-bold-square\" | \"text-circle\" | \"text-cross\" | \"text-cross-circle\" | \"text-cross-square\" | \"text-field\" | \"text-field-focus\" | \"text-format\" | \"text-italic\" | \"text-italic-circle\" | \"text-italic-square\" | \"text-selection\" | \"text-square\" | \"text-square-2\" | \"text-underline\" | \"text-underline-circle\" | \"text-underline-cross\" | \"thermometer\" | \"three-squares\" | \"ticket\" | \"ticket-sale\" | \"ticket-star\" | \"to-pip\" | \"tornado\" | \"tornado-small\" | \"traffic\" | \"traffic-economy\" | \"tram\" | \"transfer-horizontal\" | \"transfer-vertical\" | \"translation\" | \"translation-2\" | \"transmission\" | \"transmission-circle\" | \"transmission-square\" | \"trash-bin-2\" | \"trash-bin-minimalistic\" | \"trash-bin-minimalistic-2\" | \"trash-bin-trash\" | \"treadmill\" | \"treadmill-round\" | \"tuning\" | \"tuning-2\" | \"tuning-3\" | \"tuning-4\" | \"tuning-square\" | \"tuning-square-2\" | \"turntable\" | \"turntable-minimalistic\" | \"turntable-music-note\" | \"tv\" | \"ufo\" | \"ufo-2\" | \"ufo-3\" | \"umbrella\" | \"undo-left\" | \"undo-left-round\" | \"undo-left-round-square\" | \"undo-left-square\" | \"undo-right\" | \"undo-right-round\" | \"undo-right-round-square\" | \"undo-right-square\" | \"unlink\" | \"unlink-minimalistic\" | \"unread\" | \"upload\" | \"upload-minimalistic\" | \"upload-square\" | \"upload-track\" | \"upload-track-2\" | \"upload-twice-square\" | \"usb\" | \"usb-circle\" | \"usb-square\" | \"user\" | \"user-block\" | \"user-block-rounded\" | \"user-check\" | \"user-check-rounded\" | \"user-circle\" | \"user-cross\" | \"user-cross-rounded\" | \"user-hand-up\" | \"user-hands\" | \"user-heart\" | \"user-heart-rounded\" | \"user-id\" | \"user-minus\" | \"user-minus-rounded\" | \"user-plus\" | \"user-plus-rounded\" | \"user-rounded\" | \"user-speak\" | \"user-speak-rounded\" | \"users-group-rounded\" | \"users-group-two-rounded\" | \"vanity\" | \"verified-check\" | \"video-frame\" | \"video-frame-2\" | \"video-frame-cut\" | \"video-frame-cut-2\" | \"video-frame-play-horizontal\" | \"video-frame-play-vertical\" | \"video-frame-replace\" | \"video-library\" | \"videocamera\" | \"videocamera-add\" | \"videocamera-record\" | \"vinyl\" | \"vinyl-record\" | \"virus\" | \"volleyball\" | \"volleyball-2\" | \"volume\" | \"volume-cross\" | \"volume-knob\" | \"volume-loud\" | \"volume-small\" | \"walking\" | \"walking-round\" | \"wallet\" | \"wallet-2\" | \"wallet-money\" | \"wallpaper\" | \"washing-machine\" | \"washing-machine-minimalistic\" | \"watch-round\" | \"watch-square\" | \"watch-square-minimalistic\" | \"watch-square-minimalistic-charge\" | \"water\" | \"water-sun\" | \"waterdrop\" | \"waterdrops\" | \"wheel\" | \"wheel-angle\" | \"whisk\" | \"wi-fi-router\" | \"wi-fi-router-minimalistic\" | \"wi-fi-router-round\" | \"widget\" | \"widget-2\" | \"widget-3\" | \"widget-4\" | \"widget-5\" | \"widget-6\" | \"widget-add\" | \"win-rar\" | \"wind\" | \"window-frame\" | \"wineglass\" | \"wineglass-triangle\" | \"wireless-charge\" | \"women\" | \"xxx\" | \"zip-file\"",
               "summary": "Public type SolarLinearIconName exported by CocoFrame.",
               "deprecated": false,
               "examples": [],
@@ -2991,7 +3071,7 @@ export const apiReference = {
     },
     {
       "name": "@cocoframe/qa",
-      "version": "0.0.2",
+      "version": "0.0.3",
       "description": "`@cocoframe/qa` is CocoFrame's provider-independent quality approval contract. It connects approved product requirements and component decisions to adaptive QA questions, traceable test cases, automated quality gates, defects, evidence, and final approval.",
       "readme": "packages/qa/README.md",
       "entries": [
@@ -3008,7 +3088,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 246
+              "line": 248
             },
             {
               "name": "answerCocoQa",
@@ -3018,7 +3098,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 185
+              "line": 187
             },
             {
               "name": "approveCocoQa",
@@ -3028,7 +3108,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 311
+              "line": 313
             },
             {
               "name": "auditProductDesign",
@@ -3038,7 +3118,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/design.ts",
-              "line": 193
+              "line": 194
             },
             {
               "name": "checkCocoQa",
@@ -3048,7 +3128,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 292
+              "line": 294
             },
             {
               "name": "closeCocoQaDefect",
@@ -3058,7 +3138,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 272
+              "line": 274
             },
             {
               "name": "CocoQa",
@@ -3113,7 +3193,7 @@ export const apiReference = {
             {
               "name": "CocoQaCase",
               "kind": "interface",
-              "signature": "interface CocoQaCase {\n  id: string;\n  title: string;\n  category: CocoQaCategory;\n  source: string;\n  required: boolean;\n  status: \"failed\" | \"pending\" | \"not-applicable\" | \"passed\" | \"blocked\";\n  evidence?: string;\n  updatedAt?: string\n}",
+              "signature": "interface CocoQaCase {\n  id: string;\n  title: string;\n  category: CocoQaCategory;\n  source: string;\n  required: boolean;\n  status: \"failed\" | \"not-applicable\" | \"pending\" | \"passed\" | \"blocked\";\n  evidence?: string;\n  updatedAt?: string\n}",
               "summary": "Public interface CocoQaCase exported by CocoFrame.",
               "deprecated": false,
               "examples": [],
@@ -3198,7 +3278,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 172
+              "line": 174
             },
             {
               "name": "CocoQaResultStatus",
@@ -3258,7 +3338,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/design.ts",
-              "line": 236
+              "line": 237
             },
             {
               "name": "createCocoQa",
@@ -3408,7 +3488,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 179
+              "line": 181
             },
             {
               "name": "parseCocoQa",
@@ -3418,7 +3498,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 319
+              "line": 321
             },
             {
               "name": "parseDesignProfile",
@@ -3468,7 +3548,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 227
+              "line": 229
             },
             {
               "name": "recordCocoQaGate",
@@ -3478,7 +3558,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 205
+              "line": 207
             },
             {
               "name": "renderCocoQaArtifacts",
@@ -3488,7 +3568,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 359
+              "line": 361
             },
             {
               "name": "slugifyCocoQa",
@@ -3498,7 +3578,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 375
+              "line": 377
             }
           ]
         }
@@ -5308,7 +5388,7 @@ export const apiReference = {
             {
               "name": "GridProps",
               "kind": "interface",
-              "signature": "interface GridProps {\n  columns?: 1 | 2 | 4 | 3;\n  gap?: \"medium\" | \"small\" | \"large\";\n  as?: \"section\" | \"div\" | \"ul\";\n  class?: string;\n  children?: CocoNode\n}",
+              "signature": "interface GridProps {\n  columns?: 2 | 1 | 4 | 3;\n  gap?: \"medium\" | \"small\" | \"large\";\n  as?: \"section\" | \"div\" | \"ul\";\n  class?: string;\n  children?: CocoNode\n}",
               "summary": "Public interface GridProps exported by CocoFrame.",
               "deprecated": false,
               "examples": [],
@@ -5328,7 +5408,7 @@ export const apiReference = {
             {
               "name": "HeadingProps",
               "kind": "interface",
-              "signature": "interface HeadingProps {\n  level?: 1 | 2 | 4 | 3 | 5 | 6;\n  size?: \"medium\" | \"small\" | \"large\" | \"xlarge\";\n  id?: string;\n  class?: string;\n  children?: CocoNode\n}",
+              "signature": "interface HeadingProps {\n  level?: 2 | 1 | 4 | 3 | 5 | 6;\n  size?: \"medium\" | \"small\" | \"large\" | \"xlarge\";\n  id?: string;\n  class?: string;\n  children?: CocoNode\n}",
               "summary": "Public interface HeadingProps exported by CocoFrame.",
               "deprecated": false,
               "examples": [],
@@ -6758,7 +6838,7 @@ export const apiReference = {
     },
     {
       "name": "create-cocoframe",
-      "version": "0.0.7",
+      "version": "0.0.8",
       "description": "Create a new CocoFrame application",
       "readme": "packages/create-cocoframe/README.md",
       "entries": [

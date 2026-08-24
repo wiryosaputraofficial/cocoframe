@@ -26,7 +26,7 @@ test("parses, fingerprints, and compiles allow-listed project design tokens", as
   assert.equal(tokens["space-4"], "1.5rem");
   assert.equal(tokens.radius, "0.5rem");
   assert.equal(tokens["font-size-base"], "1rem");
-  assert.equal(productDesignCriteria(profile, { hasReference: true }).length, 13);
+  assert.equal(productDesignCriteria(profile, { hasReference: true }).length, 14);
   assert.ok(contrastRatio("#0f172a", "#ffffff") >= 4.5);
 });
 
@@ -39,6 +39,7 @@ test("returns stable Product Design Quality diagnostics from sanitized provider 
     referenceState: "unavailable",
     measurements: [
       { id: "mobile-overflow", principle: "overflow", status: "failed", summary: "A card clips at 320 pixels.", sanitized: true },
+      { id: "card-alignment", principle: "alignment", status: "failed", summary: "Cards drift from the shared grid.", sanitized: true },
       { id: "private-reference", principle: "fidelity", status: "passed", summary: "Contains private account content.", sanitized: false },
     ],
   });
@@ -47,6 +48,7 @@ test("returns stable Product Design Quality diagnostics from sanitized provider 
     "COMPONENT_REUSE_NOT_AUDITED",
     "REFERENCE_UNAVAILABLE",
     "OVERFLOW_DETECTED",
+    "VISUAL_ALIGNMENT_FAILED",
     "SENSITIVE_VISUAL_EVIDENCE_BLOCKED",
   ]);
 });

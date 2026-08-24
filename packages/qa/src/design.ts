@@ -21,12 +21,12 @@ const colorTokens = new Set<string>(tokenNames.filter((name) =>
   name.includes("color-") || name.startsWith("primary-") || name.startsWith("neutral-")));
 
 export type DesignTokenName = typeof tokenNames[number];
-export type DesignPrinciple = "reuse" | "tokens" | "spacing" | "color" | "contrast" |
+export type DesignPrinciple = "reuse" | "tokens" | "alignment" | "spacing" | "color" | "contrast" |
   "typography" | "radius" | "elevation" | "iconography" | "overflow" | "responsive" |
   "accessibility" | "fidelity";
 export type DesignDiagnosticCode = "INVALID_DESIGN_PROFILE" | "UNRESOLVED_TOKEN_REFERENCE" |
   "COMPONENT_REUSE_NOT_AUDITED" | "CONTRAST_FAILED" | "OVERFLOW_DETECTED" |
-  "INCONSISTENT_SPACING" | "INCONSISTENT_ICONOGRAPHY" | "REFERENCE_UNAVAILABLE" |
+  "INCONSISTENT_SPACING" | "VISUAL_ALIGNMENT_FAILED" | "INCONSISTENT_ICONOGRAPHY" | "REFERENCE_UNAVAILABLE" |
   "VISUAL_FIDELITY_FAILED" | "EVIDENCE_UNAVAILABLE" | "SENSITIVE_VISUAL_EVIDENCE_BLOCKED" |
   "DESIGN_STATE_CONFLICT" | "COMPONENT_IMPACT_CONFLICT" | "DESIGN_GATE_TIMEOUT";
 
@@ -172,6 +172,7 @@ export function productDesignCriteria(
   const items: DesignQaCriterion[] = [
     criterion("component-reuse", "Existing framework and application components are audited before a new component is proposed.", "visual"),
     criterion("semantic-tokens", "Project appearance is derived from the approved semantic design profile instead of duplicated hardcoded styles.", "visual"),
+    criterion("alignment", "Grid and container edges, text baselines, icon-label pairs, cards, and columns remain consistently aligned at every approved viewport and zoom level.", "visual"),
     criterion("spacing", "Spacing values follow the approved scale and produce a consistent layout rhythm.", "visual"),
     criterion("color", "Semantic color usage remains consistent across equivalent states and components.", "visual"),
     criterion("contrast", "Text, focus indicators, controls, and meaningful graphics satisfy the approved WCAG 2.2 AA contrast thresholds.", "accessibility"),
@@ -271,7 +272,8 @@ function failedMeasurement(
   measurement: NonNullable<ProductDesignAuditInput["measurements"]>[number],
 ): DesignDiagnostic {
   const code: DesignDiagnosticCode = measurement.principle === "overflow" ? "OVERFLOW_DETECTED"
-    : measurement.principle === "spacing" ? "INCONSISTENT_SPACING"
+    : measurement.principle === "alignment" ? "VISUAL_ALIGNMENT_FAILED"
+      : measurement.principle === "spacing" ? "INCONSISTENT_SPACING"
       : measurement.principle === "iconography" ? "INCONSISTENT_ICONOGRAPHY"
         : measurement.principle === "fidelity" ? "VISUAL_FIDELITY_FAILED"
           : measurement.principle === "contrast" ? "CONTRAST_FAILED"

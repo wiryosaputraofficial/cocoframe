@@ -7,12 +7,15 @@ import type {
   AgentGeneratedCapability,
   AgentMiddleware,
   AgentProjectSnapshot,
+  AgentProposedFile,
+  AgentRoute,
 } from "@cocoframe/agent";
 import {
   discoverGlobalStyles,
   discoverIcons,
   discoverIslands,
   discoverRoutes,
+  routePatternFromFile,
   discoverStyles,
   discoverUiComponents,
 } from "./project.ts";
@@ -65,6 +68,26 @@ export async function inspectProjectReadOnly(projectRoot: string, signal?: Abort
   };
 }
 
+/** Derives routes from an in-memory file proposal through the canonical CocoFrame route parser. */
+export function inspectProposedRoutesReadOnly(
+  projectRoot: string,
+  changes: readonly AgentProposedFile[],
+): readonly AgentRoute[] {
+  const routesDirectory = path.join(projectRoot, "app", "routes");
+  return changes.flatMap((change): readonly AgentRoute[] => {
+    const relativeFile = change.path.trim().replaceAll("\\", "/").replace(/^\.\//, "");
+    const segments = relativeFile.split("/");
+    if (!relativeFile.startsWith("app/routes/") || segments.some((segment) => !segment || segment === "." || segment === "..")
+        || !/\.(?:page|route)\.tsx?$/.test(relativeFile)) return [];
+    const file = path.join(projectRoot, ...segments);
+    return [{
+      kind: relativeFile.includes(".route.") ? "api" : "page",
+      pattern: routePatternFromFile(routesDirectory, file),
+      file: relativeFile,
+      layouts: [],
+    }];
+  }).sort((left, right) => left.pattern.localeCompare(right.pattern) || left.file.localeCompare(right.file));
+}
 async function discoverApis(
   root: string,
   routes: readonly { readonly pattern: string; readonly file: string }[],
