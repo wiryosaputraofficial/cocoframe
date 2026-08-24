@@ -12,6 +12,6 @@
     "@cocoframe/observability": "0.0.4",
     "@cocoframe/schema": "0.0.3",
     "@cocoframe/security": "0.0.4",
-    "@cocoframe/ui": "0.0.3"
+    "@cocoframe/ui": "0.0.4"
   }
 }

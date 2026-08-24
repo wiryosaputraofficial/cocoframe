@@ -112,6 +112,18 @@ test("renders theme, mobile, workflow, advanced form, and AI patterns without br
   assert.doesNotMatch(body, /<script|\sstyle=/);
 });
 
+test("applies only allow-listed server-rendered Theme token overrides", async () => {
+  const body = await renderToString(Theme({
+    theme: "light",
+    tokens: { radius: "0.75rem", "color-primary": "#17684a" },
+    children: "Branded project",
+  }));
+  assert.match(body, /style="--coco-color-primary:#17684a;--coco-radius:0.75rem"/);
+  assert.doesNotMatch(body, /<script/);
+  assert.throws(() => Theme({ tokens: { "color-primary": "red;display:none" }, children: "Unsafe" }), /unsafe CSS value/);
+  assert.throws(() => Theme({ tokens: { "unknown-token": "1rem" } as never, children: "Unknown" }), /Unknown CocoFrame theme token/);
+});
+
 test("uses bundled Solar icons for built-in component chrome", async () => {
   const body = await renderToString(Stack({ children: [
     SearchField({ id: "catalog-search", name: "q", label: "Search", onInput: () => {} }),

@@ -7,7 +7,7 @@ generation, CocoSpecs discovery, CocoRef component approval, CocoQA evidence and
 
 - `cocoframe spec create|resume|answer|check|generate|approve` manages adaptive product discovery and review artifacts under `specs/<feature>/`.
 - `cocoframe ref create|add|audit|status|consent|decline|preview|feedback|approve|cancel` manages reference audits and consent-gated component previews under `refs/<name>/`.
-- `cocoframe qa create|resume|answer|run|record|defect|resolve|check|approve` manages traceable quality evidence and release approval under `qa/<feature>/`.
+- `cocoframe qa create|resume|answer|run|record|defect|resolve|check|approve` manages traceable quality evidence and release approval under `qa/<feature>/`; create accepts `--design <profile>` for Product Design Quality.
 - `cocoframe inspect <project>` emits routes, layouts, islands, styles, UI/icon usage, contracts, middleware, and system routes.
 - `cocoframe agent <project>` serves versioned MCP discovery, lifecycle, and controlled mutation tools; `agent approve|deny|cancel|expire` records host-only hash-bound decisions outside the MCP tool surface.
 - `cocoframe dev <project>` builds and watches isolated development output.

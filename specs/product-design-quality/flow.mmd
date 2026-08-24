@@ -1,0 +1,58 @@
+flowchart TD
+    start([Start: Product Design Quality])
+    step1["The user requests a feature with an optional visual reference."]
+    start --> step1
+    step2["The AI inspects the component inventory and project design profile."]
+    step1 --> step2
+    step3["CocoRef compares the reference requirements with existing components."]
+    step2 --> step3
+    step4["The AI selects reusable components before proposing any new component."]
+    step3 --> step4
+    step5["Every missing component follows CocoRef consent, preview, revision, and approval."]
+    step4 --> step5
+    step6["The user defines or approves semantic colors, spacing, radius, typography, elevation, and icon rules."]
+    step5 --> step6
+    step7["The AI implements the interface using approved primitives and tokens."]
+    step6 --> step7
+    step8["CocoQA runs the product-design principle audit."]
+    step7 --> step8
+    step9["The rendered result is compared with approved CocoRef criteria when a reference exists."]
+    step8 --> step9
+    step10["Contrast, overflow, responsive, spacing, and consistency defects are recorded."]
+    step9 --> step10
+    step11["The AI fixes defects and reruns the required checks."]
+    step10 --> step11
+    step12["A human reviewer grants explicit final design QA approval."]
+    step11 --> step12
+    success([A supported AI can audit approved references, the existing component inventory, and project design tokens; reuse existing components first; produce a consistent customizable interface; and prove spacing, color, contrast, iconography, overfl])
+    step12 --> success
+    error1["INVALID_DESIGN_PROFILE: report the invalid token fields and require a schema-valid profile."]
+    step12 -. failure .-> error1
+    error2["UNRESOLVED_TOKEN_REFERENCE: report a missing alias or cycle and require explicit token repair."]
+    step12 -. failure .-> error2
+    error3["COMPONENT_REUSE_NOT_AUDITED: refuse a new component proposal until inventory inspection completes."]
+    step12 -. failure .-> error3
+    error4["CONTRAST_FAILED: identify the foreground and background pair, measured ratio, required target, and affected element."]
+    step12 -. failure .-> error4
+    error5["OVERFLOW_DETECTED: identify the viewport, element, clipping or horizontal overflow, and reproduction evidence."]
+    step12 -. failure .-> error5
+    error6["INCONSISTENT_SPACING: identify values outside the approved scale and their locations."]
+    step12 -. failure .-> error6
+    error7["INCONSISTENT_ICONOGRAPHY: identify inconsistent family, size, stroke, alignment, or accessible labeling."]
+    step12 -. failure .-> error7
+    error8["REFERENCE_UNAVAILABLE: preserve lifecycle state and ask for a valid completed CocoRef or reference."]
+    step12 -. failure .-> error8
+    error9["VISUAL_FIDELITY_FAILED: report the approved criterion and deviation that exceeded its tolerance."]
+    step12 -. failure .-> error9
+    error10["EVIDENCE_UNAVAILABLE: keep the relevant gate blocked and provide a safe retry path."]
+    step12 -. failure .-> error10
+    error11["SENSITIVE_VISUAL_EVIDENCE_BLOCKED: refuse persistence until sensitive regions are removed or redacted."]
+    step12 -. failure .-> error11
+    error12["DESIGN_STATE_CONFLICT: invalidate stale review after reference, token, or component source changes."]
+    step12 -. failure .-> error12
+    error13["COMPONENT_IMPACT_CONFLICT: report affected consumers and require a reviewed compatibility plan."]
+    step12 -. failure .-> error13
+    error14["DESIGN_GATE_TIMEOUT: abort safely, clean temporary evidence, and allow a bounded retry."]
+    step12 -. failure .-> error14
+    error15["Every diagnostic is stable and machine-readable, includes recovery guidance, and never changes approval state silently."]
+    step12 -. failure .-> error15

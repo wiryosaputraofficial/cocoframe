@@ -13,7 +13,7 @@ and compact APIs that are easy for developers and AI agents to understand.
 
 ## Documentation
 
-- Run the example and open `/docs` for the documentation center. Focused guides live under `/docs/getting-started`, `/docs/pages`, `/docs/islands`, `/docs/forms`, `/docs/apis`, `/docs/database`, `/docs/security`, `/docs/testing`, and `/docs/deployment`.
+- Run the example and open `/docs` for the documentation center. Focused guides live under `/docs/getting-started`, `/docs/pages`, `/docs/islands`, `/docs/forms`, `/docs/apis`, `/docs/database`, `/docs/security`, `/docs/testing`, `/docs/deployment`, and `/docs/product-design-quality`.
 - Open `/docs/api-reference` for package exports, signatures, types, deprecations, examples, and source locations generated directly from TypeScript and JSDoc.
 - Open `/components` for the complete typed UI catalog, design tokens,
   utility classes, props, and chart variants.
@@ -324,6 +324,15 @@ cocoframe qa approve login
 ```
 
 The canonical record is `qa/<feature>/qa.json`. Generated test-plan, traceability, report, and defect Markdown files are review views. Required questions, cases, gates, and open defects block approval. See `docs/cocoqa.md` for the lifecycle and evidence-safety rules.
+
+### Product Design Quality
+
+Projects can add `cocoframe.design.json` to customize semantic color, spacing,
+radius, typography, elevation, breakpoints, and icon policy without forking UI
+components. CocoQA then requires reuse-first, contrast, spacing, iconography,
+overflow, responsive, accessibility, and optional CocoRef fidelity evidence.
+The profile fingerprint invalidates stale approval when design decisions change.
+See `docs/product-design-quality.md`.
 
 ## Provider-independent AI clients with Agent Bridge
 

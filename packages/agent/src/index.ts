@@ -89,7 +89,7 @@ const componentSchema = z.object({ name: z.string(), kind: z.enum(["application"
 const islandSchema = z.object({ name: z.string(), file: z.string() });
 const middlewareSchema = z.object({ id: z.string(), source: z.string(), file: z.string() });
 const dependencySchema = z.object({ name: z.string(), range: z.string(), kind: z.enum(["dependency", "devDependency", "peerDependency", "optionalDependency"]) });
-const generatedCapabilitySchema = z.object({ kind: z.enum(["openapi", "client", "api-reference", "context", "assets", "deployment"]), file: z.string() });
+const generatedCapabilitySchema = z.object({ kind: z.enum(["openapi", "client", "api-reference", "context", "assets", "deployment", "design-profile"]), file: z.string() });
 const paginationSchema = z.object({ limit: z.number().int(), truncated: z.boolean(), nextCursor: z.string().optional() });
 
 const baseInputSchema = z.object({ protocolVersion: z.number().int().optional() });
@@ -191,8 +191,10 @@ const cocoQaDefectSchema = z.object({
 const cocoQaDataSchema = z.object({
   lifecycle: z.literal("cocoqa"), feature: z.object({ id: z.string(), title: z.string() }), mode: z.enum(["standard", "thorough"]),
   state: z.string(), approved: z.boolean(), source: z.enum(["canonical", "proposed"]), canonicalFile: z.string(),
-  sources: z.array(z.object({ kind: z.enum(["cocospec", "cocoref", "manual"]), id: z.string(), file: z.string().optional(), state: z.string() })),
-  acceptanceCriteria: z.array(z.string()), questions: z.array(cocoQaQuestionSchema), cases: z.array(cocoQaCaseSchema),
+  sources: z.array(z.object({ kind: z.enum(["cocospec", "cocoref", "design-profile", "manual"]), id: z.string(), file: z.string().optional(), state: z.string() })),
+  acceptanceCriteria: z.array(z.string()),
+  designProfile: z.object({ id: z.string(), file: z.string(), hash: z.string() }).optional(),
+  questions: z.array(cocoQaQuestionSchema), cases: z.array(cocoQaCaseSchema),
   gates: z.array(cocoQaGateSchema), defects: z.array(cocoQaDefectSchema),
   unresolved: z.array(z.object({ kind: z.enum(["question", "case", "gate", "defect"]), id: z.string(), message: z.string() })),
   mutationRequired: z.boolean(), nextAction: z.string(),

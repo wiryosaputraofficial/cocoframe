@@ -157,6 +157,7 @@ async function discoverGeneratedCapabilities(root: string): Promise<readonly Age
     ["openapi", "app/generated/openapi.json"], ["client", "app/generated/cocoframe-client.ts"],
     ["api-reference", "app/generated/api-reference.ts"], ["context", ".cocoframe/context.json"],
     ["assets", ".cocoframe/assets.json"], ["deployment", ".cocoframe/deploy.json"],
+    ["design-profile", "cocoframe.design.json"],
   ];
   const found: AgentGeneratedCapability[] = [];
   for (const [kind, file] of candidates) if (await exists(path.join(root, file))) found.push({ kind, file });

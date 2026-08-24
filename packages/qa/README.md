@@ -30,5 +30,8 @@ qa = recordCocoQaCase(qa, "acceptance-1", "passed", "Playwright login test");
 qa = approveCocoQa(qa);
 ```
 
-Use `cocoframe qa` for the filesystem and automated-gate workflow. The canonical
-source is `qa/<feature>/qa.json`; generated Markdown files are review views.
+Use `cocoframe qa` for the filesystem and automated-gate workflow. Add
+`--design cocoframe.design.json` to bind required Product Design Quality
+cases and the Design Profile fingerprint. The canonical source is
+`qa/<feature>/qa.json`; generated Markdown files are review views. See
+`docs/product-design-quality.md` for the complete contract.

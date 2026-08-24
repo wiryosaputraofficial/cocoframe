@@ -2,11 +2,11 @@
 export const apiReference = {
   "version": 1,
   "generatedBy": "scripts/api-reference.ts",
-  "packageVersion": "0.0.5",
+  "packageVersion": "0.0.6",
   "packages": [
     {
       "name": "@cocoframe/agent",
-      "version": "0.0.1",
+      "version": "0.0.2",
       "description": "Provider-independent, approval-aware Agent Bridge contracts for CocoFrame.",
       "readme": "packages/agent/README.md",
       "entries": [
@@ -148,7 +148,7 @@ export const apiReference = {
             {
               "name": "AgentGeneratedCapability",
               "kind": "interface",
-              "signature": "interface AgentGeneratedCapability {\n  kind: \"openapi\" | \"client\" | \"api-reference\" | \"context\" | \"assets\" | \"deployment\";\n  file: string\n}",
+              "signature": "interface AgentGeneratedCapability {\n  kind: \"openapi\" | \"client\" | \"api-reference\" | \"context\" | \"assets\" | \"deployment\" | \"design-profile\";\n  file: string\n}",
               "summary": "An existing generated artifact that can be consumed but is never rewritten by inspection.",
               "deprecated": false,
               "examples": [],
@@ -263,7 +263,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/agent/src/index.ts",
-              "line": 242
+              "line": 244
             },
             {
               "name": "readAgentOperationPlan",
@@ -403,7 +403,7 @@ export const apiReference = {
     },
     {
       "name": "@cocoframe/cli",
-      "version": "0.0.6",
+      "version": "0.0.7",
       "description": "The `cocoframe` executable owns project discovery, inspection, development, generation, CocoSpecs discovery, CocoRef component approval, CocoQA evidence and release approval, local Agent Bridge MCP serving, production builds, asset serving, and startup.",
       "readme": "packages/cli/README.md",
       "entries": [
@@ -2991,7 +2991,7 @@ export const apiReference = {
     },
     {
       "name": "@cocoframe/qa",
-      "version": "0.0.1",
+      "version": "0.0.2",
       "description": "`@cocoframe/qa` is CocoFrame's provider-independent quality approval contract. It connects approved product requirements and component decisions to adaptive QA questions, traceable test cases, automated quality gates, defects, evidence, and final approval.",
       "readme": "packages/qa/README.md",
       "entries": [
@@ -3008,7 +3008,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 237
+              "line": 246
             },
             {
               "name": "answerCocoQa",
@@ -3018,7 +3018,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 176
+              "line": 185
             },
             {
               "name": "approveCocoQa",
@@ -3028,7 +3028,17 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 302
+              "line": 311
+            },
+            {
+              "name": "auditProductDesign",
+              "kind": "function",
+              "signature": "auditProductDesign(profile: DesignProfile, input: ProductDesignAuditInput): ProductDesignAuditResult",
+              "summary": "Evaluates provider-supplied, sanitized measurements without crawling or rendering.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/qa/src/design.ts",
+              "line": 193
             },
             {
               "name": "checkCocoQa",
@@ -3038,7 +3048,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 283
+              "line": 292
             },
             {
               "name": "closeCocoQaDefect",
@@ -3048,7 +3058,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 263
+              "line": 272
             },
             {
               "name": "CocoQa",
@@ -3058,7 +3068,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 70
+              "line": 72
             },
             {
               "name": "COCOQA_VERSION",
@@ -3068,7 +3078,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 2
+              "line": 4
             },
             {
               "name": "CocoQaAnswer",
@@ -3078,7 +3088,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 29
+              "line": 31
             },
             {
               "name": "CocoQaAnswerStatus",
@@ -3088,7 +3098,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 6
+              "line": 8
             },
             {
               "name": "CocoQaArtifacts",
@@ -3098,7 +3108,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 108
+              "line": 111
             },
             {
               "name": "CocoQaCase",
@@ -3108,7 +3118,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 35
+              "line": 37
             },
             {
               "name": "CocoQaCategory",
@@ -3118,7 +3128,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 8
+              "line": 10
             },
             {
               "name": "CocoQaCheckIssue",
@@ -3128,7 +3138,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 96
+              "line": 99
             },
             {
               "name": "CocoQaCheckResult",
@@ -3138,7 +3148,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 102
+              "line": 105
             },
             {
               "name": "CocoQaDefect",
@@ -3148,7 +3158,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 56
+              "line": 58
             },
             {
               "name": "CocoQaGate",
@@ -3158,7 +3168,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 46
+              "line": 48
             },
             {
               "name": "CocoQaMode",
@@ -3168,7 +3178,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 4
+              "line": 6
             },
             {
               "name": "CocoQaQuestion",
@@ -3178,7 +3188,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 20
+              "line": 22
             },
             {
               "name": "cocoQaQuestions",
@@ -3188,7 +3198,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 163
+              "line": 172
             },
             {
               "name": "CocoQaResultStatus",
@@ -3198,7 +3208,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 7
+              "line": 9
             },
             {
               "name": "CocoQaSeverity",
@@ -3208,17 +3218,17 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 9
+              "line": 11
             },
             {
               "name": "CocoQaSource",
               "kind": "interface",
-              "signature": "interface CocoQaSource {\n  kind: \"cocospec\" | \"cocoref\" | \"manual\";\n  id: string;\n  file?: string;\n  state: string\n}",
+              "signature": "interface CocoQaSource {\n  kind: \"design-profile\" | \"cocospec\" | \"cocoref\" | \"manual\";\n  id: string;\n  file?: string;\n  state: string\n}",
               "summary": "Public interface CocoQaSource exported by CocoFrame.",
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 13
+              "line": 15
             },
             {
               "name": "CocoQaState",
@@ -3228,7 +3238,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 5
+              "line": 7
             },
             {
               "name": "CocoQaValue",
@@ -3238,7 +3248,17 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 11
+              "line": 13
+            },
+            {
+              "name": "contrastRatio",
+              "kind": "function",
+              "signature": "contrastRatio(foreground: string, background: string): number",
+              "summary": "Measures WCAG contrast for two six-digit hexadecimal colors.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/qa/src/design.ts",
+              "line": 236
             },
             {
               "name": "createCocoQa",
@@ -3248,17 +3268,137 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 128
+              "line": 135
             },
             {
               "name": "CreateCocoQaOptions",
               "kind": "interface",
-              "signature": "interface CreateCocoQaOptions {\n  feature: string;\n  title?: string;\n  mode?: CocoQaMode;\n  sources?: readonly CocoQaSource[];\n  acceptanceCriteria?: readonly string[];\n  referenceCriteria?: readonly {    readonly id: string;    readonly description: string;}[];\n  gates?: readonly {    readonly id: string;    readonly script: string;    readonly required?: boolean;}[];\n  now?: string | Date\n}",
+              "signature": "interface CreateCocoQaOptions {\n  feature: string;\n  title?: string;\n  mode?: CocoQaMode;\n  sources?: readonly CocoQaSource[];\n  acceptanceCriteria?: readonly string[];\n  referenceCriteria?: readonly {    readonly id: string;    readonly description: string;}[];\n  designCriteria?: readonly {    readonly id: string;    readonly description: string;    readonly category: \"visual\" | \"responsive\" | \"accessibility\";}[];\n  gates?: readonly {    readonly id: string;    readonly script: string;    readonly required?: boolean;}[];\n  now?: string | Date\n}",
               "summary": "Public interface CreateCocoQaOptions exported by CocoFrame.",
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 85
+              "line": 87
+            },
+            {
+              "name": "defineDesignProfile",
+              "kind": "function",
+              "signature": "defineDesignProfile(profile: DesignProfile): DesignProfile",
+              "summary": "Defines and validates one provider-independent, server-first project design profile.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/qa/src/design.ts",
+              "line": 92
+            },
+            {
+              "name": "DESIGN_PROFILE_VERSION",
+              "kind": "variable",
+              "signature": "variable DESIGN_PROFILE_VERSION = 1",
+              "summary": "The persisted Product Design Quality profile version.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/qa/src/design.ts",
+              "line": 2
+            },
+            {
+              "name": "DesignDiagnostic",
+              "kind": "interface",
+              "signature": "interface DesignDiagnostic {\n  code: DesignDiagnosticCode;\n  message: string;\n  recovery: string;\n  target?: string;\n  measured?: number;\n  required?: number\n}",
+              "summary": "Public interface DesignDiagnostic exported by CocoFrame.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/qa/src/design.ts",
+              "line": 64
+            },
+            {
+              "name": "DesignDiagnosticCode",
+              "kind": "type",
+              "signature": "type DesignDiagnosticCode",
+              "summary": "Public type DesignDiagnosticCode exported by CocoFrame.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/qa/src/design.ts",
+              "line": 27
+            },
+            {
+              "name": "DesignIconPolicy",
+              "kind": "interface",
+              "signature": "interface DesignIconPolicy {\n  package: \"@cocoframe/icons\";\n  family: \"linear\";\n  sizes: readonly number[]\n}",
+              "summary": "Public interface DesignIconPolicy exported by CocoFrame.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/qa/src/design.ts",
+              "line": 37
+            },
+            {
+              "name": "DesignPrinciple",
+              "kind": "type",
+              "signature": "type DesignPrinciple",
+              "summary": "Public type DesignPrinciple exported by CocoFrame.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/qa/src/design.ts",
+              "line": 24
+            },
+            {
+              "name": "DesignProfile",
+              "kind": "interface",
+              "signature": "interface DesignProfile {\n  version: 1;\n  id: string;\n  name: string;\n  extends?: string;\n  themes: Readonly<Record<string, DesignProfileTheme>>;\n  spacing: Readonly<Record<string, string>>;\n  radius: Readonly<Record<string, string>>;\n  typography: Readonly<Record<string, string>>;\n  elevation: Readonly<Record<string, string>>;\n  breakpoints: Readonly<Record<string, string>>;\n  icons: DesignIconPolicy;\n  updatedAt: string\n}",
+              "summary": "Public interface DesignProfile exported by CocoFrame.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/qa/src/design.ts",
+              "line": 43
+            },
+            {
+              "name": "DesignProfileTheme",
+              "kind": "interface",
+              "signature": "interface DesignProfileTheme {\n  variables: Readonly<Partial<Record<\"font-sans\" | \"font-mono\" | \"primary-600\" | \"primary-500\" | \"primary-400\" | \"primary-300\" | \"primary-100\" | \"neutral-900\" | \"neutral-700\" | \"neutral-500\" | \"neutral-300\" | \"neutral-100\" | \"neutral-0\" | \"color-text\" | \"color-muted\" | \"color-surface\" | \"color-subtle\" | \"color-border\" | \"color-primary\" | \"color-primary-hover\" | \"color-primary-contrast\" | \"color-success\" | \"color-warning\" | \"color-danger\" | \"color-info\" | \"color-focus\" | \"font-size-xs\" | \"font-size-sm\" | \"font-size-base\" | \"font-size-lg\" | \"font-size-xl\" | \"font-size-2xl\" | \"font-size-3xl\" | \"line-xs\" | \"line-sm\" | \"line-base\" | \"line-lg\" | \"line-xl\" | \"line-2xl\" | \"line-3xl\" | \"space-0\" | \"space-1\" | \"space-2\" | \"space-3\" | \"space-4\" | \"space-5\" | \"space-6\" | \"space-7\" | \"space-8\" | \"radius-none\" | \"radius-sm\" | \"radius\" | \"radius-lg\" | \"radius-xl\" | \"radius-full\" | \"shadow-sm\" | \"shadow-md\" | \"shadow-lg\" | \"shadow-xl\", string>>>\n}",
+              "summary": "Public interface DesignProfileTheme exported by CocoFrame.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/qa/src/design.ts",
+              "line": 33
+            },
+            {
+              "name": "DesignQaCriterion",
+              "kind": "interface",
+              "signature": "interface DesignQaCriterion {\n  id: string;\n  description: string;\n  category: \"accessibility\" | \"responsive\" | \"visual\"\n}",
+              "summary": "Public interface DesignQaCriterion exported by CocoFrame.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/qa/src/design.ts",
+              "line": 58
+            },
+            {
+              "name": "designThemeTokens",
+              "kind": "function",
+              "signature": "designThemeTokens(profile: DesignProfile, theme: string): Readonly<Partial<Record<DesignTokenName, string>>>",
+              "summary": "Returns allow-listed Coco UI variables for one approved profile theme.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/qa/src/design.ts",
+              "line": 143
+            },
+            {
+              "name": "DesignTokenName",
+              "kind": "type",
+              "signature": "type DesignTokenName = \"font-sans\" | \"font-mono\" | \"primary-600\" | \"primary-500\" | \"primary-400\" | \"primary-300\" | \"primary-100\" | \"neutral-900\" | \"neutral-700\" | \"neutral-500\" | \"neutral-300\" | \"neutral-100\" | \"neutral-0\" | \"color-text\" | \"color-muted\" | \"color-surface\" | \"color-subtle\" | \"color-border\" | \"color-primary\" | \"color-primary-hover\" | \"color-primary-contrast\" | \"color-success\" | \"color-warning\" | \"color-danger\" | \"color-info\" | \"color-focus\" | \"font-size-xs\" | \"font-size-sm\" | \"font-size-base\" | \"font-size-lg\" | \"font-size-xl\" | \"font-size-2xl\" | \"font-size-3xl\" | \"line-xs\" | \"line-sm\" | \"line-base\" | \"line-lg\" | \"line-xl\" | \"line-2xl\" | \"line-3xl\" | \"space-0\" | \"space-1\" | \"space-2\" | \"space-3\" | \"space-4\" | \"space-5\" | \"space-6\" | \"space-7\" | \"space-8\" | \"radius-none\" | \"radius-sm\" | \"radius\" | \"radius-lg\" | \"radius-xl\" | \"radius-full\" | \"shadow-sm\" | \"shadow-md\" | \"shadow-lg\" | \"shadow-xl\"",
+              "summary": "Public type DesignTokenName exported by CocoFrame.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/qa/src/design.ts",
+              "line": 23
+            },
+            {
+              "name": "hashDesignProfile",
+              "kind": "function",
+              "signature": "hashDesignProfile(profile: DesignProfile): Promise<string>",
+              "summary": "Computes a stable SHA-256 fingerprint without persisting profile values.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/qa/src/design.ts",
+              "line": 160
             },
             {
               "name": "nextCocoQaQuestions",
@@ -3268,7 +3408,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 170
+              "line": 179
             },
             {
               "name": "parseCocoQa",
@@ -3278,7 +3418,47 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 310
+              "line": 319
+            },
+            {
+              "name": "parseDesignProfile",
+              "kind": "function",
+              "signature": "parseDesignProfile(value: unknown): DesignProfile",
+              "summary": "Parses a persisted design profile without evaluating CSS or application code.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/qa/src/design.ts",
+              "line": 97
+            },
+            {
+              "name": "ProductDesignAuditInput",
+              "kind": "interface",
+              "signature": "interface ProductDesignAuditInput {\n  componentsAudited: boolean;\n  proposedComponents?: readonly string[];\n  referenceState?: \"ready\" | \"missing\" | \"unavailable\";\n  measurements?: readonly {    readonly id: string;    readonly principle: DesignPrinciple;    readonly status: \"passed\" | \"failed\" | \"blocked\";    readonly summary: string;    readonly sanitized: boolean;}[]\n}",
+              "summary": "Public interface ProductDesignAuditInput exported by CocoFrame.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/qa/src/design.ts",
+              "line": 73
+            },
+            {
+              "name": "ProductDesignAuditResult",
+              "kind": "interface",
+              "signature": "interface ProductDesignAuditResult {\n  passed: boolean;\n  diagnostics: readonly DesignDiagnostic[]\n}",
+              "summary": "Public interface ProductDesignAuditResult exported by CocoFrame.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/qa/src/design.ts",
+              "line": 86
+            },
+            {
+              "name": "productDesignCriteria",
+              "kind": "function",
+              "signature": "productDesignCriteria(profile: DesignProfile, options?: { readonly hasReference?: boolean; }): readonly DesignQaCriterion[]",
+              "summary": "Produces required Product Design Quality cases for CocoQA.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/qa/src/design.ts",
+              "line": 167
             },
             {
               "name": "recordCocoQaCase",
@@ -3288,7 +3468,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 218
+              "line": 227
             },
             {
               "name": "recordCocoQaGate",
@@ -3298,7 +3478,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 196
+              "line": 205
             },
             {
               "name": "renderCocoQaArtifacts",
@@ -3308,7 +3488,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 350
+              "line": 359
             },
             {
               "name": "slugifyCocoQa",
@@ -3318,7 +3498,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 366
+              "line": 375
             }
           ]
         }
@@ -4156,7 +4336,7 @@ export const apiReference = {
     },
     {
       "name": "@cocoframe/ui",
-      "version": "0.0.3",
+      "version": "0.0.4",
       "description": "Semantic server-first UI primitives, application patterns, charts, design tokens, and collision-safe utilities.",
       "readme": "packages/ui/README.md",
       "entries": [
@@ -4243,7 +4423,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 101
+              "line": 140
             },
             {
               "name": "AppShellProps",
@@ -4253,7 +4433,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 89
+              "line": 128
             },
             {
               "name": "AspectRatio",
@@ -4353,7 +4533,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 85
+              "line": 124
             },
             {
               "name": "BottomNavigationItem",
@@ -4363,7 +4543,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 68
+              "line": 107
             },
             {
               "name": "BottomNavigationProps",
@@ -4373,7 +4553,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 76
+              "line": 115
             },
             {
               "name": "BottomSheet",
@@ -4673,7 +4853,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 326
+              "line": 365
             },
             {
               "name": "CitationProps",
@@ -4683,7 +4863,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 316
+              "line": 355
             },
             {
               "name": "Code",
@@ -4913,7 +5093,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 224
+              "line": 263
             },
             {
               "name": "DateRangePickerProps",
@@ -4923,7 +5103,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 207
+              "line": 246
             },
             {
               "name": "Details",
@@ -5083,7 +5263,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 154
+              "line": 193
             },
             {
               "name": "FilterBarProps",
@@ -5093,7 +5273,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 142
+              "line": 181
             },
             {
               "name": "FormField",
@@ -5363,7 +5543,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 43
+              "line": 82
             },
             {
               "name": "LiveRegionProps",
@@ -5373,7 +5553,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 34
+              "line": 73
             },
             {
               "name": "Marker",
@@ -5513,7 +5693,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 202
+              "line": 241
             },
             {
               "name": "MultiSelectOption",
@@ -5523,7 +5703,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 181
+              "line": 220
             },
             {
               "name": "MultiSelectProps",
@@ -5533,7 +5713,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 187
+              "line": 226
             },
             {
               "name": "NavigationItem",
@@ -5583,7 +5763,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 176
+              "line": 215
             },
             {
               "name": "NumberFieldProps",
@@ -5593,7 +5773,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 158
+              "line": 197
             },
             {
               "name": "Offcanvas",
@@ -5623,7 +5803,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 123
+              "line": 162
             },
             {
               "name": "PageHeaderProps",
@@ -5633,7 +5813,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 111
+              "line": 150
             },
             {
               "name": "Pagination",
@@ -5703,7 +5883,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 300
+              "line": 339
             },
             {
               "name": "PromptComposerProps",
@@ -5713,7 +5893,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 280
+              "line": 319
             },
             {
               "name": "Questionnaire",
@@ -5823,7 +6003,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 64
+              "line": 103
             },
             {
               "name": "SafeAreaEdge",
@@ -5833,7 +6013,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 54
+              "line": 93
             },
             {
               "name": "SafeAreaProps",
@@ -5843,7 +6023,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 56
+              "line": 95
             },
             {
               "name": "ScrollArea",
@@ -6013,7 +6193,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 30
+              "line": 69
             },
             {
               "name": "SkipLinkProps",
@@ -6023,7 +6203,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 22
+              "line": 61
             },
             {
               "name": "Slider",
@@ -6113,7 +6293,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 245
+              "line": 284
             },
             {
               "name": "StepperItem",
@@ -6123,7 +6303,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 228
+              "line": 267
             },
             {
               "name": "StepperProps",
@@ -6133,7 +6313,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 236
+              "line": 275
             },
             {
               "name": "Switch",
@@ -6278,22 +6458,32 @@ export const apiReference = {
             {
               "name": "Theme",
               "kind": "function",
-              "signature": "Theme({ theme, as, class: className, children }: ThemeProps): CocoNode",
+              "signature": "Theme({ theme, as, class: className, tokens, children }: ThemeProps): CocoNode",
               "summary": "Renders the Theme server-first UI primitive with semantic markup and no required browser runtime.",
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 18
+              "line": 40
             },
             {
               "name": "ThemeProps",
               "kind": "interface",
-              "signature": "interface ThemeProps {\n  theme?: \"system\" | \"light\" | \"dark\";\n  as?: \"section\" | \"div\" | \"main\";\n  class?: string;\n  children?: CocoNode\n}",
+              "signature": "interface ThemeProps {\n  theme?: \"system\" | \"light\" | \"dark\";\n  as?: \"section\" | \"div\" | \"main\";\n  tokens?: Readonly<Partial<Record<\"font-sans\" | \"font-mono\" | \"primary-600\" | \"primary-500\" | \"primary-400\" | \"primary-300\" | \"primary-100\" | \"neutral-900\" | \"neutral-700\" | \"neutral-500\" | \"neutral-300\" | \"neutral-100\" | \"neutral-0\" | \"color-text\" | \"color-muted\" | \"color-surface\" | \"color-subtle\" | \"color-border\" | \"color-primary\" | \"color-primary-hover\" | \"color-primary-contrast\" | \"color-success\" | \"color-warning\" | \"color-danger\" | \"color-info\" | \"color-focus\" | \"font-size-xs\" | \"font-size-sm\" | \"font-size-base\" | \"font-size-lg\" | \"font-size-xl\" | \"font-size-2xl\" | \"font-size-3xl\" | \"line-xs\" | \"line-sm\" | \"line-base\" | \"line-lg\" | \"line-xl\" | \"line-2xl\" | \"line-3xl\" | \"space-0\" | \"space-1\" | \"space-2\" | \"space-3\" | \"space-4\" | \"space-5\" | \"space-6\" | \"space-7\" | \"space-8\" | \"radius-none\" | \"radius-sm\" | \"radius\" | \"radius-lg\" | \"radius-xl\" | \"radius-full\" | \"shadow-sm\" | \"shadow-md\" | \"shadow-lg\" | \"shadow-xl\", string>>>;\n  class?: string;\n  children?: CocoNode\n}",
               "summary": "Public interface ThemeProps exported by CocoFrame.",
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 10
+              "line": 30
+            },
+            {
+              "name": "ThemeTokenName",
+              "kind": "type",
+              "signature": "type ThemeTokenName = \"font-sans\" | \"font-mono\" | \"primary-600\" | \"primary-500\" | \"primary-400\" | \"primary-300\" | \"primary-100\" | \"neutral-900\" | \"neutral-700\" | \"neutral-500\" | \"neutral-300\" | \"neutral-100\" | \"neutral-0\" | \"color-text\" | \"color-muted\" | \"color-surface\" | \"color-subtle\" | \"color-border\" | \"color-primary\" | \"color-primary-hover\" | \"color-primary-contrast\" | \"color-success\" | \"color-warning\" | \"color-danger\" | \"color-info\" | \"color-focus\" | \"font-size-xs\" | \"font-size-sm\" | \"font-size-base\" | \"font-size-lg\" | \"font-size-xl\" | \"font-size-2xl\" | \"font-size-3xl\" | \"line-xs\" | \"line-sm\" | \"line-base\" | \"line-lg\" | \"line-xl\" | \"line-2xl\" | \"line-3xl\" | \"space-0\" | \"space-1\" | \"space-2\" | \"space-3\" | \"space-4\" | \"space-5\" | \"space-6\" | \"space-7\" | \"space-8\" | \"radius-none\" | \"radius-sm\" | \"radius\" | \"radius-lg\" | \"radius-xl\" | \"radius-full\" | \"shadow-sm\" | \"shadow-md\" | \"shadow-lg\" | \"shadow-xl\"",
+              "summary": "One allow-listed semantic CSS variable accepted by Theme.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/ui/src/patterns.ts",
+              "line": 28
             },
             {
               "name": "ThinkingIndicator",
@@ -6303,7 +6493,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 312
+              "line": 351
             },
             {
               "name": "ThinkingIndicatorProps",
@@ -6313,7 +6503,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 305
+              "line": 344
             },
             {
               "name": "Toast",
@@ -6413,7 +6603,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 138
+              "line": 177
             },
             {
               "name": "ToolbarProps",
@@ -6423,7 +6613,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 127
+              "line": 166
             },
             {
               "name": "Tooltip",
@@ -6453,7 +6643,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 249
+              "line": 288
             },
             {
               "name": "TreeView",
@@ -6463,7 +6653,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 268
+              "line": 307
             },
             {
               "name": "TreeViewProps",
@@ -6473,7 +6663,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/ui/src/patterns.ts",
-              "line": 260
+              "line": 299
             },
             {
               "name": "uiComponents",
@@ -6568,7 +6758,7 @@ export const apiReference = {
     },
     {
       "name": "create-cocoframe",
-      "version": "0.0.6",
+      "version": "0.0.7",
       "description": "Create a new CocoFrame application",
       "readme": "packages/create-cocoframe/README.md",
       "entries": [

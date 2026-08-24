@@ -19,10 +19,10 @@
     "@cocoframe/icons": "0.0.3",
     "@cocoframe/jsx": "0.0.3",
     "@cocoframe/schema": "0.0.3",
-    "@cocoframe/ui": "0.0.3"
+    "@cocoframe/ui": "0.0.4"
   },
   "devDependencies": {
-    "@cocoframe/cli": "0.0.4",
+    "@cocoframe/cli": "0.0.7",
     "@types/node": "^24.0.0",
     "typescript": "^5.9.0"
   }

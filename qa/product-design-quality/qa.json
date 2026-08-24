@@ -1,0 +1,433 @@
+{
+  "version": 1,
+  "feature": {
+    "id": "product-design-quality",
+    "title": "Product Design Quality"
+  },
+  "mode": "thorough",
+  "state": "approved",
+  "sources": [
+    {
+      "kind": "design-profile",
+      "id": "cocoframe-foundation",
+      "file": "examples/basic/cocoframe.design.json",
+      "state": "sha256:6c084176b74b974da3b8e21c3fa307ea80beefc83cd2829fbb715e3ec05022bb"
+    },
+    {
+      "kind": "cocospec",
+      "id": "product-design-quality",
+      "file": "specs/product-design-quality/spec.json",
+      "state": "approved"
+    }
+  ],
+  "answers": {
+    "target-environments": {
+      "status": "answered",
+      "value": "Local development, production-like build, and isolated npm package-smoke projects.",
+      "updatedAt": "2026-08-24T04:55:42.552Z"
+    },
+    "browsers-devices": {
+      "status": "answered",
+      "value": "Chromium, Firefox, and WebKit desktop; 320, 390, 768, 1366, and 3840 pixel viewports; keyboard-only interaction, reduced motion, and 200 percent text zoom.",
+      "updatedAt": "2026-08-24T04:55:46.237Z"
+    },
+    "test-data": {
+      "status": "answered",
+      "value": "Use examples/basic, the approved CocoSpec, the approved Design Profile, generated documentation, and isolated temporary workspaces. No accounts, secrets, external services, or production data. Temporary fixtures must be cleaned after use.",
+      "updatedAt": "2026-08-24T04:55:49.420Z"
+    },
+    "release-blockers": {
+      "status": "answered",
+      "value": "Any required gate failure, critical or high defect, WCAG contrast failure, destructive overflow or clipping, unapproved missing component, Design Profile hash conflict, or sensitive evidence blocks release. Low or medium design deviations require explicit Product Owner or QA Reviewer acceptance; AI cannot approve.",
+      "updatedAt": "2026-08-24T04:55:52.937Z"
+    },
+    "accessibility-target": {
+      "status": "answered",
+      "value": "WCAG 2.2 AA keyboard-only operation logical focus order visible focus contrast semantic labels announcements manual screen-reader review 200 percent text zoom forced colors reduced motion and ergonomic non-overlapping touch targets.",
+      "updatedAt": "2026-08-24T04:58:53.846Z"
+    },
+    "security-abuse": {
+      "status": "answered",
+      "value": "Negatively test unknown and unsafe CSS tokens, URL script or expression injection, malformed profiles, workspace traversal and linked escapes, unsanitized evidence, secret exposure, stale approvals, and unauthorized mutation. Read-only audits must not mutate state, and an AI agent cannot approve its own result.",
+      "updatedAt": "2026-08-24T04:59:02.300Z"
+    },
+    "performance-thresholds": {
+      "status": "answered",
+      "value": "Parse and validate a normal Design Profile within 100 milliseconds. Complete a static audit within 2 seconds for up to 500 components or 10000 token usages. Each viewport gate is limited to 30 seconds and the complete visual audit to 2 minutes. Profiles are limited to 256 kilobytes and evidence to 10 files of 10 megabytes each. Theme adds no island or hydration payload.",
+      "updatedAt": "2026-08-24T04:59:10.929Z"
+    },
+    "compatibility-risks": {
+      "status": "answered",
+      "value": "The feature is additive and opt-in. Projects without a Design Profile retain existing visuals. Older CocoQA records remain readable. Migration is explicit and never automatic. Theme remains server-first. Agent contracts remain provider-independent. Rollback removes profile adoption and regenerates derived artifacts from canonical sources.",
+      "updatedAt": "2026-08-24T04:59:19.261Z"
+    },
+    "exploratory-charter": {
+      "status": "answered",
+      "value": "Run a 30 minute risk-focused exploration covering profile edge cases, nested Theme overrides, dark and forced-colors modes, long content, 200 percent zoom, stale hashes, component reuse, icon labeling, and cancellation. Keep only sanitized notes and declared screenshots.",
+      "updatedAt": "2026-08-24T05:00:39.924Z"
+    },
+    "design-profile-scope": {
+      "status": "answered",
+      "value": "Use Design Profile cocoframe-foundation at examples/basic/cocoframe.design.json with light and dark themes and SHA-256 6c084176b74b974da3b8e21c3fa307ea80beefc83cd2829fbb715e3ec05022bb. Inventory includes all project.inspect application components, @cocoframe/ui primitives, and @cocoframe/icons linear. No component exceptions are approved.",
+      "updatedAt": "2026-08-24T05:00:44.047Z"
+    },
+    "design-evidence": {
+      "status": "answered",
+      "value": "Use unit evidence for profile parsing, token safety, contrast, and diagnostics; rendered HTML evidence for server-first Theme behavior; inspect and source evidence for component reuse and icon origin; Playwright computed metrics for spacing, color, radius, responsive reflow, overflow, keyboard, images, and client errors; manual review for screen readers, forced colors, zoom, and visual hierarchy. Fidelity is not applicable without a completed CocoRef.",
+      "updatedAt": "2026-08-24T05:00:47.443Z"
+    },
+    "design-viewports": {
+      "status": "answered",
+      "value": "Verify 320 by 568, 390 by 844, 768 by 1024, 1366 by 768, and 3840 by 2160 viewports; light and dark themes; keyboard focus, hover, disabled and error states; reduced motion, forced colors, long content, and 200 percent text zoom.",
+      "updatedAt": "2026-08-24T05:00:51.404Z"
+    },
+    "design-waivers": {
+      "status": "answered",
+      "value": "Low- and medium-severity design deviations may be accepted only through explicit joint approval by the Product Owner or Designer and the QA or Release Reviewer, with rationale, affected targets, follow-up, and expiry recorded. AI agents and implementation authors cannot approve their own results. Critical or high defects are never waivable. WCAG contrast, focus, or accessibility failures; destructive overflow, clipping, or overlapping controls; missing or unapproved components or CocoRef decisions; unsafe or unknown tokens; sensitive evidence; stale Design Profile, reference, or component hashes; and any required gate failure always block release.",
+      "updatedAt": "2026-08-24T05:03:14.912Z"
+    }
+  },
+  "cases": [
+    {
+      "id": "acceptance-1",
+      "title": "Given an existing component inventory, when a feature is designed, then existing components are audited and returned before a new component is proposed.",
+      "category": "functional",
+      "source": "cocospec:acceptance-1",
+      "required": true,
+      "status": "passed",
+      "evidence": "Agent Bridge project.inspect and component.find tests enumerate the existing @cocoframe/ui inventory before proposals; auditProductDesign emits COMPONENT_REUSE_NOT_AUDITED when this order is violated.",
+      "updatedAt": "2026-08-24T05:14:15.150Z"
+    },
+    {
+      "id": "acceptance-2",
+      "title": "Given a project design profile, when semantic color, spacing, radius, typography, or elevation tokens are changed, then supported components adopt the approved values without forking their primitives.",
+      "category": "functional",
+      "source": "cocospec:acceptance-2",
+      "required": true,
+      "status": "passed",
+      "evidence": "tests/ui.test.ts proves Theme applies allow-listed color and radius overrides as server-rendered CSS variables; tests/design-quality.test.ts compiles color, spacing, radius, typography, and elevation tokens from the approved profile.",
+      "updatedAt": "2026-08-24T05:14:15.522Z"
+    },
+    {
+      "id": "acceptance-3",
+      "title": "Given a component variant, when its styling is inspected, then project appearance is derived from declared semantic tokens rather than duplicated hardcoded project colors.",
+      "category": "functional",
+      "source": "cocospec:acceptance-3",
+      "required": true,
+      "status": "passed",
+      "evidence": "Theme accepts only declared semantic token names and renders deterministic --coco-* variables; unknown or unsafe project tokens are rejected by focused UI and Design Profile tests.",
+      "updatedAt": "2026-08-24T05:14:15.891Z"
+    },
+    {
+      "id": "acceptance-4",
+      "title": "Given an approved spacing and radius scale, when related screens and components are audited, then their layout rhythm and shapes use the approved scale consistently.",
+      "category": "functional",
+      "source": "cocospec:acceptance-4",
+      "required": true,
+      "status": "passed",
+      "evidence": "Playwright computed metrics confirm all four lifecycle cards share one radius and an exact 24px gap, matching the approved radius-xl and space-4 scale.",
+      "updatedAt": "2026-08-24T05:14:16.269Z"
+    },
+    {
+      "id": "acceptance-5",
+      "title": "Given text or an interactive control, when contrast is measured, then it satisfies the approved WCAG 2.2 AA target.",
+      "category": "functional",
+      "source": "cocospec:acceptance-5",
+      "required": true,
+      "status": "passed",
+      "evidence": "auditProductDesign validates light and dark profile contrast without diagnostics; contrastRatio unit coverage and forced-colors focus assertions passed.",
+      "updatedAt": "2026-08-24T05:14:16.683Z"
+    },
+    {
+      "id": "acceptance-6",
+      "title": "Given supported viewports from 320 pixels through 4K and approved text zoom, when the interface is rendered, then it remains usable without unintended horizontal overflow or clipped content.",
+      "category": "functional",
+      "source": "cocospec:acceptance-6",
+      "required": true,
+      "status": "passed",
+      "evidence": "Responsive Playwright coverage passed at 320x568, 390x844, 768x1024, 1366x768, and 3840x2160; the restrictive 320px case also passed at 200% text zoom without horizontal overflow.",
+      "updatedAt": "2026-08-24T05:14:17.141Z"
+    },
+    {
+      "id": "acceptance-7",
+      "title": "Given interface icons, when they are audited, then they come from the approved catalog and use consistent family, size, stroke, alignment, and accessible labeling.",
+      "category": "functional",
+      "source": "cocospec:acceptance-7",
+      "required": true,
+      "status": "passed",
+      "evidence": "The approved profile restricts icons to @cocoframe/icons linear at 16, 20, 24, and 32; project.inspect and source review confirm the Features page imports that catalog and decorative icons are hidden from assistive technology.",
+      "updatedAt": "2026-08-24T05:14:17.632Z"
+    },
+    {
+      "id": "acceptance-8",
+      "title": "Given a completed CocoRef, when CocoQA is created, then every approved visual criterion remains traceable to a QA case and sanitized evidence.",
+      "category": "functional",
+      "source": "cocospec:acceptance-8",
+      "required": true,
+      "status": "passed",
+      "evidence": "No CocoRef source applies to this implementation. The conditional contract is verified by tests/qa.test.ts: completed CocoRef criteria become source-linked required QA cases with sanitized evidence fields.",
+      "updatedAt": "2026-08-24T05:14:51.092Z"
+    },
+    {
+      "id": "acceptance-9",
+      "title": "Given no visual reference, when product-design QA runs, then design-system checks still execute and visual-fidelity checks are explicitly not applicable.",
+      "category": "functional",
+      "source": "cocospec:acceptance-9",
+      "required": true,
+      "status": "passed",
+      "evidence": "The canonical QA has no CocoRef source yet includes all twelve non-fidelity Product Design Quality cases; auditProductDesign passes without a reference state and fidelity is explicitly not applicable.",
+      "updatedAt": "2026-08-24T05:14:51.486Z"
+    },
+    {
+      "id": "acceptance-10",
+      "title": "Given a critical or high product-design defect, when release approval is attempted, then CocoQA refuses approval until the defect is resolved.",
+      "category": "functional",
+      "source": "cocospec:acceptance-10",
+      "required": true,
+      "status": "passed",
+      "evidence": "CocoQA unit coverage proves release approval is blocked by unresolved results, and packages/qa/src/index.ts rejects acceptance of critical or high defects.",
+      "updatedAt": "2026-08-24T05:14:51.875Z"
+    },
+    {
+      "id": "acceptance-11",
+      "title": "Given design evidence, when it is recorded or reported, then sensitive data is redacted and screenshots are persisted only in declared approved artifacts.",
+      "category": "functional",
+      "source": "cocospec:acceptance-11",
+      "required": true,
+      "status": "passed",
+      "evidence": "auditProductDesign rejects unsanitized measurements with SENSITIVE_VISUAL_EVIDENCE_BLOCKED; Agent Bridge sanitizes all tool output and this QA stores only sanitized text evidence with no screenshots.",
+      "updatedAt": "2026-08-24T05:14:52.308Z"
+    },
+    {
+      "id": "acceptance-12",
+      "title": "Given a server-first component, when project styling is customized, then no browser runtime is introduced solely for visual appearance.",
+      "category": "functional",
+      "source": "cocospec:acceptance-12",
+      "required": true,
+      "status": "passed",
+      "evidence": "Theme token overrides render directly into HTML and tests assert no script element is introduced; no island or hydration code was added for visual customization.",
+      "updatedAt": "2026-08-24T05:14:52.746Z"
+    },
+    {
+      "id": "acceptance-13",
+      "title": "Given two supported AI providers, when they perform the same design-quality workflow, then they use the same provider-independent contracts and receive structurally equivalent results.",
+      "category": "functional",
+      "source": "cocospec:acceptance-13",
+      "required": true,
+      "status": "passed",
+      "evidence": "Agent Bridge exposes one versioned provider-independent cocoqa.trace schema and deterministic Design Profile result structure; tests discover the same contract without provider branches.",
+      "updatedAt": "2026-08-24T05:14:53.252Z"
+    },
+    {
+      "id": "acceptance-14",
+      "title": "Given a completed workflow, when the AI reports completion, then it lists reused components, token decisions, reference fidelity, quality evidence, defects, and unresolved visual risks.",
+      "category": "functional",
+      "source": "cocospec:acceptance-14",
+      "required": true,
+      "status": "passed",
+      "evidence": "The canonical QA report includes source-bound Design Profile decisions, component reuse evidence, CocoRef applicability, per-case evidence, gate results, defects, and unresolved issues for the final AI summary.",
+      "updatedAt": "2026-08-24T05:14:53.679Z"
+    },
+    {
+      "id": "design-component-reuse",
+      "title": "Existing framework and application components are audited before a new component is proposed.",
+      "category": "visual",
+      "source": "design:component-reuse",
+      "required": true,
+      "status": "passed",
+      "evidence": "project.inspect enumerated framework components and icons, component.find reports auditedExistingComponents true, and the Features page reuses the existing cocospecs-feature pattern for all lifecycle cards.",
+      "updatedAt": "2026-08-24T05:14:54.158Z"
+    },
+    {
+      "id": "design-semantic-tokens",
+      "title": "Project appearance is derived from the approved semantic design profile instead of duplicated hardcoded styles.",
+      "category": "visual",
+      "source": "design:semantic-tokens",
+      "required": true,
+      "status": "passed",
+      "evidence": "The approved profile compiles to allow-listed semantic CSS variables and Theme rejects unknown tokens; token overrides are applied without primitive forks.",
+      "updatedAt": "2026-08-24T05:14:54.518Z"
+    },
+    {
+      "id": "design-spacing",
+      "title": "Spacing values follow the approved scale and produce a consistent layout rhythm.",
+      "category": "visual",
+      "source": "design:spacing",
+      "required": true,
+      "status": "passed",
+      "evidence": "Computed browser metrics confirm an exact 24px lifecycle-card rhythm at every approved viewport, matching profile space-4.",
+      "updatedAt": "2026-08-24T05:14:54.949Z"
+    },
+    {
+      "id": "design-color",
+      "title": "Semantic color usage remains consistent across equivalent states and components.",
+      "category": "visual",
+      "source": "design:color",
+      "required": true,
+      "status": "passed",
+      "evidence": "Computed browser metrics confirm equivalent lifecycle cards share one background; light and dark semantic colors are declared centrally in cocoframe.design.json.",
+      "updatedAt": "2026-08-24T05:14:55.378Z"
+    },
+    {
+      "id": "design-contrast",
+      "title": "Text, focus indicators, controls, and meaningful graphics satisfy the approved WCAG 2.2 AA contrast thresholds.",
+      "category": "accessibility",
+      "source": "design:contrast",
+      "required": true,
+      "status": "passed",
+      "evidence": "Both profile themes pass auditProductDesign contrast checks for text, primary controls, and focus; forced-colors focus remains visible with at least a 1px outline.",
+      "updatedAt": "2026-08-24T05:14:55.762Z"
+    },
+    {
+      "id": "design-typography",
+      "title": "Typography uses the approved family, scale, weight, line height, and readable wrapping.",
+      "category": "visual",
+      "source": "design:typography",
+      "required": true,
+      "status": "passed",
+      "evidence": "Typography family, size, and line-height scales parse from the approved profile; shared lifecycle-card selectors provide equivalent headings and body wrapping, including at 200% text zoom.",
+      "updatedAt": "2026-08-24T05:14:56.274Z"
+    },
+    {
+      "id": "design-radius",
+      "title": "Corners use the approved radius scale consistently.",
+      "category": "visual",
+      "source": "design:radius",
+      "required": true,
+      "status": "passed",
+      "evidence": "All four lifecycle cards have identical computed border radius and the 16px result matches the approved radius-xl token.",
+      "updatedAt": "2026-08-24T05:14:57.044Z"
+    },
+    {
+      "id": "design-elevation",
+      "title": "Shadows and elevation communicate hierarchy consistently without obscuring focus or contrast.",
+      "category": "visual",
+      "source": "design:elevation",
+      "required": true,
+      "status": "passed",
+      "evidence": "Equivalent lifecycle cards share one reusable shadow declaration; source review confirms elevation does not replace or obscure the forced-colors focus outline.",
+      "updatedAt": "2026-08-24T05:14:57.805Z"
+    },
+    {
+      "id": "design-iconography",
+      "title": "Icons use the approved catalog, family, sizes, alignment, and accessible labeling.",
+      "category": "accessibility",
+      "source": "design:iconography",
+      "required": true,
+      "status": "passed",
+      "evidence": "Source imports only @cocoframe/icons/linear icons; profile catalog, family, and sizes validate, while decorative card icons use aria-hidden and actionable links keep text labels.",
+      "updatedAt": "2026-08-24T05:14:58.311Z"
+    },
+    {
+      "id": "design-overflow",
+      "title": "Approved viewports and text zoom have no unintended horizontal overflow, clipping, or overlapping controls.",
+      "category": "responsive",
+      "source": "design:overflow",
+      "required": true,
+      "status": "passed",
+      "evidence": "Playwright found no horizontal overflow, clipping, or hidden lifecycle CTA at the five approved viewports and at 200% text zoom on the 320px baseline.",
+      "updatedAt": "2026-08-24T05:14:58.751Z"
+    },
+    {
+      "id": "design-responsive",
+      "title": "The interface reflows from 320 pixels through 4K at every approved viewport.",
+      "category": "responsive",
+      "source": "design:responsive",
+      "required": true,
+      "status": "passed",
+      "evidence": "Critical-page and lifecycle-card E2E coverage passed from 320px through 4K, with equal card widths and responsive reflow.",
+      "updatedAt": "2026-08-24T05:14:59.198Z"
+    },
+    {
+      "id": "design-accessibility",
+      "title": "Keyboard, focus, semantic, announcement, forced-colors, and reduced-motion behavior satisfy the approved target.",
+      "category": "accessibility",
+      "source": "design:accessibility",
+      "required": true,
+      "status": "passed",
+      "evidence": "Role-based browser assertions expose named navigation and links; keyboard focus leaves BODY, forced-colors retains a visible outline, reduced motion is enabled, and 200% text zoom remains usable.",
+      "updatedAt": "2026-08-24T05:14:59.672Z"
+    },
+    {
+      "id": "framework-server-first",
+      "title": "Useful server-rendered output exists without browser JavaScript.",
+      "category": "compatibility",
+      "source": "cocoframe:server-first",
+      "required": true,
+      "status": "passed",
+      "evidence": "Theme and Product Design APIs produce useful server-rendered HTML and CSS variables; tests verify no visual-only script or island payload.",
+      "updatedAt": "2026-08-24T05:15:00.089Z"
+    },
+    {
+      "id": "framework-accessibility",
+      "title": "Keyboard, focus, labels, errors, and semantic structure satisfy the approved accessibility target.",
+      "category": "accessibility",
+      "source": "cocoframe:accessibility",
+      "required": true,
+      "status": "passed",
+      "evidence": "Automated role, accessible-name, keyboard-focus, forced-colors, reduced-motion, image-alt, and zoom checks passed; source review confirms semantic headings, links, navigation, and decorative icon handling.",
+      "updatedAt": "2026-08-24T05:15:00.535Z"
+    },
+    {
+      "id": "framework-responsive",
+      "title": "The feature remains usable across the approved viewport and device range without horizontal overflow.",
+      "category": "responsive",
+      "source": "cocoframe:responsive",
+      "required": true,
+      "status": "passed",
+      "evidence": "The full critical-page matrix passed at 320, 390, 768, 1366, and 3840 pixels with healthy images, keyboard targets, and no horizontal overflow.",
+      "updatedAt": "2026-08-24T05:15:01.063Z"
+    }
+  ],
+  "gates": [
+    {
+      "id": "check",
+      "script": "check",
+      "required": true,
+      "status": "passed",
+      "durationMs": 11522,
+      "exitCode": 0,
+      "updatedAt": "2026-08-24T05:12:07.902Z"
+    },
+    {
+      "id": "test",
+      "script": "test",
+      "required": true,
+      "status": "passed",
+      "durationMs": 34866,
+      "exitCode": 0,
+      "updatedAt": "2026-08-24T05:08:42.630Z"
+    },
+    {
+      "id": "inspect",
+      "script": "inspect",
+      "required": true,
+      "status": "passed",
+      "durationMs": 1226,
+      "exitCode": 0,
+      "updatedAt": "2026-08-24T05:08:43.868Z"
+    },
+    {
+      "id": "build",
+      "script": "build",
+      "required": true,
+      "status": "passed",
+      "durationMs": 1314,
+      "exitCode": 0,
+      "updatedAt": "2026-08-24T05:08:45.192Z"
+    },
+    {
+      "id": "test-e2e",
+      "script": "test:e2e",
+      "required": true,
+      "status": "passed",
+      "durationMs": 171328,
+      "exitCode": 0,
+      "updatedAt": "2026-08-24T05:11:36.522Z"
+    }
+  ],
+  "defects": [],
+  "createdAt": "2026-08-24T04:53:00.911Z",
+  "updatedAt": "2026-08-24T05:17:29.431Z",
+  "approvedAt": "2026-08-24T05:17:29.431Z"
+}

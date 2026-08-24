@@ -15,6 +15,9 @@ import {
   createCocoQa,
   nextCocoQaQuestions,
   parseCocoQa,
+  parseDesignProfile,
+  hashDesignProfile,
+  productDesignCriteria,
   slugifyCocoQa,
   type CocoQaMode,
 } from "@cocoframe/qa";
@@ -162,15 +165,36 @@ export async function readCocoQaTrace(
   const canonicalFile = `qa/${feature}/qa.json`;
   const existing = await readOptionalCanonical(root, canonicalFile, signal);
   const acceptanceCriteria = stringList(spec.answers["acceptance-criteria"]?.value);
+  const designFile = "cocoframe.design.json";
+  const designValue = await readOptionalCanonical(root, designFile, signal);
+  const designProfile = designValue === undefined
+    ? undefined
+    : parseCanonical("Design Profile", designFile, designValue, parseDesignProfile);
+  const designHash = designProfile ? await hashDesignProfile(designProfile) : undefined;
   const qa = existing === undefined
     ? createCocoQa({
       feature,
       title: spec.feature.title,
       mode: input.mode,
-      sources: [{ kind: "cocospec", id: feature, file: specFile, state: spec.state }],
+      sources: [
+        { kind: "cocospec", id: feature, file: specFile, state: spec.state },
+        ...(designProfile && designHash ? [{ kind: "design-profile" as const, id: designProfile.id, file: designFile, state: "sha256:" + designHash }] : []),
+      ],
       acceptanceCriteria,
+      ...(designProfile ? { designCriteria: productDesignCriteria(designProfile) } : {}),
     })
     : parseCanonical("CocoQA", canonicalFile, existing, parseCocoQa);
+  const qaDesignSource = qa.sources.find(({ kind }) => kind === "design-profile");
+  if (existing !== undefined && qaDesignSource &&
+      (!designProfile || !designHash || qaDesignSource.state !== "sha256:" + designHash)) {
+    throw diagnosticError(
+      "STATE_CONFLICT",
+      "The Design Profile changed after the canonical CocoQA plan was reviewed.",
+      "Inspect the current Design Profile, rebuild the CocoQA plan, and request approval again.",
+    );
+  }
+  const traceDesignProfile = existing === undefined || qaDesignSource ? designProfile : undefined;
+  const traceDesignHash = existing === undefined || qaDesignSource ? designHash : undefined;
   const check = checkCocoQa(qa);
   return {
     lifecycle: "cocoqa" as const,
@@ -182,6 +206,7 @@ export async function readCocoQaTrace(
     canonicalFile,
     sources: qa.sources,
     acceptanceCriteria,
+    ...(traceDesignProfile && traceDesignHash ? { designProfile: { id: traceDesignProfile.id, file: designFile, hash: traceDesignHash } } : {}),
     questions: nextCocoQaQuestions(qa, input.limit),
     cases: qa.cases,
     gates: qa.gates,

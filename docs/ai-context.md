@@ -101,7 +101,8 @@ move.
 | --- | --- | --- |
 | Product discovery or a new application feature | `@cocoframe/specs`, existing `specs/<feature>/spec.json`, and `cocoframe inspect` | adaptive questions, explicit assumptions, generated review artifacts, approval state |
 | Image- or website-reference implementation | `@cocoframe/cocoref`, existing `refs/<name>/ref.json`, and `cocoframe inspect` | inventory reuse, missing-component consent, actual candidate preview, revision history, temporary-route cleanup |
-| Feature QA or release approval | `@cocoframe/qa`, approved `specs/<feature>/spec.json`, optional completed `refs/<name>/ref.json`, and `qa/<feature>/qa.json` | adaptive QA decisions, traceability, allow-listed gates, sanitized evidence, defects, explicit approval |
+| Feature QA or release approval | `@cocoframe/qa`, approved `specs/<feature>/spec.json`, optional completed `refs/<name>/ref.json`, optional `cocoframe.design.json`, and `qa/<feature>/qa.json` | adaptive QA decisions, Product Design Quality, traceability, allow-listed gates, sanitized evidence, defects, explicit approval |
+| Product design or theme quality | `docs/product-design-quality.md`, `@cocoframe/qa`, `@cocoframe/ui`, the project Design Profile, component inventory, and completed CocoRef when applicable | reuse-first audit, token safety, spacing, contrast, iconography, overflow, responsive states, fidelity, profile fingerprint |
 | AI client or MCP integration | `@cocoframe/agent`, `docs/agent-bridge.md`, `packages/cli/src/inspect-readonly.ts`, and the approved Agent Bridge CocoSpec | provider-independent schemas, read-only guarantees, workspace confinement, stable diagnostics, role-aware approval boundary |
 | Routing or pages | Router, page types, request dispatcher | load/meta/view ownership, status codes, streaming |
 | Rendering or streaming | renderer, response writer, error boundaries | abort propagation, headers, buffered error behavior |
@@ -201,6 +202,7 @@ The next useful companion documents are:
 - `docs/cocospecs.md`: adaptive discovery, generated product artifacts, and the approval lifecycle.
 - `docs/cocoref.md`: visual-reference audit, candidate consent, preview, revision, promotion, and cleanup.
 - `docs/cocoqa.md`: adaptive quality decisions, traceable coverage, gate execution, defects, evidence, and release approval.
+- `docs/product-design-quality.md`: Design Profiles, component reuse, token customization, visual evidence, responsive coverage, and fidelity.
 - `docs/repository-map.md`: package ownership, public entry points, and key tests.
 - `docs/request-lifecycle.md`: one end-to-end request trace, including failures.
 - `docs/generated-artifacts.md`: generators, inputs, outputs, and commands.

@@ -11,6 +11,10 @@ import {
   createCocoQa,
   nextCocoQaQuestions,
   parseCocoQa,
+  parseDesignProfile,
+  hashDesignProfile,
+  productDesignCriteria,
+  auditProductDesign,
   recordCocoQaCase,
   recordCocoQaGate,
   renderCocoQaArtifacts,
@@ -70,6 +74,7 @@ export async function runQaCommand(
     const ref = refName ? parseCocoRef(JSON.parse(await readFile(path.join(projectRoot, "refs", slugifyCocoRef(refName), "ref.json"), "utf8"))) : undefined;
     if (ref && ref.state !== "ready") throw new Error(`CocoQA requires a completed CocoRef; ${ref.name} is ${ref.state}.`);
     const manifest = await readManifest(projectRoot);
+    const design = await readDesignProfile(projectRoot, optionString(parsed.options, "design"));
     const acceptanceCriteria = valueLines(spec.answers["acceptance-criteria"]?.value);
     if (!acceptanceCriteria.length) throw new Error(`Approved CocoSpec ${specId} has no acceptance criteria.`);
     const qa = createCocoQa({
@@ -77,10 +82,12 @@ export async function runQaCommand(
       title: optionString(parsed.options, "title") ?? spec.feature.title,
       mode: parseMode(optionString(parsed.options, "mode") ?? "standard"),
       sources: [
+        ...(design ? [{ kind: "design-profile" as const, id: design.profile.id, file: design.file, state: "sha256:" + design.hash }] : []),
         { kind: "cocospec", id: specId, file: relative(projectRoot, specPath), state: spec.state },
         ...(ref ? [{ kind: "cocoref" as const, id: ref.name, file: `refs/${ref.name}/ref.json`, state: ref.state }] : []),
       ],
       acceptanceCriteria,
+      ...(design ? { designCriteria: productDesignCriteria(design.profile, { hasReference: Boolean(ref) }) } : {}),
       ...(ref ? { referenceCriteria: ref.requirements.filter(({ status }) => status === "approved" || status === "reused").map(({ id, description }) => ({ id, description })) } : {}),
       gates: qualityScripts.filter((script) => manifest.scripts[script]).map((script) => ({ id: script.replace(":", "-"), script, required: true })),
     });
@@ -220,8 +227,40 @@ async function readManifest(projectRoot: string): Promise<{ readonly scripts: Re
 
 async function readQa(projectRoot: string, feature: string): Promise<CocoQa> {
   const file = qaFile(projectRoot, feature);
-  try { return parseCocoQa(JSON.parse(await readFile(file, "utf8"))); }
-  catch (error) { if ((error as NodeJS.ErrnoException).code === "ENOENT") throw new Error(`CocoQA does not exist: ${relative(projectRoot, file)}.`); throw error; }
+  try {
+    const qa = parseCocoQa(JSON.parse(await readFile(file, "utf8")));
+    const source = qa.sources.find(({ kind }) => kind === "design-profile");
+    if (source?.file) {
+      const design = await readDesignProfile(projectRoot, source.file);
+      if (!design || source.state !== "sha256:" + design.hash) {
+        throw Object.assign(new Error("DESIGN_STATE_CONFLICT: The Design Profile changed after CocoQA review. Inspect the profile, rebuild the QA plan, and request approval again."), { code: "DESIGN_STATE_CONFLICT" });
+      }
+    }
+    return qa;
+  } catch (error) {
+    if ((error as NodeJS.ErrnoException).code === "ENOENT") throw new Error("CocoQA does not exist: " + relative(projectRoot, file) + ".");
+    throw error;
+  }
+}
+
+async function readDesignProfile(projectRoot: string, requested?: string) {
+  const relativeFile = requested ?? "cocoframe.design.json";
+  const file = path.resolve(projectRoot, relativeFile);
+  const rootPrefix = path.resolve(projectRoot) + path.sep;
+  if (file !== path.resolve(projectRoot) && !file.startsWith(rootPrefix)) {
+    throw new Error("WORKSPACE_ACCESS_DENIED: Design Profile must be inside the approved project root.");
+  }
+  if (!await exists(file)) {
+    if (requested) throw new Error("Design Profile does not exist: " + relativeFile + ".");
+    return undefined;
+  }
+  const profile = parseDesignProfile(JSON.parse(await readFile(file, "utf8")));
+  const audit = auditProductDesign(profile, { componentsAudited: true });
+  if (!audit.passed) {
+    const details = audit.diagnostics.map(({ code, message }) => code + ": " + message).join(" ");
+    throw new Error("Design Profile failed validation. " + details);
+  }
+  return { profile, file: relative(projectRoot, file), hash: await hashDesignProfile(profile) };
 }
 
 async function persist(projectRoot: string, qa: CocoQa): Promise<void> {
@@ -262,7 +301,7 @@ function printStatus(io: QaCommandIo, projectRoot: string, qa: CocoQa, json: boo
 
 function validateArguments(operation: string, parsed: ParsedArguments): void {
   const options: Readonly<Record<string, readonly string[]>> = {
-    help: [], create: ["json", "mode", "project", "ref", "spec", "title"], resume: ["json", "project"], status: ["json", "project"], plan: ["json", "project"], report: ["json", "project"],
+    help: [], create: ["design", "json", "mode", "project", "ref", "spec", "title"], resume: ["json", "project"], status: ["json", "project"], plan: ["json", "project"], report: ["json", "project"],
     answer: ["json", "project", "status"], run: ["gate", "json", "project"], record: ["evidence", "json", "project"], defect: ["actual", "evidence", "expected", "json", "project", "severity", "steps", "title"],
     resolve: ["as", "json", "project", "resolution"], check: ["json", "project"], approve: ["json", "project"],
   };
@@ -317,7 +356,7 @@ async function exists(file: string): Promise<boolean> { try { await access(file)
 
 function qaHelp(): string {
   return "CocoQA\n\nCommands:\n" +
-    "  cocoframe qa create <feature> --spec <approved-feature> [--ref <completed-reference>] [--mode standard|thorough]\n" +
+    "  cocoframe qa create <feature> --spec <approved-feature> [--ref <completed-reference>] [--design <profile>] [--mode standard|thorough]\n" +
     "  cocoframe qa resume|status|plan|report <feature> [--json] [--project <path>]\n" +
     "  cocoframe qa answer <feature> <question-id> [value] [--status <status>]\n" +
     "  cocoframe qa run <feature> [--gate <gate-id>] [--project <path>]\n" +

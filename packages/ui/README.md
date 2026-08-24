@@ -15,6 +15,10 @@ export const Profile = () => (
 );
 ```
 
+`Theme` accepts typed, allow-listed semantic token overrides for project color,
+spacing, radius, typography, and elevation customization. It emits server-side
+custom properties and rejects unsafe or unknown values.
+
 Components render semantic HTML without browser runtime by default. Use an island
 only when interaction genuinely requires it, and prefer an existing primitive
 before creating an application-specific equivalent. The live `/components`

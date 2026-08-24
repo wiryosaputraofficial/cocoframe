@@ -1,0 +1,57 @@
+erDiagram
+    DesignProfile {
+        literal_1 version
+        string id
+        string name
+        string extends "nullable"
+        record_string__semantictokenset_ themes
+        tokenscale spacing
+        tokenscale radius
+        typographyscale typography
+        tokenscale elevation
+        breakpointscale breakpoints
+        iconpolicy icons
+        iso_timestamp updatedAt
+    }
+    SemanticTokenSet {
+        typed_semantic_surface__text__border__action__focus__status__and_overlay_colors colors
+    }
+    DesignAudit {
+        string id
+        string qaId
+        string profileId
+        sha256 profileHash
+        string referenceId "nullable"
+        sha256 referenceHash "nullable"
+        draft_running_failed_passed_approved state
+        iso_timestamp createdAt
+        iso_timestamp updatedAt
+        iso_timestamp approvedAt "nullable"
+    }
+    DesignAuditCase {
+        string id
+        string auditId
+        reuse_tokens_spacing_color_contrast_typography_radius_elevation_iconography_overflow_responsive_accessibility_fidelity principle
+        sanitized_component_id target
+        string viewport "nullable"
+        cocoqaresultstatus status
+        boolean required
+        string__ evidenceIds
+    }
+    DesignEvidence {
+        string id
+        string caseId
+        measurement_screenshot_trace_manual_review kind
+        string summary
+        string relativePath "nullable"
+        sha256 contentHash "nullable"
+        literal_true sanitized
+        iso_timestamp createdAt
+    }
+    DesignProfile ||--o{ DesignAudit : "evaluated by"
+    CocoQa ||--o{ DesignAudit : "tracks design audits"
+    CocoRef ||--o{ DesignAuditCase : "supplies fidelity criteria"
+    DesignAudit ||--o{ DesignAuditCase : "contains"
+    DesignAuditCase ||--o{ DesignEvidence : "proved by"
+    DesignAuditCase ||--o{ CocoQaDefect : "may produce"
+    CocoRefComponentDecision ||--o{ DesignAuditCase : "supplies reuse status"

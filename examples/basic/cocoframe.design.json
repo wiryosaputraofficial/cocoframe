@@ -1,0 +1,108 @@
+{
+  "version": 1,
+  "id": "cocoframe-foundation",
+  "name": "CocoFrame Foundation",
+  "themes": {
+    "light": {
+      "variables": {
+        "primary-600": "#17684a",
+        "primary-500": "#2e8b65",
+        "primary-400": "#5fc09a",
+        "primary-300": "#85d6ad",
+        "primary-100": "#e6f4ec",
+        "neutral-900": "#0f172a",
+        "neutral-700": "#334155",
+        "neutral-500": "#475569",
+        "neutral-300": "#cbd5e1",
+        "neutral-100": "#f1f5f9",
+        "neutral-0": "#ffffff",
+        "color-text": "#0f172a",
+        "color-muted": "#475569",
+        "color-surface": "#ffffff",
+        "color-subtle": "#f1f5f9",
+        "color-border": "#cbd5e1",
+        "color-primary": "#17684a",
+        "color-primary-hover": "#14543e",
+        "color-primary-contrast": "#ffffff",
+        "color-success": "#15803d",
+        "color-warning": "#b45309",
+        "color-danger": "#b91c1c",
+        "color-info": "#1d4ed8",
+        "color-focus": "#17684a"
+      }
+    },
+    "dark": {
+      "variables": {
+        "color-text": "#f8fafc",
+        "color-muted": "#cbd5e1",
+        "color-surface": "#0f172a",
+        "color-subtle": "#1e293b",
+        "color-border": "#475569",
+        "color-primary": "#85d6ad",
+        "color-primary-hover": "#a4e0bd",
+        "color-primary-contrast": "#09291e",
+        "color-success": "#86efac",
+        "color-warning": "#fcd34d",
+        "color-danger": "#fca5a5",
+        "color-info": "#93c5fd",
+        "color-focus": "#85d6ad"
+      }
+    }
+  },
+  "spacing": {
+    "0": "0",
+    "1": "0.25rem",
+    "2": "0.5rem",
+    "3": "1rem",
+    "4": "1.5rem",
+    "5": "2rem",
+    "6": "3rem",
+    "7": "4rem",
+    "8": "6rem"
+  },
+  "radius": {
+    "none": "0",
+    "sm": "0.25rem",
+    "default": "0.5rem",
+    "lg": "0.75rem",
+    "xl": "1rem",
+    "full": "9999px"
+  },
+  "typography": {
+    "font-sans": "Satoshi, system-ui, sans-serif",
+    "font-mono": "ui-monospace, Consolas, monospace",
+    "font-size-xs": "0.75rem",
+    "font-size-sm": "0.875rem",
+    "font-size-base": "1rem",
+    "font-size-lg": "1.25rem",
+    "font-size-xl": "1.5rem",
+    "font-size-2xl": "2rem",
+    "font-size-3xl": "2.5rem",
+    "line-xs": "1rem",
+    "line-sm": "1.25rem",
+    "line-base": "1.5rem",
+    "line-lg": "1.75rem",
+    "line-xl": "2rem",
+    "line-2xl": "2.5rem",
+    "line-3xl": "3rem"
+  },
+  "elevation": {
+    "sm": "0 1px 2px rgb(15 23 42 / 0.05)",
+    "md": "0 4px 6px rgb(15 23 42 / 0.1)",
+    "lg": "0 10px 15px rgb(15 23 42 / 0.1)",
+    "xl": "0 20px 25px rgb(15 23 42 / 0.12)"
+  },
+  "breakpoints": {
+    "mobile": "320px",
+    "phone": "390px",
+    "tablet": "768px",
+    "desktop": "1366px",
+    "wide": "3840px"
+  },
+  "icons": {
+    "package": "@cocoframe/icons",
+    "family": "linear",
+    "sizes": [16, 20, 24, 32]
+  },
+  "updatedAt": "2026-08-24T00:00:00.000Z"
+}

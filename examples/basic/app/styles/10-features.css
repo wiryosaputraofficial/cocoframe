@@ -33,6 +33,8 @@
 }
 
 .core-features { padding-block: 50px 78px; text-align: center; }
+.lifecycle-feature-list { margin-block: 18px 76px; display: grid; gap: 24px; }
+.lifecycle-feature-list .cocospecs-feature { width: 100%; margin: 0; }
 .core-features .section-heading h2 { font-size: clamp(30px, 3.3vw, 40px); }
 .core-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-top: 42px; text-align: left; }
 .core-card {

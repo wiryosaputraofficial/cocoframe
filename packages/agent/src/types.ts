@@ -81,7 +81,7 @@ export interface AgentDependency {
 
 /** An existing generated artifact that can be consumed but is never rewritten by inspection. */
 export interface AgentGeneratedCapability {
-  readonly kind: "openapi" | "client" | "api-reference" | "context" | "assets" | "deployment";
+  readonly kind: "openapi" | "client" | "api-reference" | "context" | "assets" | "deployment" | "design-profile";
   readonly file: string;
 }
 

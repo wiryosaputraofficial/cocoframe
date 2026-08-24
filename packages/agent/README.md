@@ -4,7 +4,8 @@ Provider-independent, approval-aware Agent Bridge contracts for CocoFrame.
 
 Start local MCP stdio with `cocoframe agent <project>`. The tool surface is:
 
-- Discovery: `project.inspect`, `docs.search`, `component.find`, `api.lookup`,
+- Discovery: `project.inspect`, including a project Design Profile capability,
+  `docs.search`, `component.find`, `api.lookup`,
   and `workflow.status`.
 - Read-only lifecycle preparation: `cocospecs.next`, `cocoref.audit`, and
   `cocoqa.trace`.

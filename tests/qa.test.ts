@@ -97,12 +97,17 @@ test("runs the CLI lifecycle from an approved CocoSpec through release approval"
     await mkdir(path.join(project, "specs", "login"), { recursive: true });
     await writeFile(path.join(project, "specs", "login", "spec.json"), `${JSON.stringify(spec, null, 2)}\n`, "utf8");
 
+    await writeFile(path.join(project, "cocoframe.design.json"), await readFile(path.resolve("examples/basic/cocoframe.design.json")), "utf8");
+
     const output: string[] = [];
     const errors: string[] = [];
     const io = { log: (message: string) => output.push(message), error: (message: string) => errors.push(message) };
-    assert.equal(await runQaCommand(["create", "login", "--spec", "login", "--project", project], project, io), 0);
+    assert.equal(await runQaCommand(["create", "login", "--spec", "login", "--design", "cocoframe.design.json", "--project", project], project, io), 0);
 
     const file = path.join(project, "qa", "login", "qa.json");
+    const created = parseCocoQa(JSON.parse(await readFile(file, "utf8")));
+    assert.ok(created.sources.some(({ kind }) => kind === "design-profile"));
+    assert.ok(created.cases.some(({ source }) => source === "design:component-reuse"));
     let qa = resolveQa(parseCocoQa(JSON.parse(await readFile(file, "utf8"))));
     await writeFile(file, `${JSON.stringify(qa, null, 2)}\n`, "utf8");
     assert.equal(await runQaCommand(["run", "login", "--gate", "check", "--project", project], project, io), 0);
@@ -122,6 +127,14 @@ test("runs the CLI lifecycle from an approved CocoSpec through release approval"
     }
     assert.deepEqual(errors, []);
     assert.ok(output.some((message) => message.includes("Approved CocoQA login")));
+
+    const changedProfile = JSON.parse(await readFile(path.join(project, "cocoframe.design.json"), "utf8"));
+    changedProfile.updatedAt = "2026-08-24T01:00:00.000Z";
+    await writeFile(path.join(project, "cocoframe.design.json"), JSON.stringify(changedProfile, null, 2), "utf8");
+    await assert.rejects(
+      () => runQaCommand(["status", "login", "--project", project], project, io),
+      /DESIGN_STATE_CONFLICT/,
+    );
   } finally {
     await rm(project, { recursive: true, force: true });
   }

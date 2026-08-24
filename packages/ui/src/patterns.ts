@@ -7,16 +7,55 @@ interface ClassProps {
 
 type ControlSize = "small" | "medium" | "large" | "xlarge";
 
+const themeTokenNames = [
+  "font-sans", "font-mono",
+  "primary-600", "primary-500", "primary-400", "primary-300", "primary-100",
+  "neutral-900", "neutral-700", "neutral-500", "neutral-300", "neutral-100", "neutral-0",
+  "color-text", "color-muted", "color-surface", "color-subtle", "color-border",
+  "color-primary", "color-primary-hover", "color-primary-contrast", "color-success",
+  "color-warning", "color-danger", "color-info", "color-focus",
+  "font-size-xs", "font-size-sm", "font-size-base", "font-size-lg", "font-size-xl",
+  "font-size-2xl", "font-size-3xl", "line-xs", "line-sm", "line-base", "line-lg",
+  "line-xl", "line-2xl", "line-3xl", "space-0", "space-1", "space-2", "space-3",
+  "space-4", "space-5", "space-6", "space-7", "space-8", "radius-none", "radius-sm",
+  "radius", "radius-lg", "radius-xl", "radius-full", "shadow-sm", "shadow-md",
+  "shadow-lg", "shadow-xl",
+] as const;
+
+const themeTokenNameSet = new Set<string>(themeTokenNames);
+
+/** One allow-listed semantic CSS variable accepted by Theme. */
+export type ThemeTokenName = typeof themeTokenNames[number];
+
 export interface ThemeProps extends ClassProps {
   readonly theme?: "light" | "dark" | "system";
   readonly as?: "div" | "section" | "main";
+  /** Approved project-level semantic token overrides. */
+  readonly tokens?: Readonly<Partial<Record<ThemeTokenName, string>>>;
 }
 
 /**
  * Renders the Theme server-first UI primitive with semantic markup and no required browser runtime.
  */
-export function Theme({ theme = "system", as = "div", class: className, children }: ThemeProps): CocoNode {
-  return jsx(as, { "data-coco-theme": theme, class: classes("coco-theme", className), children });
+export function Theme({ theme = "system", as = "div", class: className, tokens, children }: ThemeProps): CocoNode {
+  const style = themeTokenStyle(tokens);
+  return jsx(as, { "data-coco-theme": theme, class: classes("coco-theme", className), ...(style ? { style } : {}), children });
+}
+
+function themeTokenStyle(tokens: ThemeProps["tokens"]): string | undefined {
+  if (!tokens || Object.keys(tokens).length === 0) return undefined;
+  return Object.entries(tokens)
+    .sort(([left], [right]) => left.localeCompare(right))
+    .map(([name, rawValue]) => {
+      if (!themeTokenNameSet.has(name)) throw new TypeError("Unknown CocoFrame theme token: " + name + ".");
+      if (typeof rawValue !== "string") throw new TypeError("CocoFrame theme token " + name + " must be a string.");
+      const value = rawValue.trim();
+      if (!value || value.length > 160 || /[;{}<>]|url\s*\(|expression\s*\(|javascript:/i.test(value)) {
+        throw new TypeError("CocoFrame theme token " + name + " contains an unsafe CSS value.");
+      }
+      return "--coco-" + name + ":" + value;
+    })
+    .join(";");
 }
 
 export interface SkipLinkProps extends ClassProps {

@@ -62,6 +62,7 @@ test("inspects and searches reusable CocoFrame capabilities without mutation", a
   assert.ok(data.middleware.some(({ id }) => id === "requestId"));
   assert.ok(data.dependencies.some(({ name }) => name === "@cocoframe/core"));
   assert.ok(data.generatedCapabilities.some(({ kind }) => kind === "openapi"));
+  assert.ok(data.generatedCapabilities.some(({ kind }) => kind === "design-profile"));
   assert.equal(data.pagination.truncated, false);
 
   const components = await bridge.execute("component.find", { query: "Button", limit: 20 });

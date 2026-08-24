@@ -24,7 +24,8 @@ credentials, cookies, request bodies, or other sensitive values.
 
 1. Approve the feature's CocoSpec.
 2. Complete CocoRef when a visual reference is part of the feature.
-3. Create the QA record from those sources.
+3. Add or select a Design Profile when Product Design Quality applies.
+4. Create the QA record from those sources.
 4. Answer the adaptive QA questions in batches of at most four.
 5. Run the discovered, allow-listed npm quality gates.
 6. Record evidence for every traceable manual or automated case.
@@ -32,7 +33,7 @@ credentials, cookies, request bodies, or other sensitive values.
 8. Check the record and request explicit release approval.
 
 ```bash
-cocoframe qa create login --spec login --ref login-reference
+cocoframe qa create login --spec login --ref login-reference --design cocoframe.design.json
 cocoframe qa resume login
 cocoframe qa answer login target-environments '["staging","production-like"]'
 cocoframe qa run login
@@ -53,7 +54,9 @@ QA record.
 Standard mode asks about target environments, browsers and devices, safe test
 data, release blockers, accessibility, and security or abuse cases. Thorough
 mode also asks for measurable performance thresholds, integration and migration
-regressions, and an exploratory charter.
+regressions, and an exploratory charter. When a Design Profile is present,
+adaptive questions also bind theme and inventory scope, visual evidence, exact
+viewports and zoom states, and design waiver authority.
 
 Answers may be `answered`, `assumed`, `deferred`, or `not-applicable`. Assumptions
 remain visible. Deferred questions block approval. Never place passwords, tokens,
@@ -82,5 +85,11 @@ every required case and gate has passed, and no defect remains open.
 - A failed gate or case must remain failed until new execution evidence exists.
 - Do not silently waive required coverage. Ask the user to change the approved
   policy or cancel the release.
+- Audit existing UI primitives and application components before proposing a new
+  component. Missing reference components continue through CocoRef consent.
+- Bind design evidence to the reviewed Design Profile hash. A profile change
+  invalidates the reviewed state and requires a rebuilt plan.
 - Do not declare a feature ready for release until `cocoframe qa approve`
   succeeds.
+
+See `docs/product-design-quality.md` for the complete design contract.
