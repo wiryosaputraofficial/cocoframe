@@ -1,0 +1,51 @@
+erDiagram
+    AgentSession {
+        string id PK
+        integer protocolVersion
+        string workspaceIdentity
+        json permissions
+        datetime createdAt
+        datetime closedAt "nullable"
+    }
+    OperationPlan {
+        string id PK
+        string sessionId FK
+        string toolId
+        string permissionLevel
+        json declaredTargets
+        json reviewedHashes
+        string status
+        datetime createdAt
+        datetime expiresAt
+    }
+    ApprovalDecision {
+        string id PK
+        string operationId FK
+        string actorLabel "nullable"
+        string decision
+        json approvedHashes
+        datetime decidedAt
+        datetime expiresAt
+        datetime usedAt "nullable"
+    }
+    ExecutionRecord {
+        string id PK
+        string operationId FK
+        string outcome
+        datetime startedAt
+        datetime completedAt "nullable"
+        integer affectedTargetCount
+        json diagnosticCodes
+    }
+    AuditEvent {
+        string id PK
+        string sessionId FK
+        string requestId
+        string eventType
+        json metadata "nullable"
+        datetime createdAt
+    }
+    AgentSession ||--o{ OperationPlan : "creates"
+    OperationPlan ||--o| ApprovalDecision : "receives"
+    OperationPlan ||--o| ExecutionRecord : "produces"
+    AgentSession ||--o{ AuditEvent : "emits"

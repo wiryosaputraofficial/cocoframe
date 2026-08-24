@@ -94,8 +94,8 @@ test("keeps the public documentation aligned with the complete framework surface
   const readme = await readFile(path.resolve("README.md"), "utf8");
 
   for (const id of ["project-creator", "cocospecs", "cocoref", "cocoqa", "charts", "api-reference", "observability", "recipes", "troubleshooting", "versioning", "roadmap", "contributing"]) assert.match(docs, new RegExp(`id="${id}"`));
-  for (const topic of ["getting-started", "pages", "islands", "forms", "apis", "database", "security", "components", "testing", "deployment", "cocospecs", "cocoref", "cocoqa", "cocoql", "api-reference"]) assert.match(sidebar + topics, new RegExp(`/docs/${topic}`));
-  for (const packageName of ["@cocoframe/core", "@cocoframe/jsx", "@cocoframe/router", "@cocoframe/client", "@cocoframe/ui", "@cocoframe/icons", "@cocoframe/schema", "@cocoframe/forms", "@cocoframe/auth", "@cocoframe/database", "@cocoframe/database-sqlite", "@cocoframe/database-postgres", "@cocoframe/security", "@cocoframe/observability", "@cocoframe/cocoql", "@cocoframe/specs", "@cocoframe/cocoref", "@cocoframe/qa", "@cocoframe/server-node", "@cocoframe/server-web", "@cocoframe/cli"]) {
+  for (const topic of ["getting-started", "pages", "islands", "forms", "apis", "database", "security", "components", "testing", "deployment", "agent-bridge", "cocospecs", "cocoref", "cocoqa", "cocoql", "api-reference"]) assert.match(sidebar + topics, new RegExp(`/docs/${topic}`));
+  for (const packageName of ["@cocoframe/core", "@cocoframe/jsx", "@cocoframe/router", "@cocoframe/client", "@cocoframe/ui", "@cocoframe/icons", "@cocoframe/schema", "@cocoframe/forms", "@cocoframe/auth", "@cocoframe/database", "@cocoframe/database-sqlite", "@cocoframe/database-postgres", "@cocoframe/security", "@cocoframe/observability", "@cocoframe/cocoql", "@cocoframe/specs", "@cocoframe/cocoref", "@cocoframe/qa", "@cocoframe/agent", "@cocoframe/server-node", "@cocoframe/server-web", "@cocoframe/cli"]) {
     assert.match(docs, new RegExp(packageName.replace("/", "\\/")));
   }
   assert.match(docs, /create-cocoframe/);
@@ -122,6 +122,8 @@ test("keeps the public documentation aligned with the complete framework surface
   assert.match(features, /Meet CocoRef/);
   assert.match(features, /href="\/cocoqa"/);
   assert.match(features, /Meet CocoQA/);
+  assert.match(features, /Connect through Agent Bridge/);
+  assert.match(features, /href="\/docs\/agent-bridge"/);
   assert.match(cocospecs, /One request/);
   assert.match(cocospecs, /spec\.json/);
   assert.match(cocospecs, /data-model\.mmd/);

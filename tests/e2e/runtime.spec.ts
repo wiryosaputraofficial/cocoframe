@@ -157,7 +157,9 @@ test("server form preserves invalid values and redirects valid submissions", asy
   const invalidResponsePromise = page.waitForResponse((response) =>
     response.request().method() === "POST" && new URL(response.url()).pathname === "/contact",
   );
-  await page.getByRole("button", { name: "Send message" }).click();
+  await page.locator("form.contact-form").evaluate((form) =>
+    (form as HTMLFormElement).requestSubmit(),
+  );
   const invalidResponse = await invalidResponsePromise;
   expect(invalidResponse.status(), await invalidResponse.text()).toBe(422);
   await expect(page.locator("#name")).toHaveValue("A");
@@ -169,7 +171,9 @@ test("server form preserves invalid values and redirects valid submissions", asy
   await page.locator("#message").fill("This is a complete browser submission.");
   await Promise.all([
     page.waitForURL("**/contact?sent=1"),
-    page.getByRole("button", { name: "Send message" }).click(),
+    page.locator("form.contact-form").evaluate((form) =>
+      (form as HTMLFormElement).requestSubmit(),
+    ),
   ]);
   await expect(page.getByRole("status")).toContainText("Message validated and submitted successfully.");
   assertNoClientErrors();

@@ -1,0 +1,68 @@
+flowchart TD
+    start([Start: CocoFrame Agent Bridge])
+    step1["The user opens a CocoFrame project through a supported AI client."]
+    start --> step1
+    step2["The AI client connects to Agent Bridge using MCP."]
+    step1 --> step2
+    step3["Agent Bridge validates the workspace, protocol version, and available permissions."]
+    step2 --> step3
+    step4["The AI discovers the available CocoFrame tools and capabilities."]
+    step3 --> step4
+    step5["The user requests a feature, such as a login page."]
+    step4 --> step5
+    step6["The AI calls project.inspect to understand existing routes, APIs, components, islands, and dependencies."]
+    step5 --> step6
+    step7["The AI searches documentation and reusable components."]
+    step6 --> step7
+    step8["The AI creates or resumes a CocoSpec and asks the next adaptive question batch."]
+    step7 --> step8
+    step9["The user completes and approves the CocoSpec."]
+    step8 --> step9
+    step10["The AI prepares an implementation plan from the approved acceptance criteria."]
+    step9 --> step10
+    step11["Agent Bridge requests explicit approval before any operation that changes state."]
+    step10 --> step11
+    step12["The AI implements the feature using only approved capabilities and targets."]
+    step11 --> step12
+    step13["The AI runs CocoQA and the required quality gates."]
+    step12 --> step13
+    step14["The user approves the QA result."]
+    step13 --> step14
+    step15["The AI reports the changes, test evidence, unresolved risks, and final state."]
+    step14 --> step15
+    success([An AI client can connect to CocoFrame, discover its capabilities, inspect an existing project, find reusable components and APIs, execute the CocoSpecs, CocoRef, and CocoQA lifecycles, and request explicit approval before any mutation—witho])
+    step15 --> success
+    error1["{'failure':'CONNECTION_FAILED','message':'Agent Bridge could not be reached.','recovery':'Check the Agent Bridge process and connection configuration, then retry.'}"]
+    step15 -. failure .-> error1
+    error2["{'failure':'UNSUPPORTED_PROTOCOL_VERSION','message':'The AI client and Agent Bridge use incompatible protocol versions.','recovery':'Upgrade the client or Agent Bridge to a mutually supported version.'}"]
+    step15 -. failure .-> error2
+    error3["{'failure':'INVALID_WORKSPACE','message':'The selected directory is not a valid CocoFrame workspace.','recovery':'Select the correct project root and run workspace inspection again.'}"]
+    step15 -. failure .-> error3
+    error4["{'failure':'WORKSPACE_ACCESS_DENIED','message':'The requested path is outside the approved workspace.','recovery':'Use a path inside the approved project root or request explicit access.'}"]
+    step15 -. failure .-> error4
+    error5["{'failure':'INVALID_TOOL_INPUT','message':'The tool request does not match its declared input schema.','recovery':'Correct the reported fields and retry with schema-valid input.'}"]
+    step15 -. failure .-> error5
+    error6["{'failure':'CAPABILITY_UNAVAILABLE','message':'Agent Bridge does not provide the requested capability.','recovery':'Use a supported alternative or ask the user how to proceed.'}"]
+    step15 -. failure .-> error6
+    error7["{'failure':'APPROVAL_REQUIRED','message':'This operation would change state and requires explicit user approval.','recovery':'Present the mutation plan and wait for the user to approve, revise, or deny it.'}"]
+    step15 -. failure .-> error7
+    error8["{'failure':'APPROVAL_EXPIRED','message':'The approval is no longer valid.','recovery':'Inspect the current workspace state and request a new approval.'}"]
+    step15 -. failure .-> error8
+    error9["{'failure':'STATE_CONFLICT','message':'The workspace changed after the operation was reviewed.','recovery':'Cancel execution, inspect the changed targets, rebuild the plan, and request approval again.'}"]
+    step15 -. failure .-> error9
+    error10["{'failure':'MUTATION_FAILED','message':'The approved mutation could not be completed.','recovery':'Keep the workspace unchanged or roll back safely, report the cause, and retry only after correction.'}"]
+    step15 -. failure .-> error10
+    error11["{'failure':'PARTIAL_MUTATION','message':'The operation changed only part of its declared targets.','recovery':'Block further execution, report every affected target, and apply a reviewed rollback or recovery plan.'}"]
+    step15 -. failure .-> error11
+    error12["{'failure':'OPERATION_TIMEOUT','message':'The operation exceeded its configured time limit.','recovery':'Abort the operation, clean temporary artifacts, and retry with an appropriate limit when safe.'}"]
+    step15 -. failure .-> error12
+    error13["{'failure':'OPERATION_CANCELLED','message':'The operation was cancelled before completion.','recovery':'Stop all remaining work, clean temporary artifacts, and preserve the last valid canonical state.'}"]
+    step15 -. failure .-> error13
+    error14["{'failure':'INVALID_CANONICAL_STATE','message':'The CocoSpec, CocoRef, or CocoQA document is invalid or corrupted.','recovery':'Preserve the file, report its validation issues, repair it explicitly, and validate again.'}"]
+    step15 -. failure .-> error14
+    error15["{'failure':'QUALITY_GATE_FAILED','message':'A required CocoQA quality gate did not pass.','recovery':'Record sanitized evidence and a defect, fix the issue, and rerun the required gate.'}"]
+    step15 -. failure .-> error15
+    error16["{'failure':'EXTERNAL_SERVICE_UNAVAILABLE','message':'A required external service is temporarily unavailable.','recovery':'Retry when safe or continue with an explicitly supported local or read-only workflow.'}"]
+    step15 -. failure .-> error16
+    error17["{'failure':'SENSITIVE_OUTPUT_BLOCKED','message':'The operation produced output that may contain sensitive information.','recovery':'Redact the sensitive fields and repeat the operation without exposing or persisting secrets.'}"]
+    step15 -. failure .-> error17

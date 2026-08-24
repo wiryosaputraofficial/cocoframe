@@ -325,6 +325,26 @@ cocoframe qa approve login
 
 The canonical record is `qa/<feature>/qa.json`. Generated test-plan, traceability, report, and defect Markdown files are review views. Required questions, cases, gates, and open defects block approval. See `docs/cocoqa.md` for the lifecycle and evidence-safety rules.
 
+## Provider-independent AI clients with Agent Bridge
+
+`@cocoframe/agent` exposes CocoFrame through local MCP stdio, so an AI client can
+discover typed tools, inspect an existing project, search documentation, find
+reusable components and APIs, and read CocoSpecs, CocoRef, and CocoQA state
+without provider-specific repository parsing.
+
+```bash
+cocoframe agent .
+```
+
+Ten versioned tools cover project discovery, read-only CocoSpecs/CocoRef/CocoQA
+preparation, and controlled file writes. `mutation.plan` hashes exact targets
+without changing them; `mutation.execute` requires a role-valid, unexpired,
+single-use human approval bound to the same session and reviewed hashes. Partial
+approval changes only its selected target subset, conflicts fail closed, and
+multi-file failures roll back. No shell, Git, publish, deploy, database, external,
+or outside-workspace mutation capability is exposed. See
+`docs/agent-bridge.md` for MCP and CLI approval workflows.
+
 ## Security and observability
 
 `@cocoframe/security` provides composable middleware for CSP and browser hardening,

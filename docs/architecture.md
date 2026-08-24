@@ -51,6 +51,7 @@ HTTP request -> runtime adapter -> router -> page.load -> page.meta/page.view
 - `@cocoframe/specs`: provider-independent adaptive discovery, versioned product decisions, completeness checks, and deterministic PRD, flow, data-model, acceptance, decision, and task artifacts.
 - `@cocoframe/cocoref`: provider-independent visual-reference audits, component reuse decisions, explicit candidate consent, preview/revision state, and approval evidence.
 - `@cocoframe/qa`: provider-independent adaptive QA planning, requirement traceability, quality-gate results, defect policy, evidence, and explicit release approval.
+- `@cocoframe/agent`: provider-independent MCP discovery and lifecycle contracts plus hash-bound, role-aware, single-use controlled file mutation with confinement, conflict detection, rollback, and sanitized local audit records.
 - `@cocoframe/cli`: route discovery, project inspection, and development server.
 - `create-cocoframe`: dependency-free project scaffolding with a server-first starter, typed API, and opt-in island.
 
@@ -234,6 +235,10 @@ preview routes.
 CocoQA stores one versioned `qa/<feature>/qa.json` source of truth after implementation. It requires an approved CocoSpec and can include a completed CocoRef. Adaptive questions make environments, device coverage, safe test data, accessibility, security, performance, and release-blocking policy explicit before checks run.
 
 Acceptance criteria, reference decisions, and CocoFrame's server-first, accessibility, and responsive baselines become traceable required cases. The CLI executes only recognized npm quality scripts and records status, duration, and exit code without persisting raw output. Open defects or any failed required case or gate prevent approval; changing evidence invalidates prior approval.
+
+Agent Bridge serves local MCP over stdio and keeps stdout exclusive to the protocol. Tool registration does not scan the workspace; project data is read only when a tool is called. The CLI injects the existing route, island, and style discovery boundary into the Agent package, avoiding a second route convention and a package dependency cycle.
+
+Read-only inspection never invokes the production builder. Mutation planning validates explicit paths and stores proposal content only in active-process memory while persisted records contain relative paths and SHA-256 hashes. Human approval is delivered through HMAC-bound MCP elicitation, a host-only API, or a separate CLI command. Execution is role-aware, expiring, subset-selectable, conflict-detecting, serialized by an exclusive claim, single-use, and rollback-capable. No generic shell, deletion, Git, package, publish, deploy, database, external, or outside-workspace operation exists.
 
 ## Documentation architecture
 

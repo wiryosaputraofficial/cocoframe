@@ -102,6 +102,7 @@ move.
 | Product discovery or a new application feature | `@cocoframe/specs`, existing `specs/<feature>/spec.json`, and `cocoframe inspect` | adaptive questions, explicit assumptions, generated review artifacts, approval state |
 | Image- or website-reference implementation | `@cocoframe/cocoref`, existing `refs/<name>/ref.json`, and `cocoframe inspect` | inventory reuse, missing-component consent, actual candidate preview, revision history, temporary-route cleanup |
 | Feature QA or release approval | `@cocoframe/qa`, approved `specs/<feature>/spec.json`, optional completed `refs/<name>/ref.json`, and `qa/<feature>/qa.json` | adaptive QA decisions, traceability, allow-listed gates, sanitized evidence, defects, explicit approval |
+| AI client or MCP integration | `@cocoframe/agent`, `docs/agent-bridge.md`, `packages/cli/src/inspect-readonly.ts`, and the approved Agent Bridge CocoSpec | provider-independent schemas, read-only guarantees, workspace confinement, stable diagnostics, role-aware approval boundary |
 | Routing or pages | Router, page types, request dispatcher | load/meta/view ownership, status codes, streaming |
 | Rendering or streaming | renderer, response writer, error boundaries | abort propagation, headers, buffered error behavior |
 | Islands or reactivity | island registry/compiler, browser runtime | stable names, hydration payload, CSP, e2e |

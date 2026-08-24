@@ -9,6 +9,7 @@ const stageRoot = path.join(repositoryRoot, ".cocoframe", "npm");
 const command = process.argv[2] ?? "stage";
 
 const descriptions = {
+  "@cocoframe/agent": "Provider-independent MCP discovery and approval-bound Agent Bridge contracts for CocoFrame.",
   "@cocoframe/auth": "Signed-cookie session primitives for CocoFrame applications.",
   "@cocoframe/cli": "Development, build, inspection, generation, and production tooling for CocoFrame.",
   "@cocoframe/client": "Opt-in islands, signals, and streaming browser runtime for CocoFrame.",

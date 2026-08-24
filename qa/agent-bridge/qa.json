@@ -1,0 +1,282 @@
+{
+  "version": 1,
+  "feature": {
+    "id": "agent-bridge",
+    "title": "CocoFrame Agent Bridge"
+  },
+  "mode": "standard",
+  "state": "approved",
+  "sources": [
+    {
+      "kind": "cocospec",
+      "id": "agent-bridge",
+      "file": "specs/agent-bridge/spec.json",
+      "state": "approved"
+    }
+  ],
+  "answers": {
+    "target-environments": {
+      "status": "answered",
+      "value": "Local Windows, macOS, and Linux with Node.js 24 or newer; supported MCP stdio clients; and production-like npm package staging.",
+      "updatedAt": "2026-08-24T02:05:05.526Z"
+    },
+    "browsers-devices": {
+      "status": "answered",
+      "value": "Agent Bridge itself has no browser requirement. Its public documentation must pass Chromium, Firefox, and WebKit plus responsive viewport coverage from 320px through 4K.",
+      "updatedAt": "2026-08-24T02:05:05.886Z"
+    },
+    "test-data": {
+      "status": "answered",
+      "value": "Use examples/basic, the canonical Agent Bridge CocoSpec and CocoQA records, and isolated temporary directories. Do not use credentials, secrets, external services, production accounts, or production data; remove temporary fixtures after each test.",
+      "updatedAt": "2026-08-24T02:05:06.257Z"
+    },
+    "release-blockers": {
+      "status": "answered",
+      "value": "Every required gate, critical or high defect, workspace escape, sensitive-output exposure, protocol incompatibility, and read-only guarantee violation blocks release. Only low-risk non-security findings may be waived with explicit framework maintainer approval.",
+      "updatedAt": "2026-08-24T02:05:06.618Z"
+    },
+    "accessibility-target": {
+      "status": "answered",
+      "value": "Public documentation must meet WCAG 2.2 AA, including semantic headings, descriptive links, keyboard-only navigation, visible focus, logical focus order, screen-reader labels, zoom support, and responsive readability. The stdio Agent Bridge itself has no visual interface.",
+      "updatedAt": "2026-08-24T02:05:59.263Z"
+    },
+    "security-abuse": {
+      "status": "answered",
+      "value": "Negative tests must cover malformed input, unsupported protocol versions, path traversal, symlink or junction workspace escape, invalid workspaces, cancellation, response and file limits, secret and authorization-header redaction, stdout protocol cleanliness, mutation refusal, absence of arbitrary shell execution, and prevention of AI self-approval or permission widening.",
+      "updatedAt": "2026-08-24T02:05:59.629Z"
+    }
+  },
+  "cases": [
+    {
+      "id": "acceptance-1",
+      "title": "Given a supported AI client, when it connects through MCP, then it can discover every Agent Bridge tool together with its versioned input schema, output schema, description, and permission level.",
+      "category": "functional",
+      "source": "cocospec:acceptance-1",
+      "required": true,
+      "status": "passed",
+      "evidence": "tests/agent.test.ts completes MCP initialize and tools/list, asserting five tools with descriptions, versioned input/output schemas, and read permission metadata.",
+      "updatedAt": "2026-08-24T02:25:21.850Z"
+    },
+    {
+      "id": "acceptance-2",
+      "title": "Given a valid CocoFrame workspace, when project.inspect is called, then it returns the existing routes, APIs, components, islands, middleware, dependencies, and generated capabilities without modifying the workspace.",
+      "category": "functional",
+      "source": "cocospec:acceptance-2",
+      "required": true,
+      "status": "passed",
+      "evidence": "project.inspect returns routes, APIs, components, islands, middleware, dependencies, and generated capabilities; before/after file metadata remains identical.",
+      "updatedAt": "2026-08-24T02:25:22.194Z"
+    },
+    {
+      "id": "acceptance-3",
+      "title": "Given an existing framework capability, when the AI searches documentation, APIs, or components, then Agent Bridge returns the reusable capability and its source or documentation location before suggesting a new implementation.",
+      "category": "functional",
+      "source": "cocospec:acceptance-3",
+      "required": true,
+      "status": "passed",
+      "evidence": "Focused tests verify docs.search, component.find, and api.lookup return reusable capabilities with source or documentation locations.",
+      "updatedAt": "2026-08-24T02:25:22.546Z"
+    },
+    {
+      "id": "acceptance-4",
+      "title": "Given a new feature request, when the AI starts or resumes CocoSpecs, then Agent Bridge returns only the next adaptive question batch and preserves the canonical specification state.",
+      "category": "functional",
+      "source": "cocospec:acceptance-4",
+      "required": true,
+      "status": "passed",
+      "evidence": "Agent lifecycle tests verify proposed and canonical CocoSpecs return only the bounded next adaptive batch and preserve before/after workspace state.",
+      "updatedAt": "2026-08-24T02:44:25.409Z"
+    },
+    {
+      "id": "acceptance-5",
+      "title": "Given an image or website reference, when CocoRef is invoked, then existing components are audited before a missing component is proposed.",
+      "category": "functional",
+      "source": "cocospec:acceptance-5",
+      "required": true,
+      "status": "passed",
+      "evidence": "Agent lifecycle tests verify CocoRef audits the inspected component inventory, reuses Button, and marks only the unmatched timeline as consent-required.",
+      "updatedAt": "2026-08-24T02:44:25.770Z"
+    },
+    {
+      "id": "acceptance-6",
+      "title": "Given an implemented feature with an approved CocoSpec, when CocoQA is invoked, then acceptance criteria, required gates, evidence, defects, and approval state remain traceable.",
+      "category": "functional",
+      "source": "cocospec:acceptance-6",
+      "required": true,
+      "status": "passed",
+      "evidence": "Agent lifecycle tests verify approved-CocoSpec QA traceability includes acceptance criteria, questions, cases, gates, sanitized evidence, defects, and approval state.",
+      "updatedAt": "2026-08-24T02:44:26.243Z"
+    },
+    {
+      "id": "acceptance-7",
+      "title": "Given a read-only operation, when it is executed, then no source file, generated artifact, Git state, package state, or external system is changed.",
+      "category": "functional",
+      "source": "cocospec:acceptance-7",
+      "required": true,
+      "status": "passed",
+      "evidence": "Read-only tests compare the complete example workspace file state before and after MCP discovery and find no changes.",
+      "updatedAt": "2026-08-24T02:25:24.082Z"
+    },
+    {
+      "id": "acceptance-8",
+      "title": "Given an operation that may change state, when explicit approval has not been granted, then Agent Bridge refuses the operation and leaves all state unchanged.",
+      "category": "functional",
+      "source": "cocospec:acceptance-8",
+      "required": true,
+      "status": "passed",
+      "evidence": "Unknown mutation tool file.write is refused with CAPABILITY_UNAVAILABLE and the workspace remains unchanged; Phase 1 exposes no state-changing tool.",
+      "updatedAt": "2026-08-24T02:25:24.531Z"
+    },
+    {
+      "id": "acceptance-9",
+      "title": "Given an approved mutation, when the operation is executed, then only the declared workspace targets and declared action are modified.",
+      "category": "functional",
+      "source": "cocospec:acceptance-9",
+      "required": true,
+      "status": "passed",
+      "evidence": "Phase 3 mutation tests verify exact current/proposed hashes, role-bound partial approval, unchanged undeclared targets, single-use execution, target conflict detection, and multi-file rollback.",
+      "updatedAt": "2026-08-24T03:13:31.592Z"
+    },
+    {
+      "id": "acceptance-10",
+      "title": "Given a denied, expired, or cancelled approval, when execution is attempted, then no mutation occurs and a stable machine-readable diagnostic is returned.",
+      "category": "functional",
+      "source": "cocospec:acceptance-10",
+      "required": true,
+      "status": "passed",
+      "evidence": "Phase 3 mutation tests verify denied, cancelled, expired, duplicate, and already-claimed approvals return stable diagnostics and leave every declared source target unchanged.",
+      "updatedAt": "2026-08-24T03:13:31.942Z"
+    },
+    {
+      "id": "acceptance-11",
+      "title": "Given any workspace path supplied by an AI client, when it resolves outside the approved project root, then Agent Bridge rejects access.",
+      "category": "functional",
+      "source": "cocospec:acceptance-11",
+      "required": true,
+      "status": "passed",
+      "evidence": "A junction resolving outside the approved root is rejected with WORKSPACE_ACCESS_DENIED without exposing or reading the outside file.",
+      "updatedAt": "2026-08-24T02:25:25.632Z"
+    },
+    {
+      "id": "acceptance-12",
+      "title": "Given malformed input or an unsupported protocol version, when a tool is called, then Agent Bridge returns a versioned corrective error without crashing.",
+      "category": "functional",
+      "source": "cocospec:acceptance-12",
+      "required": true,
+      "status": "passed",
+      "evidence": "MCP malformed input returns structured INVALID_TOOL_INPUT; unsupported bridge versions and cancellation return versioned corrective diagnostics without crashing.",
+      "updatedAt": "2026-08-24T02:25:26.026Z"
+    },
+    {
+      "id": "acceptance-13",
+      "title": "Given secrets, cookies, authorization headers, tokens, or request bodies exist in the environment, when results and errors are returned, then none of those sensitive values are exposed or persisted.",
+      "category": "functional",
+      "source": "cocospec:acceptance-13",
+      "required": true,
+      "status": "passed",
+      "evidence": "Documentation containing an Authorization bearer secret is searched with the secret removed and REDACTED evidence returned; raw secret is never persisted.",
+      "updatedAt": "2026-08-24T02:25:26.374Z"
+    },
+    {
+      "id": "acceptance-14",
+      "title": "Given two supported AI providers, when they perform the same Agent Bridge workflow, then they use the same provider-independent tool contracts and receive structurally equivalent results.",
+      "category": "functional",
+      "source": "cocospec:acceptance-14",
+      "required": true,
+      "status": "passed",
+      "evidence": "The bridge uses the official provider-neutral MCP server contract with no provider branches; raw MCP client discovery receives the same structural tool results.",
+      "updatedAt": "2026-08-24T02:25:26.761Z"
+    },
+    {
+      "id": "acceptance-15",
+      "title": "Given a completed workflow, when the AI reports completion, then the result includes the actions performed, approvals received, files or artifacts affected, quality evidence, and unresolved risks.",
+      "category": "functional",
+      "source": "cocospec:acceptance-15",
+      "required": true,
+      "status": "passed",
+      "evidence": "Canonical CocoQA artifacts and the implementation handoff report actions, approvals, affected files, automated evidence, blocked full-scope cases, and unresolved risks.",
+      "updatedAt": "2026-08-24T02:25:27.144Z"
+    },
+    {
+      "id": "framework-server-first",
+      "title": "Useful server-rendered output exists without browser JavaScript.",
+      "category": "compatibility",
+      "source": "cocoframe:server-first",
+      "required": true,
+      "status": "passed",
+      "evidence": "Agent Bridge has no browser runtime and its public guide renders server-side; production browser runtime tests pass.",
+      "updatedAt": "2026-08-24T02:25:27.510Z"
+    },
+    {
+      "id": "framework-accessibility",
+      "title": "Keyboard, focus, labels, errors, and semantic structure satisfy the approved accessibility target.",
+      "category": "accessibility",
+      "source": "cocoframe:accessibility",
+      "required": true,
+      "status": "passed",
+      "evidence": "Agent Bridge documentation uses semantic headings and links; keyboard and accessibility browser assertions pass across the official matrix.",
+      "updatedAt": "2026-08-24T02:25:27.909Z"
+    },
+    {
+      "id": "framework-responsive",
+      "title": "The feature remains usable across the approved viewport and device range without horizontal overflow.",
+      "category": "responsive",
+      "source": "cocoframe:responsive",
+      "required": true,
+      "status": "passed",
+      "evidence": "The critical-page matrix includes /docs/agent-bridge and the filtered Agent API reference and passes at 320px, phone, tablet, laptop, and 4K viewports.",
+      "updatedAt": "2026-08-24T02:25:28.271Z"
+    }
+  ],
+  "gates": [
+    {
+      "id": "check",
+      "script": "check",
+      "required": true,
+      "status": "passed",
+      "durationMs": 10252,
+      "exitCode": 0,
+      "updatedAt": "2026-08-24T02:07:33.560Z"
+    },
+    {
+      "id": "test",
+      "script": "test",
+      "required": true,
+      "status": "passed",
+      "durationMs": 28128,
+      "exitCode": 0,
+      "updatedAt": "2026-08-24T02:11:34.931Z"
+    },
+    {
+      "id": "inspect",
+      "script": "inspect",
+      "required": true,
+      "status": "passed",
+      "durationMs": 1226,
+      "exitCode": 0,
+      "updatedAt": "2026-08-24T02:08:01.917Z"
+    },
+    {
+      "id": "build",
+      "script": "build",
+      "required": true,
+      "status": "passed",
+      "durationMs": 1101,
+      "exitCode": 0,
+      "updatedAt": "2026-08-24T02:08:03.026Z"
+    },
+    {
+      "id": "test-e2e",
+      "script": "test:e2e",
+      "required": true,
+      "status": "passed",
+      "durationMs": 168708,
+      "exitCode": 0,
+      "updatedAt": "2026-08-24T02:24:38.665Z"
+    }
+  ],
+  "defects": [],
+  "createdAt": "2026-08-24T02:01:30.304Z",
+  "updatedAt": "2026-08-24T03:24:35.818Z",
+  "approvedAt": "2026-08-24T03:24:35.818Z"
+}

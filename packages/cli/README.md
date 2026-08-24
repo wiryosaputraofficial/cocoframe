@@ -1,7 +1,7 @@
 # @cocoframe/cli
 
 The `cocoframe` executable owns project discovery, inspection, development,
-generation, CocoSpecs discovery, CocoRef component approval, CocoQA evidence and release approval, production builds, asset serving, and startup.
+generation, CocoSpecs discovery, CocoRef component approval, CocoQA evidence and release approval, local Agent Bridge MCP serving, production builds, asset serving, and startup.
 
 ## Commands
 
@@ -9,6 +9,7 @@ generation, CocoSpecs discovery, CocoRef component approval, CocoQA evidence and
 - `cocoframe ref create|add|audit|status|consent|decline|preview|feedback|approve|cancel` manages reference audits and consent-gated component previews under `refs/<name>/`.
 - `cocoframe qa create|resume|answer|run|record|defect|resolve|check|approve` manages traceable quality evidence and release approval under `qa/<feature>/`.
 - `cocoframe inspect <project>` emits routes, layouts, islands, styles, UI/icon usage, contracts, middleware, and system routes.
+- `cocoframe agent <project>` serves versioned MCP discovery, lifecycle, and controlled mutation tools; `agent approve|deny|cancel|expire` records host-only hash-bound decisions outside the MCP tool surface.
 - `cocoframe dev <project>` builds and watches isolated development output.
 - `cocoframe generate <project>` writes typed clients, OpenAPI, and CSS module declarations.
 - `cocoframe build <project>` writes production server and hashed browser assets.
@@ -18,4 +19,4 @@ generation, CocoSpecs discovery, CocoRef component approval, CocoQA evidence and
 The CLI is an executable boundary rather than an application library API.
 Discovery/build helpers in `src/project.ts` are tested repository internals.
 Generated files are never edited manually. Verify changes with
-`tests/project.test.ts`, `npm run inspect`, and build/E2E when browser output changes.
+`tests/project.test.ts`, `tests/agent.test.ts`, `npm run inspect`, and build/E2E when browser output changes.

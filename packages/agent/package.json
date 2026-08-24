@@ -1,0 +1,16 @@
+{
+  "name": "@cocoframe/agent",
+  "version": "0.0.1",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts",
+    "./stdio": "./src/stdio.ts"
+  },
+  "dependencies": {
+    "@cocoframe/cocoref": "0.0.1",
+    "@cocoframe/qa": "0.0.1",
+    "@cocoframe/specs": "0.0.1",
+    "@modelcontextprotocol/server": "^2.0.0",
+    "zod": "^4.4.3"
+  }
+}

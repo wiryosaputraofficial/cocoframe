@@ -162,6 +162,10 @@ cocoframe qa approve login`}>
           <p>Required cases and gates must pass and every defect must be closed before approval. Raw command output is not persisted. See the <a href="/cocoqa">dedicated CocoQA overview</a>.</p>
         </GuideSection>
 
+        <GuideSection id="agent-bridge" label="AI CLIENT INTEGRATION" title="Agent Bridge over local MCP" description="Connect supported AI clients to versioned CocoFrame discovery tools without provider-specific repository parsing or hidden workspace changes." language="bash" code={`cocoframe agent .`}>
+          <p><code>@cocoframe/agent</code> exposes <code>project.inspect</code>, <code>docs.search</code>, <code>component.find</code>, <code>api.lookup</code>, and <code>workflow.status</code> through local MCP stdio.</p>
+          <p>Phase 1 is read-only: every tool advertises versioned input and output schemas plus read permission. The bridge confines paths to the selected workspace, never invokes a build, and provides no arbitrary shell or mutation fallback. See the <a href="/docs/agent-bridge">focused Agent Bridge guide</a>.</p>
+        </GuideSection>
         <GuideSection id="project-structure" label="CONVENTION" title="Project structure" description="The structure is intentionally predictable, making it easy to maintain and context-efficient for AI." language="text" code={`my-app/\n├─ app/\n│  ├─ components/          # server components\n│  ├─ islands/             # *.island.tsx\n│  ├─ generated/           # typed client + OpenAPI\n│  ├─ routes/              # pages, APIs, layouts\n│  └─ styles/              # global CSS / CSS modules\n├─ specs/\n│  └─ feature-name/        # canonical spec + generated review artifacts\n├─ refs/\n│  └─ reference-name/      # CocoRef audit, approvals, and reference evidence\n├─ qa/\n│  └─ feature-name/        # CocoQA evidence, defects, and release approval\n├─ public/                  # static assets\n├─ cocoframe.config.ts      # application configuration\n└─ package.json`}>
           <p>All build output lives in <code>.cocoframe/</code>; development output is isolated in <code>.cocoframe/dev/</code>.</p>
         </GuideSection>
@@ -468,9 +472,10 @@ function PackageReferenceTable() {
     ["@cocoframe/specs", "AI product discovery", "create, answer, check, approve, adaptive questions, PRD and Mermaid artifacts"],
     ["@cocoframe/cocoref", "Reference component approval", "create, audit, consent, preview, feedback, approve, deterministic reports"],
     ["@cocoframe/qa", "AI quality approval", "create, answer, run gates, record evidence, defects, check, approve"],
+    ["@cocoframe/agent", "Local MCP Agent Bridge", "project.inspect, docs.search, component.find, api.lookup, workflow.status"],
     ["@cocoframe/server-node", "Node HTTP adapter", "createServer, gracefulShutdown, clientAddress"],
     ["@cocoframe/server-web", "Fetch/edge adapter", "webHandler"],
-    ["@cocoframe/cli", "Project tooling", "dev, build, start, inspect, generate, openapi, spec, ref, qa"],
+    ["@cocoframe/cli", "Project tooling", "agent, dev, build, start, inspect, generate, openapi, spec, ref, qa"],
     ["create-cocoframe", "Project scaffolding", "starter template, package-manager selection, safe directory checks, skip-install"],
   ] as const;
   return <div class="guide-table guide-table--packages" role="table" aria-label="Public CocoFrame packages"><div role="row"><strong role="columnheader">Package</strong><strong role="columnheader">Responsibility</strong><strong role="columnheader">Primary API</strong></div>{packages.map(([name, responsibility, api]) => <div role="row"><code>{name}</code><span>{responsibility}</span><code>{api}</code></div>)}</div>;

@@ -9,6 +9,7 @@ import { buildProject, developmentErrorEvent, discoverGlobalStyles, discoverIcon
 import { runSpecCommand } from "./spec-command.ts";
 import { runRefCommand } from "./ref-command.ts";
 import { runQaCommand } from "./qa-command.ts";
+import { runAgentCommand } from "./agent-command.ts";
 
 const [command = "help", inputRoot = ".", ...commandArguments] = process.argv.slice(2);
 const projectRoot = path.resolve(inputRoot);
@@ -30,6 +31,13 @@ if (command === "spec") {
 } else if (command === "qa") {
   try {
     process.exitCode = await runQaCommand([inputRoot, ...commandArguments]);
+  } catch (error) {
+    console.error(error instanceof Error ? error.message : error);
+    process.exitCode = 1;
+  }
+} else if (command === "agent") {
+  try {
+    process.exitCode = await runAgentCommand([inputRoot, ...commandArguments]);
   } catch (error) {
     console.error(error instanceof Error ? error.message : error);
     process.exitCode = 1;
@@ -199,7 +207,7 @@ if (command === "spec") {
   const openApiFile = await generateOpenApi(projectRoot);
   console.log(`CocoFrame OpenAPI: ${openApiFile}`);
 } else {
-  console.log("CocoFrame CLI\n\nCommands:\n  cocoframe inspect [project]\n  cocoframe dev [project]\n  cocoframe build [project]\n  cocoframe start [project]\n  cocoframe generate [project]\n  cocoframe openapi [project]\n  cocoframe spec <command> [options]\n  cocoframe ref <command> [options]\n  cocoframe qa <command> [options]");
+  console.log("CocoFrame CLI\n\nCommands:\n  cocoframe agent [project] | approve|deny|cancel|expire <operation-id> [options]\n  cocoframe inspect [project]\n  cocoframe dev [project]\n  cocoframe build [project]\n  cocoframe start [project]\n  cocoframe generate [project]\n  cocoframe openapi [project]\n  cocoframe spec <command> [options]\n  cocoframe ref <command> [options]\n  cocoframe qa <command> [options]");
 }
 
 function nodeServerOptions(): NodeServerOptions {

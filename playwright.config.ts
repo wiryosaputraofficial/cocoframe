@@ -11,7 +11,8 @@ export default defineConfig({
     timeout: 5_000,
   },
   fullyParallel: false,
-  workers: process.env.CI ? 1 : 2,
+  // WebKit's Windows process can terminate or stall under cross-browser contention.
+  workers: process.env.CI || process.platform === "win32" ? 1 : 2,
   forbidOnly: Boolean(process.env.CI),
   retries: process.env.CI ? 1 : 0,
   reporter: process.env.CI
