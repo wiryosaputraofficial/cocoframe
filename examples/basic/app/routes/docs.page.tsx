@@ -142,6 +142,11 @@ export default definePage({
           <p><code>specs/&lt;feature&gt;/spec.json</code> is the source of truth. Generated PRD, Mermaid flow and data model, acceptance criteria, decisions, and tasks are review views. Implementation begins only after the canonical state is <code>approved</code>. See the <a href="/cocospecs">dedicated CocoSpecs overview</a> for the complete product workflow.</p>
         </GuideSection>
 
+        <GuideSection id="cocoux" label="AI EXPERIENCE DESIGN" title="CocoUX journeys, states, interactions, and visual previews" description="Turn approved intent into a complete experience contract and website-like PNG evidence before exact application source is considered." language="bash" code={`cocoframe ux create checkout --brief "Design checkout." --spec checkout\ncocoframe ux answer checkout --input ./checkout-ux.json\ncocoframe ux check checkout\ncocoframe ux preview checkout\ncocoframe ux approve checkout --role application-developer\ncocoframe ux handoff checkout`}>
+          <p><code>ux/&lt;feature&gt;/ux.json</code> records actors, reachable journeys, every required state, transitions, accessible interaction behavior, visual recommendations, inventory decisions, screenshot hashes, approval, and handoff.</p>
+          <p>CocoUX captures applicable states at five approved viewport sizes. Its approval accepts visual direction only; it never promotes temporary source. CocoRef separately audits the screenshots, requests consent for missing components, and approves exact source. See the <a href="/docs/cocoux">focused CocoUX guide</a>.</p>
+        </GuideSection>
+
         <GuideSection id="cocoref" label="AI VISUAL WORKFLOW" title="CocoRef adaptive reference components" description="Use an image or website as design evidence, audit existing components, and require approval before a missing component becomes application source." language="bash" code={`cocoframe ref create dashboard --image ./references/dashboard.png
 cocoframe ref audit dashboard --requirements ./requirements.json
 cocoframe ref consent dashboard activity-feed
@@ -152,7 +157,7 @@ cocoframe ref approve dashboard activity-feed`}>
           <p>Missing components stop until the user grants consent. The local preview renders the actual temporary TSX candidate; feedback reopens it for revision. Approval promotes that exact source into <code>app/components/</code>, while approval and cancellation both remove the temporary preview. See the <a href="/cocoref">dedicated CocoRef overview</a>.</p>
         </GuideSection>
 
-        <GuideSection id="cocoqa" label="AI QUALITY WORKFLOW" title="CocoQA evidence and release approval" description="Turn approved requirements into explicit quality decisions, traceable test cases, allow-listed project gates, defect records, and release approval." language="bash" code={`cocoframe qa create login --spec login --ref login-reference
+        <GuideSection id="cocoqa" label="AI QUALITY WORKFLOW" title="CocoQA evidence and release approval" description="Turn approved requirements into explicit quality decisions, traceable test cases, allow-listed project gates, defect records, and release approval." language="bash" code={`cocoframe qa create login --spec login --ux login --ref login-reference
 cocoframe qa resume login
 cocoframe qa run login
 cocoframe qa record login acceptance-1 pass --evidence "Login E2E passed."
@@ -163,10 +168,16 @@ cocoframe qa approve login`}>
         </GuideSection>
 
         <GuideSection id="agent-bridge" label="AI CLIENT INTEGRATION" title="Agent Bridge over local MCP" description="Connect supported AI clients to versioned CocoFrame discovery tools without provider-specific repository parsing or hidden workspace changes." language="bash" code={`cocoframe agent .`}>
-          <p><code>@cocoframe/agent</code> exposes <code>project.inspect</code>, <code>docs.search</code>, <code>component.find</code>, <code>api.lookup</code>, and <code>workflow.status</code> through local MCP stdio.</p>
-          <p>Phase 1 is read-only: every tool advertises versioned input and output schemas plus read permission. The bridge confines paths to the selected workspace, never invokes a build, and provides no arbitrary shell or mutation fallback. See the <a href="/docs/agent-bridge">focused Agent Bridge guide</a>.</p>
+          <p><code>@cocoframe/agent</code> exposes <code>project.inspect</code>, <code>project.doctor</code>, <code>docs.search</code>, <code>component.find</code>, <code>api.lookup</code>, and <code>workflow.status</code> through local MCP stdio.</p>
+          <p>Read-only tools advertise versioned schemas and confine paths to the selected workspace. <code>project.doctor</code> runs only static checks unless deep mode is explicit; deep output stays in a temporary directory. The bridge provides no arbitrary shell fallback. See the <a href="/docs/agent-bridge">focused Agent Bridge guide</a>.</p>
         </GuideSection>
-        <GuideSection id="project-structure" label="CONVENTION" title="Project structure" description="The structure is intentionally predictable, making it easy to maintain and context-efficient for AI." language="text" code={`my-app/\n├─ app/\n│  ├─ components/          # server components\n│  ├─ islands/             # *.island.tsx\n│  ├─ generated/           # typed client + OpenAPI\n│  ├─ routes/              # pages, APIs, layouts\n│  └─ styles/              # global CSS / CSS modules\n├─ specs/\n│  └─ feature-name/        # canonical spec + generated review artifacts\n├─ refs/\n│  └─ reference-name/      # CocoRef audit, approvals, and reference evidence\n├─ qa/\n│  └─ feature-name/        # CocoQA evidence, defects, and release approval\n├─ public/                  # static assets\n├─ cocoframe.config.ts      # application configuration\n└─ package.json`}>
+        <GuideSection id="doctor" label="DIAGNOSTICS" title="CocoFrame Doctor" description="Diagnose project, dependency, configuration, generated-artifact, security, and isolated-build problems through one stable contract for developers, CI, and AI." language="bash" code={`cocoframe doctor
+cocoframe doctor --json
+cocoframe doctor --deep --strict`}>
+          <p>Default checks are static and read-only: they do not execute application source or configuration, access the network, or change project files. <code>--deep</code> sends build output to an isolated temporary directory.</p>
+          <p>Every diagnostic includes a stable code, severity, category, sanitized evidence, suggestion, and documentation reference. Exit code <code>0</code> is healthy, <code>1</code> reports project errors or strict warnings, and <code>2</code> identifies a cancelled or internal Doctor failure. See the <a href="/docs/doctor">focused Doctor guide</a>.</p>
+        </GuideSection>
+        <GuideSection id="project-structure" label="CONVENTION" title="Project structure" description="The structure is intentionally predictable, making it easy to maintain and context-efficient for AI." language="text" code={`my-app/\n├─ app/\n│  ├─ components/          # server components\n│  ├─ islands/             # *.island.tsx\n│  ├─ generated/           # typed client + OpenAPI\n│  ├─ routes/              # pages, APIs, layouts\n│  └─ styles/              # global CSS / CSS modules\n├─ specs/\n│  └─ feature-name/        # canonical spec + generated review artifacts\n├─ ux/\n│  └─ feature-name/        # CocoUX contract + approved PNG evidence\n├─ refs/\n│  └─ reference-name/      # CocoRef audit, approvals, and reference evidence\n├─ qa/\n│  └─ feature-name/        # CocoQA evidence, defects, and release approval\n├─ public/                  # static assets\n├─ cocoframe.config.ts      # application configuration\n└─ package.json`}>
           <p>All build output lives in <code>.cocoframe/</code>; development output is isolated in <code>.cocoframe/dev/</code>.</p>
         </GuideSection>
 
@@ -361,7 +372,7 @@ try {
           <p><code>authorizeCocoQL</code> and <code>authorizeCocoQLMutation</code> apply default-deny policies after semantic validation and before planning. Read fields, relations, aggregates, <code>create</code>/<code>update</code> fields, and <code>delete</code> permission must be explicit.</p>
           <p><code>defineCocoQLSafetyPolicy</code> limits reads and mutations deterministically. Use <code>previewCocoQLMutation</code> to inspect intent without SQL; updates and deletes require filters, and executable writes require <code>confirm affected &lt;= N</code>.</p>
           <p><code>compileCocoQLMutation</code> produces parameterized SQL with <code>verifyBeforeCommit</code>. The compiler never executes the database; adapters must check affected rows in the same transaction and roll back when the confirmation limit is exceeded.</p>
-          <p>Use <code>compileCocoQLPostgres</code> and <code>compileCocoQLMutationPostgres</code> for PostgreSQL. Both consume the same plan, use <code>$1</code>, <code>$2</code>, and subsequent placeholders, and validate forged plans before producing SQL.</p>
+          <p>Use <code>compileCocoQLPostgres</code> and <code>compileCocoQLMutationPostgres</code> for PostgreSQL SQL output. Use <code>createCocoQLPostgresExecutor</code> for the managed PostgreSQL 14–18 path: validation before acquisition, native UUID/JSONB/arrays/full-text, advanced reads, RETURNING/UPSERT, transaction guards, timeout, AbortSignal cancellation, retry, result limits, and sanitized telemetry.</p>
           <p>Use <code>compileCocoQL(source, schema)</code> as a complete pipeline shortcut. The compiler still validates plans created outside <code>planCocoQL</code>; forged operators, cross-entity references, malformed date ranges, and schema-incompatible joins fail with <code>INVALID_PLAN</code>. Plan validation does not replace application authorization.</p>
           <p>See examples in <a href="/cocoql#permissions">Permissions</a>, <a href="/cocoql#safety">Safety Policy</a>, <a href="/cocoql#mutation-preview">Mutation Preview</a>, <a href="/cocoql#mutations">Guarded Mutations</a>, <a href="/cocoql#postgresql">PostgreSQL</a>, and <a href="/cocoql#query-plan">Query Plan</a>.</p>
         </GuideSection>
@@ -370,7 +381,7 @@ try {
           <p>Never place titles, primary copy, structured data, or important SEO content inside <code>defer</code>. Only static pages enter <code>/sitemap.xml</code> automatically; API, action, and system routes are excluded. <code>/robots.txt</code> points to the sitemap.</p>
         </GuideSection>
 
-        <GuideSection id="testing" label="QUALITY" title="Testing and inspection" description="Use the compiler, Node test runner, inspection, production build, and browser E2E as quality gates." language="bash" code={`npm run check\nnpm test\nnpm run inspect\nnpm run build\n\n# install browsers once, then run all E2E tests\nnpx playwright install chromium firefox webkit\nnpm run test:e2e\n\n# Chromium only for faster local iteration\nnpm run test:e2e:chromium\n\n# benchmark renderer operations / local HTTP\nnpm run benchmark\nnpm run benchmark:http\nnpm run benchmark:http:concurrent`}>
+        <GuideSection id="testing" label="QUALITY" title="Testing and inspection" description="Use the compiler, Node test runner, inspection, production build, and browser E2E as quality gates." language="bash" code={`npm run check\nnpm test\nnpm run inspect\nnpm run build\n\n# real PostgreSQL integration (CI covers majors 14–18)\nCOCOFRAME_POSTGRES_URL=postgresql://... npm run test:postgres\n\n# install browsers once, then run all E2E tests\nnpx playwright install chromium firefox webkit\nnpm run test:e2e\n\n# Chromium only for faster local iteration\nnpm run test:e2e:chromium\n\n# benchmark renderer operations / local HTTP\nnpm run benchmark\nnpm run benchmark:http\nnpm run benchmark:http:concurrent`}>
           <p>Application tests can call <code>app.fetch(new Request(url))</code> directly without opening a port. The E2E suite starts separate development and production servers, then tests islands, the development error overlay, CSP, forms, streaming, 404 pages, live search, sorting, keyboard dialogs, and browser consoles in Chromium, Firefox, and WebKit.</p>
           <p>Responsive projects visit critical pages at 320px, 390px phones, tablets, laptops, and 4K. Checks cover horizontal overflow, keyboard focus, mobile menus, image assets, and aspect ratios.</p>
         </GuideSection>
@@ -470,12 +481,13 @@ function PackageReferenceTable() {
     ["@cocoframe/observability", "Request telemetry", "requestId, requestLogger, requestIdKey"],
     ["@cocoframe/cocoql", "AI-first query language", "parse, validate, authorize, plan, safety, MySQL/PostgreSQL compilers"],
     ["@cocoframe/specs", "AI product discovery", "create, answer, check, approve, adaptive questions, PRD and Mermaid artifacts"],
+    ["@cocoframe/ux", "AI experience design", "journeys, states, interactions, visual previews, PNG evidence, CocoRef handoff"],
     ["@cocoframe/cocoref", "Reference component approval", "create, audit, consent, preview, feedback, approve, deterministic reports"],
     ["@cocoframe/qa", "AI quality approval", "create, answer, run gates, record evidence, defects, check, approve"],
-    ["@cocoframe/agent", "Local MCP Agent Bridge", "project.inspect, docs.search, component.find, api.lookup, workflow.status"],
+    ["@cocoframe/agent", "Local MCP Agent Bridge", "project.inspect, project.doctor, cocoux.inspect, docs.search, component.find, api.lookup, workflow.status"],
     ["@cocoframe/server-node", "Node HTTP adapter", "createServer, gracefulShutdown, clientAddress"],
     ["@cocoframe/server-web", "Fetch/edge adapter", "webHandler"],
-    ["@cocoframe/cli", "Project tooling", "agent, dev, build, start, inspect, generate, openapi, spec, ref, qa"],
+    ["@cocoframe/cli", "Project tooling", "doctor, agent, dev, build, start, inspect, generate, openapi, spec, ux, ref, qa"],
     ["create-cocoframe", "Project scaffolding", "starter template, package-manager selection, safe directory checks, skip-install"],
   ] as const;
   return <div class="guide-table guide-table--packages" role="table" aria-label="Public CocoFrame packages"><div role="row"><strong role="columnheader">Package</strong><strong role="columnheader">Responsibility</strong><strong role="columnheader">Primary API</strong></div>{packages.map(([name, responsibility, api]) => <div role="row"><code>{name}</code><span>{responsibility}</span><code>{api}</code></div>)}</div>;

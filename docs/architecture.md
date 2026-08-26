@@ -49,10 +49,11 @@ HTTP request -> runtime adapter -> router -> page.load -> page.meta/page.view
   PostgreSQL compilation for AI-generated database work.
 - `@cocoframe/server-web`: Fetch export for edge and serverless hosts.
 - `@cocoframe/specs`: provider-independent adaptive discovery, versioned product decisions, completeness checks, and deterministic PRD, flow, data-model, acceptance, decision, and task artifacts.
+- `@cocoframe/ux`: provider-independent actors, reachable journeys, complete UI state matrices, accessible interactions, reuse-first visual recommendations, hash-bound PNG previews, and CocoRef handoff.
 - `@cocoframe/cocoref`: provider-independent visual-reference audits, component reuse decisions, explicit candidate consent, preview/revision state, and approval evidence.
 - `@cocoframe/qa`: provider-independent adaptive QA planning, requirement traceability, quality-gate results, defect policy, evidence, and explicit release approval.
 - `@cocoframe/agent`: provider-independent MCP discovery and lifecycle contracts plus hash-bound, role-aware, single-use controlled file mutation with confinement, conflict detection, rollback, and sanitized local audit records.
-- `@cocoframe/cli`: route discovery, project inspection, and development server.
+- `@cocoframe/cli`: route discovery, project inspection, read-only Doctor diagnostics, and development server.
 - `create-cocoframe`: dependency-free project scaffolding with a server-first starter, typed API, and opt-in island.
 
 ## Performance invariants

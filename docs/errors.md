@@ -21,6 +21,23 @@ without parsing prose.
 | HTTP 404 | core | No route or system/SEO endpoint matched. | Run `npm run inspect` and check filename-derived patterns. |
 | HTTP 500 page error | core | Page load/meta/view/render failed. | Check whether the page has a buffering `error` boundary and inspect development diagnostics. |
 
+## CocoFrame Doctor diagnostics
+
+`cocoframe doctor` returns contract version 1 diagnostics with a stable `code`,
+severity, category, sanitized evidence, suggestion, and documentation reference.
+Common codes include:
+
+| Code | Meaning | Recovery |
+| --- | --- | --- |
+| `PROJECT_NOT_FOUND` | The selected directory is not a CocoFrame project. | Run Doctor from the generated application root. |
+| `COCOFRAME_DEPENDENCY_MISSING` | A declared CocoFrame package is not installed. | Install dependencies. |
+| `COCOFRAME_DEPENDENCY_VERSION_MISMATCH` | The installed package does not satisfy the declared version. | Restore the coordinated package versions. |
+| `ISLAND_NAME_MISMATCH` | `defineIsland` name differs from the island filename. | Make the stable lowercase names identical. |
+| `GENERATED_ARTIFACT_MISSING` / `GENERATED_ARTIFACT_STALE` | Client, OpenAPI, or CSS declarations need regeneration. | Run `cocoframe generate`. |
+| `ALLOWED_HOSTS_WILDCARD` / `CREDENTIAL_CORS_WILDCARD` | Production trust configuration is unsafe. | Declare explicit trusted hosts or origins. |
+| `DEEP_BUILD_FAILED` / `DEEP_CHECK_TIMEOUT` | The isolated production build failed or exceeded its limit. | Run `cocoframe build` for full local compiler diagnostics. |
+| `DOCTOR_INTERNAL_FAILURE` | Doctor itself failed unexpectedly. | Upgrade, retry, and report the stable code if it persists. |
+
 CocoQL has versioned structured stages, codes, paths, and source locations; use
 `docs/cocoql-structured-errors.md` instead of extending this table with language-
 specific diagnostics. Public production errors must not expose secrets,

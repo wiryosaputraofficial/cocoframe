@@ -114,7 +114,7 @@ test("runs the CLI audit, actual preview, revision, promotion, and cleanup lifec
 
 test("keeps temporary CocoRef routes out of production builds", async () => {
   const source = await readFile(path.resolve("packages/cli/src/project.ts"), "utf8");
-  assert.match(source, /development[\s\S]*__cocoref/);
+  assert.match(source, /development[\s\S]*cocoref[\s\S]*cocoux/);
   assert.match(source, /discoveredRoutes\.filter/);
 });
 

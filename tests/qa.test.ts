@@ -36,6 +36,7 @@ test("builds an adaptive, traceable QA plan from approved product evidence", () 
     sources: [{ kind: "cocospec", id: "login-page", state: "approved", file: "specs/login-page/spec.json" }],
     acceptanceCriteria: ["Valid credentials redirect the member to the dashboard."],
     referenceCriteria: [{ id: "auth-card", description: "Approved responsive authentication card" }],
+    uxCriteria: [{ id: "login-error", description: "Login error state matches approved CocoUX evidence.", category: "visual" }],
     gates: [{ id: "check", script: "check" }, { id: "e2e", script: "test:e2e" }],
     now: timestamp,
   });
@@ -44,6 +45,7 @@ test("builds an adaptive, traceable QA plan from approved product evidence", () 
   assert.ok(nextCocoQaQuestions(qa).length <= 4);
   assert.ok(qa.cases.some(({ source }) => source === "cocospec:acceptance-1"));
   assert.ok(qa.cases.some(({ source }) => source === "cocoref:auth-card"));
+  assert.ok(qa.cases.some(({ source }) => source === "cocoux:login-error"));
   assert.ok(qa.cases.some(({ id }) => id === "framework-server-first"));
   assert.equal(qa.gates[1]?.script, "test:e2e");
 });

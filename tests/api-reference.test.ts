@@ -10,7 +10,7 @@ test("generates a deterministic API reference from every public package entry", 
   const symbols = reference.packages.flatMap(({ entries }) => entries.flatMap((entry) => entry.symbols));
 
   assert.equal(reference.version, 1);
-  assert.equal(reference.packages.length, 23);
+  assert.equal(reference.packages.length, 24);
   assert.ok(symbols.length > 200);
   const core = reference.packages.find(({ name }) => name === "@cocoframe/core");
   const definePage = core?.entries.flatMap(({ symbols: entries }) => entries).find(({ name }) => name === "definePage");

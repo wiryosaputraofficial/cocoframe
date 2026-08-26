@@ -13,7 +13,7 @@ export type CocoQaSeverity = "critical" | "high" | "medium" | "low";
 export type CocoQaValue = null | string | number | boolean | readonly CocoQaValue[] | { readonly [key: string]: CocoQaValue };
 
 export interface CocoQaSource {
-  readonly kind: "cocospec" | "cocoref" | "design-profile" | "manual";
+  readonly kind: "cocospec" | "cocoux" | "cocoref" | "design-profile" | "manual";
   readonly id: string;
   readonly file?: string;
   readonly state: string;
@@ -91,6 +91,7 @@ export interface CreateCocoQaOptions {
   readonly sources?: readonly CocoQaSource[];
   readonly acceptanceCriteria?: readonly string[];
   readonly referenceCriteria?: readonly { readonly id: string; readonly description: string }[];
+  readonly uxCriteria?: readonly { readonly id: string; readonly description: string; readonly category: "functional" | "edge-case" | "accessibility" | "responsive" | "visual" }[];
   readonly designCriteria?: readonly { readonly id: string; readonly description: string; readonly category: "visual" | "responsive" | "accessibility" }[];
   readonly gates?: readonly { readonly id: string; readonly script: string; readonly required?: boolean }[];
   readonly now?: string | Date;
@@ -137,10 +138,12 @@ export function createCocoQa(options: CreateCocoQaOptions): CocoQa {
   const now = timestampOf(options.now);
   const acceptance = uniqueStrings(options.acceptanceCriteria ?? []);
   const references = options.referenceCriteria ?? [];
+  const ux = options.uxCriteria ?? [];
   const design = options.designCriteria ?? [];
   const cases: CocoQaCase[] = [
     ...acceptance.map((title, index): CocoQaCase => ({ id: `acceptance-${index + 1}`, title, category: "functional", source: `cocospec:acceptance-${index + 1}`, required: true, status: "pending" })),
     ...references.map((item): CocoQaCase => ({ id: `reference-${slugifyCocoQa(item.id)}`, title: `Approved reference component: ${requiredString(item.description, "reference description")}`, category: "visual", source: `cocoref:${slugifyCocoQa(item.id)}`, required: true, status: "pending" })),
+    ...ux.map((item): CocoQaCase => ({ id: `ux-${slugifyCocoQa(item.id)}`, title: requiredString(item.description, "UX criterion description"), category: item.category, source: `cocoux:${slugifyCocoQa(item.id)}`, required: true, status: "pending" })),
     ...design.map((item): CocoQaCase => ({ id: "design-" + slugifyCocoQa(item.id), title: requiredString(item.description, "design criterion description"), category: item.category, source: "design:" + slugifyCocoQa(item.id), required: true, status: "pending" })),
     { id: "framework-server-first", title: "Useful server-rendered output exists without browser JavaScript.", category: "compatibility", source: "cocoframe:server-first", required: true, status: "pending" },
     { id: "framework-accessibility", title: "Keyboard, focus, labels, errors, and semantic structure satisfy the approved accessibility target.", category: "accessibility", source: "cocoframe:accessibility", required: true, status: "pending" },
@@ -415,7 +418,7 @@ function valueText(value: CocoQaValue | undefined): string { return value === un
 
 function parseSource(value: unknown): CocoQaSource {
   if (!isRecord(value)) throw new Error("CocoQA source must be an object.");
-  if (value.kind !== "cocospec" && value.kind !== "cocoref" && value.kind !== "design-profile" && value.kind !== "manual") throw new Error("CocoQA source kind is invalid.");
+  if (value.kind !== "cocospec" && value.kind !== "cocoux" && value.kind !== "cocoref" && value.kind !== "design-profile" && value.kind !== "manual") throw new Error("CocoQA source kind is invalid.");
   return { kind: value.kind, id: slugifyCocoQa(requiredString(value.id, "source id")), ...(typeof value.file === "string" ? { file: safeRelative(value.file, "source file") } : {}), state: requiredString(value.state, "source state") };
 }
 

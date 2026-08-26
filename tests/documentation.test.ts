@@ -8,7 +8,7 @@ test("keeps AI documentation complete for every public package and common task",
   const root = path.resolve(".");
   const context = await createRepositoryContext(root);
 
-  assert.equal(context.packageCount, 23);
+  assert.equal(context.packageCount, 24);
   assert.deepEqual(
     context.packages.filter((entry) => entry.documentation === null).map((entry) => entry.name),
     [],
@@ -22,6 +22,7 @@ test("keeps AI documentation complete for every public package and common task",
     "docs/ai-context.md",
     "docs/agent-bridge.md",
     "docs/cocospecs.md",
+    "docs/cocoux.md",
     "docs/cocoref.md",
     "docs/cocoqa.md",
     "docs/repository-map.md",

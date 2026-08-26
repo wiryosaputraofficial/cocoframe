@@ -6,7 +6,7 @@ export const apiReference = {
   "packages": [
     {
       "name": "@cocoframe/agent",
-      "version": "0.0.3",
+      "version": "0.1.0",
       "description": "Provider-independent, approval-aware Agent Bridge contracts for CocoFrame.",
       "readme": "packages/agent/README.md",
       "entries": [
@@ -73,17 +73,17 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/agent/src/types.ts",
-              "line": 157
+              "line": 212
             },
             {
               "name": "AgentBridgeOptions",
               "kind": "interface",
-              "signature": "interface AgentBridgeOptions {\n  workspaceRoot: string;\n  inspectProject: AgentProjectInspector;\n  inspectProposedRoutes?: AgentProposedRouteInspector;\n  sessionId?: string;\n  now?: () => Date;\n  approvalMinutes?: number\n}",
+              "signature": "interface AgentBridgeOptions {\n  workspaceRoot: string;\n  inspectProject: AgentProjectInspector;\n  doctorProject?: AgentProjectDoctor;\n  inspectProposedRoutes?: AgentProposedRouteInspector;\n  sessionId?: string;\n  now?: () => Date;\n  approvalMinutes?: number\n}",
               "summary": "Configuration for one local Agent Bridge instance.",
               "deprecated": false,
               "examples": [],
               "source": "packages/agent/src/types.ts",
-              "line": 131
+              "line": 184
             },
             {
               "name": "AgentComponent",
@@ -128,7 +128,7 @@ export const apiReference = {
             {
               "name": "AgentExecutionRecord",
               "kind": "interface",
-              "signature": "interface AgentExecutionRecord {\n  version: 1;\n  id: string;\n  operationId: string;\n  sessionId: string;\n  outcome: \"completed\" | \"cancelled\" | \"failed\" | \"rolled-back\" | \"partial\";\n  startedAt: string;\n  completedAt: string;\n  affectedTargets: readonly string[];\n  diagnosticCodes: readonly string[];\n  workflow: {    readonly featureId?: string;    readonly referenceDecision?: AgentWorkflowBinding[\"referenceDecision\"];    readonly verifiedTargetCount: number;    readonly visualQaRequired: boolean;    readonly qualityState: \"required\" | \"not-required\";    readonly nextAction: string;}\n}",
+              "signature": "interface AgentExecutionRecord {\n  version: 1;\n  id: string;\n  operationId: string;\n  sessionId: string;\n  outcome: \"cancelled\" | \"completed\" | \"failed\" | \"rolled-back\" | \"partial\";\n  startedAt: string;\n  completedAt: string;\n  affectedTargets: readonly string[];\n  diagnosticCodes: readonly string[];\n  workflow: {    readonly featureId?: string;    readonly referenceDecision?: AgentWorkflowBinding[\"referenceDecision\"];    readonly verifiedTargetCount: number;    readonly visualQaRequired: boolean;    readonly qualityState: \"required\" | \"not-required\";    readonly nextAction: string;}\n}",
               "summary": "Public interface AgentExecutionRecord exported by CocoFrame.",
               "deprecated": false,
               "examples": [],
@@ -216,6 +216,16 @@ export const apiReference = {
               "line": 8
             },
             {
+              "name": "AgentProjectDoctor",
+              "kind": "type",
+              "signature": "type AgentProjectDoctor",
+              "summary": "Read-only Doctor adapter supplied by a CocoFrame host such as the CLI.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/agent/src/types.ts",
+              "line": 170
+            },
+            {
               "name": "AgentProjectInspector",
               "kind": "type",
               "signature": "type AgentProjectInspector",
@@ -243,7 +253,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/agent/src/types.ts",
-              "line": 119
+              "line": 172
             },
             {
               "name": "AgentProposedRouteInspector",
@@ -253,7 +263,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/agent/src/types.ts",
-              "line": 125
+              "line": 178
             },
             {
               "name": "AgentReferenceDecision",
@@ -303,7 +313,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/agent/src/types.ts",
-              "line": 145
+              "line": 200
             },
             {
               "name": "AgentWorkflowBinding",
@@ -336,6 +346,16 @@ export const apiReference = {
               "line": 29
             },
             {
+              "name": "assertSafeTree",
+              "kind": "function",
+              "signature": "assertSafeTree(root: string, relativeDirectory: string, signal?: AbortSignal): Promise<void>",
+              "summary": "Rejects linked or excessively large workspace trees before read-only Agent Bridge or Doctor inspection.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/agent/src/workspace.ts",
+              "line": 42
+            },
+            {
               "name": "createAgentBridge",
               "kind": "function",
               "signature": "createAgentBridge(options: AgentBridgeOptions): Promise<AgentBridge>",
@@ -343,7 +363,67 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/agent/src/index.ts",
-              "line": 312
+              "line": 343
+            },
+            {
+              "name": "DoctorCategory",
+              "kind": "type",
+              "signature": "type DoctorCategory",
+              "summary": "Stable category used to group CocoFrame Doctor diagnostics.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/agent/src/types.ts",
+              "line": 123
+            },
+            {
+              "name": "DoctorCheck",
+              "kind": "interface",
+              "signature": "interface DoctorCheck {\n  id: string;\n  status: \"passed\" | \"warning\" | \"error\" | \"skipped\"\n}",
+              "summary": "Outcome of one stable Doctor check.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/agent/src/types.ts",
+              "line": 137
+            },
+            {
+              "name": "DoctorDiagnostic",
+              "kind": "interface",
+              "signature": "interface DoctorDiagnostic {\n  code: string;\n  severity: DoctorSeverity;\n  category: DoctorCategory;\n  message: string;\n  evidence: readonly string[];\n  suggestion: string;\n  documentation: string\n}",
+              "summary": "One actionable, sanitized problem found by CocoFrame Doctor.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/agent/src/types.ts",
+              "line": 126
+            },
+            {
+              "name": "DoctorOptions",
+              "kind": "interface",
+              "signature": "interface DoctorOptions {\n  deep?: boolean;\n  strict?: boolean\n}",
+              "summary": "Options shared by the Doctor CLI and Agent Bridge adapter.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/agent/src/types.ts",
+              "line": 164
+            },
+            {
+              "name": "DoctorReport",
+              "kind": "interface",
+              "signature": "interface DoctorReport {\n  framework: \"cocoframe\";\n  contractVersion: 1;\n  mode: \"default\" | \"deep\";\n  strict: boolean;\n  status: \"warning\" | \"error\" | \"healthy\" | \"internal-error\" | \"cancelled\";\n  project: string;\n  checks: readonly DoctorCheck[];\n  diagnostics: readonly DoctorDiagnostic[];\n  summary: {    readonly checks: number;    readonly passed: number;    readonly warning: number;    readonly error: number;    readonly skipped: number;    readonly internalFailure: boolean;};\n  truncated: boolean\n}",
+              "summary": "Versioned machine-readable CocoFrame Doctor result.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/agent/src/types.ts",
+              "line": 143
+            },
+            {
+              "name": "DoctorSeverity",
+              "kind": "type",
+              "signature": "type DoctorSeverity",
+              "summary": "Stable severity attached to every CocoFrame Doctor diagnostic.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/agent/src/types.ts",
+              "line": 120
             },
             {
               "name": "readAgentOperationPlan",
@@ -483,8 +563,8 @@ export const apiReference = {
     },
     {
       "name": "@cocoframe/cli",
-      "version": "0.0.8",
-      "description": "The `cocoframe` executable owns project discovery, inspection, development, generation, CocoSpecs discovery, CocoRef component approval, CocoQA evidence and release approval, local Agent Bridge MCP serving, production builds, asset serving, and startup.",
+      "version": "0.1.0",
+      "description": "The `cocoframe` executable owns project discovery, inspection, read-only diagnostics, development, generation, CocoSpecs discovery, CocoUX journey and visual preview, CocoRef component approval, CocoQA evidence and release approval, local Agent Bridge MCP serving, production builds, asset serving, and startup.",
       "readme": "packages/cli/README.md",
       "entries": [
         {
@@ -2887,7 +2967,7 @@ export const apiReference = {
             {
               "name": "SolarLinearIconName",
               "kind": "type",
-              "signature": "type SolarLinearIconName = \"route\" | \"document\" | \"accessibility\" | \"add-circle\" | \"add-folder\" | \"add-square\" | \"adhesive-plaster\" | \"adhesive-plaster-2\" | \"airbuds\" | \"airbuds-case\" | \"airbuds-case-charge\" | \"airbuds-case-minimalistic\" | \"airbuds-case-open\" | \"airbuds-charge\" | \"airbuds-check\" | \"airbuds-left\" | \"airbuds-remove\" | \"airbuds-right\" | \"alarm\" | \"alarm-add\" | \"alarm-pause\" | \"alarm-play\" | \"alarm-remove\" | \"alarm-sleep\" | \"alarm-turn-off\" | \"album\" | \"align-bottom\" | \"align-horizontal-center\" | \"align-horizontal-spacing\" | \"align-left\" | \"align-right\" | \"align-top\" | \"align-vertical-center\" | \"align-vertical-spacing\" | \"alt-arrow-down\" | \"alt-arrow-left\" | \"alt-arrow-right\" | \"alt-arrow-up\" | \"archive\" | \"archive-check\" | \"archive-down\" | \"archive-down-minimalistic\" | \"archive-minimalistic\" | \"archive-up\" | \"archive-up-minimalistic\" | \"armchair\" | \"armchair-2\" | \"arrow-down\" | \"arrow-left\" | \"arrow-left-down\" | \"arrow-left-up\" | \"arrow-right\" | \"arrow-right-down\" | \"arrow-right-up\" | \"arrow-to-down-left\" | \"arrow-to-down-right\" | \"arrow-to-top-left\" | \"arrow-to-top-right\" | \"arrow-up\" | \"asteroid\" | \"atom\" | \"augmented-reality\" | \"backpack\" | \"backspace\" | \"bacteria\" | \"bag\" | \"bag-2\" | \"bag-3\" | \"bag-4\" | \"bag-5\" | \"bag-check\" | \"bag-cross\" | \"bag-heart\" | \"bag-music\" | \"bag-music-2\" | \"bag-smile\" | \"balloon\" | \"balls\" | \"banknote\" | \"banknote-2\" | \"bar-chair\" | \"basketball\" | \"bath\" | \"battery-charge\" | \"battery-charge-minimalistic\" | \"battery-full\" | \"battery-full-minimalistic\" | \"battery-half\" | \"battery-half-minimalistic\" | \"battery-low\" | \"battery-low-minimalistic\" | \"bed\" | \"bedside-table\" | \"bedside-table-2\" | \"bedside-table-3\" | \"bedside-table-4\" | \"bell\" | \"bell-off\" | \"bell-ring\" | \"benzene-ring\" | \"bicycling\" | \"bicycling-round\" | \"bill\" | \"bill-2\" | \"bill-check\" | \"bill-cross\" | \"bill-list\" | \"black-hole\" | \"black-hole-2\" | \"black-hole-3\" | \"bluetooth\" | \"bluetooth-circle\" | \"bluetooth-square\" | \"bluetooth-wave\" | \"body\" | \"body-shape\" | \"body-shape-minimalistic\" | \"bolt\" | \"bolt-circle\" | \"bomb\" | \"bomb-emoji\" | \"bomb-minimalistic\" | \"bone\" | \"bone-crack\" | \"bone-fracture\" | \"bones\" | \"bonfire\" | \"book\" | \"book-2\" | \"book-bookmark\" | \"book-bookmark-minimalistic\" | \"book-minimalistic\" | \"bookmark\" | \"bookmark-circle\" | \"bookmark-opened\" | \"bookmark-square\" | \"bookmark-square-minimalistic\" | \"boombox\" | \"bottle\" | \"bowling\" | \"box\" | \"box-minimalistic\" | \"branching-paths-down\" | \"branching-paths-up\" | \"broom\" | \"bug\" | \"bug-minimalistic\" | \"buildings\" | \"buildings-2\" | \"buildings-3\" | \"bus\" | \"calculator\" | \"calculator-minimalistic\" | \"calendar\" | \"calendar-add\" | \"calendar-date\" | \"calendar-mark\" | \"calendar-minimalistic\" | \"calendar-search\" | \"call-cancel\" | \"call-cancel-rounded\" | \"call-chat\" | \"call-chat-rounded\" | \"call-dropped\" | \"call-dropped-rounded\" | \"call-medicine\" | \"call-medicine-rounded\" | \"camera\" | \"camera-add\" | \"camera-minimalistic\" | \"camera-rotate\" | \"camera-square\" | \"car-battery\" | \"card\" | \"card-2\" | \"card-receive\" | \"card-search\" | \"card-send\" | \"card-transfer\" | \"cardholder\" | \"cart\" | \"cart-2\" | \"cart-3\" | \"cart-4\" | \"cart-5\" | \"cart-check\" | \"cart-cross\" | \"cart-large\" | \"cart-large-2\" | \"cart-large-3\" | \"cart-large-4\" | \"cart-large-minimalistic\" | \"cart-plus\" | \"case\" | \"case-minimalistic\" | \"case-round\" | \"case-round-minimalistic\" | \"cash-out\" | \"cassette\" | \"cassette-2\" | \"cat\" | \"chair\" | \"chair-2\" | \"chandelier\" | \"chart\" | \"chart-2\" | \"chart-square\" | \"chat-dots\" | \"chat-line\" | \"chat-round\" | \"chat-round-call\" | \"chat-round-check\" | \"chat-round-dots\" | \"chat-round-like\" | \"chat-round-line\" | \"chat-round-money\" | \"chat-round-unread\" | \"chat-round-video\" | \"chat-square\" | \"chat-square-2\" | \"chat-square-arrow\" | \"chat-square-call\" | \"chat-square-check\" | \"chat-square-code\" | \"chat-square-like\" | \"chat-unread\" | \"check-circle\" | \"check-read\" | \"check-square\" | \"checklist\" | \"checklist-minimalistic\" | \"chef-hat\" | \"chef-hat-heart\" | \"chef-hat-minimalistic\" | \"circle-bottom-down\" | \"circle-bottom-up\" | \"circle-top-down\" | \"circle-top-up\" | \"city\" | \"clapperboard\" | \"clapperboard-edit\" | \"clapperboard-open\" | \"clapperboard-open-play\" | \"clapperboard-play\" | \"clapperboard-text\" | \"clipboard\" | \"clipboard-add\" | \"clipboard-check\" | \"clipboard-heart\" | \"clipboard-list\" | \"clipboard-remove\" | \"clipboard-text\" | \"clock-circle\" | \"clock-square\" | \"close-circle\" | \"close-square\" | \"closet\" | \"closet-2\" | \"cloud\" | \"cloud-bolt\" | \"cloud-bolt-minimalistic\" | \"cloud-check\" | \"cloud-cross\" | \"cloud-download\" | \"cloud-file\" | \"cloud-minus\" | \"cloud-plus\" | \"cloud-rain\" | \"cloud-snowfall\" | \"cloud-snowfall-minimalistic\" | \"cloud-storage\" | \"cloud-storm\" | \"cloud-sun\" | \"cloud-sun-2\" | \"cloud-upload\" | \"cloud-waterdrop\" | \"cloud-waterdrops\" | \"clouds\" | \"cloudy-moon\" | \"code\" | \"code-2\" | \"code-circle\" | \"code-file\" | \"code-scan\" | \"code-square\" | \"colour-tuning\" | \"command\" | \"compass\" | \"compass-big\" | \"compass-square\" | \"conditioner\" | \"conditioner-2\" | \"confetti\" | \"confetti-minimalistic\" | \"confounded-circle\" | \"confounded-square\" | \"copy\" | \"copyright\" | \"corkscrew\" | \"cosmetic\" | \"course-down\" | \"course-up\" | \"cpu\" | \"cpu-bolt\" | \"creative-commons\" | \"crop\" | \"crop-minimalistic\" | \"crown\" | \"crown-line\" | \"crown-minimalistic\" | \"crown-star\" | \"cup\" | \"cup-first\" | \"cup-hot\" | \"cup-music\" | \"cup-paper\" | \"cup-star\" | \"cursor\" | \"cursor-square\" | \"danger\" | \"danger-circle\" | \"danger-square\" | \"danger-triangle\" | \"database\" | \"delivery\" | \"devices\" | \"diagram-down\" | \"diagram-up\" | \"dialog\" | \"dialog-2\" | \"diploma\" | \"diploma-verified\" | \"diskette\" | \"dislike\" | \"display\" | \"dna\" | \"document-2\" | \"document-add\" | \"document-medicine\" | \"document-text\" | \"documents\" | \"documents-minimalistic\" | \"dollar\" | \"dollar-minimalistic\" | \"donut\" | \"donut-bitten\" | \"double-alt-arrow-down\" | \"double-alt-arrow-left\" | \"double-alt-arrow-right\" | \"double-alt-arrow-up\" | \"download\" | \"download-minimalistic\" | \"download-square\" | \"download-twice-square\" | \"dropper\" | \"dropper-2\" | \"dropper-3\" | \"dropper-minimalistic\" | \"dropper-minimalistic-2\" | \"dumbbell\" | \"dumbbell-large\" | \"dumbbell-large-minimalistic\" | \"dumbbell-small\" | \"dumbbells\" | \"dumbbells-2\" | \"earth\" | \"electric-refueling\" | \"emoji-funny-circle\" | \"emoji-funny-square\" | \"end-call\" | \"end-call-rounded\" | \"eraser\" | \"eraser-circle\" | \"eraser-square\" | \"euro\" | \"exit\" | \"explicit\" | \"export\" | \"expressionless-circle\" | \"expressionless-square\" | \"eye\" | \"eye-closed\" | \"eye-scan\" | \"face-scan-circle\" | \"face-scan-square\" | \"facemask-circle\" | \"facemask-square\" | \"feed\" | \"ferris-wheel\" | \"figma\" | \"figma-file\" | \"file\" | \"file-check\" | \"file-corrupted\" | \"file-download\" | \"file-favorite\" | \"file-left\" | \"file-remove\" | \"file-right\" | \"file-send\" | \"file-smile\" | \"file-text\" | \"filter\" | \"filters\" | \"fire\" | \"fire-minimalistic\" | \"fire-square\" | \"flag\" | \"flag-2\" | \"flame\" | \"flash-drive\" | \"flashlight\" | \"flashlight-on\" | \"flip-horizontal\" | \"flip-vertical\" | \"floor-lamp\" | \"floor-lamp-minimalistic\" | \"fog\" | \"folder\" | \"folder-2\" | \"folder-check\" | \"folder-cloud\" | \"folder-error\" | \"folder-favorite-bookmark\" | \"folder-favorite-star\" | \"folder-open\" | \"folder-path-connect\" | \"folder-security\" | \"folder-with-files\" | \"football\" | \"forbidden\" | \"forbidden-circle\" | \"forward\" | \"forward-2\" | \"forward-right\" | \"four-k\" | \"fridge\" | \"fuel\" | \"full-screen\" | \"full-screen-circle\" | \"full-screen-square\" | \"gallery\" | \"gallery-add\" | \"gallery-check\" | \"gallery-circle\" | \"gallery-download\" | \"gallery-edit\" | \"gallery-favorite\" | \"gallery-minimalistic\" | \"gallery-remove\" | \"gallery-round\" | \"gallery-send\" | \"gallery-wide\" | \"gameboy\" | \"gamepad\" | \"gamepad-charge\" | \"gamepad-minimalistic\" | \"gamepad-no-charge\" | \"gamepad-old\" | \"garage\" | \"gas-station\" | \"ghost\" | \"ghost-smile\" | \"gift\" | \"glasses\" | \"global\" | \"globe\" | \"golf\" | \"gps\" | \"graph\" | \"graph-down\" | \"graph-down-new\" | \"graph-new\" | \"graph-new-up\" | \"graph-up\" | \"hamburger-menu\" | \"hand-heart\" | \"hand-money\" | \"hand-pills\" | \"hand-shake\" | \"hand-stars\" | \"hanger\" | \"hanger-2\" | \"hashtag\" | \"hashtag-chat\" | \"hashtag-circle\" | \"hashtag-square\" | \"headphones-round\" | \"headphones-round-sound\" | \"headphones-square\" | \"headphones-square-sound\" | \"health\" | \"heart\" | \"heart-angle\" | \"heart-crack\" | \"heart-lock\" | \"heart-pulse\" | \"heart-pulse-2\" | \"heart-shine\" | \"heart-unlock\" | \"hearts\" | \"help\" | \"high-definition\" | \"high-quality\" | \"hiking\" | \"hiking-minimalistic\" | \"hiking-round\" | \"history\" | \"history-2\" | \"history-3\" | \"home\" | \"home-2\" | \"home-add\" | \"home-add-angle\" | \"home-angle\" | \"home-angle-2\" | \"home-smile\" | \"home-smile-angle\" | \"home-wi-fi\" | \"home-wi-fi-angle\" | \"hospital\" | \"hourglass\" | \"hourglass-line\" | \"house\" | \"i-phone\" | \"import\" | \"inbox\" | \"inbox-archive\" | \"inbox-in\" | \"inbox-line\" | \"inbox-out\" | \"inbox-unread\" | \"incognito\" | \"incoming-call\" | \"incoming-call-rounded\" | \"infinite\" | \"info-circle\" | \"info-square\" | \"jar-of-pills\" | \"jar-of-pills-2\" | \"key\" | \"key-minimalistic\" | \"key-minimalistic-2\" | \"key-minimalistic-square\" | \"key-minimalistic-square-2\" | \"key-minimalistic-square-3\" | \"key-square\" | \"key-square-2\" | \"keyboard\" | \"kick-scooter\" | \"ladle\" | \"lamp\" | \"laptop\" | \"laptop-2\" | \"laptop-3\" | \"laptop-minimalistic\" | \"layers\" | \"layers-minimalistic\" | \"leaf\" | \"letter\" | \"letter-opened\" | \"letter-unread\" | \"library\" | \"lightbulb\" | \"lightbulb-bolt\" | \"lightbulb-minimalistic\" | \"lightning\" | \"like\" | \"link\" | \"link-circle\" | \"link-minimalistic\" | \"link-minimalistic-2\" | \"link-round\" | \"link-round-angle\" | \"link-square\" | \"list\" | \"list-arrow-down\" | \"list-arrow-down-minimalistic\" | \"list-arrow-up\" | \"list-arrow-up-minimalistic\" | \"list-check\" | \"list-check-minimalistic\" | \"list-cross\" | \"list-cross-minimalistic\" | \"list-down\" | \"list-down-minimalistic\" | \"list-heart\" | \"list-heart-minimalistic\" | \"list-up\" | \"list-up-minimalistic\" | \"list-vertical\" | \"lock\" | \"lock-keyhole\" | \"lock-keyhole-minimalistic\" | \"lock-keyhole-minimalistic-unlocked\" | \"lock-keyhole-unlocked\" | \"lock-password\" | \"lock-password-unlocked\" | \"lock-unlocked\" | \"login\" | \"login-2\" | \"login-3\" | \"logout\" | \"logout-2\" | \"logout-3\" | \"magic-wand\" | \"magic-wand-2\" | \"magic-wand-3\" | \"magnet\" | \"magnet-wave\" | \"magnifier\" | \"magnifier-bug\" | \"magnifier-zoom-in\" | \"magnifier-zoom-out\" | \"mailbox\" | \"map\" | \"map-arrow-down\" | \"map-arrow-left\" | \"map-arrow-right\" | \"map-arrow-square\" | \"map-arrow-up\" | \"map-point\" | \"map-point-add\" | \"map-point-favorite\" | \"map-point-hospital\" | \"map-point-remove\" | \"map-point-rotate\" | \"map-point-school\" | \"map-point-search\" | \"map-point-wave\" | \"mask-happy\" | \"mask-sad\" | \"masks\" | \"maximize\" | \"maximize-square\" | \"maximize-square-2\" | \"maximize-square-3\" | \"maximize-square-minimalistic\" | \"medal-ribbon\" | \"medal-ribbon-star\" | \"medal-ribbons-star\" | \"medal-star\" | \"medal-star-circle\" | \"medal-star-square\" | \"medical-kit\" | \"meditation\" | \"meditation-round\" | \"men\" | \"mention-circle\" | \"mention-square\" | \"menu-dots\" | \"menu-dots-circle\" | \"menu-dots-square\" | \"microphone\" | \"microphone-2\" | \"microphone-3\" | \"microphone-large\" | \"minimalistic-magnifier\" | \"minimalistic-magnifier-bug\" | \"minimalistic-magnifier-zoom-in\" | \"minimalistic-magnifier-zoom-out\" | \"minimize\" | \"minimize-square\" | \"minimize-square-2\" | \"minimize-square-3\" | \"minimize-square-minimalistic\" | \"minus-circle\" | \"minus-square\" | \"mirror\" | \"mirror-2\" | \"mirror-left\" | \"mirror-right\" | \"money-bag\" | \"money-roll\" | \"monitor\" | \"monitor-camera\" | \"monitor-smartphone\" | \"moon\" | \"moon-fog\" | \"moon-sleep\" | \"moon-stars\" | \"mouse\" | \"mouse-circle\" | \"mouse-minimalistic\" | \"move-to-folder\" | \"mug\" | \"multiple-forward-left\" | \"multiple-forward-right\" | \"music-library\" | \"music-library-2\" | \"music-note\" | \"music-note-2\" | \"music-note-3\" | \"music-note-4\" | \"music-note-slider\" | \"music-note-slider-2\" | \"music-notes\" | \"muted\" | \"notebook\" | \"notebook-2\" | \"notebook-bookmark\" | \"notebook-minimalistic\" | \"notebook-square\" | \"notes\" | \"notes-minimalistic\" | \"notification-lines-remove\" | \"notification-remove\" | \"notification-unread\" | \"notification-unread-lines\" | \"object-scan\" | \"outgoing-call\" | \"outgoing-call-rounded\" | \"oven-mitts\" | \"oven-mitts-minimalistic\" | \"paint-roller\" | \"palette\" | \"palette-2\" | \"palette-round\" | \"panorama\" | \"paper-bin\" | \"paperclip\" | \"paperclip-2\" | \"paperclip-rounded\" | \"paperclip-rounded-2\" | \"paragraph-spacing\" | \"passport\" | \"passport-minimalistic\" | \"password\" | \"password-minimalistic\" | \"password-minimalistic-input\" | \"pause\" | \"pause-circle\" | \"paw\" | \"pen\" | \"pen-2\" | \"pen-new-round\" | \"pen-new-square\" | \"people-nearby\" | \"perfume\" | \"phone\" | \"phone-calling\" | \"phone-calling-rounded\" | \"phone-rounded\" | \"pie-chart\" | \"pie-chart-2\" | \"pie-chart-3\" | \"pill\" | \"pills\" | \"pills-2\" | \"pills-3\" | \"pin\" | \"pin-circle\" | \"pin-list\" | \"pip\" | \"pip-2\" | \"pipette\" | \"plane\" | \"plane-2\" | \"plane-3\" | \"planet\" | \"planet-2\" | \"planet-3\" | \"planet-4\" | \"plate\" | \"play\" | \"play-circle\" | \"play-stream\" | \"playback-speed\" | \"playlist\" | \"playlist-2\" | \"playlist-minimalistic\" | \"playlist-minimalistic-2\" | \"playlist-minimalistic-3\" | \"plug-circle\" | \"plus-minus\" | \"podcast\" | \"point-on-map\" | \"point-on-map-perspective\" | \"posts-carousel-horizontal\" | \"posts-carousel-vertical\" | \"power\" | \"presentation-graph\" | \"printer\" | \"printer-2\" | \"printer-minimalistic\" | \"programming\" | \"projector\" | \"pulse\" | \"pulse-2\" | \"qr-code\" | \"question-circle\" | \"question-square\" | \"quit-full-screen\" | \"quit-full-screen-circle\" | \"quit-full-screen-square\" | \"quit-pip\" | \"radar\" | \"radar-2\" | \"radial-blur\" | \"radio\" | \"radio-minimalistic\" | \"ranking\" | \"receive-square\" | \"receive-twice-square\" | \"record\" | \"record-audio-circle\" | \"record-circle\" | \"record-minimalistic\" | \"record-square\" | \"reel\" | \"reel-2\" | \"refresh\" | \"refresh-circle\" | \"refresh-square\" | \"remote-controller\" | \"remote-controller-2\" | \"remote-controller-minimalistic\" | \"remove-folder\" | \"reorder\" | \"reorder-2\" | \"repeat\" | \"repeat-one\" | \"repeat-one-minimalistic\" | \"reply\" | \"reply-2\" | \"restart\" | \"restart-circle\" | \"restart-square\" | \"revote\" | \"rewind-10-seconds-back\" | \"rewind-10-seconds-forward\" | \"rewind-15-seconds-back\" | \"rewind-15-seconds-forward\" | \"rewind-5-seconds-back\" | \"rewind-5-seconds-forward\" | \"rewind-back\" | \"rewind-back-circle\" | \"rewind-forward\" | \"rewind-forward-circle\" | \"rocket\" | \"rocket-2\" | \"rolling-pin\" | \"round-alt-arrow-down\" | \"round-alt-arrow-left\" | \"round-alt-arrow-right\" | \"round-alt-arrow-up\" | \"round-arrow-down\" | \"round-arrow-left\" | \"round-arrow-left-down\" | \"round-arrow-left-up\" | \"round-arrow-right\" | \"round-arrow-right-down\" | \"round-arrow-right-up\" | \"round-arrow-up\" | \"round-double-alt-arrow-down\" | \"round-double-alt-arrow-left\" | \"round-double-alt-arrow-right\" | \"round-double-alt-arrow-up\" | \"round-graph\" | \"round-sort-horizontal\" | \"round-sort-vertical\" | \"round-transfer-diagonal\" | \"round-transfer-horizontal\" | \"round-transfer-vertical\" | \"rounded-magnifier\" | \"rounded-magnifier-bug\" | \"rounded-magnifier-zoom-in\" | \"rounded-magnifier-zoom-out\" | \"routing\" | \"routing-2\" | \"routing-3\" | \"ruble\" | \"rugby\" | \"ruler\" | \"ruler-angular\" | \"ruler-cross-pen\" | \"ruler-pen\" | \"running\" | \"running-2\" | \"running-round\" | \"sad-circle\" | \"sad-square\" | \"safe-2\" | \"safe-circle\" | \"safe-square\" | \"sale\" | \"sale-square\" | \"satellite\" | \"scale\" | \"scaling\" | \"scanner\" | \"scanner-2\" | \"scissors\" | \"scissors-square\" | \"scooter\" | \"screen-share\" | \"screencast\" | \"screencast-2\" | \"sd-card\" | \"send-square\" | \"send-twice-square\" | \"server\" | \"server-2\" | \"server-minimalistic\" | \"server-path\" | \"server-square\" | \"server-square-cloud\" | \"server-square-update\" | \"settings\" | \"settings-minimalistic\" | \"share\" | \"share-circle\" | \"shield\" | \"shield-check\" | \"shield-cross\" | \"shield-keyhole\" | \"shield-keyhole-minimalistic\" | \"shield-minimalistic\" | \"shield-minus\" | \"shield-network\" | \"shield-plus\" | \"shield-star\" | \"shield-up\" | \"shield-user\" | \"shield-warning\" | \"shock-absorber\" | \"shop\" | \"shop-2\" | \"shop-minimalistic\" | \"shuffle\" | \"sidebar\" | \"sidebar-code\" | \"sidebar-minimalistic\" | \"signpost\" | \"signpost-2\" | \"sim-card\" | \"sim-card-minimalistic\" | \"sim-cards\" | \"siren\" | \"siren-rounded\" | \"skateboard\" | \"skateboarding\" | \"skateboarding-round\" | \"skip-next\" | \"skip-previous\" | \"skirt\" | \"slash-circle\" | \"slash-square\" | \"sledgehammer\" | \"sleeping\" | \"sleeping-circle\" | \"sleeping-square\" | \"slider-horizontal\" | \"slider-minimalistic-horizontal\" | \"slider-vertical\" | \"slider-vertical-minimalistic\" | \"smart-home\" | \"smart-home-angle\" | \"smart-speaker\" | \"smart-speaker-2\" | \"smart-speaker-minimalistic\" | \"smart-vacuum-cleaner\" | \"smart-vacuum-cleaner-2\" | \"smartphone\" | \"smartphone-2\" | \"smartphone-rotate-2\" | \"smartphone-rotate-angle\" | \"smartphone-rotate-orientation\" | \"smartphone-update\" | \"smartphone-vibration\" | \"smile-circle\" | \"smile-square\" | \"snowflake\" | \"socket\" | \"sofa\" | \"sofa-2\" | \"sofa-3\" | \"sort\" | \"sort-alphabetically\" | \"sort-by-time\" | \"sort-from-bottom-to-top\" | \"sort-from-top-to-bottom\" | \"sort-horizontal\" | \"sort-vertical\" | \"soundwave\" | \"soundwave-circle\" | \"soundwave-square\" | \"speaker\" | \"speaker-minimalistic\" | \"special-effects\" | \"speedometer-low\" | \"speedometer-max\" | \"speedometer-middle\" | \"square-academic-cap\" | \"square-academic-cap-2\" | \"square-alt-arrow-down\" | \"square-alt-arrow-left\" | \"square-alt-arrow-right\" | \"square-alt-arrow-up\" | \"square-arrow-down\" | \"square-arrow-left\" | \"square-arrow-left-down\" | \"square-arrow-left-up\" | \"square-arrow-right\" | \"square-arrow-right-down\" | \"square-arrow-right-up\" | \"square-arrow-up\" | \"square-bottom-down\" | \"square-bottom-up\" | \"square-double-alt-arrow-down\" | \"square-double-alt-arrow-left\" | \"square-double-alt-arrow-right\" | \"square-double-alt-arrow-up\" | \"square-forward\" | \"square-share-line\" | \"square-sort-horizontal\" | \"square-sort-vertical\" | \"square-top-down\" | \"square-top-up\" | \"square-transfer-horizontal\" | \"square-transfer-vertical\" | \"ssd-round\" | \"ssd-square\" | \"star\" | \"star-2\" | \"star-angle\" | \"star-circle\" | \"star-fall\" | \"star-fall-2\" | \"star-fall-minimalistic\" | \"star-fall-minimalistic-2\" | \"star-rainbow\" | \"star-ring\" | \"star-rings\" | \"star-shine\" | \"stars\" | \"stars-2\" | \"stars-line\" | \"stars-minimalistic\" | \"station\" | \"station-minimalistic\" | \"stethoscope\" | \"sticker-circle\" | \"sticker-smile-circle\" | \"sticker-smile-circle-2\" | \"sticker-smile-square\" | \"sticker-square\" | \"stop\" | \"stop-circle\" | \"stopwatch\" | \"stopwatch-pause\" | \"stopwatch-play\" | \"stream\" | \"streets\" | \"streets-map-point\" | \"streets-navigation\" | \"stretching\" | \"stretching-round\" | \"structure\" | \"subtitles\" | \"suitcase\" | \"suitcase-lines\" | \"suitcase-tag\" | \"sun\" | \"sun-2\" | \"sun-fog\" | \"sunrise\" | \"sunset\" | \"suspension\" | \"suspension-bolt\" | \"suspension-cross\" | \"swimming\" | \"syringe\" | \"t-shirt\" | \"tablet\" | \"tag\" | \"tag-horizontal\" | \"tag-price\" | \"target\" | \"tea-cup\" | \"telescope\" | \"temperature\" | \"tennis\" | \"tennis-2\" | \"test-tube\" | \"test-tube-minimalistic\" | \"text-bold\" | \"text-bold-circle\" | \"text-bold-square\" | \"text-circle\" | \"text-cross\" | \"text-cross-circle\" | \"text-cross-square\" | \"text-field\" | \"text-field-focus\" | \"text-format\" | \"text-italic\" | \"text-italic-circle\" | \"text-italic-square\" | \"text-selection\" | \"text-square\" | \"text-square-2\" | \"text-underline\" | \"text-underline-circle\" | \"text-underline-cross\" | \"thermometer\" | \"three-squares\" | \"ticket\" | \"ticket-sale\" | \"ticket-star\" | \"to-pip\" | \"tornado\" | \"tornado-small\" | \"traffic\" | \"traffic-economy\" | \"tram\" | \"transfer-horizontal\" | \"transfer-vertical\" | \"translation\" | \"translation-2\" | \"transmission\" | \"transmission-circle\" | \"transmission-square\" | \"trash-bin-2\" | \"trash-bin-minimalistic\" | \"trash-bin-minimalistic-2\" | \"trash-bin-trash\" | \"treadmill\" | \"treadmill-round\" | \"tuning\" | \"tuning-2\" | \"tuning-3\" | \"tuning-4\" | \"tuning-square\" | \"tuning-square-2\" | \"turntable\" | \"turntable-minimalistic\" | \"turntable-music-note\" | \"tv\" | \"ufo\" | \"ufo-2\" | \"ufo-3\" | \"umbrella\" | \"undo-left\" | \"undo-left-round\" | \"undo-left-round-square\" | \"undo-left-square\" | \"undo-right\" | \"undo-right-round\" | \"undo-right-round-square\" | \"undo-right-square\" | \"unlink\" | \"unlink-minimalistic\" | \"unread\" | \"upload\" | \"upload-minimalistic\" | \"upload-square\" | \"upload-track\" | \"upload-track-2\" | \"upload-twice-square\" | \"usb\" | \"usb-circle\" | \"usb-square\" | \"user\" | \"user-block\" | \"user-block-rounded\" | \"user-check\" | \"user-check-rounded\" | \"user-circle\" | \"user-cross\" | \"user-cross-rounded\" | \"user-hand-up\" | \"user-hands\" | \"user-heart\" | \"user-heart-rounded\" | \"user-id\" | \"user-minus\" | \"user-minus-rounded\" | \"user-plus\" | \"user-plus-rounded\" | \"user-rounded\" | \"user-speak\" | \"user-speak-rounded\" | \"users-group-rounded\" | \"users-group-two-rounded\" | \"vanity\" | \"verified-check\" | \"video-frame\" | \"video-frame-2\" | \"video-frame-cut\" | \"video-frame-cut-2\" | \"video-frame-play-horizontal\" | \"video-frame-play-vertical\" | \"video-frame-replace\" | \"video-library\" | \"videocamera\" | \"videocamera-add\" | \"videocamera-record\" | \"vinyl\" | \"vinyl-record\" | \"virus\" | \"volleyball\" | \"volleyball-2\" | \"volume\" | \"volume-cross\" | \"volume-knob\" | \"volume-loud\" | \"volume-small\" | \"walking\" | \"walking-round\" | \"wallet\" | \"wallet-2\" | \"wallet-money\" | \"wallpaper\" | \"washing-machine\" | \"washing-machine-minimalistic\" | \"watch-round\" | \"watch-square\" | \"watch-square-minimalistic\" | \"watch-square-minimalistic-charge\" | \"water\" | \"water-sun\" | \"waterdrop\" | \"waterdrops\" | \"wheel\" | \"wheel-angle\" | \"whisk\" | \"wi-fi-router\" | \"wi-fi-router-minimalistic\" | \"wi-fi-router-round\" | \"widget\" | \"widget-2\" | \"widget-3\" | \"widget-4\" | \"widget-5\" | \"widget-6\" | \"widget-add\" | \"win-rar\" | \"wind\" | \"window-frame\" | \"wineglass\" | \"wineglass-triangle\" | \"wireless-charge\" | \"women\" | \"xxx\" | \"zip-file\"",
+              "signature": "type SolarLinearIconName = \"route\" | \"document\" | \"share\" | \"accessibility\" | \"add-circle\" | \"add-folder\" | \"add-square\" | \"adhesive-plaster\" | \"adhesive-plaster-2\" | \"airbuds\" | \"airbuds-case\" | \"airbuds-case-charge\" | \"airbuds-case-minimalistic\" | \"airbuds-case-open\" | \"airbuds-charge\" | \"airbuds-check\" | \"airbuds-left\" | \"airbuds-remove\" | \"airbuds-right\" | \"alarm\" | \"alarm-add\" | \"alarm-pause\" | \"alarm-play\" | \"alarm-remove\" | \"alarm-sleep\" | \"alarm-turn-off\" | \"album\" | \"align-bottom\" | \"align-horizontal-center\" | \"align-horizontal-spacing\" | \"align-left\" | \"align-right\" | \"align-top\" | \"align-vertical-center\" | \"align-vertical-spacing\" | \"alt-arrow-down\" | \"alt-arrow-left\" | \"alt-arrow-right\" | \"alt-arrow-up\" | \"archive\" | \"archive-check\" | \"archive-down\" | \"archive-down-minimalistic\" | \"archive-minimalistic\" | \"archive-up\" | \"archive-up-minimalistic\" | \"armchair\" | \"armchair-2\" | \"arrow-down\" | \"arrow-left\" | \"arrow-left-down\" | \"arrow-left-up\" | \"arrow-right\" | \"arrow-right-down\" | \"arrow-right-up\" | \"arrow-to-down-left\" | \"arrow-to-down-right\" | \"arrow-to-top-left\" | \"arrow-to-top-right\" | \"arrow-up\" | \"asteroid\" | \"atom\" | \"augmented-reality\" | \"backpack\" | \"backspace\" | \"bacteria\" | \"bag\" | \"bag-2\" | \"bag-3\" | \"bag-4\" | \"bag-5\" | \"bag-check\" | \"bag-cross\" | \"bag-heart\" | \"bag-music\" | \"bag-music-2\" | \"bag-smile\" | \"balloon\" | \"balls\" | \"banknote\" | \"banknote-2\" | \"bar-chair\" | \"basketball\" | \"bath\" | \"battery-charge\" | \"battery-charge-minimalistic\" | \"battery-full\" | \"battery-full-minimalistic\" | \"battery-half\" | \"battery-half-minimalistic\" | \"battery-low\" | \"battery-low-minimalistic\" | \"bed\" | \"bedside-table\" | \"bedside-table-2\" | \"bedside-table-3\" | \"bedside-table-4\" | \"bell\" | \"bell-off\" | \"bell-ring\" | \"benzene-ring\" | \"bicycling\" | \"bicycling-round\" | \"bill\" | \"bill-2\" | \"bill-check\" | \"bill-cross\" | \"bill-list\" | \"black-hole\" | \"black-hole-2\" | \"black-hole-3\" | \"bluetooth\" | \"bluetooth-circle\" | \"bluetooth-square\" | \"bluetooth-wave\" | \"body\" | \"body-shape\" | \"body-shape-minimalistic\" | \"bolt\" | \"bolt-circle\" | \"bomb\" | \"bomb-emoji\" | \"bomb-minimalistic\" | \"bone\" | \"bone-crack\" | \"bone-fracture\" | \"bones\" | \"bonfire\" | \"book\" | \"book-2\" | \"book-bookmark\" | \"book-bookmark-minimalistic\" | \"book-minimalistic\" | \"bookmark\" | \"bookmark-circle\" | \"bookmark-opened\" | \"bookmark-square\" | \"bookmark-square-minimalistic\" | \"boombox\" | \"bottle\" | \"bowling\" | \"box\" | \"box-minimalistic\" | \"branching-paths-down\" | \"branching-paths-up\" | \"broom\" | \"bug\" | \"bug-minimalistic\" | \"buildings\" | \"buildings-2\" | \"buildings-3\" | \"bus\" | \"calculator\" | \"calculator-minimalistic\" | \"calendar\" | \"calendar-add\" | \"calendar-date\" | \"calendar-mark\" | \"calendar-minimalistic\" | \"calendar-search\" | \"call-cancel\" | \"call-cancel-rounded\" | \"call-chat\" | \"call-chat-rounded\" | \"call-dropped\" | \"call-dropped-rounded\" | \"call-medicine\" | \"call-medicine-rounded\" | \"camera\" | \"camera-add\" | \"camera-minimalistic\" | \"camera-rotate\" | \"camera-square\" | \"car-battery\" | \"card\" | \"card-2\" | \"card-receive\" | \"card-search\" | \"card-send\" | \"card-transfer\" | \"cardholder\" | \"cart\" | \"cart-2\" | \"cart-3\" | \"cart-4\" | \"cart-5\" | \"cart-check\" | \"cart-cross\" | \"cart-large\" | \"cart-large-2\" | \"cart-large-3\" | \"cart-large-4\" | \"cart-large-minimalistic\" | \"cart-plus\" | \"case\" | \"case-minimalistic\" | \"case-round\" | \"case-round-minimalistic\" | \"cash-out\" | \"cassette\" | \"cassette-2\" | \"cat\" | \"chair\" | \"chair-2\" | \"chandelier\" | \"chart\" | \"chart-2\" | \"chart-square\" | \"chat-dots\" | \"chat-line\" | \"chat-round\" | \"chat-round-call\" | \"chat-round-check\" | \"chat-round-dots\" | \"chat-round-like\" | \"chat-round-line\" | \"chat-round-money\" | \"chat-round-unread\" | \"chat-round-video\" | \"chat-square\" | \"chat-square-2\" | \"chat-square-arrow\" | \"chat-square-call\" | \"chat-square-check\" | \"chat-square-code\" | \"chat-square-like\" | \"chat-unread\" | \"check-circle\" | \"check-read\" | \"check-square\" | \"checklist\" | \"checklist-minimalistic\" | \"chef-hat\" | \"chef-hat-heart\" | \"chef-hat-minimalistic\" | \"circle-bottom-down\" | \"circle-bottom-up\" | \"circle-top-down\" | \"circle-top-up\" | \"city\" | \"clapperboard\" | \"clapperboard-edit\" | \"clapperboard-open\" | \"clapperboard-open-play\" | \"clapperboard-play\" | \"clapperboard-text\" | \"clipboard\" | \"clipboard-add\" | \"clipboard-check\" | \"clipboard-heart\" | \"clipboard-list\" | \"clipboard-remove\" | \"clipboard-text\" | \"clock-circle\" | \"clock-square\" | \"close-circle\" | \"close-square\" | \"closet\" | \"closet-2\" | \"cloud\" | \"cloud-bolt\" | \"cloud-bolt-minimalistic\" | \"cloud-check\" | \"cloud-cross\" | \"cloud-download\" | \"cloud-file\" | \"cloud-minus\" | \"cloud-plus\" | \"cloud-rain\" | \"cloud-snowfall\" | \"cloud-snowfall-minimalistic\" | \"cloud-storage\" | \"cloud-storm\" | \"cloud-sun\" | \"cloud-sun-2\" | \"cloud-upload\" | \"cloud-waterdrop\" | \"cloud-waterdrops\" | \"clouds\" | \"cloudy-moon\" | \"code\" | \"code-2\" | \"code-circle\" | \"code-file\" | \"code-scan\" | \"code-square\" | \"colour-tuning\" | \"command\" | \"compass\" | \"compass-big\" | \"compass-square\" | \"conditioner\" | \"conditioner-2\" | \"confetti\" | \"confetti-minimalistic\" | \"confounded-circle\" | \"confounded-square\" | \"copy\" | \"copyright\" | \"corkscrew\" | \"cosmetic\" | \"course-down\" | \"course-up\" | \"cpu\" | \"cpu-bolt\" | \"creative-commons\" | \"crop\" | \"crop-minimalistic\" | \"crown\" | \"crown-line\" | \"crown-minimalistic\" | \"crown-star\" | \"cup\" | \"cup-first\" | \"cup-hot\" | \"cup-music\" | \"cup-paper\" | \"cup-star\" | \"cursor\" | \"cursor-square\" | \"danger\" | \"danger-circle\" | \"danger-square\" | \"danger-triangle\" | \"database\" | \"delivery\" | \"devices\" | \"diagram-down\" | \"diagram-up\" | \"dialog\" | \"dialog-2\" | \"diploma\" | \"diploma-verified\" | \"diskette\" | \"dislike\" | \"display\" | \"dna\" | \"document-2\" | \"document-add\" | \"document-medicine\" | \"document-text\" | \"documents\" | \"documents-minimalistic\" | \"dollar\" | \"dollar-minimalistic\" | \"donut\" | \"donut-bitten\" | \"double-alt-arrow-down\" | \"double-alt-arrow-left\" | \"double-alt-arrow-right\" | \"double-alt-arrow-up\" | \"download\" | \"download-minimalistic\" | \"download-square\" | \"download-twice-square\" | \"dropper\" | \"dropper-2\" | \"dropper-3\" | \"dropper-minimalistic\" | \"dropper-minimalistic-2\" | \"dumbbell\" | \"dumbbell-large\" | \"dumbbell-large-minimalistic\" | \"dumbbell-small\" | \"dumbbells\" | \"dumbbells-2\" | \"earth\" | \"electric-refueling\" | \"emoji-funny-circle\" | \"emoji-funny-square\" | \"end-call\" | \"end-call-rounded\" | \"eraser\" | \"eraser-circle\" | \"eraser-square\" | \"euro\" | \"exit\" | \"explicit\" | \"export\" | \"expressionless-circle\" | \"expressionless-square\" | \"eye\" | \"eye-closed\" | \"eye-scan\" | \"face-scan-circle\" | \"face-scan-square\" | \"facemask-circle\" | \"facemask-square\" | \"feed\" | \"ferris-wheel\" | \"figma\" | \"figma-file\" | \"file\" | \"file-check\" | \"file-corrupted\" | \"file-download\" | \"file-favorite\" | \"file-left\" | \"file-remove\" | \"file-right\" | \"file-send\" | \"file-smile\" | \"file-text\" | \"filter\" | \"filters\" | \"fire\" | \"fire-minimalistic\" | \"fire-square\" | \"flag\" | \"flag-2\" | \"flame\" | \"flash-drive\" | \"flashlight\" | \"flashlight-on\" | \"flip-horizontal\" | \"flip-vertical\" | \"floor-lamp\" | \"floor-lamp-minimalistic\" | \"fog\" | \"folder\" | \"folder-2\" | \"folder-check\" | \"folder-cloud\" | \"folder-error\" | \"folder-favorite-bookmark\" | \"folder-favorite-star\" | \"folder-open\" | \"folder-path-connect\" | \"folder-security\" | \"folder-with-files\" | \"football\" | \"forbidden\" | \"forbidden-circle\" | \"forward\" | \"forward-2\" | \"forward-right\" | \"four-k\" | \"fridge\" | \"fuel\" | \"full-screen\" | \"full-screen-circle\" | \"full-screen-square\" | \"gallery\" | \"gallery-add\" | \"gallery-check\" | \"gallery-circle\" | \"gallery-download\" | \"gallery-edit\" | \"gallery-favorite\" | \"gallery-minimalistic\" | \"gallery-remove\" | \"gallery-round\" | \"gallery-send\" | \"gallery-wide\" | \"gameboy\" | \"gamepad\" | \"gamepad-charge\" | \"gamepad-minimalistic\" | \"gamepad-no-charge\" | \"gamepad-old\" | \"garage\" | \"gas-station\" | \"ghost\" | \"ghost-smile\" | \"gift\" | \"glasses\" | \"global\" | \"globe\" | \"golf\" | \"gps\" | \"graph\" | \"graph-down\" | \"graph-down-new\" | \"graph-new\" | \"graph-new-up\" | \"graph-up\" | \"hamburger-menu\" | \"hand-heart\" | \"hand-money\" | \"hand-pills\" | \"hand-shake\" | \"hand-stars\" | \"hanger\" | \"hanger-2\" | \"hashtag\" | \"hashtag-chat\" | \"hashtag-circle\" | \"hashtag-square\" | \"headphones-round\" | \"headphones-round-sound\" | \"headphones-square\" | \"headphones-square-sound\" | \"health\" | \"heart\" | \"heart-angle\" | \"heart-crack\" | \"heart-lock\" | \"heart-pulse\" | \"heart-pulse-2\" | \"heart-shine\" | \"heart-unlock\" | \"hearts\" | \"help\" | \"high-definition\" | \"high-quality\" | \"hiking\" | \"hiking-minimalistic\" | \"hiking-round\" | \"history\" | \"history-2\" | \"history-3\" | \"home\" | \"home-2\" | \"home-add\" | \"home-add-angle\" | \"home-angle\" | \"home-angle-2\" | \"home-smile\" | \"home-smile-angle\" | \"home-wi-fi\" | \"home-wi-fi-angle\" | \"hospital\" | \"hourglass\" | \"hourglass-line\" | \"house\" | \"i-phone\" | \"import\" | \"inbox\" | \"inbox-archive\" | \"inbox-in\" | \"inbox-line\" | \"inbox-out\" | \"inbox-unread\" | \"incognito\" | \"incoming-call\" | \"incoming-call-rounded\" | \"infinite\" | \"info-circle\" | \"info-square\" | \"jar-of-pills\" | \"jar-of-pills-2\" | \"key\" | \"key-minimalistic\" | \"key-minimalistic-2\" | \"key-minimalistic-square\" | \"key-minimalistic-square-2\" | \"key-minimalistic-square-3\" | \"key-square\" | \"key-square-2\" | \"keyboard\" | \"kick-scooter\" | \"ladle\" | \"lamp\" | \"laptop\" | \"laptop-2\" | \"laptop-3\" | \"laptop-minimalistic\" | \"layers\" | \"layers-minimalistic\" | \"leaf\" | \"letter\" | \"letter-opened\" | \"letter-unread\" | \"library\" | \"lightbulb\" | \"lightbulb-bolt\" | \"lightbulb-minimalistic\" | \"lightning\" | \"like\" | \"link\" | \"link-circle\" | \"link-minimalistic\" | \"link-minimalistic-2\" | \"link-round\" | \"link-round-angle\" | \"link-square\" | \"list\" | \"list-arrow-down\" | \"list-arrow-down-minimalistic\" | \"list-arrow-up\" | \"list-arrow-up-minimalistic\" | \"list-check\" | \"list-check-minimalistic\" | \"list-cross\" | \"list-cross-minimalistic\" | \"list-down\" | \"list-down-minimalistic\" | \"list-heart\" | \"list-heart-minimalistic\" | \"list-up\" | \"list-up-minimalistic\" | \"list-vertical\" | \"lock\" | \"lock-keyhole\" | \"lock-keyhole-minimalistic\" | \"lock-keyhole-minimalistic-unlocked\" | \"lock-keyhole-unlocked\" | \"lock-password\" | \"lock-password-unlocked\" | \"lock-unlocked\" | \"login\" | \"login-2\" | \"login-3\" | \"logout\" | \"logout-2\" | \"logout-3\" | \"magic-wand\" | \"magic-wand-2\" | \"magic-wand-3\" | \"magnet\" | \"magnet-wave\" | \"magnifier\" | \"magnifier-bug\" | \"magnifier-zoom-in\" | \"magnifier-zoom-out\" | \"mailbox\" | \"map\" | \"map-arrow-down\" | \"map-arrow-left\" | \"map-arrow-right\" | \"map-arrow-square\" | \"map-arrow-up\" | \"map-point\" | \"map-point-add\" | \"map-point-favorite\" | \"map-point-hospital\" | \"map-point-remove\" | \"map-point-rotate\" | \"map-point-school\" | \"map-point-search\" | \"map-point-wave\" | \"mask-happy\" | \"mask-sad\" | \"masks\" | \"maximize\" | \"maximize-square\" | \"maximize-square-2\" | \"maximize-square-3\" | \"maximize-square-minimalistic\" | \"medal-ribbon\" | \"medal-ribbon-star\" | \"medal-ribbons-star\" | \"medal-star\" | \"medal-star-circle\" | \"medal-star-square\" | \"medical-kit\" | \"meditation\" | \"meditation-round\" | \"men\" | \"mention-circle\" | \"mention-square\" | \"menu-dots\" | \"menu-dots-circle\" | \"menu-dots-square\" | \"microphone\" | \"microphone-2\" | \"microphone-3\" | \"microphone-large\" | \"minimalistic-magnifier\" | \"minimalistic-magnifier-bug\" | \"minimalistic-magnifier-zoom-in\" | \"minimalistic-magnifier-zoom-out\" | \"minimize\" | \"minimize-square\" | \"minimize-square-2\" | \"minimize-square-3\" | \"minimize-square-minimalistic\" | \"minus-circle\" | \"minus-square\" | \"mirror\" | \"mirror-2\" | \"mirror-left\" | \"mirror-right\" | \"money-bag\" | \"money-roll\" | \"monitor\" | \"monitor-camera\" | \"monitor-smartphone\" | \"moon\" | \"moon-fog\" | \"moon-sleep\" | \"moon-stars\" | \"mouse\" | \"mouse-circle\" | \"mouse-minimalistic\" | \"move-to-folder\" | \"mug\" | \"multiple-forward-left\" | \"multiple-forward-right\" | \"music-library\" | \"music-library-2\" | \"music-note\" | \"music-note-2\" | \"music-note-3\" | \"music-note-4\" | \"music-note-slider\" | \"music-note-slider-2\" | \"music-notes\" | \"muted\" | \"notebook\" | \"notebook-2\" | \"notebook-bookmark\" | \"notebook-minimalistic\" | \"notebook-square\" | \"notes\" | \"notes-minimalistic\" | \"notification-lines-remove\" | \"notification-remove\" | \"notification-unread\" | \"notification-unread-lines\" | \"object-scan\" | \"outgoing-call\" | \"outgoing-call-rounded\" | \"oven-mitts\" | \"oven-mitts-minimalistic\" | \"paint-roller\" | \"palette\" | \"palette-2\" | \"palette-round\" | \"panorama\" | \"paper-bin\" | \"paperclip\" | \"paperclip-2\" | \"paperclip-rounded\" | \"paperclip-rounded-2\" | \"paragraph-spacing\" | \"passport\" | \"passport-minimalistic\" | \"password\" | \"password-minimalistic\" | \"password-minimalistic-input\" | \"pause\" | \"pause-circle\" | \"paw\" | \"pen\" | \"pen-2\" | \"pen-new-round\" | \"pen-new-square\" | \"people-nearby\" | \"perfume\" | \"phone\" | \"phone-calling\" | \"phone-calling-rounded\" | \"phone-rounded\" | \"pie-chart\" | \"pie-chart-2\" | \"pie-chart-3\" | \"pill\" | \"pills\" | \"pills-2\" | \"pills-3\" | \"pin\" | \"pin-circle\" | \"pin-list\" | \"pip\" | \"pip-2\" | \"pipette\" | \"plane\" | \"plane-2\" | \"plane-3\" | \"planet\" | \"planet-2\" | \"planet-3\" | \"planet-4\" | \"plate\" | \"play\" | \"play-circle\" | \"play-stream\" | \"playback-speed\" | \"playlist\" | \"playlist-2\" | \"playlist-minimalistic\" | \"playlist-minimalistic-2\" | \"playlist-minimalistic-3\" | \"plug-circle\" | \"plus-minus\" | \"podcast\" | \"point-on-map\" | \"point-on-map-perspective\" | \"posts-carousel-horizontal\" | \"posts-carousel-vertical\" | \"power\" | \"presentation-graph\" | \"printer\" | \"printer-2\" | \"printer-minimalistic\" | \"programming\" | \"projector\" | \"pulse\" | \"pulse-2\" | \"qr-code\" | \"question-circle\" | \"question-square\" | \"quit-full-screen\" | \"quit-full-screen-circle\" | \"quit-full-screen-square\" | \"quit-pip\" | \"radar\" | \"radar-2\" | \"radial-blur\" | \"radio\" | \"radio-minimalistic\" | \"ranking\" | \"receive-square\" | \"receive-twice-square\" | \"record\" | \"record-audio-circle\" | \"record-circle\" | \"record-minimalistic\" | \"record-square\" | \"reel\" | \"reel-2\" | \"refresh\" | \"refresh-circle\" | \"refresh-square\" | \"remote-controller\" | \"remote-controller-2\" | \"remote-controller-minimalistic\" | \"remove-folder\" | \"reorder\" | \"reorder-2\" | \"repeat\" | \"repeat-one\" | \"repeat-one-minimalistic\" | \"reply\" | \"reply-2\" | \"restart\" | \"restart-circle\" | \"restart-square\" | \"revote\" | \"rewind-10-seconds-back\" | \"rewind-10-seconds-forward\" | \"rewind-15-seconds-back\" | \"rewind-15-seconds-forward\" | \"rewind-5-seconds-back\" | \"rewind-5-seconds-forward\" | \"rewind-back\" | \"rewind-back-circle\" | \"rewind-forward\" | \"rewind-forward-circle\" | \"rocket\" | \"rocket-2\" | \"rolling-pin\" | \"round-alt-arrow-down\" | \"round-alt-arrow-left\" | \"round-alt-arrow-right\" | \"round-alt-arrow-up\" | \"round-arrow-down\" | \"round-arrow-left\" | \"round-arrow-left-down\" | \"round-arrow-left-up\" | \"round-arrow-right\" | \"round-arrow-right-down\" | \"round-arrow-right-up\" | \"round-arrow-up\" | \"round-double-alt-arrow-down\" | \"round-double-alt-arrow-left\" | \"round-double-alt-arrow-right\" | \"round-double-alt-arrow-up\" | \"round-graph\" | \"round-sort-horizontal\" | \"round-sort-vertical\" | \"round-transfer-diagonal\" | \"round-transfer-horizontal\" | \"round-transfer-vertical\" | \"rounded-magnifier\" | \"rounded-magnifier-bug\" | \"rounded-magnifier-zoom-in\" | \"rounded-magnifier-zoom-out\" | \"routing\" | \"routing-2\" | \"routing-3\" | \"ruble\" | \"rugby\" | \"ruler\" | \"ruler-angular\" | \"ruler-cross-pen\" | \"ruler-pen\" | \"running\" | \"running-2\" | \"running-round\" | \"sad-circle\" | \"sad-square\" | \"safe-2\" | \"safe-circle\" | \"safe-square\" | \"sale\" | \"sale-square\" | \"satellite\" | \"scale\" | \"scaling\" | \"scanner\" | \"scanner-2\" | \"scissors\" | \"scissors-square\" | \"scooter\" | \"screen-share\" | \"screencast\" | \"screencast-2\" | \"sd-card\" | \"send-square\" | \"send-twice-square\" | \"server\" | \"server-2\" | \"server-minimalistic\" | \"server-path\" | \"server-square\" | \"server-square-cloud\" | \"server-square-update\" | \"settings\" | \"settings-minimalistic\" | \"share-circle\" | \"shield\" | \"shield-check\" | \"shield-cross\" | \"shield-keyhole\" | \"shield-keyhole-minimalistic\" | \"shield-minimalistic\" | \"shield-minus\" | \"shield-network\" | \"shield-plus\" | \"shield-star\" | \"shield-up\" | \"shield-user\" | \"shield-warning\" | \"shock-absorber\" | \"shop\" | \"shop-2\" | \"shop-minimalistic\" | \"shuffle\" | \"sidebar\" | \"sidebar-code\" | \"sidebar-minimalistic\" | \"signpost\" | \"signpost-2\" | \"sim-card\" | \"sim-card-minimalistic\" | \"sim-cards\" | \"siren\" | \"siren-rounded\" | \"skateboard\" | \"skateboarding\" | \"skateboarding-round\" | \"skip-next\" | \"skip-previous\" | \"skirt\" | \"slash-circle\" | \"slash-square\" | \"sledgehammer\" | \"sleeping\" | \"sleeping-circle\" | \"sleeping-square\" | \"slider-horizontal\" | \"slider-minimalistic-horizontal\" | \"slider-vertical\" | \"slider-vertical-minimalistic\" | \"smart-home\" | \"smart-home-angle\" | \"smart-speaker\" | \"smart-speaker-2\" | \"smart-speaker-minimalistic\" | \"smart-vacuum-cleaner\" | \"smart-vacuum-cleaner-2\" | \"smartphone\" | \"smartphone-2\" | \"smartphone-rotate-2\" | \"smartphone-rotate-angle\" | \"smartphone-rotate-orientation\" | \"smartphone-update\" | \"smartphone-vibration\" | \"smile-circle\" | \"smile-square\" | \"snowflake\" | \"socket\" | \"sofa\" | \"sofa-2\" | \"sofa-3\" | \"sort\" | \"sort-alphabetically\" | \"sort-by-time\" | \"sort-from-bottom-to-top\" | \"sort-from-top-to-bottom\" | \"sort-horizontal\" | \"sort-vertical\" | \"soundwave\" | \"soundwave-circle\" | \"soundwave-square\" | \"speaker\" | \"speaker-minimalistic\" | \"special-effects\" | \"speedometer-low\" | \"speedometer-max\" | \"speedometer-middle\" | \"square-academic-cap\" | \"square-academic-cap-2\" | \"square-alt-arrow-down\" | \"square-alt-arrow-left\" | \"square-alt-arrow-right\" | \"square-alt-arrow-up\" | \"square-arrow-down\" | \"square-arrow-left\" | \"square-arrow-left-down\" | \"square-arrow-left-up\" | \"square-arrow-right\" | \"square-arrow-right-down\" | \"square-arrow-right-up\" | \"square-arrow-up\" | \"square-bottom-down\" | \"square-bottom-up\" | \"square-double-alt-arrow-down\" | \"square-double-alt-arrow-left\" | \"square-double-alt-arrow-right\" | \"square-double-alt-arrow-up\" | \"square-forward\" | \"square-share-line\" | \"square-sort-horizontal\" | \"square-sort-vertical\" | \"square-top-down\" | \"square-top-up\" | \"square-transfer-horizontal\" | \"square-transfer-vertical\" | \"ssd-round\" | \"ssd-square\" | \"star\" | \"star-2\" | \"star-angle\" | \"star-circle\" | \"star-fall\" | \"star-fall-2\" | \"star-fall-minimalistic\" | \"star-fall-minimalistic-2\" | \"star-rainbow\" | \"star-ring\" | \"star-rings\" | \"star-shine\" | \"stars\" | \"stars-2\" | \"stars-line\" | \"stars-minimalistic\" | \"station\" | \"station-minimalistic\" | \"stethoscope\" | \"sticker-circle\" | \"sticker-smile-circle\" | \"sticker-smile-circle-2\" | \"sticker-smile-square\" | \"sticker-square\" | \"stop\" | \"stop-circle\" | \"stopwatch\" | \"stopwatch-pause\" | \"stopwatch-play\" | \"stream\" | \"streets\" | \"streets-map-point\" | \"streets-navigation\" | \"stretching\" | \"stretching-round\" | \"structure\" | \"subtitles\" | \"suitcase\" | \"suitcase-lines\" | \"suitcase-tag\" | \"sun\" | \"sun-2\" | \"sun-fog\" | \"sunrise\" | \"sunset\" | \"suspension\" | \"suspension-bolt\" | \"suspension-cross\" | \"swimming\" | \"syringe\" | \"t-shirt\" | \"tablet\" | \"tag\" | \"tag-horizontal\" | \"tag-price\" | \"target\" | \"tea-cup\" | \"telescope\" | \"temperature\" | \"tennis\" | \"tennis-2\" | \"test-tube\" | \"test-tube-minimalistic\" | \"text-bold\" | \"text-bold-circle\" | \"text-bold-square\" | \"text-circle\" | \"text-cross\" | \"text-cross-circle\" | \"text-cross-square\" | \"text-field\" | \"text-field-focus\" | \"text-format\" | \"text-italic\" | \"text-italic-circle\" | \"text-italic-square\" | \"text-selection\" | \"text-square\" | \"text-square-2\" | \"text-underline\" | \"text-underline-circle\" | \"text-underline-cross\" | \"thermometer\" | \"three-squares\" | \"ticket\" | \"ticket-sale\" | \"ticket-star\" | \"to-pip\" | \"tornado\" | \"tornado-small\" | \"traffic\" | \"traffic-economy\" | \"tram\" | \"transfer-horizontal\" | \"transfer-vertical\" | \"translation\" | \"translation-2\" | \"transmission\" | \"transmission-circle\" | \"transmission-square\" | \"trash-bin-2\" | \"trash-bin-minimalistic\" | \"trash-bin-minimalistic-2\" | \"trash-bin-trash\" | \"treadmill\" | \"treadmill-round\" | \"tuning\" | \"tuning-2\" | \"tuning-3\" | \"tuning-4\" | \"tuning-square\" | \"tuning-square-2\" | \"turntable\" | \"turntable-minimalistic\" | \"turntable-music-note\" | \"tv\" | \"ufo\" | \"ufo-2\" | \"ufo-3\" | \"umbrella\" | \"undo-left\" | \"undo-left-round\" | \"undo-left-round-square\" | \"undo-left-square\" | \"undo-right\" | \"undo-right-round\" | \"undo-right-round-square\" | \"undo-right-square\" | \"unlink\" | \"unlink-minimalistic\" | \"unread\" | \"upload\" | \"upload-minimalistic\" | \"upload-square\" | \"upload-track\" | \"upload-track-2\" | \"upload-twice-square\" | \"usb\" | \"usb-circle\" | \"usb-square\" | \"user\" | \"user-block\" | \"user-block-rounded\" | \"user-check\" | \"user-check-rounded\" | \"user-circle\" | \"user-cross\" | \"user-cross-rounded\" | \"user-hand-up\" | \"user-hands\" | \"user-heart\" | \"user-heart-rounded\" | \"user-id\" | \"user-minus\" | \"user-minus-rounded\" | \"user-plus\" | \"user-plus-rounded\" | \"user-rounded\" | \"user-speak\" | \"user-speak-rounded\" | \"users-group-rounded\" | \"users-group-two-rounded\" | \"vanity\" | \"verified-check\" | \"video-frame\" | \"video-frame-2\" | \"video-frame-cut\" | \"video-frame-cut-2\" | \"video-frame-play-horizontal\" | \"video-frame-play-vertical\" | \"video-frame-replace\" | \"video-library\" | \"videocamera\" | \"videocamera-add\" | \"videocamera-record\" | \"vinyl\" | \"vinyl-record\" | \"virus\" | \"volleyball\" | \"volleyball-2\" | \"volume\" | \"volume-cross\" | \"volume-knob\" | \"volume-loud\" | \"volume-small\" | \"walking\" | \"walking-round\" | \"wallet\" | \"wallet-2\" | \"wallet-money\" | \"wallpaper\" | \"washing-machine\" | \"washing-machine-minimalistic\" | \"watch-round\" | \"watch-square\" | \"watch-square-minimalistic\" | \"watch-square-minimalistic-charge\" | \"water\" | \"water-sun\" | \"waterdrop\" | \"waterdrops\" | \"wheel\" | \"wheel-angle\" | \"whisk\" | \"wi-fi-router\" | \"wi-fi-router-minimalistic\" | \"wi-fi-router-round\" | \"widget\" | \"widget-2\" | \"widget-3\" | \"widget-4\" | \"widget-5\" | \"widget-6\" | \"widget-add\" | \"win-rar\" | \"wind\" | \"window-frame\" | \"wineglass\" | \"wineglass-triangle\" | \"wireless-charge\" | \"women\" | \"xxx\" | \"zip-file\"",
               "summary": "Public type SolarLinearIconName exported by CocoFrame.",
               "deprecated": false,
               "examples": [],
@@ -3291,7 +3371,7 @@ export const apiReference = {
     },
     {
       "name": "@cocoframe/qa",
-      "version": "0.0.3",
+      "version": "0.1.0",
       "description": "`@cocoframe/qa` is CocoFrame's provider-independent quality approval contract. It connects approved product requirements and component decisions to adaptive QA questions, traceable test cases, automated quality gates, defects, evidence, and final approval.",
       "readme": "packages/qa/README.md",
       "entries": [
@@ -3308,7 +3388,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 248
+              "line": 251
             },
             {
               "name": "answerCocoQa",
@@ -3318,7 +3398,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 187
+              "line": 190
             },
             {
               "name": "approveCocoQa",
@@ -3328,7 +3408,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 313
+              "line": 316
             },
             {
               "name": "auditProductDesign",
@@ -3348,7 +3428,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 294
+              "line": 297
             },
             {
               "name": "closeCocoQaDefect",
@@ -3358,7 +3438,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 274
+              "line": 277
             },
             {
               "name": "CocoQa",
@@ -3408,12 +3488,12 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 111
+              "line": 112
             },
             {
               "name": "CocoQaCase",
               "kind": "interface",
-              "signature": "interface CocoQaCase {\n  id: string;\n  title: string;\n  category: CocoQaCategory;\n  source: string;\n  required: boolean;\n  status: \"failed\" | \"not-applicable\" | \"pending\" | \"passed\" | \"blocked\";\n  evidence?: string;\n  updatedAt?: string\n}",
+              "signature": "interface CocoQaCase {\n  id: string;\n  title: string;\n  category: CocoQaCategory;\n  source: string;\n  required: boolean;\n  status: \"passed\" | \"failed\" | \"not-applicable\" | \"pending\" | \"blocked\";\n  evidence?: string;\n  updatedAt?: string\n}",
               "summary": "Public interface CocoQaCase exported by CocoFrame.",
               "deprecated": false,
               "examples": [],
@@ -3438,7 +3518,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 99
+              "line": 100
             },
             {
               "name": "CocoQaCheckResult",
@@ -3448,7 +3528,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 105
+              "line": 106
             },
             {
               "name": "CocoQaDefect",
@@ -3498,7 +3578,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 174
+              "line": 177
             },
             {
               "name": "CocoQaResultStatus",
@@ -3523,7 +3603,7 @@ export const apiReference = {
             {
               "name": "CocoQaSource",
               "kind": "interface",
-              "signature": "interface CocoQaSource {\n  kind: \"design-profile\" | \"cocospec\" | \"cocoref\" | \"manual\";\n  id: string;\n  file?: string;\n  state: string\n}",
+              "signature": "interface CocoQaSource {\n  kind: \"design-profile\" | \"cocospec\" | \"cocoux\" | \"cocoref\" | \"manual\";\n  id: string;\n  file?: string;\n  state: string\n}",
               "summary": "Public interface CocoQaSource exported by CocoFrame.",
               "deprecated": false,
               "examples": [],
@@ -3568,12 +3648,12 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 135
+              "line": 136
             },
             {
               "name": "CreateCocoQaOptions",
               "kind": "interface",
-              "signature": "interface CreateCocoQaOptions {\n  feature: string;\n  title?: string;\n  mode?: CocoQaMode;\n  sources?: readonly CocoQaSource[];\n  acceptanceCriteria?: readonly string[];\n  referenceCriteria?: readonly {    readonly id: string;    readonly description: string;}[];\n  designCriteria?: readonly {    readonly id: string;    readonly description: string;    readonly category: \"visual\" | \"responsive\" | \"accessibility\";}[];\n  gates?: readonly {    readonly id: string;    readonly script: string;    readonly required?: boolean;}[];\n  now?: string | Date\n}",
+              "signature": "interface CreateCocoQaOptions {\n  feature: string;\n  title?: string;\n  mode?: CocoQaMode;\n  sources?: readonly CocoQaSource[];\n  acceptanceCriteria?: readonly string[];\n  referenceCriteria?: readonly {    readonly id: string;    readonly description: string;}[];\n  uxCriteria?: readonly {    readonly id: string;    readonly description: string;    readonly category: \"functional\" | \"edge-case\" | \"accessibility\" | \"responsive\" | \"visual\";}[];\n  designCriteria?: readonly {    readonly id: string;    readonly description: string;    readonly category: \"visual\" | \"responsive\" | \"accessibility\";}[];\n  gates?: readonly {    readonly id: string;    readonly script: string;    readonly required?: boolean;}[];\n  now?: string | Date\n}",
               "summary": "Public interface CreateCocoQaOptions exported by CocoFrame.",
               "deprecated": false,
               "examples": [],
@@ -3708,7 +3788,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 181
+              "line": 184
             },
             {
               "name": "parseCocoQa",
@@ -3718,7 +3798,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 321
+              "line": 324
             },
             {
               "name": "parseDesignProfile",
@@ -3768,7 +3848,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 229
+              "line": 232
             },
             {
               "name": "recordCocoQaGate",
@@ -3778,7 +3858,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 207
+              "line": 210
             },
             {
               "name": "renderCocoQaArtifacts",
@@ -3788,7 +3868,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 361
+              "line": 364
             },
             {
               "name": "slugifyCocoQa",
@@ -3798,7 +3878,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/qa/src/index.ts",
-              "line": 377
+              "line": 380
             }
           ]
         }
@@ -4708,7 +4788,7 @@ export const apiReference = {
             {
               "name": "AlertProps",
               "kind": "interface",
-              "signature": "interface AlertProps {\n  variant?: \"error\" | \"info\" | \"success\" | \"warning\";\n  class?: string;\n  children?: CocoNode\n}",
+              "signature": "interface AlertProps {\n  variant?: \"warning\" | \"error\" | \"info\" | \"success\";\n  class?: string;\n  children?: CocoNode\n}",
               "summary": "Public interface AlertProps exported by CocoFrame.",
               "deprecated": false,
               "examples": [],
@@ -4818,7 +4898,7 @@ export const apiReference = {
             {
               "name": "BadgeProps",
               "kind": "interface",
-              "signature": "interface BadgeProps {\n  variant?: \"danger\" | \"primary\" | \"info\" | \"success\" | \"warning\" | \"neutral\";\n  class?: string;\n  children?: CocoNode\n}",
+              "signature": "interface BadgeProps {\n  variant?: \"warning\" | \"danger\" | \"primary\" | \"info\" | \"success\" | \"neutral\";\n  class?: string;\n  children?: CocoNode\n}",
               "summary": "Public interface BadgeProps exported by CocoFrame.",
               "deprecated": false,
               "examples": [],
@@ -5868,7 +5948,7 @@ export const apiReference = {
             {
               "name": "MarkerProps",
               "kind": "interface",
-              "signature": "interface MarkerProps {\n  tone?: \"danger\" | \"primary\" | \"success\" | \"warning\" | \"neutral\";\n  icon?: CocoNode;\n  class?: string;\n  children?: CocoNode\n}",
+              "signature": "interface MarkerProps {\n  tone?: \"warning\" | \"danger\" | \"primary\" | \"success\" | \"neutral\";\n  icon?: CocoNode;\n  class?: string;\n  children?: CocoNode\n}",
               "summary": "Public interface MarkerProps exported by CocoFrame.",
               "deprecated": false,
               "examples": [],
@@ -6838,7 +6918,7 @@ export const apiReference = {
             {
               "name": "ToastProps",
               "kind": "interface",
-              "signature": "interface ToastProps {\n  title: string;\n  description?: string;\n  variant?: \"error\" | \"info\" | \"success\" | \"warning\";\n  action?: CocoNode;\n  dismissLabel?: string;\n  onDismiss?: (event: Event) => void;\n  class?: string;\n  children?: CocoNode\n}",
+              "signature": "interface ToastProps {\n  title: string;\n  description?: string;\n  variant?: \"warning\" | \"error\" | \"info\" | \"success\";\n  action?: CocoNode;\n  dismissLabel?: string;\n  onDismiss?: (event: Event) => void;\n  class?: string;\n  children?: CocoNode\n}",
               "summary": "Public interface ToastProps exported by CocoFrame.",
               "deprecated": false,
               "examples": [],
@@ -7057,8 +7137,383 @@ export const apiReference = {
       ]
     },
     {
+      "name": "@cocoframe/ux",
+      "version": "0.0.1",
+      "description": "`@cocoframe/ux` is CocoFrame's provider-independent UX planning contract. It connects reviewed product intent to user journeys, complete interface states, interaction behavior, reuse-first visual recommendations, rendered preview evidence, and a hash-bound CocoRef handoff.",
+      "readme": "packages/ux/README.md",
+      "entries": [
+        {
+          "subpath": ".",
+          "importPath": "@cocoframe/ux",
+          "source": "packages/ux/src/index.ts",
+          "symbols": [
+            {
+              "name": "approveCocoUx",
+              "kind": "function",
+              "signature": "approveCocoUx(ux: CocoUx, input: { readonly reviewerRole: CocoUxApproval[\"reviewerRole\"]; readonly contractHash: string; readonly previewHash: string; }, now?: string | Date): CocoUx",
+              "summary": "Approves only visual direction for a hash-bound CocoRef handoff.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/ux/src/index.ts",
+              "line": 432
+            },
+            {
+              "name": "bindCocoUxApprovedEvidence",
+              "kind": "function",
+              "signature": "bindCocoUxApprovedEvidence(ux: CocoUx, files: Readonly<Record<string, string>>, now?: string | Date): CocoUx",
+              "summary": "Rebinds preview PNG records to immutable workspace evidence before approval.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/ux/src/index.ts",
+              "line": 417
+            },
+            {
+              "name": "cancelCocoUx",
+              "kind": "function",
+              "signature": "cancelCocoUx(ux: CocoUx, now?: string | Date): CocoUx",
+              "summary": "Cancels an unhanded UX workflow while preserving reviewed decision history.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/ux/src/index.ts",
+              "line": 452
+            },
+            {
+              "name": "checkCocoUx",
+              "kind": "function",
+              "signature": "checkCocoUx(ux: CocoUx): CocoUxCheckResult",
+              "summary": "Validates graph reachability, complete states, interaction behavior, and component reuse.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/ux/src/index.ts",
+              "line": 310
+            },
+            {
+              "name": "CocoUx",
+              "kind": "interface",
+              "signature": "interface CocoUx {\n  version: 1;\n  feature: {    readonly id: string;    readonly title: string;};\n  brief: string;\n  state: CocoUxLifecycleState;\n  revision: number;\n  sources: readonly CocoUxSourceBinding[];\n  inventory: readonly CocoUxInventoryItem[];\n  actors: readonly CocoUxActor[];\n  journeys: readonly CocoUxJourney[];\n  screens: readonly CocoUxScreen[];\n  states: readonly CocoUxUiState[];\n  transitions: readonly CocoUxTransition[];\n  interactions: readonly CocoUxInteraction[];\n  visualRecommendations: readonly CocoUxVisualRecommendation[];\n  componentDecisions: readonly CocoUxComponentDecision[];\n  previews: readonly CocoUxPreviewRevision[];\n  decisions: readonly {    readonly action: string;    readonly detail: string;    readonly createdAt: string;}[];\n  approval?: CocoUxApproval;\n  handoff?: CocoUxHandoff;\n  createdAt: string;\n  updatedAt: string\n}",
+              "summary": "Versioned canonical CocoUX document.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/ux/src/index.ts",
+              "line": 196
+            },
+            {
+              "name": "COCOUX_VERSION",
+              "kind": "variable",
+              "signature": "variable COCOUX_VERSION = 1",
+              "summary": "Persisted CocoUX contract version.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/ux/src/index.ts",
+              "line": 2
+            },
+            {
+              "name": "CocoUxActor",
+              "kind": "interface",
+              "signature": "interface CocoUxActor {\n  id: string;\n  name: string;\n  goals: readonly string[];\n  permissions: readonly string[]\n}",
+              "summary": "User or system actor participating in a journey.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/ux/src/index.ts",
+              "line": 43
+            },
+            {
+              "name": "CocoUxApproval",
+              "kind": "interface",
+              "signature": "interface CocoUxApproval {\n  revision: number;\n  reviewerRole: \"application-developer\" | \"framework-maintainer\";\n  contractHash: string;\n  previewHash: string;\n  approvedAt: string\n}",
+              "summary": "Human approval of an exact UX contract and preview revision.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/ux/src/index.ts",
+              "line": 177
+            },
+            {
+              "name": "CocoUxArtifacts",
+              "kind": "interface",
+              "signature": "interface CocoUxArtifacts {\n  journey-map.mmd: string;\n  state-diagram.mmd: string;\n  interaction-matrix.md: string;\n  visual-brief.md: string;\n  decisions.md: string\n}",
+              "summary": "Deterministic review artifacts generated from one canonical UX document.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/ux/src/index.ts",
+              "line": 251
+            },
+            {
+              "name": "CocoUxCheckResult",
+              "kind": "interface",
+              "signature": "interface CocoUxCheckResult {\n  valid: boolean;\n  readyForPreview: boolean;\n  diagnostics: readonly CocoUxDiagnostic[];\n  counts: {    readonly actors: number;    readonly journeys: number;    readonly screens: number;    readonly states: number;    readonly transitions: number;    readonly interactions: number;    readonly visuals: number;}\n}",
+              "summary": "Result of validating UX completeness and graph integrity.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/ux/src/index.ts",
+              "line": 243
+            },
+            {
+              "name": "CocoUxComponentDecision",
+              "kind": "interface",
+              "signature": "interface CocoUxComponentDecision {\n  id: string;\n  recommendationId: string;\n  component: string;\n  decision: \"reuse\" | \"missing\";\n  inventoryId?: string;\n  rationale: string;\n  consent: \"not-required\" | \"pending\" | \"approved\" | \"declined\"\n}",
+              "summary": "Inventory decision for one recommended component.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/ux/src/index.ts",
+              "line": 135
+            },
+            {
+              "name": "CocoUxDesign",
+              "kind": "interface",
+              "signature": "interface CocoUxDesign {\n  actors: readonly CocoUxActor[];\n  journeys: readonly CocoUxJourney[];\n  screens: readonly CocoUxScreen[];\n  states: readonly CocoUxUiState[];\n  transitions: readonly CocoUxTransition[];\n  interactions: readonly CocoUxInteraction[];\n  visualRecommendations: readonly CocoUxVisualRecommendation[];\n  componentDecisions: readonly CocoUxComponentDecision[]\n}",
+              "summary": "UX design fields replaced together or section-by-section.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/ux/src/index.ts",
+              "line": 221
+            },
+            {
+              "name": "CocoUxDiagnostic",
+              "kind": "interface",
+              "signature": "interface CocoUxDiagnostic {\n  code: string;\n  severity: \"warning\" | \"error\";\n  category: \"source\" | \"preview\" | \"visual\" | \"journey\" | \"state\" | \"interaction\";\n  path: string;\n  message: string;\n  recovery: string\n}",
+              "summary": "Stable CocoUX validation diagnostic.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/ux/src/index.ts",
+              "line": 233
+            },
+            {
+              "name": "CocoUxFeedback",
+              "kind": "interface",
+              "signature": "interface CocoUxFeedback {\n  message: string;\n  createdAt: string\n}",
+              "summary": "Concrete user feedback attached to a preview revision.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/ux/src/index.ts",
+              "line": 146
+            },
+            {
+              "name": "CocoUxHandoff",
+              "kind": "interface",
+              "signature": "interface CocoUxHandoff {\n  refId: string;\n  refFile: string;\n  screenshotFiles: readonly string[];\n  hashes: Readonly<Record<string, string>>;\n  status: \"completed\";\n  createdAt: string\n}",
+              "summary": "Completed transfer of approved visual evidence to CocoRef.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/ux/src/index.ts",
+              "line": 186
+            },
+            {
+              "name": "CocoUxInteraction",
+              "kind": "interface",
+              "signature": "interface CocoUxInteraction {\n  id: string;\n  stateId: string;\n  target: string;\n  trigger: string;\n  behavior: string;\n  keyboard: string;\n  focus: string;\n  announcement?: string;\n  feedback: string;\n  recovery: string\n}",
+              "summary": "Accessible behavior of one interactive target.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/ux/src/index.ts",
+              "line": 105
+            },
+            {
+              "name": "CocoUxInventoryItem",
+              "kind": "interface",
+              "signature": "interface CocoUxInventoryItem {\n  id: string;\n  kind: \"ui\" | \"component\" | \"island\" | \"approved-cocoref\" | \"token\";\n  name: string;\n  file?: string\n}",
+              "summary": "Reusable project capability captured before visual recommendations.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/ux/src/index.ts",
+              "line": 35
+            },
+            {
+              "name": "CocoUxJourney",
+              "kind": "interface",
+              "signature": "interface CocoUxJourney {\n  id: string;\n  actorId: string;\n  goal: string;\n  entryPoints: readonly string[];\n  steps: readonly CocoUxJourneyStep[];\n  alternatePaths: readonly string[];\n  successOutcome: string\n}",
+              "summary": "User journey from an explicit entry to an observable outcome.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/ux/src/index.ts",
+              "line": 62
+            },
+            {
+              "name": "CocoUxJourneyStep",
+              "kind": "interface",
+              "signature": "interface CocoUxJourneyStep {\n  id: string;\n  order: number;\n  screenId: string;\n  action: string;\n  stateId: string;\n  outcome: string;\n  nextStepIds: readonly string[]\n}",
+              "summary": "One ordered journey step and its reachable successors.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/ux/src/index.ts",
+              "line": 51
+            },
+            {
+              "name": "CocoUxLifecycleState",
+              "kind": "type",
+              "signature": "type CocoUxLifecycleState",
+              "summary": "Lifecycle state of one canonical CocoUX document.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/ux/src/index.ts",
+              "line": 5
+            },
+            {
+              "name": "CocoUxPreviewRevision",
+              "kind": "interface",
+              "signature": "interface CocoUxPreviewRevision {\n  revision: number;\n  sourcePaths: readonly string[];\n  sourceHashes: Readonly<Record<string, string>>;\n  previewUrl: string;\n  status: \"cancelled\" | \"revising\" | \"ready\" | \"approved\";\n  feedback: readonly CocoUxFeedback[];\n  screenshots: readonly CocoUxScreenshotEvidence[];\n  createdAt: string\n}",
+              "summary": "One managed server-rendered preview revision.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/ux/src/index.ts",
+              "line": 165
+            },
+            {
+              "name": "CocoUxScreen",
+              "kind": "interface",
+              "signature": "interface CocoUxScreen {\n  id: string;\n  routeOrSurface: string;\n  purpose: string\n}",
+              "summary": "Route or surface that owns a complete state matrix.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/ux/src/index.ts",
+              "line": 73
+            },
+            {
+              "name": "CocoUxScreenshotEvidence",
+              "kind": "interface",
+              "signature": "interface CocoUxScreenshotEvidence {\n  id: string;\n  stateId: string;\n  viewport: {    readonly width: number;    readonly height: number;};\n  theme: string;\n  file: string;\n  sourceHash: string;\n  imageHash: string;\n  uxContractHash: string;\n  description: string\n}",
+              "summary": "PNG screenshot and the exact preview contract that produced it.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/ux/src/index.ts",
+              "line": 152
+            },
+            {
+              "name": "CocoUxSourceBinding",
+              "kind": "interface",
+              "signature": "interface CocoUxSourceBinding {\n  id: string;\n  kind: \"design-profile\" | \"cocospec\" | \"cocoref\" | \"project-snapshot\";\n  file?: string;\n  state: string;\n  hash: string\n}",
+              "summary": "Canonical source bound to a UX decision.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/ux/src/index.ts",
+              "line": 26
+            },
+            {
+              "name": "CocoUxStateKind",
+              "kind": "type",
+              "signature": "type CocoUxStateKind",
+              "summary": "Required interface state kinds reviewed for every CocoUX screen.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/ux/src/index.ts",
+              "line": 23
+            },
+            {
+              "name": "CocoUxTransition",
+              "kind": "interface",
+              "signature": "interface CocoUxTransition {\n  id: string;\n  fromStateId: string;\n  toStateId: string;\n  trigger: string;\n  guard?: string;\n  feedback: string;\n  outcome: string;\n  recovery: string\n}",
+              "summary": "Explicit state transition with feedback and recovery.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/ux/src/index.ts",
+              "line": 93
+            },
+            {
+              "name": "CocoUxUiState",
+              "kind": "interface",
+              "signature": "interface CocoUxUiState {\n  id: string;\n  screenId: string;\n  kind: CocoUxStateKind;\n  applicability: \"not-applicable\" | \"applicable\";\n  rationale: string;\n  entryCondition: string;\n  content: string;\n  availableActions: readonly string[];\n  recovery?: string\n}",
+              "summary": "One reviewed interface state.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/ux/src/index.ts",
+              "line": 80
+            },
+            {
+              "name": "CocoUxVisualRecommendation",
+              "kind": "interface",
+              "signature": "interface CocoUxVisualRecommendation {\n  id: string;\n  screenId: string;\n  stateIds: readonly string[];\n  hierarchy: readonly string[];\n  layout: Readonly<Record<string, string>>;\n  components: readonly string[];\n  tokens: Readonly<Record<string, string>>;\n  typography: Readonly<Record<string, string>>;\n  color: Readonly<Record<string, string>>;\n  motion: Readonly<Record<string, string>>;\n  responsive: Readonly<Record<string, string>>;\n  rationale: string\n}",
+              "summary": "Reuse-first recommendation for a screen and its states.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/ux/src/index.ts",
+              "line": 119
+            },
+            {
+              "name": "createCocoUx",
+              "kind": "function",
+              "signature": "createCocoUx(options: { readonly feature: string; readonly title?: string; readonly brief: string; readonly sources?: readonly CocoUxSourceBinding[]; readonly inventory?: readonly CocoUxInventoryItem[]; readonly now?: string | Date; }): CocoUx",
+              "summary": "Creates an empty canonical UX contract without inventing product decisions.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/ux/src/index.ts",
+              "line": 264
+            },
+            {
+              "name": "defineCocoUxDesign",
+              "kind": "function",
+              "signature": "defineCocoUxDesign(ux: CocoUx, design: CocoUxDesign, now?: string | Date): CocoUx",
+              "summary": "Replaces UX design decisions and invalidates any prior preview approval or handoff.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/ux/src/index.ts",
+              "line": 282
+            },
+            {
+              "name": "handoffCocoUxToRef",
+              "kind": "function",
+              "signature": "handoffCocoUxToRef(ux: CocoUx, input: Omit<CocoUxHandoff, \"status\" | \"createdAt\">, now?: string | Date): CocoUx",
+              "summary": "Records a completed handoff without granting application-source approval.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/ux/src/index.ts",
+              "line": 444
+            },
+            {
+              "name": "markCocoUxPreview",
+              "kind": "function",
+              "signature": "markCocoUxPreview(ux: CocoUx, input: Omit<CocoUxPreviewRevision, \"revision\" | \"status\" | \"feedback\" | \"createdAt\">, now?: string | Date): CocoUx",
+              "summary": "Records the exact rendered preview source and screenshot evidence.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/ux/src/index.ts",
+              "line": 381
+            },
+            {
+              "name": "parseCocoUx",
+              "kind": "function",
+              "signature": "parseCocoUx(value: unknown): CocoUx",
+              "summary": "Parses an untrusted persisted CocoUX document into its typed canonical form.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/ux/src/index.ts",
+              "line": 460
+            },
+            {
+              "name": "renderCocoUxArtifacts",
+              "kind": "function",
+              "signature": "renderCocoUxArtifacts(ux: CocoUx): CocoUxArtifacts",
+              "summary": "Renders deterministic journey, state, interaction, visual, and decision review views.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/ux/src/index.ts",
+              "line": 486
+            },
+            {
+              "name": "requestCocoUxRevision",
+              "kind": "function",
+              "signature": "requestCocoUxRevision(ux: CocoUx, message: string, now?: string | Date): CocoUx",
+              "summary": "Reopens the latest preview with concrete user feedback.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/ux/src/index.ts",
+              "line": 407
+            },
+            {
+              "name": "setCocoUxSection",
+              "kind": "function",
+              "signature": "setCocoUxSection<K extends keyof CocoUxDesign>(ux: CocoUx, section: K, value: CocoUxDesign[K], now?: string | Date): CocoUx",
+              "summary": "Replaces one typed UX design section and invalidates prior preview approval.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/ux/src/index.ts",
+              "line": 295
+            }
+          ]
+        }
+      ]
+    },
+    {
       "name": "create-cocoframe",
-      "version": "0.0.8",
+      "version": "0.0.9",
       "description": "Create a new CocoFrame application",
       "readme": "packages/create-cocoframe/README.md",
       "entries": [

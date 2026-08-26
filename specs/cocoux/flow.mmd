@@ -1,0 +1,54 @@
+flowchart TD
+    start([Start: CocoUX])
+    step1["Audit the project, routes, reusable components, islands, and design tokens."]
+    start --> step1
+    step2["Create or resume ux/<feature>/ux.json."]
+    step1 --> step2
+    step3["Define actors, goals, entry points, and journeys."]
+    step2 --> step3
+    step4["Complete the required states and transitions."]
+    step3 --> step4
+    step5["Define interaction, keyboard, feedback, and recovery behavior."]
+    step4 --> step5
+    step6["Recommend layout, hierarchy, components, tokens, motion, and responsive behavior."]
+    step5 --> step6
+    step7["Audit component reuse and obtain explicit consent before previewing any missing component."]
+    step6 --> step7
+    step8["Generate a development-only server-rendered website preview under managed CocoUX paths."]
+    step7 --> step8
+    step9["Capture deterministic PNG screenshots for approved viewports, themes, and important states with source hashes."]
+    step8 --> step9
+    step10["Validate conflicts, dead ends, missing states, accessibility, and visual completeness."]
+    step9 --> step10
+    step11["Collect user feedback and revise the same temporary preview until the visual direction is approved or cancelled."]
+    step10 --> step11
+    step12["On CocoUX approval, copy the approved screenshots into refs/<feature>/references and create a linked CocoRef from the UX contract."]
+    step11 --> step12
+    step13["CocoRef audits reuse and missing components, obtains per-component consent, previews exact candidates, and promotes source only after CocoRef approval."]
+    step12 --> step13
+    step14["Remove temporary CocoUX preview source after handoff or cancellation."]
+    step13 --> step14
+    step15["Developer or AI implements only the fully approved contracts."]
+    step14 --> step15
+    success([From one product brief, CocoUX produces a consistent machine-readable UX contract containing journeys, a complete state matrix, interaction contracts, and visual recommendations ready for implementation and CocoQA.])
+    step15 --> success
+    error1["Invalid input or schema returns a field-specific stable diagnostic and correction guidance."]
+    step15 -. failure .-> error1
+    error2["Journey dead ends or incomplete transitions identify the affected node, trigger, and missing outcome."]
+    step15 -. failure .-> error2
+    error3["Missing required states identify incomplete rows in the state matrix."]
+    step15 -. failure .-> error3
+    error4["Inaccessible interaction reports missing keyboard, focus, announcement, feedback, or recovery behavior."]
+    step15 -. failure .-> error4
+    error5["A changed project snapshot marks recommendations stale and requires a fresh inventory audit."]
+    step15 -. failure .-> error5
+    error6["Unavailable components produce reuse alternatives or an explicit consent request; they are never silently created."]
+    step15 -. failure .-> error6
+    error7["CocoSpec, Design Profile, CocoRef, or UX contract conflicts block approval until canonical sources are aligned."]
+    step15 -. failure .-> error7
+    error8["Preview render or screenshot failure preserves canonical state and offers a deterministic retry."]
+    step15 -. failure .-> error8
+    error9["Source-hash mismatch blocks approval and handoff so only the reviewed preview can continue."]
+    step15 -. failure .-> error9
+    error10["Limits, timeout, or cancellation return sanitized diagnostics and clean managed temporary artifacts."]
+    step15 -. failure .-> error10

@@ -1,0 +1,312 @@
+{
+  "version": 1,
+  "feature": {
+    "id": "coco-doctor",
+    "title": "Coco Doctor"
+  },
+  "mode": "thorough",
+  "state": "approved",
+  "sources": [
+    {
+      "kind": "cocospec",
+      "id": "coco-doctor",
+      "file": "specs/coco-doctor/spec.json",
+      "state": "approved"
+    }
+  ],
+  "answers": {
+    "target-environments": {
+      "status": "answered",
+      "value": [
+        "Local Node.js 24 or newer",
+        "CI on Ubuntu and Windows",
+        "Installed npm tarball and package-smoke environment",
+        "Default and deep Doctor modes against examples/basic",
+        "In-process Agent Bridge and MCP tool discovery"
+      ],
+      "updatedAt": "2026-08-25T23:49:30.409Z"
+    },
+    "browsers-devices": {
+      "status": "answered",
+      "value": [
+        "Doctor CLI has no browser runtime requirement",
+        "The /docs/doctor documentation must pass the existing Chromium, Firefox, WebKit, 320px, 390px phone, tablet, laptop, and 4K matrix",
+        "Narrow terminal behavior is verified through plain-text output without fixed-width tables"
+      ],
+      "updatedAt": "2026-08-25T23:49:30.742Z"
+    },
+    "test-data": {
+      "status": "answered",
+      "value": [
+        "Use examples/basic as the healthy reference project",
+        "Use temporary sanitized fixtures for missing dependencies, stale generated files, island mismatch, unsafe configuration, invalid projects, and cancellation",
+        "Use no accounts, credentials, external services, or databases",
+        "Clean every temporary fixture after execution"
+      ],
+      "updatedAt": "2026-08-25T23:49:31.074Z"
+    },
+    "release-blockers": {
+      "status": "answered",
+      "value": [
+        "Any failed approved acceptance criterion",
+        "A Doctor-caused failure in check, test, inspect, build, test:e2e, or package smoke",
+        "Any secret disclosure or read outside the workspace",
+        "Any source or generated-artifact mutation by default or deep mode",
+        "Any JSON schema, diagnostic-field, or exit-code incompatibility",
+        "Default Doctor latency above two seconds on the reference project",
+        "No waiver is allowed for security, mutation safety, contract compatibility, or required gates"
+      ],
+      "updatedAt": "2026-08-25T23:49:31.411Z"
+    },
+    "accessibility-target": {
+      "status": "answered",
+      "value": [
+        "WCAG 2.2 AA for the Doctor documentation",
+        "Keyboard navigation and visible focus on /docs/doctor",
+        "CLI output does not rely on color or symbols alone",
+        "Support NO_COLOR, non-TTY, screen readers, and plain-text copying",
+        "JSON contains no ANSI escape sequences",
+        "Headings, checks, diagnostics, evidence, suggestions, and summary use a consistent order"
+      ],
+      "updatedAt": "2026-08-26T00:31:41.644Z"
+    },
+    "security-abuse": {
+      "status": "answered",
+      "value": [
+        "Reject symlink escape from the workspace",
+        "Bound files above 1 MiB and workspaces above 10000 files",
+        "Return sanitized diagnostics for malformed or unreadable manifests",
+        "Never expose tokens, passwords, cookies, authorization headers, private keys, or environment values",
+        "Reject wildcard allowedHosts, credentialed CORS, and trusted proxy configuration",
+        "Default mode does not execute configuration or source",
+        "Deep mode does not import the application bundle",
+        "Perform no network request, dependency install, database access, or project mutation"
+      ],
+      "updatedAt": "2026-08-26T00:31:41.973Z"
+    },
+    "performance-thresholds": {
+      "status": "answered",
+      "value": [
+        "Default Doctor completes below two seconds on examples/basic",
+        "Deep mode has a 60-second timeout",
+        "Inspect at most 10000 files, 1 MiB per source file, and return at most 1000 diagnostics",
+        "Check cancellation between checks and major filesystem operations",
+        "Write deep build output only to a temporary directory",
+        "Add no browser bundle or runtime for the CLI command"
+      ],
+      "updatedAt": "2026-08-26T00:31:42.303Z"
+    },
+    "compatibility-risks": {
+      "status": "answered",
+      "value": [
+        "All existing CLI commands retain their behavior",
+        "buildProject(project, development) remains compatible and output override is optional",
+        "Existing Agent Bridge tools and read-only protocol v1 remain compatible",
+        "project.doctor is an additive read-only tool",
+        "JSON starts at contract version 1 and stable diagnostic codes never change meaning",
+        "Doctor does not change generated clients, OpenAPI, manifests, or project source",
+        "Ubuntu and Windows must pass",
+        "Rollback uses the previous coordinated package release"
+      ],
+      "updatedAt": "2026-08-26T00:31:42.637Z"
+    },
+    "exploratory-charter": {
+      "status": "answered",
+      "value": [
+        "Time-box exploratory testing to 20 minutes",
+        "Exercise flags in different orders and project paths containing spaces or Unicode",
+        "Repeat Doctor to verify deterministic output and no file mutation",
+        "Try missing node_modules, no routes, malformed manifest, linked configuration, and unreadable files",
+        "Verify temporary deep-build output is cleaned after success and failure",
+        "Verify human output in narrow terminals, non-TTY, and NO_COLOR",
+        "Verify Agent Bridge discovers project.doctor, honors cancellation, and preserves workspace state",
+        "Verify /docs/doctor server output, keyboard navigation, links, and mobile overflow without JavaScript",
+        "Persist only sanitized summaries without source, absolute paths, credentials, or raw command output"
+      ],
+      "updatedAt": "2026-08-26T00:32:20.991Z"
+    }
+  },
+  "cases": [
+    {
+      "id": "acceptance-1",
+      "title": "Given a healthy project, when doctor runs, then it exits 0 with no error diagnostics",
+      "category": "functional",
+      "source": "cocospec:acceptance-1",
+      "required": true,
+      "status": "passed",
+      "evidence": "Unit test verified healthy reference project, exit 0 semantics, zero errors, and default runtime under 2 seconds; full QA test gate passed 171/171.",
+      "updatedAt": "2026-08-26T00:46:21.775Z"
+    },
+    {
+      "id": "acceptance-2",
+      "title": "Given one or more error diagnostics, when doctor completes, then it exits 1",
+      "category": "functional",
+      "source": "cocospec:acceptance-2",
+      "required": true,
+      "status": "passed",
+      "evidence": "Doctor fixture tests verified error diagnostics and strict warnings produce exit code 1.",
+      "updatedAt": "2026-08-26T00:46:22.165Z"
+    },
+    {
+      "id": "acceptance-3",
+      "title": "Given an internal doctor failure, then it exits 2 with a sanitized failure",
+      "category": "functional",
+      "source": "cocospec:acceptance-3",
+      "required": true,
+      "status": "passed",
+      "evidence": "Cancellation test verified sanitized OPERATION_CANCELLED reporting; code inspection verified unexpected failures become DOCTOR_INTERNAL_FAILURE/internal-error and CLI maps internal-error or cancelled to exit code 2.",
+      "updatedAt": "2026-08-26T00:46:22.512Z"
+    },
+    {
+      "id": "acceptance-4",
+      "title": "Given --json, output is a versioned contract with no interleaved human logs",
+      "category": "functional",
+      "source": "cocospec:acceptance-4",
+      "required": true,
+      "status": "passed",
+      "evidence": "JSON command test parsed the sole output as contractVersion 1 with no interleaved human logs.",
+      "updatedAt": "2026-08-26T00:46:22.880Z"
+    },
+    {
+      "id": "acceptance-5",
+      "title": "Default checks do not modify files, perform network requests, or reveal secrets",
+      "category": "functional",
+      "source": "cocospec:acceptance-5",
+      "required": true,
+      "status": "passed",
+      "evidence": "Before/after source snapshots were identical for default and deep runs; secret fixture was redacted; implementation has no network, install, database, or source-write operation.",
+      "updatedAt": "2026-08-26T00:46:23.227Z"
+    },
+    {
+      "id": "acceptance-6",
+      "title": "Every diagnostic includes code, severity, category, message, sanitized evidence, suggestion, and documentation reference",
+      "category": "functional",
+      "source": "cocospec:acceptance-6",
+      "required": true,
+      "status": "passed",
+      "evidence": "Diagnostic fixture asserted code, severity, category, message, non-empty sanitized evidence, suggestion, and /docs/doctor#diagnostics for every diagnostic.",
+      "updatedAt": "2026-08-26T00:46:23.576Z"
+    },
+    {
+      "id": "acceptance-7",
+      "title": "Expensive checks run only when --deep is explicitly selected",
+      "category": "functional",
+      "source": "cocospec:acceptance-7",
+      "required": true,
+      "status": "passed",
+      "evidence": "Reference test verified build.production is skipped by default and passed only with deep mode in an isolated temporary output.",
+      "updatedAt": "2026-08-26T00:46:23.941Z"
+    },
+    {
+      "id": "acceptance-8",
+      "title": "CLI, CI, and Agent Bridge consume the same diagnostic engine and contract",
+      "category": "functional",
+      "source": "cocospec:acceptance-8",
+      "required": true,
+      "status": "passed",
+      "evidence": "CLI and Agent Bridge tests verified the shared diagnoseProject engine, contract v1, project.doctor discovery, and stable read-only MCP output.",
+      "updatedAt": "2026-08-26T00:46:24.292Z"
+    },
+    {
+      "id": "framework-server-first",
+      "title": "Useful server-rendered output exists without browser JavaScript.",
+      "category": "compatibility",
+      "source": "cocoframe:server-first",
+      "required": true,
+      "status": "passed",
+      "evidence": "Package smoke passed SSR, typed API, inspect, and production build for all four official templates; documentation route rendered successfully without requiring browser JavaScript.",
+      "updatedAt": "2026-08-26T00:46:24.637Z"
+    },
+    {
+      "id": "framework-accessibility",
+      "title": "Keyboard, focus, labels, errors, and semantic structure satisfy the approved accessibility target.",
+      "category": "accessibility",
+      "source": "cocoframe:accessibility",
+      "required": true,
+      "status": "passed",
+      "evidence": "Playwright passed keyboard focus and semantic main-content checks across Chromium, Firefox, WebKit and approved responsive viewports.",
+      "updatedAt": "2026-08-26T00:46:25.003Z"
+    },
+    {
+      "id": "framework-target-reachability",
+      "title": "Every changed internal link, CTA, route, anchor, and API target returns successful content or an intentional redirect; external targets have sanitized provider evidence.",
+      "category": "functional",
+      "source": "cocoframe:target-reachability",
+      "required": true,
+      "status": "passed",
+      "evidence": "Playwright critical-route matrix verified /docs/doctor and all changed documentation targets return HTTP 200.",
+      "updatedAt": "2026-08-26T00:46:25.359Z"
+    },
+    {
+      "id": "framework-interaction-integrity",
+      "title": "Every changed link and control has an accessible name, keyboard behavior, visible focus, and an action matching its label.",
+      "category": "accessibility",
+      "source": "cocoframe:interaction-integrity",
+      "required": true,
+      "status": "passed",
+      "evidence": "Playwright verified every tested documentation page exposes a keyboard focus target; Doctor human output uses text labels and no color-only status.",
+      "updatedAt": "2026-08-26T00:46:25.712Z"
+    },
+    {
+      "id": "framework-responsive",
+      "title": "The feature remains usable across the approved viewport and device range without horizontal overflow.",
+      "category": "responsive",
+      "source": "cocoframe:responsive",
+      "required": true,
+      "status": "passed",
+      "evidence": "Playwright verified /docs/doctor has no horizontal overflow and healthy content at 320x568, 390x844, 768x1024, 1366x768, and 3840x2160.",
+      "updatedAt": "2026-08-26T00:46:26.065Z"
+    }
+  ],
+  "gates": [
+    {
+      "id": "check",
+      "script": "check",
+      "required": true,
+      "status": "passed",
+      "durationMs": 9505,
+      "exitCode": 0,
+      "updatedAt": "2026-08-26T00:41:46.385Z"
+    },
+    {
+      "id": "test",
+      "script": "test",
+      "required": true,
+      "status": "passed",
+      "durationMs": 28243,
+      "exitCode": 0,
+      "updatedAt": "2026-08-26T00:42:14.637Z"
+    },
+    {
+      "id": "inspect",
+      "script": "inspect",
+      "required": true,
+      "status": "passed",
+      "durationMs": 753,
+      "exitCode": 0,
+      "updatedAt": "2026-08-26T00:42:15.395Z"
+    },
+    {
+      "id": "build",
+      "script": "build",
+      "required": true,
+      "status": "passed",
+      "durationMs": 743,
+      "exitCode": 0,
+      "updatedAt": "2026-08-26T00:42:16.144Z"
+    },
+    {
+      "id": "test-e2e",
+      "script": "test:e2e",
+      "required": true,
+      "status": "passed",
+      "durationMs": 127962,
+      "exitCode": 0,
+      "updatedAt": "2026-08-26T00:44:24.110Z"
+    }
+  ],
+  "defects": [],
+  "createdAt": "2026-08-25T23:48:30.321Z",
+  "updatedAt": "2026-08-26T00:46:37.100Z",
+  "approvedAt": "2026-08-26T00:46:37.100Z"
+}

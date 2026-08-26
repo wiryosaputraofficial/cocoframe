@@ -6,13 +6,14 @@ import test from "node:test";
 import { InMemoryTransport, type JSONRPCMessage } from "@modelcontextprotocol/server";
 import { createAgentBridge } from "../packages/agent/src/index.ts";
 import { inspectProjectReadOnly } from "../packages/cli/src/inspect-readonly.ts";
+import { diagnoseProject } from "../packages/cli/src/doctor.ts";
 
 test("discovers versioned read-only Agent Bridge tools over MCP", async () => {
   const projectRoot = path.resolve("examples/basic");
   const before = await fileState(projectRoot);
-  const bridge = await createAgentBridge({ workspaceRoot: projectRoot, inspectProject: inspectProjectReadOnly });
+  const bridge = await createAgentBridge({ workspaceRoot: projectRoot, inspectProject: inspectProjectReadOnly, doctorProject: diagnoseProject });
 
-  assert.deepEqual(bridge.tools.map(({ name }) => name), ["project.inspect", "docs.search", "component.find", "api.lookup", "workflow.status", "cocospecs.next", "cocoref.audit", "cocoqa.trace", "mutation.plan", "mutation.execute"]);
+  assert.deepEqual(bridge.tools.map(({ name }) => name), ["project.inspect", "project.doctor", "docs.search", "component.find", "api.lookup", "workflow.status", "cocospecs.next", "cocoux.inspect", "cocoref.audit", "cocoqa.trace", "mutation.plan", "mutation.execute"]);
   for (const tool of bridge.tools) {
     assert.equal(tool.permission, tool.name.startsWith("mutation.") ? "write" : "read");
     assert.equal(tool.protocolVersion, 2);
@@ -35,7 +36,7 @@ test("discovers versioned read-only Agent Bridge tools over MCP", async () => {
   await clientTransport.send({ jsonrpc: "2.0", method: "notifications/initialized" });
   await clientTransport.send({ jsonrpc: "2.0", id: 2, method: "tools/list", params: {} });
   const listed = await response(messages, 2) as { readonly result?: { readonly tools?: readonly { readonly name: string; readonly inputSchema: unknown; readonly outputSchema?: unknown; readonly _meta?: Readonly<Record<string, unknown>> }[] } };
-  assert.equal(listed.result?.tools?.length, 10);
+  assert.equal(listed.result?.tools?.length, 12);
   assert.deepEqual(listed.result?.tools?.map(({ name }) => name), bridge.tools.map(({ name }) => name));
   for (const tool of listed.result?.tools ?? []) {
     assert.ok(tool.inputSchema);
@@ -51,7 +52,7 @@ test("discovers versioned read-only Agent Bridge tools over MCP", async () => {
 });
 
 test("inspects and searches reusable CocoFrame capabilities without mutation", async () => {
-  const bridge = await createAgentBridge({ workspaceRoot: path.resolve("examples/basic"), inspectProject: inspectProjectReadOnly });
+  const bridge = await createAgentBridge({ workspaceRoot: path.resolve("examples/basic"), inspectProject: inspectProjectReadOnly, doctorProject: diagnoseProject });
   const inspected = await bridge.execute("project.inspect", { protocolVersion: 1, limit: 500 });
   assert.equal(inspected.ok, true);
   const data = inspected.data as Awaited<ReturnType<typeof inspectProjectReadOnly>> & { pagination: { truncated: boolean } };
@@ -64,6 +65,11 @@ test("inspects and searches reusable CocoFrame capabilities without mutation", a
   assert.ok(data.generatedCapabilities.some(({ kind }) => kind === "openapi"));
   assert.ok(data.generatedCapabilities.some(({ kind }) => kind === "design-profile"));
   assert.equal(data.pagination.truncated, false);
+
+  const doctor = await bridge.execute("project.doctor", { deep: false, strict: false });
+  assert.equal(doctor.ok, true);
+  assert.equal((doctor.data as { contractVersion: number }).contractVersion, 1);
+  assert.equal((doctor.data as { status: string }).status, "healthy");
 
   const components = await bridge.execute("component.find", { query: "Button", limit: 20 });
   assert.equal(components.ok, true);

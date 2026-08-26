@@ -5,6 +5,7 @@ import {
   auditCocoRefLifecycle,
   readCocoQaTrace,
   readCocoSpecsNext,
+  readCocoUxLifecycle,
 } from "./lifecycle.ts";
 import {
   AgentMutationManager,
@@ -69,7 +70,15 @@ export {
   type AgentProposedRouteInspector,
   type AgentRoute,
   type AgentToolDescriptor,
+  type AgentProjectDoctor,
+  type DoctorCategory,
+  type DoctorCheck,
+  type DoctorDiagnostic,
+  type DoctorOptions,
+  type DoctorReport,
+  type DoctorSeverity,
 } from "./types.ts";
+export { assertSafeTree } from "./workspace.ts";
 export {
   AgentMutationManager,
   readAgentOperationPlan,
@@ -115,13 +124,28 @@ const dependencySchema = z.object({ name: z.string(), range: z.string(), kind: z
 const generatedCapabilitySchema = z.object({ kind: z.enum(["openapi", "client", "api-reference", "context", "assets", "deployment", "design-profile"]), file: z.string() });
 const paginationSchema = z.object({ limit: z.number().int(), truncated: z.boolean(), nextCursor: z.string().optional() });
 
+const doctorDiagnosticSchema = z.object({
+  code: z.string(), severity: z.enum(["warning", "error"]),
+  category: z.enum(["environment", "project", "dependencies", "configuration", "generated", "security", "build", "internal"]),
+  message: z.string(), evidence: z.array(z.string()), suggestion: z.string(), documentation: z.string(),
+});
+const doctorCheckSchema = z.object({ id: z.string(), status: z.enum(["passed", "warning", "error", "skipped"]) });
+const doctorDataSchema = z.object({
+  framework: z.literal("cocoframe"), contractVersion: z.literal(1), mode: z.enum(["default", "deep"]), strict: z.boolean(),
+  status: z.enum(["healthy", "warning", "error", "internal-error", "cancelled"]), project: z.string(),
+  checks: z.array(doctorCheckSchema), diagnostics: z.array(doctorDiagnosticSchema),
+  summary: z.object({ checks: z.number().int(), passed: z.number().int(), warning: z.number().int(), error: z.number().int(), skipped: z.number().int(), internalFailure: z.boolean() }),
+  truncated: z.boolean(),
+});
+
 const baseInputSchema = z.object({ protocolVersion: z.number().int().optional() });
 const paginatedInputSchema = baseInputSchema.extend({ cursor: z.string().regex(/^\d+$/).optional(), limit: z.number().int().min(1).max(500).default(100) });
 const projectInputSchema = paginatedInputSchema;
+const doctorInputSchema = baseInputSchema.extend({ deep: z.boolean().default(false), strict: z.boolean().default(false) });
 const docsInputSchema = paginatedInputSchema.extend({ query: z.string().trim().min(1).max(200) });
 const componentInputSchema = paginatedInputSchema.extend({ query: z.string().trim().max(200).default("") });
 const apiInputSchema = paginatedInputSchema.extend({ query: z.string().trim().max(200).default("") });
-const workflowInputSchema = paginatedInputSchema.extend({ lifecycle: z.enum(["all", "cocospec", "cocoref", "cocoqa"]).default("all") });const cocoSpecsInputSchema = baseInputSchema.extend({
+const workflowInputSchema = paginatedInputSchema.extend({ lifecycle: z.enum(["all", "cocospec", "cocoux", "cocoref", "cocoqa"]).default("all") });const cocoSpecsInputSchema = baseInputSchema.extend({
   feature: z.string().trim().min(1).max(100),
   title: z.string().trim().min(1).max(200).optional(),
   brief: z.string().trim().max(2_000).optional(),
@@ -141,7 +165,9 @@ const cocoQaInputSchema = baseInputSchema.extend({
   feature: z.string().trim().min(1).max(100),
   mode: z.enum(["standard", "thorough"]).default("standard"),
   limit: z.number().int().min(1).max(4).default(4),
-});const fileChangeSchema = z.object({
+});
+const cocoUxInputSchema = baseInputSchema.extend({ feature: z.string().trim().min(1).max(100) });
+const fileChangeSchema = z.object({
   path: z.string().trim().min(1).max(500),
   content: z.string().max(256 * 1024),
 });
@@ -194,7 +220,7 @@ const docsDataSchema = z.object({
 const componentDataSchema = z.object({ components: z.array(componentSchema), total: z.number().int(), auditedExistingComponents: z.literal(true), nextCursor: z.string().optional() });
 const apiDataSchema = z.object({ apis: z.array(apiSchema), total: z.number().int(), nextCursor: z.string().optional() });
 const workflowDataSchema = z.object({
-  records: z.array(z.object({ lifecycle: z.enum(["cocospec", "cocoref", "cocoqa"]), id: z.string(), state: z.string(), version: z.number().int(), file: z.string(), valid: z.boolean(), issue: z.string().optional() })),
+  records: z.array(z.object({ lifecycle: z.enum(["cocospec", "cocoux", "cocoref", "cocoqa"]), id: z.string(), state: z.string(), version: z.number().int(), file: z.string(), valid: z.boolean(), issue: z.string().optional() })),
   total: z.number().int(), nextCursor: z.string().optional(),
 });const cocoSpecQuestionSchema = z.object({
   id: z.string(), section: z.enum(["intent", "users", "flow", "interface", "authentication", "data", "integration", "quality", "delivery"]),
@@ -217,6 +243,11 @@ const cocoRefDataSchema = z.object({
   auditedExistingComponents: z.literal(true), inventory: z.array(componentSchema), requirements: z.array(cocoRefDecisionSchema),
   missingComponents: z.array(cocoRefDecisionSchema), mutationRequired: z.boolean(), nextAction: z.string(),
 });
+const cocoUxDataSchema = z.object({
+  lifecycle: z.literal("cocoux"), feature: z.object({ id: z.string(), title: z.string() }), state: z.string(), revision: z.number().int(), canonicalFile: z.string(),
+  sources: z.array(z.unknown()), inventory: z.array(z.unknown()), actors: z.array(z.unknown()), journeys: z.array(z.unknown()), screens: z.array(z.unknown()), states: z.array(z.unknown()), transitions: z.array(z.unknown()), interactions: z.array(z.unknown()), visualRecommendations: z.array(z.unknown()), componentDecisions: z.array(z.unknown()),
+  check: z.object({ valid: z.boolean(), readyForPreview: z.boolean(), diagnostics: z.array(z.unknown()), counts: z.unknown() }), latestPreview: z.unknown().optional(), approval: z.unknown().optional(), handoff: z.unknown().optional(), mutationRequired: z.literal(false), nextAction: z.string(),
+});
 const cocoQaQuestionSchema = z.object({
   id: z.string(), category: z.enum(["functional", "edge-case", "accessibility", "responsive", "security", "performance", "compatibility", "visual"]),
   prompt: z.string(), why: z.string(), responseHint: z.string(), required: z.boolean(),
@@ -237,7 +268,7 @@ const cocoQaDefectSchema = z.object({
 const cocoQaDataSchema = z.object({
   lifecycle: z.literal("cocoqa"), feature: z.object({ id: z.string(), title: z.string() }), mode: z.enum(["standard", "thorough"]),
   state: z.string(), approved: z.boolean(), source: z.enum(["canonical", "proposed"]), canonicalFile: z.string(),
-  sources: z.array(z.object({ kind: z.enum(["cocospec", "cocoref", "design-profile", "manual"]), id: z.string(), file: z.string().optional(), state: z.string() })),
+  sources: z.array(z.object({ kind: z.enum(["cocospec", "cocoux", "cocoref", "design-profile", "manual"]), id: z.string(), file: z.string().optional(), state: z.string() })),
   acceptanceCriteria: z.array(z.string()),
   designProfile: z.object({ id: z.string(), file: z.string(), hash: z.string() }).optional(),
   questions: z.array(cocoQaQuestionSchema), cases: z.array(cocoQaCaseSchema),
@@ -339,6 +370,16 @@ export async function createAgentBridge(options: AgentBridgeOptions): Promise<Ag
         return pageSnapshot(snapshot, offset, limit);
       },
     },
+    ...(options.doctorProject ? [{
+      name: "project.doctor",
+      description: "Diagnose CocoFrame project, dependency, configuration, generated-artifact, security, and optional isolated-build problems without modifying the workspace.",
+      inputSchema: doctorInputSchema,
+      outputSchema: resultSchema(doctorDataSchema),
+      run: async (input: Record<string, unknown>, signal?: AbortSignal) => {
+        assertProtocolVersion(input.protocolVersion);
+        return options.doctorProject!(workspaceRoot, { deep: input.deep === true, strict: input.strict === true }, signal);
+      },
+    } satisfies ToolDefinition] : []),
     {
       name: "docs.search",
       description: "Search CocoFrame workspace documentation and generated API references before proposing a new implementation.",
@@ -371,7 +412,7 @@ export async function createAgentBridge(options: AgentBridgeOptions): Promise<Ag
     },
     {
       name: "workflow.status",
-      description: "Read canonical CocoSpecs, CocoRef, and CocoQA lifecycle states without changing or regenerating their artifacts.",
+      description: "Read canonical CocoSpecs, CocoUX, CocoRef, and CocoQA lifecycle states without changing or regenerating their artifacts.",
       inputSchema: workflowInputSchema,
       outputSchema: resultSchema(workflowDataSchema),
       run: async (input, signal) => {
@@ -386,6 +427,16 @@ export async function createAgentBridge(options: AgentBridgeOptions): Promise<Ag
       run: async (input, signal) => {
         assertProtocolVersion(input.protocolVersion);
         return readCocoSpecsNext(workspaceRoot, await inspect(signal), input as never, signal);
+      },
+    },
+    {
+      name: "cocoux.inspect",
+      description: "Read the canonical CocoUX journey, complete state matrix, interactions, visual recommendations, PNG evidence, and handoff status through the same validation engine used by the CLI.",
+      inputSchema: cocoUxInputSchema,
+      outputSchema: resultSchema(cocoUxDataSchema),
+      run: async (input, signal) => {
+        assertProtocolVersion(input.protocolVersion);
+        return readCocoUxLifecycle(workspaceRoot, input as never, signal);
       },
     },
     {
@@ -470,7 +521,7 @@ export async function createAgentBridge(options: AgentBridgeOptions): Promise<Ag
   const server = new McpServer(
     { name: "cocoframe-agent-bridge", version: "0.0.1" },
     {
-      instructions: "Inspect and reuse existing CocoFrame capabilities first. User-facing work must complete approved CocoSpecs, an explicit visual-reference decision, CocoRef when applicable, verified interaction targets, and required visual QA. Mutations require exact workflow- and hash-bound plans plus human approval; an AI agent cannot approve its own operation.",
+      instructions: "Inspect and reuse existing CocoFrame capabilities first. User-facing work must complete approved CocoSpecs, CocoUX when journey or visual design is needed, an explicit visual-reference decision, CocoRef when applicable, verified interaction targets, and required visual QA. CocoUX approval only authorizes CocoRef handoff and never source promotion. Mutations require exact workflow- and hash-bound plans plus human approval; an AI agent cannot approve its own operation.",
       requestState: { verify: approvalState.verify },
     },
   );

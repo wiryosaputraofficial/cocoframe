@@ -48,6 +48,11 @@ const creator = path.join("node_modules", "create-cocoframe", "src", "cli.js");
     await node([tsc, "-p", path.join(projectRoot, "tsconfig.json"), "--noEmit"]);
     await node([cli, "inspect", template.directory]);
     await node([cli, "build", template.directory]);
+    const doctor = await node([cli, "doctor", template.directory, "--json"]);
+    const doctorReport = JSON.parse(doctor.stdout);
+    if (doctorReport.contractVersion !== 1 || doctorReport.summary?.error !== 0) {
+      throw new Error(`${template.name}: CocoFrame Doctor reported an invalid or unhealthy package result.`);
+    }
 
     const bundle = pathToFileURL(path.join(projectRoot, ".cocoframe", "server.mjs"));
     bundle.searchParams.set("template", template.name);
@@ -60,7 +65,7 @@ const creator = path.join("node_modules", "create-cocoframe", "src", "cli.js");
     if (health.status !== 200) throw new Error(`${template.name}: unexpected health status ${health.status}.`);
     const data = await health.json();
     if (data.ok !== true || data.framework !== "cocoframe") throw new Error(`${template.name}: typed health response is invalid.`);
-    console.log(`${template.name}: SSR, typed API, inspect, and production build passed.`);
+    console.log(`${template.name}: SSR, typed API, inspect, Doctor, and production build passed.`);
   }
   console.log("CocoFrame npm tarball smoke test passed for every official template.");
 } finally {

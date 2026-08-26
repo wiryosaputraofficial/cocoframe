@@ -28,11 +28,13 @@ standard error. The client owns the process lifetime.
 | Tool | Permission | Purpose |
 | --- | --- | --- |
 | `project.inspect` | `read` | Returns routes, APIs, components, islands, middleware, dependencies, and generated capabilities. |
+| `project.doctor` | `read` | Returns the same versioned, actionable read-only diagnostics as `cocoframe doctor --json`. |
 | `docs.search` | `read` | Searches documentation and generated API references. |
 | `component.find` | `read` | Finds reusable application and framework components. |
 | `api.lookup` | `read` | Finds filename-discovered and contracted APIs. |
 | `workflow.status` | `read` | Reads canonical lifecycle state. |
 | `cocospecs.next` | `read` | Returns only the next adaptive CocoSpecs batch or an in-memory proposal. |
+| `cocoux.inspect` | `read` | Reads journeys, states, interactions, visual recommendations, PNG evidence, and handoff state through the canonical CocoUX engine. |
 | `cocoref.audit` | `read` | Audits existing components before proposing missing UI. |
 | `cocoqa.trace` | `read` | Traces acceptance criteria, cases, gates, evidence, defects, and approval. |
 | `mutation.plan` | `write` | Validates and hashes an explicit file-write proposal without changing declared targets. |
@@ -50,26 +52,29 @@ Agent Bridge protocol v2 makes the lifecycle order enforceable instead of a
 prompt convention. Protocol v1 clients may continue to call read-only tools, but
 every v1 mutation is rejected.
 
-1. Call `project.inspect`, then search documentation, components, and APIs for
+1. Call `project.inspect` and `project.doctor`, then search documentation, components, and APIs for
    reusable capabilities.
 2. Call `cocospecs.next`. Create or resume the canonical CocoSpec through the
    owning CLI/editor lifecycle, answer only the returned adaptive batch, and
    obtain explicit CocoSpec approval.
-3. For user-facing work, record one visual decision: `reference`,
+3. When journey or visual direction must be designed, complete CocoUX, review its
+   local PNG evidence, and obtain human approval. CocoUX approval allows only a
+   CocoRef handoff and never source promotion.
+4. For user-facing work, record one visual decision: `reference`,
    `no-reference`, or `not-applicable`. A reference requires a ready CocoRef
    whose existing-component audit is complete. Reference-free visual work
    requires the current Design Profile.
-4. Call `mutation.plan` with protocol v2, one workflow binding, exact file
+5. Call `mutation.plan` with protocol v2, one workflow binding, exact file
    changes, and one accessibility declaration for every changed static
    `href`, `to`, or `action` target.
-5. Agent Bridge re-inspects the workspace, validates canonical lifecycle state,
+6. Agent Bridge re-inspects the workspace, validates canonical lifecycle state,
    uses the CLI's route convention to verify existing and proposed destinations,
    and creates a hash-only plan without changing source files.
-6. A human approves all or a subset of the exact targets through MCP elicitation,
+7. A human approves all or a subset of the exact targets through MCP elicitation,
    an editor host, or the separate CLI approval command.
-7. Call `mutation.execute`. The bridge revalidates inspection, lifecycle,
+8. Call `mutation.execute`. The bridge revalidates inspection, lifecycle,
    target, workflow, approval, expiry, and file hashes immediately before writing.
-8. Run or resume CocoQA. Runtime target reachability, interaction accessibility,
+9. Run or resume CocoQA. Runtime target reachability, interaction accessibility,
    visual alignment, responsive/overflow behavior, and CocoRef fidelity when
    applicable remain required evidence. A completed file write is not release
    approval.

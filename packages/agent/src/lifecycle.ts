@@ -10,6 +10,7 @@ import {
   type CocoSpecMode,
 } from "@cocoframe/specs";
 import { parseCocoRef, slugifyCocoRef, type CocoRef } from "@cocoframe/cocoref";
+import { checkCocoUx, parseCocoUx, type CocoUx } from "@cocoframe/ux";
 import {
   checkCocoQa,
   createCocoQa,
@@ -47,6 +48,52 @@ export interface CocoQaTraceInput {
   readonly feature: string;
   readonly mode: CocoQaMode;
   readonly limit: number;
+}
+
+export interface CocoUxInspectInput {
+  readonly feature: string;
+}
+
+/** Returns the canonical CocoUX contract and completeness diagnostics without creating preview files. */
+export async function readCocoUxLifecycle(root: string, input: CocoUxInspectInput, signal?: AbortSignal) {
+  throwIfCancelled(signal);
+  const feature = slugifyFeature(input.feature);
+  const canonicalFile = `ux/${feature}/ux.json`;
+  const value = await readOptionalCanonical(root, canonicalFile, signal);
+  if (value === undefined) throw diagnosticError("INVALID_CANONICAL_STATE", `CocoUX does not exist: ${canonicalFile}.`, "Create CocoUX from an approved CocoSpec and the current component inventory before designing the experience.");
+  const ux = parseCanonical("CocoUX", canonicalFile, value, parseCocoUx);
+  const check = checkCocoUx(ux);
+  return {
+    lifecycle: "cocoux" as const,
+    feature: ux.feature,
+    state: ux.state,
+    revision: ux.revision,
+    canonicalFile,
+    sources: ux.sources,
+    inventory: ux.inventory,
+    actors: ux.actors,
+    journeys: ux.journeys,
+    screens: ux.screens,
+    states: ux.states,
+    transitions: ux.transitions,
+    interactions: ux.interactions,
+    visualRecommendations: ux.visualRecommendations,
+    componentDecisions: ux.componentDecisions,
+    check,
+    latestPreview: ux.previews.at(-1),
+    approval: ux.approval,
+    handoff: ux.handoff,
+    mutationRequired: false as const,
+    nextAction: ux.state === "handed-off"
+      ? "Continue CocoRef component audit and exact-source approval; CocoUX approval did not promote application source."
+      : ux.state === "approved"
+        ? "Hand the hash-bound PNG evidence and UX contract to CocoRef."
+        : ux.state === "preview-ready"
+          ? "Ask a human application developer or framework maintainer to approve or request a revision."
+          : check.readyForPreview
+            ? "Generate and capture the managed local visual preview through an approved mutation."
+            : "Resolve the returned journey, state, interaction, visual, and consent diagnostics before preview.",
+  };
 }
 
 /** Returns only the next adaptive CocoSpecs batch and never persists a proposed draft. */
@@ -174,6 +221,12 @@ export async function readCocoQaTrace(
   const referenceCriteria = ref?.requirements
     .filter(({ status }) => status === "reused" || status === "approved")
     .map(({ id, description }) => ({ id, description })) ?? [];
+  const uxFile = "ux/" + feature + "/ux.json";
+  const uxValue = await readOptionalCanonical(root, uxFile, signal);
+  const ux = uxValue === undefined ? undefined : parseCanonical("CocoUX", uxFile, uxValue, parseCocoUx);
+  if (ux && ux.state !== "approved" && ux.state !== "handed-off") {
+    throw diagnosticError("INVALID_CANONICAL_STATE", `CocoQA requires approved or handed-off CocoUX when ${uxFile} exists; it is ${ux.state}.`, "Complete visual review and obtain human CocoUX approval before creating CocoQA.");
+  }
   const designFile = "cocoframe.design.json";
   const designValue = await readOptionalCanonical(root, designFile, signal);
   const designProfile = designValue === undefined
@@ -187,10 +240,12 @@ export async function readCocoQaTrace(
       mode: input.mode,
       sources: [
         { kind: "cocospec", id: feature, file: specFile, state: spec.state },
+        ...(ux ? [{ kind: "cocoux" as const, id: ux.feature.id, file: uxFile, state: ux.state }] : []),
         ...(ref ? [{ kind: "cocoref" as const, id: ref.name, file: refFile, state: ref.state }] : []),
         ...(designProfile && designHash ? [{ kind: "design-profile" as const, id: designProfile.id, file: designFile, state: "sha256:" + designHash }] : []),
       ],
       acceptanceCriteria,
+      ...(ux ? { uxCriteria: criteriaFromUx(ux) } : {}),
       ...(referenceCriteria.length ? { referenceCriteria } : {}),
       ...(designProfile ? { designCriteria: productDesignCriteria(designProfile, { hasReference: Boolean(ref) }) } : {}),
     })
@@ -230,6 +285,15 @@ export async function readCocoQaTrace(
         ? "Report traceable QA evidence and approval state."
         : "Ask only this QA question batch; execution and evidence recording require separately approved mutations.",
   };
+}
+
+function criteriaFromUx(ux: CocoUx) {
+  return [
+    ...ux.journeys.map((journey) => ({ id: `journey-${journey.id}`, description: `Journey reaches its approved outcome: ${journey.successOutcome}`, category: "functional" as const })),
+    ...ux.states.map((state) => ({ id: `state-${state.id}`, description: `${state.screenId} ${state.kind} state matches its reviewed content, actions, and recovery behavior.`, category: "edge-case" as const })),
+    ...ux.interactions.map((interaction) => ({ id: `interaction-${interaction.id}`, description: `${interaction.target} preserves keyboard, focus, feedback, and recovery behavior.`, category: "accessibility" as const })),
+    ...(ux.previews.at(-1)?.screenshots.map((screenshot) => ({ id: `visual-${screenshot.id}`, description: `Rendered output matches ${screenshot.file} at ${screenshot.viewport.width}×${screenshot.viewport.height}.`, category: screenshot.viewport.width <= 768 ? "responsive" as const : "visual" as const })) ?? []),
+  ];
 }
 
 function canonicalRequirements(ref: CocoRef | undefined): CocoRefAuditInput["requirements"] {

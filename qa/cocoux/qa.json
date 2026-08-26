@@ -1,0 +1,356 @@
+{
+  "version": 1,
+  "feature": {
+    "id": "cocoux",
+    "title": "CocoUX"
+  },
+  "mode": "thorough",
+  "state": "approved",
+  "sources": [
+    {
+      "kind": "cocospec",
+      "id": "cocoux",
+      "file": "specs/cocoux/spec.json",
+      "state": "approved"
+    }
+  ],
+  "answers": {
+    "target-environments": {
+      "status": "answered",
+      "value": [
+        "Local development",
+        "Linux CI on Node.js 24",
+        "Packed npm artifacts",
+        "Production build"
+      ],
+      "updatedAt": "2026-08-26T01:40:11.106Z"
+    },
+    "browsers-devices": {
+      "status": "answered",
+      "value": [
+        "Chromium",
+        "Firefox",
+        "WebKit",
+        "320x568",
+        "390x844",
+        "768x1024",
+        "1366x768",
+        "3840x2160"
+      ],
+      "updatedAt": "2026-08-26T01:40:11.405Z"
+    },
+    "test-data": {
+      "status": "answered",
+      "value": [
+        "Deterministic fixtures in temporary workspaces",
+        "No accounts or credentials",
+        "No private or authenticated production data",
+        "Clean up generated preview fixtures after tests"
+      ],
+      "updatedAt": "2026-08-26T01:40:11.714Z"
+    },
+    "release-blockers": {
+      "status": "answered",
+      "value": [
+        "All required type-check, unit test, inspect, build, E2E, package smoke, and benchmark gates must pass",
+        "Critical and high defects cannot be waived",
+        "Only framework maintainers may explicitly accept documented low or medium residual risk"
+      ],
+      "updatedAt": "2026-08-26T01:40:12.009Z"
+    },
+    "accessibility-target": {
+      "status": "answered",
+      "value": [
+        "WCAG 2.2 AA",
+        "Keyboard-only operation",
+        "Logical focus order and visible focus",
+        "Accessible names and semantic HTML",
+        "Live announcements for status and feedback"
+      ],
+      "updatedAt": "2026-08-26T01:40:50.555Z"
+    },
+    "security-abuse": {
+      "status": "answered",
+      "value": [
+        "Reject path traversal and linked escape paths",
+        "Reject non-local preview URLs",
+        "Reject changed source or screenshot hashes after capture",
+        "Reject invalid approval roles",
+        "Never retain or expose sensitive data",
+        "Enforce screenshot count and size limits",
+        "CocoUX approval must never promote application source"
+      ],
+      "updatedAt": "2026-08-26T01:40:50.862Z"
+    },
+    "performance-thresholds": {
+      "status": "answered",
+      "value": [
+        "Basic contract operations under 200 ms",
+        "Static check and artifact generation under 2 seconds",
+        "Preview build under 60 seconds",
+        "Each PNG capture under 30 seconds",
+        "At most 50 PNG files, 5 MiB each, and 100 MiB per revision"
+      ],
+      "updatedAt": "2026-08-26T01:40:51.164Z"
+    },
+    "compatibility-risks": {
+      "status": "answered",
+      "value": [
+        "Node.js 24",
+        "CLI and Agent Bridge use the same UX engine",
+        "CocoRef handoff remains backward compatible",
+        "CocoQA traceability accepts CocoUX sources",
+        "Production excludes __cocoux routes",
+        "Existing CocoSpec and CocoRef lifecycles remain unchanged"
+      ],
+      "updatedAt": "2026-08-26T01:40:51.464Z"
+    },
+    "exploratory-charter": {
+      "status": "answered",
+      "value": [
+        "30-minute risk-focused exploration",
+        "Resume, revision, and cancellation paths",
+        "Source changes after screenshot capture",
+        "Port collision and missing Chromium recovery",
+        "50-screenshot boundary and non-applicable states",
+        "Existing CocoRef handoff conflict",
+        "Temporary source and route cleanup",
+        "Mobile and 4K preview inspection"
+      ],
+      "updatedAt": "2026-08-26T01:41:26.275Z"
+    }
+  },
+  "cases": [
+    {
+      "id": "acceptance-1",
+      "title": "Given the same canonical inputs, generated outputs are deterministic, versioned, and machine-readable.",
+      "category": "functional",
+      "source": "cocospec:acceptance-1",
+      "required": true,
+      "status": "passed",
+      "evidence": "npm test: deterministic CocoUX engine and CLI artifact tests passed; npm run check passed.",
+      "updatedAt": "2026-08-26T01:56:31.473Z"
+    },
+    {
+      "id": "acceptance-2",
+      "title": "Every journey has no dead end and every transition declares a trigger and outcome.",
+      "category": "functional",
+      "source": "cocospec:acceptance-2",
+      "required": true,
+      "status": "passed",
+      "evidence": "npm test passed focused journey validation for declared triggers, outcomes, and dead-end detection.",
+      "updatedAt": "2026-08-26T01:56:55.343Z"
+    },
+    {
+      "id": "acceptance-3",
+      "title": "Initial, loading, empty, success, validation, disabled, error, offline, and permission states are reviewed.",
+      "category": "functional",
+      "source": "cocospec:acceptance-3",
+      "required": true,
+      "status": "passed",
+      "evidence": "npm test passed required-state coverage checks for all nine approved state categories.",
+      "updatedAt": "2026-08-26T01:56:55.709Z"
+    },
+    {
+      "id": "acceptance-4",
+      "title": "Every interaction declares trigger, target, feedback, keyboard behavior, and recovery.",
+      "category": "functional",
+      "source": "cocospec:acceptance-4",
+      "required": true,
+      "status": "passed",
+      "evidence": "npm test passed interaction contract checks for trigger, target, feedback, keyboard behavior, and recovery.",
+      "updatedAt": "2026-08-26T01:56:56.062Z"
+    },
+    {
+      "id": "acceptance-5",
+      "title": "Visual recommendations reuse existing components and design tokens before proposing additions.",
+      "category": "functional",
+      "source": "cocospec:acceptance-5",
+      "required": true,
+      "status": "passed",
+      "evidence": "npm test passed project inventory, reuse-decision, token, and explicit missing-component consent checks.",
+      "updatedAt": "2026-08-26T01:56:56.428Z"
+    },
+    {
+      "id": "acceptance-6",
+      "title": "CocoUX renders a real development-only website preview and captures PNG evidence for approved viewports, themes, and states.",
+      "category": "functional",
+      "source": "cocospec:acceptance-6",
+      "required": true,
+      "status": "passed",
+      "evidence": "Real Playwright integration captured five valid PNG previews from a local development-only CocoUX route; full E2E passed.",
+      "updatedAt": "2026-08-26T01:56:56.793Z"
+    },
+    {
+      "id": "acceptance-7",
+      "title": "Every screenshot records its viewport, theme, state, revision, source hash, and linked UX contract.",
+      "category": "functional",
+      "source": "cocospec:acceptance-7",
+      "required": true,
+      "status": "passed",
+      "evidence": "npm test passed screenshot manifest assertions for viewport, theme, state, revision, source hash, and UX contract linkage.",
+      "updatedAt": "2026-08-26T01:56:57.147Z"
+    },
+    {
+      "id": "acceptance-8",
+      "title": "CocoUX approval permits only handoff of the approved visual direction to CocoRef and never promotes application source.",
+      "category": "functional",
+      "source": "cocospec:acceptance-8",
+      "required": true,
+      "status": "passed",
+      "evidence": "npm test passed approval and immutable evidence checks; approved CocoUX does not promote application source.",
+      "updatedAt": "2026-08-26T01:56:57.511Z"
+    },
+    {
+      "id": "acceptance-9",
+      "title": "CocoRef receives the approved screenshots and linked UX contract, then retains inventory audit, missing-component consent, exact-preview approval, and source promotion ownership.",
+      "category": "functional",
+      "source": "cocospec:acceptance-9",
+      "required": true,
+      "status": "passed",
+      "evidence": "npm test passed CocoUX-to-CocoRef handoff with copied visual references and UX hash linkage while CocoRef ownership remains intact.",
+      "updatedAt": "2026-08-26T01:56:57.880Z"
+    },
+    {
+      "id": "acceptance-10",
+      "title": "Temporary CocoUX preview files are removed after successful handoff or cancellation.",
+      "category": "functional",
+      "source": "cocospec:acceptance-10",
+      "required": true,
+      "status": "passed",
+      "evidence": "npm test passed managed preview cleanup for successful handoff and cancellation.",
+      "updatedAt": "2026-08-26T01:56:58.227Z"
+    },
+    {
+      "id": "acceptance-11",
+      "title": "When an external visual reference exists, CocoRef remains the source of fidelity decisions.",
+      "category": "functional",
+      "source": "cocospec:acceptance-11",
+      "required": true,
+      "status": "passed",
+      "evidence": "npm test passed CocoRef linkage behavior; fidelity decisions remain represented by the CocoRef lifecycle.",
+      "updatedAt": "2026-08-26T01:56:58.590Z"
+    },
+    {
+      "id": "acceptance-12",
+      "title": "CocoQA can derive traceable cases from approved CocoUX and completed CocoRef.",
+      "category": "functional",
+      "source": "cocospec:acceptance-12",
+      "required": true,
+      "status": "passed",
+      "evidence": "npm test passed CocoQA derivation from approved CocoUX and completed CocoRef traceability inputs.",
+      "updatedAt": "2026-08-26T01:56:58.970Z"
+    },
+    {
+      "id": "acceptance-13",
+      "title": "CLI and Agent Bridge use the same CocoUX engine and contract.",
+      "category": "functional",
+      "source": "cocospec:acceptance-13",
+      "required": true,
+      "status": "passed",
+      "evidence": "npm test and npm run inspect passed shared CLI and read-only Agent Bridge CocoUX contract coverage.",
+      "updatedAt": "2026-08-26T01:56:59.330Z"
+    },
+    {
+      "id": "framework-server-first",
+      "title": "Useful server-rendered output exists without browser JavaScript.",
+      "category": "compatibility",
+      "source": "cocoframe:server-first",
+      "required": true,
+      "status": "passed",
+      "evidence": "Package smoke passed SSR and production builds for every official template; CocoUX preview scaffolds server-rendered routes.",
+      "updatedAt": "2026-08-26T01:56:59.726Z"
+    },
+    {
+      "id": "framework-accessibility",
+      "title": "Keyboard, focus, labels, errors, and semantic structure satisfy the approved accessibility target.",
+      "category": "accessibility",
+      "source": "cocoframe:accessibility",
+      "required": true,
+      "status": "passed",
+      "evidence": "Full Chromium, Firefox, and WebKit E2E passed keyboard flows, focus behavior, semantic dialogs, 200 percent text zoom, and forced colors.",
+      "updatedAt": "2026-08-26T01:57:00.108Z"
+    },
+    {
+      "id": "framework-target-reachability",
+      "title": "Every changed internal link, CTA, route, anchor, and API target returns successful content or an intentional redirect; external targets have sanitized provider evidence.",
+      "category": "functional",
+      "source": "cocoframe:target-reachability",
+      "required": true,
+      "status": "passed",
+      "evidence": "Full E2E, local documentation inspection, and package smoke passed route, CTA, API, redirect, and 404 reachability checks.",
+      "updatedAt": "2026-08-26T01:57:00.482Z"
+    },
+    {
+      "id": "framework-interaction-integrity",
+      "title": "Every changed link and control has an accessible name, keyboard behavior, visible focus, and an action matching its label.",
+      "category": "accessibility",
+      "source": "cocoframe:interaction-integrity",
+      "required": true,
+      "status": "passed",
+      "evidence": "Full cross-browser E2E passed accessible keyboard-operated catalogs, dialogs, forms, islands, and controls.",
+      "updatedAt": "2026-08-26T01:57:00.842Z"
+    },
+    {
+      "id": "framework-responsive",
+      "title": "The feature remains usable across the approved viewport and device range without horizontal overflow.",
+      "category": "responsive",
+      "source": "cocoframe:responsive",
+      "required": true,
+      "status": "passed",
+      "evidence": "Responsive E2E passed 320x568, 390x844, 768x1024, 1366x768, and 3840x2160 without horizontal overflow.",
+      "updatedAt": "2026-08-26T01:57:01.209Z"
+    }
+  ],
+  "gates": [
+    {
+      "id": "check",
+      "script": "check",
+      "required": true,
+      "status": "passed",
+      "durationMs": 9769,
+      "exitCode": 0,
+      "updatedAt": "2026-08-26T01:41:47.175Z"
+    },
+    {
+      "id": "test",
+      "script": "test",
+      "required": true,
+      "status": "passed",
+      "durationMs": 29906,
+      "exitCode": 0,
+      "updatedAt": "2026-08-26T01:42:17.085Z"
+    },
+    {
+      "id": "inspect",
+      "script": "inspect",
+      "required": true,
+      "status": "passed",
+      "durationMs": 739,
+      "exitCode": 0,
+      "updatedAt": "2026-08-26T01:42:17.829Z"
+    },
+    {
+      "id": "build",
+      "script": "build",
+      "required": true,
+      "status": "passed",
+      "durationMs": 726,
+      "exitCode": 0,
+      "updatedAt": "2026-08-26T01:42:18.561Z"
+    },
+    {
+      "id": "test-e2e",
+      "script": "test:e2e",
+      "required": true,
+      "status": "passed",
+      "durationMs": 126447,
+      "exitCode": 0,
+      "updatedAt": "2026-08-26T01:55:18.670Z"
+    }
+  ],
+  "defects": [],
+  "createdAt": "2026-08-26T01:38:14.112Z",
+  "updatedAt": "2026-08-26T01:57:12.935Z",
+  "approvedAt": "2026-08-26T01:57:12.935Z"
+}

@@ -4,10 +4,10 @@ import ArrowRightIcon from "@cocoframe/icons/linear/arrow-right";
 import { componentNavigationGroups } from "../components/component-navigation.ts";
 
 const groups = [
-  ["GET STARTED", [["Documentation home", "/docs"], ["Getting Started", "/docs/getting-started"], ["Agent Bridge", "/docs/agent-bridge"], ["CocoSpecs", "/docs/cocospecs"], ["CocoRef", "/docs/cocoref"], ["CocoQA", "/docs/cocoqa"]]],
+  ["GET STARTED", [["Documentation home", "/docs"], ["Getting Started", "/docs/getting-started"], ["Agent Bridge", "/docs/agent-bridge"], ["CocoSpecs", "/docs/cocospecs"], ["CocoUX", "/docs/cocoux"], ["CocoRef", "/docs/cocoref"], ["CocoQA", "/docs/cocoqa"]]],
   ["FRONTEND", [["Pages & Routing", "/docs/pages"], ["Interactive Islands", "/docs/islands"], ["Forms & Validation", "/docs/forms"], ["Components & Icons", "/docs/components"]]],
   ["BACKEND", [["APIs & Typed Client", "/docs/apis"], ["Database", "/docs/database"], ["Security & Auth", "/docs/security"], ["CocoQL", "/docs/cocoql"], ["Generated API Reference", "/docs/api-reference"]]],
-  ["PRODUCTION", [["Testing", "/docs/testing"], ["Deployment", "/docs/deployment"], ["Complete Guide", "/docs#guides"], ["Troubleshooting", "/docs#troubleshooting"], ["Versioning & Roadmap", "/docs#versioning"]]],
+  ["PRODUCTION", [["CocoFrame Doctor", "/docs/doctor"], ["Testing", "/docs/testing"], ["Deployment", "/docs/deployment"], ["Complete Guide", "/docs#guides"], ["Troubleshooting", "/docs#troubleshooting"], ["Versioning & Roadmap", "/docs#versioning"]]],
 ] as const;
 
 export default defineIsland<{ kind: "documentation" | "components"; activePath?: string }>({

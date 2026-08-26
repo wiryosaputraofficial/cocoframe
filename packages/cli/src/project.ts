@@ -90,12 +90,12 @@ export async function discoverStyles(projectRoot: string): Promise<readonly Disc
   }));
 }
 
-async function discoverCocoRefStyles(projectRoot: string): Promise<readonly DiscoveredStyle[]> {
-  const directory = path.join(projectRoot, ".cocoframe", "cocoref");
-  const files = await walk(directory).catch((error: unknown) => {
+async function discoverDevelopmentWorkflowStyles(projectRoot: string): Promise<readonly DiscoveredStyle[]> {
+  const directories = ["cocoref", "cocoux"].map((name) => path.join(projectRoot, ".cocoframe", name));
+  const files = (await Promise.all(directories.map((directory) => walk(directory).catch((error: unknown) => {
     if ((error as NodeJS.ErrnoException).code === "ENOENT") return [];
     throw error;
-  });
+  })))).flat();
   return Promise.all(files.filter((file) => file.endsWith(".module.css")).sort().map(async (file) =>
     compileCssModule(projectRoot, file, await readFile(file, "utf8"))));
 }
@@ -132,15 +132,15 @@ export function developmentErrorEvent(error: unknown): string {
   return `event: build-error\ndata: ${JSON.stringify(payload)}\n\n`;
 }
 
-export async function buildProject(projectRoot: string, development: boolean): Promise<string> {
+export async function buildProject(projectRoot: string, development: boolean, options: { readonly outputRoot?: string } = {}): Promise<string> {
   const discoveredRoutes = await discoverRoutes(projectRoot);
   const routes = development
     ? discoveredRoutes
-    : discoveredRoutes.filter(({ file }) => !file.replaceAll("\\", "/").includes("/app/routes/__cocoref/"));
+    : discoveredRoutes.filter(({ file }) => !/\/app\/routes\/__(?:cocoref|cocoux)\//.test(file.replaceAll("\\", "/")));
   const islands = await discoverIslands(projectRoot);
   const styles = [
     ...await discoverStyles(projectRoot),
-    ...(development ? await discoverCocoRefStyles(projectRoot) : []),
+    ...(development ? await discoverDevelopmentWorkflowStyles(projectRoot) : []),
   ];
   const globalStyles = await discoverGlobalStyles(projectRoot);
   const globalCss = (await Promise.all(globalStyles.map((file) => readFile(file, "utf8")))).join("\n");
@@ -155,7 +155,7 @@ export async function buildProject(projectRoot: string, development: boolean): P
   const hasStyles = developmentCss.length > 0 || styles.length > 0 || uiCss.length > 0 || globalCss.length > 0;
   const stylesByFile = new Map(styles.map((style) => [path.resolve(style.file), style]));
   const layouts = [...new Set(routes.flatMap((route) => route.layouts))];
-  const generatedRoot = path.resolve(projectRoot, ".cocoframe");
+  const generatedRoot = path.resolve(options.outputRoot ?? path.join(projectRoot, ".cocoframe"));
   const outputDirectory = development ? path.join(generatedRoot, "dev") : generatedRoot;
   const outputFile = path.join(outputDirectory, "server.mjs");
   const virtualEntry = "\0cocoframe:entry";

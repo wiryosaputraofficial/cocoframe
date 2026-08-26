@@ -31,6 +31,7 @@ const descriptions = {
   "@cocoframe/server-web": "Fetch-standard edge and serverless handler for CocoFrame.",
   "@cocoframe/specs": "Adaptive AI product discovery, approval, and deterministic specification artifacts for CocoFrame.",
   "@cocoframe/ui": "Server-first semantic UI components, charts, syntax highlighting, and utilities for CocoFrame.",
+  "@cocoframe/ux": "Journey, state, interaction, visual preview, PNG evidence, and CocoRef handoff contracts for CocoFrame.",
   "create-cocoframe": "Dependency-free project creator for CocoFrame applications.",
 };
 

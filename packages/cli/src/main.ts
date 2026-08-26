@@ -10,11 +10,20 @@ import { runSpecCommand } from "./spec-command.ts";
 import { runRefCommand } from "./ref-command.ts";
 import { runQaCommand } from "./qa-command.ts";
 import { runAgentCommand } from "./agent-command.ts";
+import { runDoctorCommand } from "./doctor-command.ts";
+import { runUxCommand } from "./ux-command.ts";
 
 const [command = "help", inputRoot = ".", ...commandArguments] = process.argv.slice(2);
 const projectRoot = path.resolve(inputRoot);
 
-if (command === "spec") {
+if (command === "ux") {
+  try {
+    process.exitCode = await runUxCommand([inputRoot, ...commandArguments]);
+  } catch (error) {
+    console.error(error instanceof Error ? error.message : error);
+    process.exitCode = 1;
+  }
+} else if (command === "spec") {
   try {
     process.exitCode = await runSpecCommand([inputRoot, ...commandArguments]);
   } catch (error) {
@@ -41,6 +50,13 @@ if (command === "spec") {
   } catch (error) {
     console.error(error instanceof Error ? error.message : error);
     process.exitCode = 1;
+  }
+} else if (command === "doctor") {
+  try {
+    process.exitCode = await runDoctorCommand([inputRoot, ...commandArguments]);
+  } catch (error) {
+    console.error(error instanceof Error ? error.message : error);
+    process.exitCode = 2;
   }
 } else if (command === "inspect") {
   const routes = await discoverRoutes(projectRoot);
@@ -155,6 +171,9 @@ if (command === "spec") {
   const cocoRefDirectory = path.join(projectRoot, ".cocoframe", "cocoref");
   await mkdir(cocoRefDirectory, { recursive: true });
   const cocoRefWatcher = watch(cocoRefDirectory, { recursive: true }, scheduleRebuild);
+  const cocoUxDirectory = path.join(projectRoot, ".cocoframe", "cocoux");
+  await mkdir(cocoUxDirectory, { recursive: true });
+  const cocoUxWatcher = watch(cocoUxDirectory, { recursive: true }, scheduleRebuild);
   let publicWatcher: ReturnType<typeof watch> | undefined;
   try {
     publicWatcher = watch(path.join(projectRoot, "public"), { recursive: true }, scheduleRebuild);
@@ -167,6 +186,7 @@ if (command === "spec") {
   server.on("close", () => {
     watcher.close();
     cocoRefWatcher.close();
+    cocoUxWatcher.close();
     publicWatcher?.close();
     configWatcher.close();
   });
@@ -207,7 +227,7 @@ if (command === "spec") {
   const openApiFile = await generateOpenApi(projectRoot);
   console.log(`CocoFrame OpenAPI: ${openApiFile}`);
 } else {
-  console.log("CocoFrame CLI\n\nCommands:\n  cocoframe agent [project] | approve|deny|cancel|expire <operation-id> [options]\n  cocoframe inspect [project]\n  cocoframe dev [project]\n  cocoframe build [project]\n  cocoframe start [project]\n  cocoframe generate [project]\n  cocoframe openapi [project]\n  cocoframe spec <command> [options]\n  cocoframe ref <command> [options]\n  cocoframe qa <command> [options]");
+  console.log("CocoFrame CLI\n\nCommands:\n  cocoframe agent [project] | approve|deny|cancel|expire <operation-id> [options]\n  cocoframe doctor [project] [--json] [--deep] [--strict]\n  cocoframe inspect [project]\n  cocoframe dev [project]\n  cocoframe build [project]\n  cocoframe start [project]\n  cocoframe generate [project]\n  cocoframe openapi [project]\n  cocoframe spec <command> [options]\n  cocoframe ux <command> [options]\n  cocoframe ref <command> [options]\n  cocoframe qa <command> [options]");
 }
 
 function nodeServerOptions(): NodeServerOptions {

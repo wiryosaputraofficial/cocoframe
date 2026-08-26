@@ -94,6 +94,9 @@ changes the architecture and updates its tests and documentation:
   inspect first, approved CocoSpecs, an explicit visual-reference decision,
   CocoRef when referenced, reuse inventory evidence, verified changed targets,
   and human mutation approval.
+- Journey or visual-direction work uses canonical CocoUX before CocoRef. CocoUX
+  approval authorizes only a hash-bound PNG handoff and never application-source
+  promotion.
 - A successful Agent Bridge file write is not release readiness. Changed targets
   require runtime/accessibility evidence, and visual work requires CocoQA
   alignment, spacing, contrast, overflow, responsive, and fidelity evidence when
@@ -108,6 +111,7 @@ move.
 | Task | Inspect first | Also verify |
 | --- | --- | --- |
 | Product discovery or a new application feature | `@cocoframe/specs`, existing `specs/<feature>/spec.json`, and `cocoframe inspect` | adaptive questions, explicit assumptions, generated review artifacts, approval state |
+| Journey, state, interaction, or visual direction | `@cocoframe/ux`, approved `specs/<feature>/spec.json`, existing inventory, and `ux/<feature>/ux.json` | reachable journey graph, complete state matrix, accessible behavior, explicit missing-component consent, local PNG evidence, hash-bound human approval, CocoRef handoff |
 | Image- or website-reference implementation | `@cocoframe/cocoref`, existing `refs/<name>/ref.json`, and `cocoframe inspect` | inventory reuse, missing-component consent, actual candidate preview, revision history, temporary-route cleanup |
 | Feature QA or release approval | `@cocoframe/qa`, approved `specs/<feature>/spec.json`, optional completed `refs/<name>/ref.json`, optional `cocoframe.design.json`, and `qa/<feature>/qa.json` | adaptive QA decisions, Product Design Quality, traceability, allow-listed gates, sanitized evidence, defects, explicit approval |
 | Product design or theme quality | `docs/product-design-quality.md`, `@cocoframe/qa`, `@cocoframe/ui`, the project Design Profile, component inventory, and completed CocoRef when applicable | reuse-first audit, token safety, grid/container/baseline alignment, spacing, contrast, iconography, overflow, responsive states, fidelity, profile fingerprint |

@@ -14,7 +14,7 @@ export interface SearchMatch {
 }
 
 export interface WorkflowRecord {
-  readonly lifecycle: "cocospec" | "cocoref" | "cocoqa";
+  readonly lifecycle: "cocospec" | "cocoux" | "cocoref" | "cocoqa";
   readonly id: string;
   readonly state: string;
   readonly version: number;
@@ -38,6 +38,7 @@ export async function resolveWorkspaceRoot(input: string): Promise<string> {
   return canonical;
 }
 
+/** Rejects linked or excessively large workspace trees before read-only Agent Bridge or Doctor inspection. */
 export async function assertSafeTree(root: string, relativeDirectory: string, signal?: AbortSignal): Promise<void> {
   const directory = await confinedExistingPath(root, relativeDirectory);
   if (!directory) return;
@@ -115,6 +116,7 @@ export function findApis(snapshot: AgentProjectSnapshot, query: string, offset: 
 export async function readWorkflowRecords(root: string, lifecycle: string, offset: number, limit: number, signal?: AbortSignal) {
   const definitions = [
     { lifecycle: "cocospec" as const, directory: "specs", file: "spec.json" },
+    { lifecycle: "cocoux" as const, directory: "ux", file: "ux.json" },
     { lifecycle: "cocoref" as const, directory: "refs", file: "ref.json" },
     { lifecycle: "cocoqa" as const, directory: "qa", file: "qa.json" },
   ].filter((item) => lifecycle === "all" || item.lifecycle === lifecycle);

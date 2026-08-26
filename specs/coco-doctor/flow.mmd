@@ -1,0 +1,30 @@
+flowchart TD
+    start([Start: Coco Doctor])
+    step1["User runs cocoframe doctor in a project"]
+    start --> step1
+    step2["Doctor resolves the project root and environment"]
+    step1 --> step2
+    step3["Doctor runs safe read-only checks"]
+    step2 --> step3
+    step4["Doctor aggregates and deterministically orders diagnostics"]
+    step3 --> step4
+    step5["Doctor renders human output or a versioned JSON document"]
+    step4 --> step5
+    step6["Doctor exits with a status derived from the result"]
+    step5 --> step6
+    success([One command identifies actionable CocoFrame project problems with stable diagnostic codes, safe evidence, remediation guidance, documentation references, and consistent exit status without exposing secrets.])
+    step6 --> success
+    error1["A non-CocoFrame directory reports PROJECT_NOT_FOUND with recovery guidance"]
+    step6 -. failure .-> error1
+    error2["Configuration load failures identify the related file without exposing sensitive values"]
+    step6 -. failure .-> error2
+    error3["Missing or incompatible dependencies produce dependency diagnostics"]
+    step6 -. failure .-> error3
+    error4["Stale generated artifacts include the appropriate regeneration command"]
+    step6 -. failure .-> error4
+    error5["Unreadable files produce sanitized diagnostics without including sensitive content"]
+    step6 -. failure .-> error5
+    error6["A failed or timed-out deep check produces a check-specific diagnostic"]
+    step6 -. failure .-> error6
+    error7["An unexpected doctor failure exits 2 and --json still emits a valid sanitized JSON document"]
+    step6 -. failure .-> error7

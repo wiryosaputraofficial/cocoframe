@@ -1,0 +1,152 @@
+erDiagram
+    UxDocument {
+        literal_1 version
+        featureidentity feature
+        uxlifecyclestate state
+        positive_integer revision
+        record_string_sha256_ sourceHashes
+        timestamp createdAt
+        timestamp updatedAt
+        timestamp approvedAt "nullable"
+        timestamp handedOffAt "nullable"
+    }
+    SourceBinding {
+        slug id
+        cocospec_cocoref_design_profile_project_snapshot kind
+        relative_path file "nullable"
+        string state
+        sha256 hash
+    }
+    Actor {
+        slug id
+        string name
+        string__ goals
+        string__ permissions
+    }
+    Journey {
+        slug id
+        actor_id actorId
+        string goal
+        string__ entryPoints
+        journeystep_id__ stepIds
+        string__ alternatePaths
+        string successOutcome
+    }
+    JourneyStep {
+        slug id
+        journey_id journeyId
+        non_negative_integer order
+        screen_id screenId
+        string action
+        uistate_id stateId
+        string outcome
+        journeystep_id__ nextStepIds
+    }
+    Screen {
+        slug id
+        string routeOrSurface
+        string purpose
+        uistate_id__ stateIds
+    }
+    UiState {
+        slug id
+        screen_id screenId
+        initial_loading_empty_success_validation_disabled_error_offline_permission_custom kind
+        applicable_not_applicable applicability
+        string rationale
+        string entryCondition
+        string content
+        string__ availableActions
+        string recovery "nullable"
+    }
+    Transition {
+        slug id
+        uistate_id fromStateId
+        uistate_id toStateId
+        string trigger
+        string guard "nullable"
+        string feedback
+        string outcome
+        string recovery "nullable"
+    }
+    Interaction {
+        slug id
+        uistate_id stateId
+        string target
+        string trigger
+        string behavior
+        string keyboard
+        string focus
+        string announcement "nullable"
+        string feedback
+        string recovery "nullable"
+    }
+    VisualRecommendation {
+        slug id
+        screen_id screenId
+        uistate_id__ stateIds
+        string__ hierarchy
+        structured layout
+        string__ components
+        record_string_string_ tokens
+        structured typography
+        structured color
+        structured motion
+        structured responsive
+        string rationale
+    }
+    ComponentDecision {
+        slug id
+        visualrecommendation_id recommendationId
+        reuse_missing decision
+        string inventoryId "nullable"
+        string rationale
+        pending_approved_declined_not_required consent
+    }
+    PreviewRevision {
+        positive_integer revision
+        relative_path__ sourcePaths
+        record_relative_path_sha256_ sourceHashes
+        local_http_url previewUrl
+        building_ready_revising_approved_cancelled status
+        feedback__ feedback
+    }
+    ScreenshotEvidence {
+        slug id
+        previewrevision_revision previewRevision
+        uistate_id stateId
+        width_height viewport
+        string theme
+        relative_png_path file
+        sha256 sourceHash
+        sha256 imageHash
+        string description
+    }
+    Approval {
+        previewrevision_revision revision
+        application_developer_framework_maintainer reviewerRole
+        sha256 contractHash
+        sha256 previewHash
+        timestamp approvedAt
+    }
+    CocoRefHandoff {
+        slug refId
+        relative_path refFile
+        relative_path__ screenshotFiles
+        record_relative_path_sha256_ hashes
+        pending_completed_failed status
+        timestamp createdAt
+    }
+    UxDocument ||--o{ SourceBinding : "binds canonical sources"
+    UxDocument ||--o{ Actor : "defines actors"
+    Actor ||--o{ Journey : "owns journeys"
+    Journey ||--o{ JourneyStep : "orders steps"
+    Screen ||--o{ UiState : "defines complete states"
+    UiState ||--o{ Transition : "connects states"
+    UiState ||--o{ Interaction : "exposes interactions"
+    Screen ||--o{ VisualRecommendation : "receives visual recommendations"
+    VisualRecommendation ||--o{ ComponentDecision : "audits component use"
+    UxDocument ||--o{ PreviewRevision : "tracks previews"
+    PreviewRevision ||--o{ ScreenshotEvidence : "captures evidence"
+    PreviewRevision ||--o{ Approval : "receives visual-direction approval"
+    UxDocument ||--o{ CocoRefHandoff : "hands off approved direction"

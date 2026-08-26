@@ -54,6 +54,21 @@ Open `http://127.0.0.1:3000` after the development server reports that all
 routes are loaded. The server watches application files and reloads changes
 automatically.
 
+Diagnose a project before debugging it manually:
+
+```bash
+cocoframe doctor
+cocoframe doctor --json
+cocoframe doctor --deep --strict
+```
+
+Doctor uses static, read-only checks by default and returns stable actionable
+diagnostics for developers, CI, and AI clients. `--deep` runs the canonical
+production build in an isolated temporary output directory, while `--strict`
+makes warning-only results fail CI. No mode installs dependencies, accesses the
+network, executes the built application, or changes project source and generated
+artifacts.
+
 Choose an official template when you need more than the default starter:
 
 ```bash
@@ -310,12 +325,33 @@ The source of truth is `refs/<name>/ref.json`. Temporary candidates render
 through local development-only routes and are removed on approval or cancellation.
 See `docs/cocoref.md` for the complete lifecycle and AI safety rules.
 
+## Journey and visual direction with CocoUX
+
+`@cocoframe/ux` turns approved intent into explicit actors, reachable journeys,
+complete state matrices, accessible interactions, reuse-first visual
+recommendations, and real local PNG previews.
+
+```bash
+cocoframe ux create checkout --brief "Design checkout." --spec checkout
+cocoframe ux answer checkout --input ./checkout-ux.json
+cocoframe ux check checkout
+cocoframe ux preview checkout
+cocoframe ux approve checkout --role application-developer
+cocoframe ux handoff checkout
+```
+
+The canonical record is `ux/<feature>/ux.json`. CocoUX approval authorizes only
+the hash-bound PNG and UX-contract handoff to CocoRef; it never promotes preview
+source into the application. CocoRef keeps its separate component audit,
+missing-component consent, exact-source preview, and source approval boundary.
+See `docs/cocoux.md`.
+
 ## Evidence-based release approval with CocoQA
 
 `@cocoframe/qa` connects an approved CocoSpec and optional completed CocoRef to adaptive quality questions, traceable test cases, known npm quality gates, sanitized evidence, defects, and explicit release approval.
 
 ```bash
-cocoframe qa create login --spec login --ref login-reference
+cocoframe qa create login --spec login --ux login --ref login-reference
 cocoframe qa resume login
 cocoframe qa run login
 cocoframe qa record login acceptance-1 pass --evidence "Login E2E passed."
@@ -339,14 +375,14 @@ See `docs/product-design-quality.md`.
 
 `@cocoframe/agent` exposes CocoFrame through local MCP stdio, so an AI client can
 discover typed tools, inspect an existing project, search documentation, find
-reusable components and APIs, and read CocoSpecs, CocoRef, and CocoQA state
+reusable components and APIs, and read CocoSpecs, CocoUX, CocoRef, and CocoQA state
 without provider-specific repository parsing.
 
 ```bash
 cocoframe agent .
 ```
 
-Ten versioned tools cover project discovery, read-only CocoSpecs/CocoRef/CocoQA
+Twelve versioned tools cover project inspection and diagnostics, read-only CocoSpecs/CocoUX/CocoRef/CocoQA
 preparation, and controlled file writes. Protocol v2 requires user-facing
 mutations to bind an approved CocoSpec, an explicit visual-reference decision,
 the current component/design state, and verified static navigation targets.

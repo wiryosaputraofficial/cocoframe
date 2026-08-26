@@ -27,6 +27,7 @@ import {
   type CocoQaValue,
 } from "@cocoframe/qa";
 import { parseCocoSpec, slugifyFeature, type CocoSpecValue } from "@cocoframe/specs";
+import { parseCocoUx, type CocoUx } from "@cocoframe/ux";
 
 interface QaCommandIo {
   readonly log: (message: string) => void;
@@ -73,6 +74,10 @@ export async function runQaCommand(
     const refName = optionString(parsed.options, "ref");
     const ref = refName ? parseCocoRef(JSON.parse(await readFile(path.join(projectRoot, "refs", slugifyCocoRef(refName), "ref.json"), "utf8"))) : undefined;
     if (ref && ref.state !== "ready") throw new Error(`CocoQA requires a completed CocoRef; ${ref.name} is ${ref.state}.`);
+    const uxName = optionString(parsed.options, "ux");
+    const uxPath = uxName ? path.join(projectRoot, "ux", slugifyFeature(uxName), "ux.json") : undefined;
+    const ux = uxPath ? parseCocoUx(JSON.parse(await readFile(uxPath, "utf8"))) : undefined;
+    if (ux && ux.state !== "approved" && ux.state !== "handed-off") throw new Error(`CocoQA requires approved or handed-off CocoUX; ${ux.feature.id} is ${ux.state}.`);
     const manifest = await readManifest(projectRoot);
     const design = await readDesignProfile(projectRoot, optionString(parsed.options, "design"));
     const acceptanceCriteria = valueLines(spec.answers["acceptance-criteria"]?.value);
@@ -84,9 +89,11 @@ export async function runQaCommand(
       sources: [
         ...(design ? [{ kind: "design-profile" as const, id: design.profile.id, file: design.file, state: "sha256:" + design.hash }] : []),
         { kind: "cocospec", id: specId, file: relative(projectRoot, specPath), state: spec.state },
+        ...(ux && uxPath ? [{ kind: "cocoux" as const, id: ux.feature.id, file: relative(projectRoot, uxPath), state: ux.state }] : []),
         ...(ref ? [{ kind: "cocoref" as const, id: ref.name, file: `refs/${ref.name}/ref.json`, state: ref.state }] : []),
       ],
       acceptanceCriteria,
+      ...(ux ? { uxCriteria: uxCriteria(ux) } : {}),
       ...(design ? { designCriteria: productDesignCriteria(design.profile, { hasReference: Boolean(ref) }) } : {}),
       ...(ref ? { referenceCriteria: ref.requirements.filter(({ status }) => status === "approved" || status === "reused").map(({ id, description }) => ({ id, description })) } : {}),
       gates: qualityScripts.filter((script) => manifest.scripts[script]).map((script) => ({ id: script.replace(":", "-"), script, required: true })),
@@ -301,7 +308,7 @@ function printStatus(io: QaCommandIo, projectRoot: string, qa: CocoQa, json: boo
 
 function validateArguments(operation: string, parsed: ParsedArguments): void {
   const options: Readonly<Record<string, readonly string[]>> = {
-    help: [], create: ["design", "json", "mode", "project", "ref", "spec", "title"], resume: ["json", "project"], status: ["json", "project"], plan: ["json", "project"], report: ["json", "project"],
+    help: [], create: ["design", "json", "mode", "project", "ref", "spec", "title", "ux"], resume: ["json", "project"], status: ["json", "project"], plan: ["json", "project"], report: ["json", "project"],
     answer: ["json", "project", "status"], run: ["gate", "json", "project"], record: ["evidence", "json", "project"], defect: ["actual", "evidence", "expected", "json", "project", "severity", "steps", "title"],
     resolve: ["as", "json", "project", "resolution"], check: ["json", "project"], approve: ["json", "project"],
   };
@@ -341,6 +348,15 @@ function valueLines(value: CocoSpecValue | undefined): readonly string[] {
   return value.split(/\r?\n|;/).map(cleanItem).filter(Boolean);
 }
 
+function uxCriteria(ux: CocoUx) {
+  return [
+    ...ux.journeys.map((journey) => ({ id: `journey-${journey.id}`, description: `Journey reaches its approved outcome: ${journey.successOutcome}`, category: "functional" as const })),
+    ...ux.states.map((state) => ({ id: `state-${state.id}`, description: `${state.screenId} ${state.kind} state matches the reviewed content, actions, and recovery behavior.`, category: "edge-case" as const })),
+    ...ux.interactions.map((interaction) => ({ id: `interaction-${interaction.id}`, description: `${interaction.target} supports ${interaction.trigger}, ${interaction.keyboard}, focus behavior, feedback, and recovery.`, category: "accessibility" as const })),
+    ...(ux.previews.at(-1)?.screenshots.map((screenshot) => ({ id: `visual-${screenshot.id}`, description: `Rendered output matches approved CocoUX PNG ${screenshot.file} at ${screenshot.viewport.width}×${screenshot.viewport.height} in ${screenshot.theme}.`, category: screenshot.viewport.width <= 768 ? "responsive" as const : "visual" as const })) ?? []),
+  ];
+}
+
 function valueText(value: CocoSpecValue): string { return typeof value === "string" ? value : JSON.stringify(value); }
 function cleanItem(value: string): string { return value.trim().replace(/^[-*]\s+/, "").replace(/^\d+[.)]\s+/, ""); }
 function qaFile(projectRoot: string, feature: string): string { return path.join(projectRoot, "qa", slugifyCocoQa(feature), "qa.json"); }
@@ -356,7 +372,7 @@ async function exists(file: string): Promise<boolean> { try { await access(file)
 
 function qaHelp(): string {
   return "CocoQA\n\nCommands:\n" +
-    "  cocoframe qa create <feature> --spec <approved-feature> [--ref <completed-reference>] [--design <profile>] [--mode standard|thorough]\n" +
+    "  cocoframe qa create <feature> --spec <approved-feature> [--ux <approved-ux>] [--ref <completed-reference>] [--design <profile>] [--mode standard|thorough]\n" +
     "  cocoframe qa resume|status|plan|report <feature> [--json] [--project <path>]\n" +
     "  cocoframe qa answer <feature> <question-id> [value] [--status <status>]\n" +
     "  cocoframe qa run <feature> [--gate <gate-id>] [--project <path>]\n" +

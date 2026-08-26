@@ -468,7 +468,7 @@ async function resolveMutationTarget(root: string, relative: string): Promise<st
       }
       break;
     } catch (error) {
-      if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+      if (!isMissingPathError(error)) throw error;
       ancestor = path.dirname(ancestor);
     }
   }
@@ -480,7 +480,7 @@ async function resolveMutationTarget(root: string, relative: string): Promise<st
     const info = await stat(canonical);
     if (!info.isFile()) throw diagnosticError("WORKSPACE_ACCESS_DENIED", "Mutation targets must be regular files.", "Choose a regular file target.");
   } catch (error) {
-    if ((error as NodeJS.ErrnoException).code !== "ENOENT") throw error;
+    if (!isMissingPathError(error)) throw error;
   }
   return target;
 }
@@ -491,9 +491,14 @@ async function readCurrent(file: string): Promise<Uint8Array | undefined> {
     if (info.size > MAX_TOTAL_BYTES) throw diagnosticError("CAPABILITY_UNAVAILABLE", "An existing mutation target exceeds the 1 MiB rollback limit.", "Use a smaller explicit target or mutate it outside Agent Bridge.");
     return await readFile(file);
   } catch (error) {
-    if ((error as NodeJS.ErrnoException).code === "ENOENT") return undefined;
+    if (isMissingPathError(error)) return undefined;
     throw error;
   }
+}
+
+function isMissingPathError(error: unknown): boolean {
+  const code = (error as NodeJS.ErrnoException).code;
+  return code === "ENOENT" || code === "ENOTDIR";
 }
 
 function containsSensitiveMaterial(content: string): boolean {

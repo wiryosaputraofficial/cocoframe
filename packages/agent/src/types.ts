@@ -116,6 +116,59 @@ export interface AgentProjectSnapshot {
 /** Read-only project inspection adapter injected by a CocoFrame host such as the CLI. */
 export type AgentProjectInspector = (projectRoot: string, signal?: AbortSignal) => Promise<AgentProjectSnapshot>;
 
+/** Stable severity attached to every CocoFrame Doctor diagnostic. */
+export type DoctorSeverity = "warning" | "error";
+
+/** Stable category used to group CocoFrame Doctor diagnostics. */
+export type DoctorCategory = "environment" | "project" | "dependencies" | "configuration" | "generated" | "security" | "build" | "internal";
+
+/** One actionable, sanitized problem found by CocoFrame Doctor. */
+export interface DoctorDiagnostic {
+  readonly code: string;
+  readonly severity: DoctorSeverity;
+  readonly category: DoctorCategory;
+  readonly message: string;
+  readonly evidence: readonly string[];
+  readonly suggestion: string;
+  readonly documentation: string;
+}
+
+/** Outcome of one stable Doctor check. */
+export interface DoctorCheck {
+  readonly id: string;
+  readonly status: "passed" | "warning" | "error" | "skipped";
+}
+
+/** Versioned machine-readable CocoFrame Doctor result. */
+export interface DoctorReport {
+  readonly framework: "cocoframe";
+  readonly contractVersion: 1;
+  readonly mode: "default" | "deep";
+  readonly strict: boolean;
+  readonly status: "healthy" | "warning" | "error" | "internal-error" | "cancelled";
+  readonly project: string;
+  readonly checks: readonly DoctorCheck[];
+  readonly diagnostics: readonly DoctorDiagnostic[];
+  readonly summary: {
+    readonly checks: number;
+    readonly passed: number;
+    readonly warning: number;
+    readonly error: number;
+    readonly skipped: number;
+    readonly internalFailure: boolean;
+  };
+  readonly truncated: boolean;
+}
+
+/** Options shared by the Doctor CLI and Agent Bridge adapter. */
+export interface DoctorOptions {
+  readonly deep?: boolean;
+  readonly strict?: boolean;
+}
+
+/** Read-only Doctor adapter supplied by a CocoFrame host such as the CLI. */
+export type AgentProjectDoctor = (projectRoot: string, options?: DoctorOptions, signal?: AbortSignal) => Promise<DoctorReport>;
+
 export interface AgentProposedFile {
   readonly path: string;
   readonly content: string;
@@ -131,6 +184,8 @@ export type AgentProposedRouteInspector = (
 export interface AgentBridgeOptions {
   readonly workspaceRoot: string;
   readonly inspectProject: AgentProjectInspector;
+  /** Adds the read-only project.doctor tool when the host provides the canonical Doctor engine. */
+  readonly doctorProject?: AgentProjectDoctor;
   /** Uses the host's canonical route convention to validate planned destinations before writes. */
   readonly inspectProposedRoutes?: AgentProposedRouteInspector;
   /** Optional stable session identifier supplied by an editor host. */

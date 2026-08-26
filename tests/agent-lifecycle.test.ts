@@ -6,6 +6,7 @@ import test from "node:test";
 import { approveCocoSpec, answerCocoSpec, createCocoSpec, nextQuestions, type CocoSpecQuestion, type CocoSpecValue } from "@cocoframe/specs";
 import { auditCocoRef, createCocoRef } from "@cocoframe/cocoref";
 import { answerCocoQa, createCocoQa, nextCocoQaQuestions, recordCocoQaCase } from "@cocoframe/qa";
+import { createCocoUx } from "@cocoframe/ux";
 import { createAgentBridge } from "../packages/agent/src/index.ts";
 import { inspectProjectReadOnly } from "../packages/cli/src/inspect-readonly.ts";
 
@@ -67,6 +68,23 @@ test("audits existing components before proposing missing CocoRef components", a
   assert.equal(data.requirements[1]?.consentRequired, true);
   assert.deepEqual(data.missingComponents.map(({ id }) => id), ["adaptive-timeline"]);
   assert.deepEqual(await fileState(root), before);
+});
+
+test("inspects canonical CocoUX through its pure completeness engine", async (context) => {
+  const root = await fixtureWorkspace();
+  context.after(async () => rm(root, { recursive: true, force: true }));
+  const ux = createCocoUx({ feature: "reporting", brief: "Design reporting UX.", now: "2026-08-26T00:00:00.000Z" });
+  await mkdir(path.join(root, "ux", "reporting"), { recursive: true });
+  await writeFile(path.join(root, "ux", "reporting", "ux.json"), JSON.stringify(ux, null, 2));
+  const bridge = await createAgentBridge({ workspaceRoot: root, inspectProject: inspectProjectReadOnly });
+  const result = await bridge.execute("cocoux.inspect", { feature: "reporting" });
+  assert.equal(result.ok, true);
+  const data = result.data as { lifecycle: string; state: string; check: { readyForPreview: boolean; diagnostics: readonly { code: string }[] }; mutationRequired: boolean };
+  assert.equal(data.lifecycle, "cocoux");
+  assert.equal(data.state, "draft");
+  assert.equal(data.check.readyForPreview, false);
+  assert.ok(data.check.diagnostics.some(({ code }) => code === "UX_JOURNEYS_MISSING"));
+  assert.equal(data.mutationRequired, false);
 });
 
 test("keeps CocoQA acceptance, evidence, defects, gates, and approval state traceable and redacted", async (context) => {

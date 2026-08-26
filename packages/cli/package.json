@@ -1,19 +1,21 @@
 {
   "name": "@cocoframe/cli",
-  "version": "0.0.8",
+  "version": "0.1.0",
   "type": "module",
   "bin": {
     "cocoframe": "./src/main.ts"
   },
   "dependencies": {
-    "@cocoframe/agent": "0.0.3",
+    "@cocoframe/agent": "0.1.0",
     "@cocoframe/client": "0.0.4",
     "@cocoframe/cocoref": "0.0.1",
     "@cocoframe/core": "0.0.4",
-    "@cocoframe/qa": "0.0.3",
+    "@cocoframe/qa": "0.1.0",
     "@cocoframe/server-node": "0.0.3",
     "@cocoframe/specs": "0.0.1",
     "@cocoframe/ui": "0.0.4",
+    "@cocoframe/ux": "0.0.1",
+    "playwright": "^1.62.1",
     "rolldown": "^1.0.0"
   }
 }
