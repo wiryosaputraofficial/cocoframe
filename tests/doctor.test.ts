@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { mkdir, mkdtemp, readFile, readdir, rm, stat, writeFile } from "node:fs/promises";
+import { mkdir, mkdtemp, readFile, readdir, rm, stat, utimes, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import test from "node:test";
@@ -33,6 +33,29 @@ test("emits valid JSON and applies strict warning exit behavior", async (context
   assert.ok(result.diagnostics.some(({ code }) => code === "GENERATED_ARTIFACT_MISSING"));
   const strict = await runDoctorCommand([root, "--strict"], root, { log: () => undefined, error: () => undefined });
   assert.equal(strict, 1);
+});
+
+test("ignores checkout-order timestamp noise but reports meaningful generated drift", async (context) => {
+  const root = await fixture(context, "doctor-freshness");
+  const route = path.join(root, "app", "routes", "api", "ping.route.ts");
+  const generatedRoot = path.join(root, "app", "generated");
+  const client = path.join(generatedRoot, "cocoframe-client.ts");
+  const openapi = path.join(generatedRoot, "openapi.json");
+  await mkdir(path.dirname(route), { recursive: true });
+  await mkdir(generatedRoot, { recursive: true });
+  await writeFile(route, "export default { id: 'ping', method: 'GET' };\n");
+  await writeFile(client, "// generated\n");
+  await writeFile(openapi, "{}\n");
+
+  const baseline = Date.now() / 1_000;
+  await Promise.all([client, openapi].map((file) => utimes(file, baseline, baseline)));
+  await utimes(route, baseline + 0.5, baseline + 0.5);
+  const checkout = await diagnoseProject(root);
+  assert.equal(checkout.diagnostics.some(({ code }) => code === "GENERATED_ARTIFACT_STALE"), false);
+
+  await utimes(route, baseline + 2, baseline + 2);
+  const changed = await diagnoseProject(root);
+  assert.equal(changed.diagnostics.some(({ code }) => code === "GENERATED_ARTIFACT_STALE"), true);
 });
 
 test("returns actionable project, island, and security diagnostics without secrets", async (context) => {

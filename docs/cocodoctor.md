@@ -163,6 +163,10 @@ environment dumps, lockfile credentials, or unrelated application data.
 Doctor caps output at 1,000 diagnostics and sets `truncated: true` when the cap is
 reached.
 
+Freshness checks allow one second of filesystem timestamp tolerance so a clean
+Git checkout is not reported stale merely because files were extracted in a
+different order. A meaningful source edit still requires regeneration.
+
 ## Privacy and security
 
 Doctor does not execute application or configuration source in default mode.

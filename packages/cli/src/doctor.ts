@@ -14,6 +14,7 @@ import { buildProject, discoverStyles } from "./project.ts";
 const MAX_FILE_BYTES = 1024 * 1024;
 const MAX_DIAGNOSTICS = 1_000;
 const DEEP_TIMEOUT_MS = 60_000;
+const FRESHNESS_TOLERANCE_MS = 1_000;
 
 interface PackageManifest {
   readonly name?: string;
@@ -251,7 +252,10 @@ async function newerThan(sources: readonly string[], target: string): Promise<bo
   try {
     const targetTime = (await stat(target)).mtimeMs;
     const sourceTimes = await Promise.all(sources.map(async (file) => (await stat(file)).mtimeMs));
-    return sourceTimes.some((value) => value > targetTime);
+    // Fresh checkouts can assign source and generated files slightly different
+    // mtimes based only on extraction order. Require a meaningful difference so
+    // Doctor still catches local edits without reporting checkout-order noise.
+    return sourceTimes.some((value) => value > targetTime + FRESHNESS_TOLERANCE_MS);
   } catch {
     return true;
   }
