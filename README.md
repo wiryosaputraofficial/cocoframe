@@ -13,9 +13,10 @@ cd my-app
 npm run dev
 ```
 
-Start with the **[complete documentation index](docs/README.md)** or follow the
-**[getting-started guide](docs/getting-started.md)**. The same documentation is
-also available as a local website when this repository is running.
+Browse the **[published documentation website](https://wiryosaputraofficial.github.io/cocoframe/)**,
+open the **[complete GitHub documentation index](docs/README.md)**, or follow the
+**[getting-started guide](docs/getting-started.md)**. The application reference
+documentation is also available locally when this repository is running.
 
 ## Design goals
 
