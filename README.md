@@ -3,6 +3,20 @@
 Experimental server-first web framework focused on speed, SEO, maintainability,
 and compact APIs that are easy for developers and AI agents to understand.
 
+> **Release status:** CocoFrame is an architectural MVP in the `0.x` series.
+> Public contracts are typed and tested, but breaking changes may still be made
+> with an explicit migration note. Node.js 24 or newer is required.
+
+```bash
+npm create cocoframe@latest my-app
+cd my-app
+npm run dev
+```
+
+Start with the **[complete documentation index](docs/README.md)** or follow the
+**[getting-started guide](docs/getting-started.md)**. The same documentation is
+also available as a local website when this repository is running.
+
 ## Design goals
 
 - HTML and SEO metadata are rendered on the server by default.
@@ -13,14 +27,33 @@ and compact APIs that are easy for developers and AI agents to understand.
 
 ## Documentation
 
-- Run the example and open `/docs` for the documentation center. Focused guides live under `/docs/getting-started`, `/docs/pages`, `/docs/islands`, `/docs/forms`, `/docs/apis`, `/docs/database`, `/docs/security`, `/docs/testing`, `/docs/deployment`, and `/docs/product-design-quality`.
-- Open `/docs/api-reference` for package exports, signatures, types, deprecations, examples, and source locations generated directly from TypeScript and JSDoc.
-- Open `/components` for the complete typed UI catalog, design tokens,
-  utility classes, props, and chart variants.
-- Open `/icons` to search all 1,246 bundled Solar Linear icons and copy their
-  direct import path.
-- Open `/cocoql` for the language, schema, permissions, safety, mutations,
-  SQL dialects, and Query Plan documentation.
+| I want to... | Read |
+| --- | --- |
+| Create and understand my first application | [Getting started](docs/getting-started.md) |
+| Understand the framework boundaries | [Architecture](docs/architecture.md) and [request lifecycle](docs/request-lifecycle.md) |
+| Look up every CLI command | [CLI reference](docs/cli-reference.md) |
+| Diagnose a project or CI failure | [CocoFrame Doctor](docs/cocodoctor.md) and [troubleshooting](docs/troubleshooting.md) |
+| Configure and deploy an application | [Configuration](docs/configuration.md) and [deployment](docs/deployment.md) |
+| Follow the complete AI-assisted workflow | [Product workflow](docs/product-workflow.md) |
+| Design journeys and visual direction | [CocoUX](docs/cocoux.md) and [Product Design Quality](docs/product-design-quality.md) |
+| Use images or websites as implementation references | [CocoRef](docs/cocoref.md) |
+| Validate a release with traceable evidence | [CocoQA](docs/cocoqa.md) |
+| Query PostgreSQL safely | [CocoQL PostgreSQL](docs/cocoql-postgresql.md) |
+| Find a package and its public entry points | [Package catalog](docs/packages.md) |
+| Contribute to CocoFrame | [Contributing guide](CONTRIBUTING.md) and [security policy](SECURITY.md) |
+
+For the complete map—including recipes, compatibility, errors, generated
+artifacts, architecture decisions, and AI-agent guidance—open
+**[docs/README.md](docs/README.md)**.
+
+Run the reference site with `npm run dev`, then open:
+
+- `http://127.0.0.1:3000/docs` for the searchable documentation center;
+- `http://127.0.0.1:3000/docs/api-reference` for generated package exports,
+  signatures, types, examples, and source locations;
+- `http://127.0.0.1:3000/components` for the typed UI catalog;
+- `http://127.0.0.1:3000/icons` for all 1,246 Solar Linear icons;
+- `http://127.0.0.1:3000/cocoql` for the CocoQL language center.
 
 ## Page example
 

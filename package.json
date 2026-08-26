@@ -9,7 +9,8 @@
   ],
   "scripts": {
     "check": "tsc --noEmit && npm run docs:check",
-    "docs:check": "node scripts/public-docs.ts && node scripts/api-reference.ts --check",
+    "docs:check": "node scripts/public-docs.ts && node scripts/api-reference.ts --check && node scripts/check-markdown-links.mjs",
+    "docs:links": "node scripts/check-markdown-links.mjs",
     "docs:write": "node scripts/public-docs.ts --write && node scripts/api-reference.ts",
     "docs:api": "node scripts/api-reference.ts",
     "test:e2e": "playwright test",

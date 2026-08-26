@@ -211,6 +211,15 @@ manual for the entire framework.
 
 The next useful companion documents are:
 
+- `docs/README.md`: complete human documentation map and learning paths.
+- `docs/getting-started.md`: first application, structure, generation, and production loop.
+- `docs/cli-reference.md`: complete executable command and environment reference.
+- `docs/configuration.md`: typed application, security, health, and runtime configuration.
+- `docs/deployment.md`: production artifact, proxy, health, shutdown, migration, and release contract.
+- `docs/troubleshooting.md`: deterministic failure routing and sanitized support evidence.
+- `docs/product-workflow.md`: end-to-end approval boundaries from brief through CocoQA.
+- `docs/cocodoctor.md`: Doctor modes, checks, JSON contract, codes, privacy, and CI use.
+- `docs/packages.md`: package ownership, published versions, and task-based selection.
 - `docs/cocospecs.md`: adaptive discovery, generated product artifacts, and the approval lifecycle.
 - `docs/cocoref.md`: visual-reference audit, candidate consent, preview, revision, promotion, and cleanup.
 - `docs/cocoqa.md`: adaptive quality decisions, traceable coverage, gate execution, defects, evidence, and release approval.

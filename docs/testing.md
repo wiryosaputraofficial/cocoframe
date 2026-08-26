@@ -12,6 +12,7 @@ required by `AGENTS.md` before handoff.
 | Project inspection | `npm run inspect` | Validates the discoverable route, API, middleware, UI, icon, and asset surface of `examples/basic`. |
 | Generation | `npm run generate` | Rebuilds contract client, OpenAPI, and CSS declarations from source. |
 | Documentation API generation | `npm run docs:api` | Rebuilds the checked-in package/export/signature reference rendered at `/docs/api-reference`. |
+| Markdown links | `npm run docs:links` | Verifies that repository-local Markdown link targets exist. |
 | Production build | `npm run build` | Produces the reference application's production server and hashed assets. |
 | Browser E2E | `npm run test:e2e` | Development Chromium, production Chromium/Firefox/WebKit, and five responsive Chromium viewports. |
 | Package smoke | `npm run packages:smoke` | Builds, packs, and exercises publishable package artifacts. |

@@ -115,6 +115,15 @@ export async function createRepositoryContext(repositoryRoot = defaultRoot): Pro
 
   const documentCandidates = [
     "AGENTS.md",
+    "docs/README.md",
+    "docs/getting-started.md",
+    "docs/cli-reference.md",
+    "docs/configuration.md",
+    "docs/deployment.md",
+    "docs/troubleshooting.md",
+    "docs/packages.md",
+    "docs/product-workflow.md",
+    "docs/cocodoctor.md",
     "docs/ai-context.md",
     "docs/agent-bridge.md",
     "docs/architecture.md",

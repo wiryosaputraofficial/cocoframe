@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="{{ site.lang | default: 'en' }}">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#fffaf2">
+    {% seo %}
+    <link rel="icon" type="image/png" href="{{ '/assets/brand/cocoframe-icon-transparent.png' | relative_url }}">
+    <link rel="stylesheet" href="{{ '/assets/css/style.css' | relative_url }}">
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="{{ '/' | relative_url }}" aria-label="CocoFrame documentation home">
+          <img src="{{ '/assets/brand/cocoframe-logo-horizontal.png' | relative_url }}" alt="CocoFrame">
+        </a>
+        <nav aria-label="Primary navigation">
+          <a href="{{ '/getting-started/' | relative_url }}">Get started</a>
+          <a href="{{ '/product-workflow/' | relative_url }}">Workflow</a>
+          <a href="{{ '/cli-reference/' | relative_url }}">CLI</a>
+          <a href="{{ '/cocodoctor/' | relative_url }}">Doctor</a>
+          <a href="{{ '/cocoql-postgresql/' | relative_url }}">PostgreSQL</a>
+          <a href="https://github.com/{{ site.repository }}">GitHub</a>
+        </nav>
+      </div>
+    </header>
+    <main id="content" class="page-shell">
+      <article class="documentation">
+        {{ content }}
+      </article>
+      <aside class="page-aside" aria-label="Documentation shortcuts">
+        <strong>Documentation</strong>
+        <a href="{{ '/' | relative_url }}">All guides</a>
+        <a href="{{ '/architecture/' | relative_url }}">Architecture</a>
+        <a href="{{ '/configuration/' | relative_url }}">Configuration</a>
+        <a href="{{ '/deployment/' | relative_url }}">Deployment</a>
+        <a href="{{ '/troubleshooting/' | relative_url }}">Troubleshooting</a>
+        <a href="{{ '/packages/' | relative_url }}">Packages</a>
+        <a href="{{ '/testing/' | relative_url }}">Testing</a>
+      </aside>
+    </main>
+    <footer class="site-footer">
+      <p>CocoFrame is an experimental server-first TypeScript framework.</p>
+      <p><a href="https://github.com/{{ site.repository }}/blob/main/LICENSE">GPL-3.0-only</a> · <a href="https://github.com/{{ site.repository }}/issues">Issues</a> · <a href="https://www.npmjs.com/org/cocoframe">npm packages</a></p>
+    </footer>
+  </body>
+</html>

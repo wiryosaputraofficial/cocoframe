@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://wiryosaputraofficial.github.io/cocoframe/sitemap.xml

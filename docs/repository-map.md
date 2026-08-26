@@ -91,13 +91,20 @@ changing any symbol.
 
 ## Documentation ownership
 
+- GitHub documentation index and Pages source: `docs/README.md`, `docs/index.md`,
+  and `docs/_config.yml`.
+- Developer onboarding, CLI, configuration, deployment, troubleshooting, and
+  package selection: their focused Markdown guides under `docs/`.
+- Product-to-release sequencing and approval boundaries:
+  `docs/product-workflow.md`.
+- CocoFrame Doctor contract and diagnostics: `docs/cocodoctor.md`.
 - System-wide invariants: `docs/architecture.md`.
 - AI reading and change protocol: `docs/ai-context.md`.
 - Request behavior: `docs/request-lifecycle.md`.
 - Derived files: `docs/generated-artifacts.md`.
 - Test selection: `docs/testing.md`.
 - CocoQL language and safety contracts: `docs/cocoql-*.md`.
-- Public documentation center: `examples/basic/app/routes/docs.page.tsx`, `app/routes/docs/[topic].page.tsx`, and `app/components/docs-topics.tsx`.
+- Public application documentation center: `examples/basic/app/routes/docs.page.tsx`, `app/routes/docs/[topic].page.tsx`, and `app/components/docs-topics.tsx`.
 - Generated package API reference: `scripts/api-reference.ts` → `examples/basic/app/generated/api-reference.ts` → live `/docs/api-reference`.
 - The original `/docs` complete guide and anchors remain compatible while focused `/docs/<topic>` pages provide smaller human and AI context.
 - UI and icon public examples: live `/components` and `/icons`, backed by their corresponding example routes and islands.

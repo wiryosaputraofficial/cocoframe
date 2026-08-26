@@ -3,3 +3,5 @@ dist/
 .cocoframe/
 coverage/
 *.log
+docs/_site/
+docs/.jekyll-cache/
