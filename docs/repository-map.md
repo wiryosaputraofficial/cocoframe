@@ -91,8 +91,9 @@ changing any symbol.
 
 ## Documentation ownership
 
-- GitHub documentation index and Pages source: `docs/README.md`, `docs/index.md`,
-  and `docs/_config.yml`.
+- GitHub documentation index and Pages source: `docs/README.md` and
+  `docs/_config.yml`; GitHub Pages' `jekyll-readme-index` plugin publishes the
+  same README as the site homepage.
 - Developer onboarding, CLI, configuration, deployment, troubleshooting, and
   package selection: their focused Markdown guides under `docs/`.
 - Product-to-release sequencing and approval boundaries:
