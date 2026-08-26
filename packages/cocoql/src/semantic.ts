@@ -1,4 +1,4 @@
-import type { CocoQLAggregate, CocoQLFilter, CocoQLQuery, CocoQLScalar } from "./ast.ts";
+import type { CocoQLAggregate, CocoQLFilter, CocoQLParameter, CocoQLQuery, CocoQLScalar } from "./ast.ts";
 import { cocoQLError, type CocoQLIssuePath, type CocoQLSourceLocation } from "./errors.ts";
 import type { CocoQLEntitySchema, CocoQLFieldSchema, CocoQLRelationSchema, CocoQLSchema } from "./schema.ts";
 import { getCocoQLSourceMap } from "./source-map.ts";
@@ -184,8 +184,20 @@ export function validateCocoQLFilterValue(entity: string, filter: CocoQLFilter, 
     return;
   }
   const values = filter.value.kind === "list" ? filter.value.values : [filter.value.value];
-  if ((filter.operator === "in" || filter.operator === "not in") !== (filter.value.kind === "list")) {
+  const acceptsList = filter.operator === "in" || filter.operator === "not in" || filter.operator === "contains" || filter.operator === "contained_by" || filter.operator === "overlaps";
+  if ((filter.operator === "in" || filter.operator === "not in") && filter.value.kind !== "list") {
     cocoQLError({ error: "INVALID_VALUE", stage: "semantic", entity, field: filter.field, message: `Operator '${filter.operator}' has an invalid value shape.`, ...target });
+  }
+  if (filter.value.kind === "list" && !acceptsList) cocoQLError({ error: "INVALID_VALUE", stage: "semantic", entity, field: filter.field, message: `Operator '${filter.operator}' does not accept a list value.`, ...target });
+  validateOperatorForField(entity, filter, field, target);
+  if (filter.operator === "has_key") {
+    if (filter.value.kind !== "scalar" || typeof filter.value.value !== "string") cocoQLError({ error: "INVALID_VALUE", stage: "semantic", entity, field: filter.field, message: "Operator 'has_key' requires one string key.", ...target });
+    return;
+  }
+  if (isArrayType(field.type) && (filter.operator === "contains" || filter.operator === "contained_by" || filter.operator === "overlaps")) {
+    const arrayType = field.type;
+    if (filter.value.kind !== "list" || !filter.value.values.every((value) => valueMatchesArrayItem(value, arrayType))) cocoQLError({ error: "INVALID_VALUE", stage: "semantic", entity, field: filter.field, message: `Operator '${filter.operator}' requires a compatible array value.`, ...target });
+    return;
   }
   for (const value of values) {
     if (!valueMatchesField(value, field)) cocoQLError({ error: "INVALID_VALUE", stage: "semantic", entity, field: filter.field, message: `Value ${JSON.stringify(value)} is invalid for ${entity}.${filter.field} (${field.type}).`, ...target });
@@ -193,6 +205,27 @@ export function validateCocoQLFilterValue(entity: string, filter: CocoQLFilter, 
       cocoQLError({ error: "INVALID_VALUE", stage: "semantic", entity, field: filter.field, message: `Value '${value}' is not allowed for ${entity}.${filter.field}.`, suggestions: field.values, ...target });
     }
   }
+}
+
+export function validateCocoQLAssignmentValue(entity: string, fieldName: string, value: CocoQLParameter, field: CocoQLFieldSchema, target: CocoQLDiagnosticTarget = {}): void {
+  if (Array.isArray(value)) {
+    const type = field.type;
+    if (!isArrayType(type) || value.length === 0 || !value.every((item) => valueMatchesArrayItem(item, type))) {
+      cocoQLError({ error: "INVALID_VALUE", stage: "semantic", entity, field: fieldName, message: `Array assignment is invalid for ${entity}.${fieldName} (${field.type}).`, ...target });
+    }
+    return;
+  }
+  if (!valueMatchesField(value as CocoQLScalar, field)) cocoQLError({ error: "INVALID_VALUE", stage: "semantic", entity, field: fieldName, message: `Value is invalid for ${entity}.${fieldName} (${field.type}).`, ...target });
+  if (field.type === "enum" && typeof value === "string" && field.values && !field.values.includes(value)) cocoQLError({ error: "INVALID_VALUE", stage: "semantic", entity, field: fieldName, message: `Value '${value}' is not allowed for ${entity}.${fieldName}.`, suggestions: field.values, ...target });
+}
+
+function validateOperatorForField(entity: string, filter: CocoQLFilter, field: CocoQLFieldSchema, target: CocoQLDiagnosticTarget): void {
+  const stringOnly = new Set(["starts_with", "ends_with", "ilike", "not ilike", "matches"]);
+  if (stringOnly.has(filter.operator) && field.type !== "string") cocoQLError({ error: "INVALID_VALUE", stage: "semantic", entity, field: filter.field, message: `Operator '${filter.operator}' requires a string field.`, ...target });
+  if (filter.operator === "has_key" && field.type !== "jsonb") cocoQLError({ error: "INVALID_VALUE", stage: "semantic", entity, field: filter.field, message: "Operator 'has_key' requires a jsonb field.", ...target });
+  if (filter.operator === "overlaps" && !isArrayType(field.type)) cocoQLError({ error: "INVALID_VALUE", stage: "semantic", entity, field: filter.field, message: "Operator 'overlaps' requires an array field.", ...target });
+  if (filter.operator === "contained_by" && !isArrayType(field.type) && field.type !== "jsonb") cocoQLError({ error: "INVALID_VALUE", stage: "semantic", entity, field: filter.field, message: "Operator 'contained_by' requires an array or jsonb field.", ...target });
+  if (filter.operator === "contains" && field.type !== "string" && field.type !== "json" && field.type !== "jsonb" && !isArrayType(field.type)) cocoQLError({ error: "INVALID_VALUE", stage: "semantic", entity, field: filter.field, message: "Operator 'contains' requires string, json, jsonb, or array data.", ...target });
 }
 
 function invalidSchema(message: string): never {
@@ -211,7 +244,22 @@ function valueMatchesField(value: CocoQLScalar, field: CocoQLFieldSchema): boole
   if (value === null) return field.nullable === true;
   if (field.type === "number" || field.type === "money") return typeof value === "number";
   if (field.type === "boolean") return typeof value === "boolean";
+  if (field.type === "uuid") return typeof value === "string" && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
+  if (field.type === "json" || field.type === "jsonb") {
+    if (typeof value !== "string") return false;
+    try { JSON.parse(value); return true; } catch { return false; }
+  }
+  if (isArrayType(field.type)) return false;
   return typeof value === "string" || (field.type === "id" && typeof value === "number");
+}
+
+function isArrayType(type: CocoQLFieldSchema["type"]): type is "string_array" | "number_array" | "boolean_array" | "uuid_array" { return type.endsWith("_array"); }
+function valueMatchesArrayItem(value: CocoQLScalar, type: "string_array" | "number_array" | "boolean_array" | "uuid_array"): boolean {
+  if (value === null) return false;
+  if (type === "number_array") return typeof value === "number";
+  if (type === "boolean_array") return typeof value === "boolean";
+  if (type === "uuid_array") return typeof value === "string" && /^[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value);
+  return typeof value === "string";
 }
 
 function suggestions(input: string, candidates: readonly string[]): readonly string[] {

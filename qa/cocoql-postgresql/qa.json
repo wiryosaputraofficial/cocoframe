@@ -1,0 +1,281 @@
+{
+  "version": 1,
+  "feature": {
+    "id": "cocoql-postgresql",
+    "title": "CocoQL PostgreSQL Production Integration"
+  },
+  "mode": "standard",
+  "state": "approved",
+  "sources": [
+    {
+      "kind": "cocospec",
+      "id": "cocoql-postgresql",
+      "file": "specs/cocoql-postgresql/spec.json",
+      "state": "approved"
+    }
+  ],
+  "answers": {
+    "target-environments": {
+      "status": "answered",
+      "value": [
+        "local",
+        "CI PostgreSQL 14",
+        "CI PostgreSQL 15",
+        "CI PostgreSQL 16",
+        "CI PostgreSQL 17",
+        "CI PostgreSQL 18"
+      ],
+      "updatedAt": "2026-08-26T03:00:42.774Z"
+    },
+    "browsers-devices": {
+      "status": "answered",
+      "value": [
+        "Chromium",
+        "Firefox",
+        "WebKit",
+        "responsive 320px-4K"
+      ],
+      "updatedAt": "2026-08-26T03:00:43.110Z"
+    },
+    "test-data": {
+      "status": "answered",
+      "value": "Synthetic records only in a randomized isolated PostgreSQL schema; no credentials or production personal data; cleanup drops only that generated schema.",
+      "updatedAt": "2026-08-26T03:00:43.460Z"
+    },
+    "release-blockers": {
+      "status": "answered",
+      "value": [
+        "Any required gate failure",
+        "Any critical or high defect",
+        "Migration drift or missing history",
+        "Security or authorization failure",
+        "PostgreSQL integration failure",
+        "No waivers for required coverage"
+      ],
+      "updatedAt": "2026-08-26T03:00:43.800Z"
+    },
+    "accessibility-target": {
+      "status": "answered",
+      "value": "WCAG 2.2 AA for public documentation; verify keyboard-only operation, visible focus, accessible names, 200% text zoom, forced colors, and no horizontal overflow from 320px through 4K.",
+      "updatedAt": "2026-08-26T03:50:10.689Z"
+    },
+    "security-abuse": {
+      "status": "answered",
+      "value": [
+        "Malformed CocoQL",
+        "Unauthorized entities fields relations and mutation outputs",
+        "Unsafe limits and unconfirmed writes",
+        "Preview and forged plans",
+        "SQL injection attempts",
+        "Source and result limit abuse",
+        "Abort and timeout behavior",
+        "Sanitized telemetry and errors",
+        "Migration drift and missing history"
+      ],
+      "updatedAt": "2026-08-26T03:50:11.027Z"
+    }
+  },
+  "cases": [
+    {
+      "id": "acceptance-1",
+      "title": "Given valid CocoQL reads, when executed against real PostgreSQL 14, 15, 16, 17, and 18, then filters, explicit nested joins, aggregation, semantic UTC dates, sorting, pagination, null semantics, and typed results behave deterministically.",
+      "category": "functional",
+      "source": "cocospec:acceptance-1",
+      "required": true,
+      "status": "passed",
+      "evidence": "Real integration suite passed on isolated synthetic schemas against PostgreSQL 14.24, 15.19, 16.15, 17.11, and 18.6; deterministic reads, joins, aggregation, UTC dates, sorting, pagination, and null handling also passed compiler/unit coverage.",
+      "updatedAt": "2026-08-26T03:58:18.692Z"
+    },
+    {
+      "id": "acceptance-2",
+      "title": "Given authorized create, update, or delete CocoQL, when executed, then it runs transactionally and rolls back before commit when actual affected rows exceed the confirmed maximum.",
+      "category": "functional",
+      "source": "cocospec:acceptance-2",
+      "required": true,
+      "status": "passed",
+      "evidence": "Unit and real PostgreSQL integration coverage passed for transactional create/update/delete, affected-row guard rollback, RETURNING, and unchanged rows after rejected commits.",
+      "updatedAt": "2026-08-26T03:58:19.034Z"
+    },
+    {
+      "id": "acceptance-3",
+      "title": "Given preview, invalid, unauthorized, unsafe, or forged input, when processed, then no database mutation occurs and no database connection is acquired.",
+      "category": "functional",
+      "source": "cocospec:acceptance-3",
+      "required": true,
+      "status": "passed",
+      "evidence": "Managed-executor negative tests passed with acquisition counters at zero for preview, malformed, unauthorized, unsafe, and forged inputs.",
+      "updatedAt": "2026-08-26T03:58:19.396Z"
+    },
+    {
+      "id": "acceptance-4",
+      "title": "Given PostgreSQL values, when SQL is compiled or executed, then values remain separate numbered parameters and identifiers come only from the trusted schema.",
+      "category": "functional",
+      "source": "cocospec:acceptance-4",
+      "required": true,
+      "status": "passed",
+      "evidence": "Compiler and integration tests passed for numbered PostgreSQL parameters, schema-owned identifiers, native casts, and SQL-injection-shaped values remaining out of SQL text.",
+      "updatedAt": "2026-08-26T03:58:19.740Z"
+    },
+    {
+      "id": "acceptance-5",
+      "title": "Given cancellation, timeout, query failure, commit failure, or guard failure, when execution ends, then the transaction state is safe and the pooled client is released exactly once.",
+      "category": "functional",
+      "source": "cocospec:acceptance-5",
+      "required": true,
+      "status": "passed",
+      "evidence": "Unit and PostgreSQL 14-18 integration tests passed for statement timeout, AbortSignal cancellation, retryable query/commit failures, indeterminate commit handling, rollback, single release/destroy, and pool recovery.",
+      "updatedAt": "2026-08-26T03:58:20.098Z"
+    },
+    {
+      "id": "acceptance-6",
+      "title": "Given supported native PostgreSQL fields and operations, when modeled in CocoQL, then UUID, JSONB, arrays, enums, conflict handling, returning rows, and PostgreSQL search operators compile and execute through explicit typed APIs.",
+      "category": "functional",
+      "source": "cocospec:acceptance-6",
+      "required": true,
+      "status": "passed",
+      "evidence": "PostgreSQL 14-18 integration passed for UUID, JSONB, arrays, enums, full-text search, ON CONFLICT, and RETURNING through typed APIs.",
+      "updatedAt": "2026-08-26T03:58:20.433Z"
+    },
+    {
+      "id": "acceptance-7",
+      "title": "Given advanced reads, when represented by the approved language contract, then grouped boolean filters, HAVING, DISTINCT, CTE or subquery boundaries, cursor pagination, and row locking are validated and safely compiled.",
+      "category": "functional",
+      "source": "cocospec:acceptance-7",
+      "required": true,
+      "status": "passed",
+      "evidence": "Compiler and real integration coverage passed for grouped predicates, HAVING aggregate expressions, DISTINCT, schema-preserving CTEs, unique cursors, and row locks.",
+      "updatedAt": "2026-08-26T03:58:20.767Z"
+    },
+    {
+      "id": "acceptance-8",
+      "title": "Given concurrent production migrations, when multiple instances start, then one advisory-locked migration sequence applies immutable checksummed migrations and drift is rejected.",
+      "category": "functional",
+      "source": "cocospec:acceptance-8",
+      "required": true,
+      "status": "passed",
+      "evidence": "Concurrent migration calls passed against PostgreSQL 14-18 with advisory locking; idempotence, missing history, checksum drift rejection, metadata, and legacy baseline tests passed.",
+      "updatedAt": "2026-08-26T03:58:21.124Z"
+    },
+    {
+      "id": "acceptance-9",
+      "title": "Given execution telemetry or an error, when exposed to applications or AI, then it is typed, bounded, sanitized, and does not reveal credentials or sensitive parameter values.",
+      "category": "functional",
+      "source": "cocospec:acceptance-9",
+      "required": true,
+      "status": "passed",
+      "evidence": "Telemetry and typed-error tests passed with bounded metadata and assertions that SQL, parameters, credentials, request source, authorization data, and sensitive values are absent.",
+      "updatedAt": "2026-08-26T03:58:21.453Z"
+    },
+    {
+      "id": "acceptance-10",
+      "title": "Given the official pg driver and PostgreSQL 14 through 18, when CI and packed-package smoke tests run, then read, mutation, transaction, migration, cancellation, and compatibility suites pass without MySQL regressions.",
+      "category": "functional",
+      "source": "cocospec:acceptance-10",
+      "required": true,
+      "status": "passed",
+      "evidence": "Official pg-driver suite passed locally on PostgreSQL 14-18; full repository tests passed 190 with 1 environment-conditional skip, and all 24 packed package/template smoke checks passed without MySQL regression.",
+      "updatedAt": "2026-08-26T03:58:21.788Z"
+    },
+    {
+      "id": "framework-server-first",
+      "title": "Useful server-rendered output exists without browser JavaScript.",
+      "category": "compatibility",
+      "source": "cocoframe:server-first",
+      "required": true,
+      "status": "passed",
+      "evidence": "Production build and E2E checks passed; changed CocoQL documentation renders useful server HTML without requiring browser JavaScript.",
+      "updatedAt": "2026-08-26T03:58:22.153Z"
+    },
+    {
+      "id": "framework-accessibility",
+      "title": "Keyboard, focus, labels, errors, and semantic structure satisfy the approved accessibility target.",
+      "category": "accessibility",
+      "source": "cocoframe:accessibility",
+      "required": true,
+      "status": "passed",
+      "evidence": "Chromium, Firefox, and WebKit E2E coverage passed for semantic content, keyboard behavior, focus, accessible names, 200 percent zoom, forced-colors handling, and responsive documentation expectations.",
+      "updatedAt": "2026-08-26T03:58:22.496Z"
+    },
+    {
+      "id": "framework-target-reachability",
+      "title": "Every changed internal link, CTA, route, anchor, and API target returns successful content or an intentional redirect; external targets have sanitized provider evidence.",
+      "category": "functional",
+      "source": "cocoframe:target-reachability",
+      "required": true,
+      "status": "passed",
+      "evidence": "Inspect, build, and multi-browser E2E checks passed for changed documentation routes, internal links, anchors, and API/package references.",
+      "updatedAt": "2026-08-26T03:58:22.830Z"
+    },
+    {
+      "id": "framework-interaction-integrity",
+      "title": "Every changed link and control has an accessible name, keyboard behavior, visible focus, and an action matching its label.",
+      "category": "accessibility",
+      "source": "cocoframe:interaction-integrity",
+      "required": true,
+      "status": "passed",
+      "evidence": "Multi-browser E2E checks passed for accessible names, keyboard activation, visible focus, and link/control action integrity on changed documentation surfaces.",
+      "updatedAt": "2026-08-26T03:58:23.186Z"
+    },
+    {
+      "id": "framework-responsive",
+      "title": "The feature remains usable across the approved viewport and device range without horizontal overflow.",
+      "category": "responsive",
+      "source": "cocoframe:responsive",
+      "required": true,
+      "status": "passed",
+      "evidence": "Chromium, Firefox, and WebKit responsive E2E checks passed from 320px through 4K with no horizontal overflow; 28 tests passed and 4 capability-specific skips were expected.",
+      "updatedAt": "2026-08-26T03:58:23.535Z"
+    }
+  ],
+  "gates": [
+    {
+      "id": "check",
+      "script": "check",
+      "required": true,
+      "status": "passed",
+      "durationMs": 9625,
+      "exitCode": 0,
+      "updatedAt": "2026-08-26T03:50:34.528Z"
+    },
+    {
+      "id": "test",
+      "script": "test",
+      "required": true,
+      "status": "passed",
+      "durationMs": 28132,
+      "exitCode": 0,
+      "updatedAt": "2026-08-26T03:51:02.665Z"
+    },
+    {
+      "id": "inspect",
+      "script": "inspect",
+      "required": true,
+      "status": "passed",
+      "durationMs": 621,
+      "exitCode": 0,
+      "updatedAt": "2026-08-26T03:51:03.292Z"
+    },
+    {
+      "id": "build",
+      "script": "build",
+      "required": true,
+      "status": "passed",
+      "durationMs": 588,
+      "exitCode": 0,
+      "updatedAt": "2026-08-26T03:51:03.884Z"
+    },
+    {
+      "id": "test-e2e",
+      "script": "test:e2e",
+      "required": true,
+      "status": "passed",
+      "durationMs": 112809,
+      "exitCode": 0,
+      "updatedAt": "2026-08-26T03:52:56.696Z"
+    }
+  ],
+  "defects": [],
+  "createdAt": "2026-08-26T03:00:02.585Z",
+  "updatedAt": "2026-08-26T03:58:35.787Z",
+  "approvedAt": "2026-08-26T03:58:35.787Z"
+}

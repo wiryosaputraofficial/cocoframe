@@ -1,4 +1,4 @@
-import type { CocoQLScalar } from "../ast.ts";
+import type { CocoQLParameter, CocoQLScalar } from "../ast.ts";
 import { cocoQLError } from "../errors.ts";
 import { validateCocoQLMutationPlan, type CocoQLMutationPlan } from "../mutation.ts";
 import type { CocoQLPlanFilter } from "../plan.ts";
@@ -8,7 +8,7 @@ export interface CompiledCocoQLMutation {
   readonly dialect: "mysql";
   readonly operation: "create" | "update" | "delete";
   readonly sql: string;
-  readonly parameters: readonly CocoQLScalar[];
+  readonly parameters: readonly CocoQLParameter[];
   readonly guard: {
     readonly maxAffectedRows: number;
     readonly verifyBeforeCommit: true;
@@ -21,7 +21,7 @@ export function compileCocoQLMutationToMySql(plan: CocoQLMutationPlan, schema: C
   if (plan.preview) cocoQLError({ error: "PREVIEW_REQUIRED", stage: "compiler", operation: plan.operation, message: "Preview plans cannot be compiled into write SQL.", path: ["preview"] });
   if (!plan.confirmation) cocoQLError({ error: "SAFETY_VIOLATION", stage: "compiler", operation: plan.operation, rule: "mutation.requireConfirmation", message: "Write SQL requires an affected-row confirmation.", path: ["confirmation"] });
   const entity = schema.entities[plan.rootEntity]!;
-  const parameters: CocoQLScalar[] = [];
+  const parameters: CocoQLParameter[] = [];
   let sql: string;
   if (plan.operation === "create") {
     const columns = plan.changes.map((change) => quoteIdentifier(columnFor(entity, change.field.field))).join(", ");
@@ -33,7 +33,7 @@ export function compileCocoQLMutationToMySql(plan: CocoQLMutationPlan, schema: C
         parameters.push(change.value);
         return `${quoteIdentifier(columnFor(entity, change.field.field))} = ?`;
       });
-      const filterParameters: CocoQLScalar[] = [];
+      const filterParameters: CocoQLParameter[] = [];
       const predicate = plan.filters.map((filter) => compileFilter(filter, schema, filterParameters)).join("\n  AND ");
       parameters.push(...filterParameters);
       sql = `UPDATE ${quoteIdentifier(entity.table)}\nSET ${assignments.join(",\n  ")}\nWHERE ${predicate};`;
@@ -48,8 +48,13 @@ export function compileCocoQLMutationToMySql(plan: CocoQLMutationPlan, schema: C
   });
 }
 
-function compileFilter(filter: CocoQLPlanFilter, schema: CocoQLSchema, parameters: CocoQLScalar[]): string {
+function compileFilter(filter: CocoQLPlanFilter, schema: CocoQLSchema, parameters: CocoQLParameter[]): string {
   const entity = schema.entities[filter.field.entity]!;
+  const fieldSchema = entity.fields[filter.field.field]!;
+  if (filter.operator === "ilike" || filter.operator === "not ilike" || filter.operator === "has_key" || filter.operator === "overlaps" || filter.operator === "contained_by" || filter.operator === "matches"
+    || (filter.operator === "contains" && (fieldSchema.type === "json" || fieldSchema.type === "jsonb" || fieldSchema.type.endsWith("_array")))) {
+    invalidSchema(`Operator '${filter.operator}' on '${filter.field.entity}.${filter.field.field}' is available only in the PostgreSQL dialect.`);
+  }
   const field = quoteIdentifier(columnFor(entity, filter.field.field));
   if (filter.value.kind === "date-range") {
     const type = entity.fields[filter.field.field]!.type;
@@ -80,3 +85,4 @@ function compileFilter(filter: CocoQLPlanFilter, schema: CocoQLSchema, parameter
 function formatDate(value: string, fieldType: string): string { return fieldType === "date" ? value.slice(0, 10) : value.slice(0, 23).replace("T", " "); }
 function columnFor(entity: CocoQLEntitySchema, field: string): string { return entity.fields[field]!.column ?? field; }
 function quoteIdentifier(identifier: string): string { return `\`${identifier.replaceAll("`", "``")}\``; }
+function invalidSchema(message: string): never { return cocoQLError({ error: "INVALID_SCHEMA", stage: "compiler", message }); }

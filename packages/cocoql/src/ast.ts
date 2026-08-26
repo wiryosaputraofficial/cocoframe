@@ -4,6 +4,7 @@
 export const COCOQL_VERSION = "0.1" as const;
 
 export type CocoQLScalar = string | number | boolean | null;
+export type CocoQLParameter = CocoQLScalar | readonly CocoQLScalar[];
 export type CocoQLNamedDate =
   | "today" | "yesterday"
   | "this_week" | "last_week"
@@ -21,6 +22,7 @@ export type CocoQLFilterOperator =
   | "=" | "!=" | ">" | ">=" | "<" | "<="
   | "in" | "not in"
   | "contains" | "starts_with" | "ends_with"
+  | "ilike" | "not ilike" | "has_key" | "overlaps" | "contained_by" | "matches"
   | "before" | "after";
 
 export interface CocoQLFilter {
@@ -60,7 +62,7 @@ export type CocoQLMutationOperation = "create" | "update" | "delete";
 
 export interface CocoQLMutationAssignment {
   readonly field: string;
-  readonly value: CocoQLScalar;
+  readonly value: CocoQLParameter;
 }
 
 export interface CocoQLMutationConfirmation {

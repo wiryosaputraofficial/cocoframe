@@ -1,10 +1,10 @@
-import { COCOQL_VERSION, type CocoQLFilter, type CocoQLFilterOperator, type CocoQLMutation, type CocoQLMutationAssignment, type CocoQLMutationOperation, type CocoQLScalar, type CocoQLValue } from "./ast.ts";
+import { COCOQL_VERSION, type CocoQLFilter, type CocoQLFilterOperator, type CocoQLMutation, type CocoQLMutationAssignment, type CocoQLMutationOperation, type CocoQLParameter, type CocoQLScalar, type CocoQLValue } from "./ast.ts";
 import { cocoQLError, type CocoQLSourceLocation } from "./errors.ts";
 import { lexCocoQL, type CocoQLToken, type CocoQLTokenKind } from "./lexer.ts";
 import { registerCocoQLMutationSourceMap } from "./mutation-source-map.ts";
 import { isCocoQLNamedDate } from "./semantic-date.ts";
 
-const FILTER_WORD_OPERATORS = new Set<CocoQLFilterOperator>(["in", "contains", "starts_with", "ends_with", "before", "after"]);
+const FILTER_WORD_OPERATORS = new Set<CocoQLFilterOperator>(["in", "contains", "starts_with", "ends_with", "before", "after", "ilike", "has_key", "overlaps", "contained_by", "matches"]);
 
 /** Parses the intentionally small CocoQL 0.1 mutation grammar. */
 export function parseCocoQLMutation(source: string): CocoQLMutation {
@@ -107,7 +107,7 @@ function parseAssignments(cursor: Cursor, changes: CocoQLMutationAssignment[], l
     const field = cursor.fieldReference();
     const operator = cursor.expect("operator", "Assignments require '='.");
     if (operator.value !== "=") cursor.fail("Assignments require '='.", operator);
-    changes.push({ field: field.value, value: parseScalar(cursor) });
+    changes.push({ field: field.value, value: parseParameter(cursor) });
     locations.push(field.location);
     cursor.expectLineEnd();
     cursor.skipNewlines();
@@ -118,9 +118,10 @@ function parseOperator(cursor: Cursor): CocoQLFilterOperator {
   if (cursor.at("operator")) return cursor.take().value as CocoQLFilterOperator;
   const token = cursor.expect("word", "Expected a filter operator.");
   if (token.value === "not") {
-    const next = cursor.expect("word", "Expected 'in' after 'not'.");
+    const next = cursor.expect("word", "Expected 'in' or 'ilike' after 'not'.");
     if (next.value === "in") return "not in";
-    cursor.fail("Only 'not in' is a valid compound operator.", next);
+    if (next.value === "ilike") return "not ilike";
+    cursor.fail("Only 'not in' and 'not ilike' are valid compound operators.", next);
   }
   if (FILTER_WORD_OPERATORS.has(token.value as CocoQLFilterOperator)) return token.value as CocoQLFilterOperator;
   return cursor.fail(`Unknown filter operator '${token.value}'.`, token);
@@ -140,7 +141,7 @@ function parseValue(cursor: Cursor, operator: CocoQLFilterOperator): CocoQLValue
       return { kind: "semantic-date", expression: { kind: "relative", direction: token.value, amount, unit: "days" } };
     }
   }
-  if (operator === "in" || operator === "not in") {
+  if (operator === "in" || operator === "not in" || ((operator === "contains" || operator === "contained_by" || operator === "overlaps") && cursor.at("left-bracket"))) {
     cursor.expect("left-bracket", `Operator '${operator}' requires a list.`);
     const values: CocoQLScalar[] = [];
     while (!cursor.at("right-bracket")) { values.push(parseScalar(cursor)); if (!cursor.at("comma")) break; cursor.take(); }
@@ -149,6 +150,20 @@ function parseValue(cursor: Cursor, operator: CocoQLFilterOperator): CocoQLValue
     return { kind: "list", values };
   }
   return { kind: "scalar", value: parseScalar(cursor) };
+}
+
+function parseParameter(cursor: Cursor): CocoQLParameter {
+  if (!cursor.at("left-bracket")) return parseScalar(cursor);
+  cursor.take();
+  const values: CocoQLScalar[] = [];
+  while (!cursor.at("right-bracket")) {
+    values.push(parseScalar(cursor));
+    if (!cursor.at("comma")) break;
+    cursor.take();
+  }
+  cursor.expect("right-bracket", "Expected ']' after the assignment list.");
+  if (values.length === 0) return cursor.fail("Assignment lists cannot be empty.");
+  return Object.freeze(values);
 }
 
 function parseScalar(cursor: Cursor): CocoQLScalar {

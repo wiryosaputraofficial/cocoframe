@@ -32,3 +32,10 @@ manifests, and test-only helpers are internal.
 
 Before handoff, use `.cocoframe/context.json` to review public symbols and
 downstream outputs, then run the verification selected in `docs/testing.md`.
+
+## PostgreSQL
+
+`@cocoframe/database-postgres` supports PostgreSQL server majors 14 through 18.
+Every supported major runs the real-driver integration suite in CI. A server
+major is removed only after it leaves the upstream support window and the change
+is documented in a package release.

@@ -912,3 +912,73 @@ test("PostgreSQL compiler rejects preview and forged plans before SQL output", (
   const forgedMutation = { ...validMutation, requiresAffectedRowEstimate: false };
   assert.throws(() => compileCocoQLMutationToPostgres(forgedMutation, schema), (error: unknown) => error instanceof CocoQLError && error.issue.error === "INVALID_PLAN");
 });
+
+test("supports PostgreSQL native UUID, JSONB, arrays, case-insensitive matching, and full-text search", () => {
+  const nativeSchema = defineCocoQLSchema({
+    version: "0.1",
+    entities: {
+      articles: {
+        table: "articles",
+        fields: {
+          id: { type: "uuid" },
+          slug: { type: "string", unique: true },
+          title: { type: "string" },
+          body: { type: "string", searchConfig: "english" },
+          metadata: { type: "jsonb" },
+          tags: { type: "string_array" },
+        },
+      },
+    },
+  });
+  const result = compileCocoQLPostgres(`from articles
+filter title ilike "%postgres%"
+filter metadata has_key theme
+filter tags overlaps [database,typescript]
+filter body matches "connection pooling"
+select id,slug`, nativeSchema);
+  assert.equal(result.sql, `SELECT
+  "id",
+  "slug"
+FROM "articles"
+WHERE "title" ILIKE $1
+  AND "metadata" ? $2
+  AND "tags" && $3::text[]
+  AND to_tsvector($4::regconfig, "body") @@ websearch_to_tsquery($5::regconfig, $6);`);
+  assert.deepEqual(result.parameters, ["%postgres%", "theme", ["database", "typescript"], "english", "english", "connection pooling"]);
+  assert.throws(() => compileCocoQL(`from articles\nfilter tags overlaps [postgres]\nselect id`, nativeSchema), (error: unknown) => error instanceof CocoQLError && error.issue.error === "INVALID_SCHEMA");
+});
+
+test("compiles PostgreSQL CTE, grouped predicates, HAVING, DISTINCT, cursor pagination, and row locks", () => {
+  const cte = planCocoQL(parseCocoQL("from users\nfilter status = active\nselect id,name\nsort id asc\ntake 50"), schema);
+  const outer = planCocoQL(parseCocoQL("from users\nselect id,name\nsort id asc\ntake 10"), schema);
+  const ageFilter = planCocoQL(parseCocoQL("from users\nfilter age >= 18\nselect id"), schema).filters[0]!;
+  const nameFilter = planCocoQL(parseCocoQL("from users\nfilter name ilike \"a%\"\nselect id"), schema).filters[0]!;
+  const result = compileCocoQLToPostgres(outer, schema, {
+    distinct: true,
+    ctes: [{ name: "active_users", plan: cte }],
+    fromCte: "active_users",
+    predicate: { kind: "any", predicates: [{ kind: "condition", filter: ageFilter }, { kind: "not", predicate: { kind: "condition", filter: nameFilter } }] },
+    cursor: { field: outer.orderBy[0]!.by.kind === "field" ? outer.orderBy[0]!.by.field : outer.projection[0]!, value: 100, position: "after" },
+  });
+  assert.match(result.sql, /^WITH "active_users" AS \(/);
+  assert.match(result.sql, /FROM "active_users"/);
+  assert.match(result.sql, /\("age" >= \$3 OR NOT \("name" ILIKE \$4\)\)/);
+  assert.match(result.sql, /"user_id" > \$5/);
+  assert.deepEqual(result.parameters, ["active", 50, 18, "a%", 100, 10]);
+
+  const aggregate = planCocoQL(parseCocoQL("from users\ngroup status\nselect status,count(id) as total\nsort total desc\ntake 10"), schema);
+  const having = compileCocoQLToPostgres(aggregate, schema, { having: [{ alias: "total", operator: ">", value: 2 }] });
+  assert.match(having.sql, /HAVING COUNT\("user_id"\) > \$1/);
+  assert.deepEqual(having.parameters, [2, 10]);
+
+  const locked = compileCocoQLPostgres("from users\nfilter status = active\nselect id\nsort id asc\ntake 1", schema, { lock: { mode: "update", wait: "skip_locked" } });
+  assert.match(locked.sql, /FOR UPDATE SKIP LOCKED;$/);
+});
+
+test("validates PostgreSQL cursor and mutation output policies", () => {
+  const nonUnique = planCocoQL(parseCocoQL("from users\nselect name\nsort name asc\ntake 10"), schema);
+  assert.throws(() => compileCocoQLToPostgres(nonUnique, schema, { cursor: { field: nonUnique.projection[0]!, value: "Ada", position: "after" } }), (error: unknown) => error instanceof CocoQLError && error.issue.error === "INVALID_SCHEMA");
+
+  const permissions = defineCocoQLPermissions({ version: "0.1", entities: { orders: { fields: ["id"], create: ["status", "total"] } } });
+  assert.throws(() => compileCocoQLMutationPostgres("create orders\n  status = pending\n  total = 1\nconfirm affected <= 1", schema, permissions, safety, { returning: ["status"] }), (error: unknown) => error instanceof CocoQLError && error.issue.error === "PERMISSION_DENIED");
+});

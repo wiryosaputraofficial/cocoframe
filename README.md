@@ -386,9 +386,11 @@ timing, and structured JSON events. Custom writers can forward those events to
 the application's logging or telemetry system without coupling core to a vendor.
 
 `@cocoframe/database-postgres` accepts a structurally compatible pool, so common
-PostgreSQL drivers can be injected without becoming a framework dependency. It
-provides safe release, transaction rollback, advisory-locked migrations, and
-parameter arrays.
+PostgreSQL drivers can be injected without becoming a framework dependency. Its
+managed CocoQL executor supports PostgreSQL 14–18 with validation before
+acquisition, native types and operators, advanced reads, RETURNING/UPSERT,
+transaction guards, timeout, AbortSignal cancellation, bounded retry, result
+limits, sanitized telemetry, and advisory-locked checksum migrations.
 
 Use `npm run benchmark:http:concurrent` for the concurrent localhost baseline.
 

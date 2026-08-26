@@ -1,9 +1,9 @@
-import type { CocoQLMutation, CocoQLMutationOperation, CocoQLScalar } from "./ast.ts";
+import type { CocoQLMutation, CocoQLMutationOperation, CocoQLParameter, CocoQLScalar } from "./ast.ts";
 import { cocoQLError, type CocoQLIssuePath } from "./errors.ts";
 import { getCocoQLMutationSourceMap } from "./mutation-source-map.ts";
 import { planCocoQL, validateCocoQLPlan, type CocoQLPlanFieldRef, type CocoQLPlanFilter, type CocoQLPlanOptions } from "./plan.ts";
 import type { CocoQLSchema } from "./schema.ts";
-import { resolveCocoQLFieldPath, validateCocoQL, validateCocoQLFilterValue } from "./semantic.ts";
+import { resolveCocoQLFieldPath, validateCocoQL, validateCocoQLAssignmentValue } from "./semantic.ts";
 
 /**
  * Identifies the stable cocoql mutation plan version contract used by @cocoframe/cocoql.
@@ -12,7 +12,7 @@ export const COCOQL_MUTATION_PLAN_VERSION = "0.1" as const;
 
 export interface CocoQLPlanAssignment {
   readonly field: CocoQLPlanFieldRef;
-  readonly value: CocoQLScalar;
+  readonly value: CocoQLParameter;
 }
 
 export interface CocoQLMutationPlan {
@@ -60,7 +60,7 @@ export function validateCocoQLMutation(mutation: CocoQLMutation, schema: CocoQLS
     if (seen.has(change.field)) invalidMutation(mutation.operation, `Field '${change.field}' may be assigned only once.`, ["changes", index], target.location);
     seen.add(change.field);
     const resolved = resolveCocoQLFieldPath(mutation.entity, change.field, schema, target);
-    validateCocoQLFilterValue(resolved.entity, { field: change.field, operator: "=", value: { kind: "scalar", value: change.value } }, resolved.schema, target);
+    validateCocoQLAssignmentValue(resolved.entity, change.field, change.value, resolved.schema, target);
   }
   return mutation;
 }
@@ -112,8 +112,8 @@ export function validateCocoQLMutationPlan(plan: CocoQLMutationPlan, schema: Coc
   if (plan.requiresAffectedRowEstimate !== (plan.operation !== "create")) invalidPlan("Mutation estimate flag does not match its operation.", ["requiresAffectedRowEstimate"]);
   for (const [index, change] of plan.changes.entries()) {
     if (!change || typeof change !== "object" || !change.field || change.field.entity !== plan.rootEntity || change.field.relationPath !== null
-      || !Object.hasOwn(entity.fields, change.field.field) || !isScalar(change.value)) invalidPlan("Mutation plan contains an invalid assignment.", ["changes", index]);
-    validateCocoQLFilterValue(plan.rootEntity, { field: change.field.field, operator: "=", value: { kind: "scalar", value: change.value } }, entity.fields[change.field.field]!, { path: ["changes", index] });
+      || !Object.hasOwn(entity.fields, change.field.field) || !isParameter(change.value)) invalidPlan("Mutation plan contains an invalid assignment.", ["changes", index]);
+    validateCocoQLAssignmentValue(plan.rootEntity, change.field.field, change.value, entity.fields[change.field.field]!, { path: ["changes", index] });
   }
   if (plan.confirmation !== null && (!Number.isSafeInteger(plan.confirmation.maxAffectedRows) || plan.confirmation.maxAffectedRows < 1)) invalidPlan("Mutation confirmation is invalid.", ["confirmation"]);
   return plan;
@@ -154,4 +154,5 @@ function invalidMutation(operation: CocoQLMutationOperation, message: string, pa
 }
 
 function isScalar(value: unknown): value is CocoQLScalar { return value === null || typeof value === "string" || typeof value === "number" || typeof value === "boolean"; }
+function isParameter(value: unknown): value is CocoQLParameter { return isScalar(value) || (Array.isArray(value) && value.length > 0 && value.every(isScalar)); }
 function invalidPlan(message: string, path?: CocoQLIssuePath): never { return cocoQLError({ error: "INVALID_PLAN", stage: "planner", message, ...(path ? { path } : {}) }); }

@@ -1,4 +1,4 @@
-import type { CocoQLAggregate, CocoQLFilter, CocoQLMutation, CocoQLQuery, CocoQLScalar, CocoQLValue } from "./ast.ts";
+import type { CocoQLAggregate, CocoQLFilter, CocoQLMutation, CocoQLParameter, CocoQLQuery, CocoQLScalar, CocoQLValue } from "./ast.ts";
 import { parseCocoQLMutation } from "./mutation-parser.ts";
 import { parseCocoQL } from "./parser.ts";
 
@@ -22,7 +22,7 @@ export function formatCocoQLMutationAst(mutation: CocoQLMutation): string {
     for (const filter of mutation.filters) blocks.push(formatFilter(filter));
     blocks.push(mutation.operation);
   }
-  if (mutation.operation !== "delete") blocks.push(mutation.changes.map((change) => `  ${change.field} = ${formatScalar(change.value)}`).join("\n"));
+  if (mutation.operation !== "delete") blocks.push(mutation.changes.map((change) => `  ${change.field} = ${formatParameter(change.value)}`).join("\n"));
   if (mutation.confirmation) blocks.push(`confirm affected <= ${mutation.confirmation.maxAffectedRows}`);
   return `${blocks.join("\n\n")}\n`;
 }
@@ -57,3 +57,4 @@ function formatScalar(value: CocoQLScalar): string {
   if (/^[a-z_][a-z0-9_]*$/.test(value)) return value;
   return JSON.stringify(value);
 }
+function formatParameter(value: CocoQLParameter): string { return Array.isArray(value) ? `[${value.map(formatScalar).join(", ")}]` : formatScalar(value as CocoQLScalar); }

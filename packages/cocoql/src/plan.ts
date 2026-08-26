@@ -87,7 +87,8 @@ export interface CocoQLQueryPlan {
 
 const FILTER_OPERATORS = new Set<CocoQLFilterOperator>([
   "=", "!=", ">", ">=", "<", "<=", "in", "not in", "contains",
-  "starts_with", "ends_with", "before", "after",
+  "starts_with", "ends_with", "before", "after", "ilike", "not ilike", "has_key",
+  "overlaps", "contained_by", "matches",
 ]);
 
 /**

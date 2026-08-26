@@ -680,7 +680,7 @@ export const apiReference = {
     },
     {
       "name": "@cocoframe/cocoql",
-      "version": "0.1.2",
+      "version": "0.2.0",
       "description": "Versioned, schema-aware query and mutation tooling for deterministic AI-generated database work.",
       "readme": "packages/cocoql/README.md",
       "entries": [
@@ -787,7 +787,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/cocoql/src/ast.ts",
-              "line": 39
+              "line": 41
             },
             {
               "name": "CocoQLAggregateFunction",
@@ -797,7 +797,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/cocoql/src/ast.ts",
-              "line": 37
+              "line": 39
             },
             {
               "name": "CocoQLDateRange",
@@ -827,7 +827,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/cocoql/src/schema.ts",
-              "line": 19
+              "line": 24
             },
             {
               "name": "CocoQLError",
@@ -862,12 +862,12 @@ export const apiReference = {
             {
               "name": "CocoQLFieldSchema",
               "kind": "interface",
-              "signature": "interface CocoQLFieldSchema {\n  type: CocoQLFieldType;\n  column?: string;\n  nullable?: boolean;\n  values?: readonly string[];\n  description?: string\n}",
+              "signature": "interface CocoQLFieldSchema {\n  type: CocoQLFieldType;\n  column?: string;\n  nullable?: boolean;\n  unique?: boolean;\n  searchConfig?: string;\n  values?: readonly string[];\n  description?: string\n}",
               "summary": "Public interface CocoQLFieldSchema exported by CocoFrame.",
               "deprecated": false,
               "examples": [],
               "source": "packages/cocoql/src/schema.ts",
-              "line": 4
+              "line": 7
             },
             {
               "name": "CocoQLFieldType",
@@ -887,7 +887,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/cocoql/src/ast.ts",
-              "line": 26
+              "line": 28
             },
             {
               "name": "CocoQLFilterOperator",
@@ -897,7 +897,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/cocoql/src/ast.ts",
-              "line": 20
+              "line": 21
             },
             {
               "name": "CocoQLIssue",
@@ -937,17 +937,17 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/cocoql/src/ast.ts",
-              "line": 71
+              "line": 73
             },
             {
               "name": "CocoQLMutationAssignment",
               "kind": "interface",
-              "signature": "interface CocoQLMutationAssignment {\n  field: string;\n  value: CocoQLScalar\n}",
+              "signature": "interface CocoQLMutationAssignment {\n  field: string;\n  value: CocoQLParameter\n}",
               "summary": "Public interface CocoQLMutationAssignment exported by CocoFrame.",
               "deprecated": false,
               "examples": [],
               "source": "packages/cocoql/src/ast.ts",
-              "line": 61
+              "line": 63
             },
             {
               "name": "CocoQLMutationConfirmation",
@@ -957,7 +957,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/cocoql/src/ast.ts",
-              "line": 66
+              "line": 68
             },
             {
               "name": "CocoQLMutationOperation",
@@ -967,7 +967,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/cocoql/src/ast.ts",
-              "line": 59
+              "line": 61
             },
             {
               "name": "CocoQLMutationPlan",
@@ -1017,6 +1017,16 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/cocoql/src/ast.ts",
+              "line": 8
+            },
+            {
+              "name": "CocoQLParameter",
+              "kind": "type",
+              "signature": "type CocoQLParameter",
+              "summary": "Public type CocoQLParameter exported by CocoFrame.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/cocoql/src/ast.ts",
               "line": 7
             },
             {
@@ -1052,7 +1062,7 @@ export const apiReference = {
             {
               "name": "CocoQLPlanAssignment",
               "kind": "interface",
-              "signature": "interface CocoQLPlanAssignment {\n  field: CocoQLPlanFieldRef;\n  value: CocoQLScalar\n}",
+              "signature": "interface CocoQLPlanAssignment {\n  field: CocoQLPlanFieldRef;\n  value: CocoQLParameter\n}",
               "summary": "Public interface CocoQLPlanAssignment exported by CocoFrame.",
               "deprecated": false,
               "examples": [],
@@ -1140,6 +1150,66 @@ export const apiReference = {
               "line": 31
             },
             {
+              "name": "CocoQLPostgresConflict",
+              "kind": "interface",
+              "signature": "interface CocoQLPostgresConflict {\n  fields: readonly string[];\n  action: \"update\" | \"nothing\";\n  update?: readonly string[]\n}",
+              "summary": "Public interface CocoQLPostgresConflict exported by CocoFrame.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/cocoql/src/compiler/postgres-mutation.ts",
+              "line": 18
+            },
+            {
+              "name": "CocoQLPostgresCte",
+              "kind": "interface",
+              "signature": "interface CocoQLPostgresCte {\n  name: string;\n  plan: CocoQLQueryPlan\n}",
+              "summary": "Public interface CocoQLPostgresCte exported by CocoFrame.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/cocoql/src/compiler/postgres.ts",
+              "line": 24
+            },
+            {
+              "name": "CocoQLPostgresHaving",
+              "kind": "interface",
+              "signature": "interface CocoQLPostgresHaving {\n  alias: string;\n  operator: \"=\" | \"!=\" | \">\" | \">=\" | \"<\" | \"<=\";\n  value: CocoQLScalar\n}",
+              "summary": "Public interface CocoQLPostgresHaving exported by CocoFrame.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/cocoql/src/compiler/postgres.ts",
+              "line": 18
+            },
+            {
+              "name": "CocoQLPostgresMutationCompileOptions",
+              "kind": "interface",
+              "signature": "interface CocoQLPostgresMutationCompileOptions {\n  returning?: readonly string[];\n  conflict?: CocoQLPostgresConflict\n}",
+              "summary": "Public interface CocoQLPostgresMutationCompileOptions exported by CocoFrame.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/cocoql/src/compiler/postgres-mutation.ts",
+              "line": 24
+            },
+            {
+              "name": "CocoQLPostgresPredicate",
+              "kind": "type",
+              "signature": "type CocoQLPostgresPredicate",
+              "summary": "Public type CocoQLPostgresPredicate exported by CocoFrame.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/cocoql/src/compiler/postgres.ts",
+              "line": 13
+            },
+            {
+              "name": "CocoQLPostgresReadOptions",
+              "kind": "interface",
+              "signature": "interface CocoQLPostgresReadOptions {\n  distinct?: boolean;\n  predicate?: CocoQLPostgresPredicate;\n  having?: readonly CocoQLPostgresHaving[];\n  ctes?: readonly CocoQLPostgresCte[];\n  fromCte?: string;\n  cursor?: {    readonly field: CocoQLPlanFieldRef;    readonly value: CocoQLScalar;    readonly position: \"after\" | \"before\";};\n  lock?: {    readonly mode: \"update\" | \"share\";    readonly wait?: \"wait\" | \"nowait\" | \"skip_locked\";}\n}",
+              "summary": "Public interface CocoQLPostgresReadOptions exported by CocoFrame.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/cocoql/src/compiler/postgres.ts",
+              "line": 29
+            },
+            {
               "name": "CocoQLQuery",
               "kind": "interface",
               "signature": "interface CocoQLQuery {\n  type: \"Query\";\n  version: \"0.1\";\n  source: {    readonly entity: string;};\n  with: readonly string[];\n  filters: readonly CocoQLFilter[];\n  group: readonly string[];\n  select: readonly string[];\n  aggregates: readonly CocoQLAggregate[];\n  sort: readonly CocoQLSort[];\n  take?: number;\n  skip?: number\n}",
@@ -1147,7 +1217,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/cocoql/src/ast.ts",
-              "line": 45
+              "line": 47
             },
             {
               "name": "CocoQLQueryPlan",
@@ -1187,7 +1257,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/cocoql/src/schema.ts",
-              "line": 12
+              "line": 17
             },
             {
               "name": "CocoQLRelationType",
@@ -1197,7 +1267,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/cocoql/src/schema.ts",
-              "line": 2
+              "line": 5
             },
             {
               "name": "CocoQLSafetyPolicy",
@@ -1237,7 +1307,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/cocoql/src/schema.ts",
-              "line": 26
+              "line": 31
             },
             {
               "name": "CocoQLSemanticDateExpression",
@@ -1247,7 +1317,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/cocoql/src/ast.ts",
-              "line": 12
+              "line": 13
             },
             {
               "name": "CocoQLSort",
@@ -1257,7 +1327,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/cocoql/src/ast.ts",
-              "line": 32
+              "line": 34
             },
             {
               "name": "CocoQLSourceLocation",
@@ -1297,7 +1367,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/cocoql/src/ast.ts",
-              "line": 15
+              "line": 16
             },
             {
               "name": "compileCocoQL",
@@ -1307,7 +1377,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/cocoql/src/index.ts",
-              "line": 47
+              "line": 48
             },
             {
               "name": "compileCocoQLMutation",
@@ -1317,17 +1387,17 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/cocoql/src/index.ts",
-              "line": 59
+              "line": 60
             },
             {
               "name": "compileCocoQLMutationPostgres",
               "kind": "function",
-              "signature": "compileCocoQLMutationPostgres(source: string, schema: CocoQLSchema, permissions: CocoQLPermissionPolicy, safety: CocoQLSafetyPolicy, options?: CocoQLPlanOptions): CompiledCocoQLPostgresMutation",
+              "signature": "compileCocoQLMutationPostgres(source: string, schema: CocoQLSchema, permissions: CocoQLPermissionPolicy, safety: CocoQLSafetyPolicy, options?: CocoQLPlanOptions & CocoQLPostgresMutationCompileOptions): CompiledCocoQLPostgresMutation",
               "summary": "Runs the same guarded mutation pipeline and emits PostgreSQL placeholders.",
               "deprecated": false,
               "examples": [],
               "source": "packages/cocoql/src/index.ts",
-              "line": 67
+              "line": 68
             },
             {
               "name": "compileCocoQLMutationToMySql",
@@ -1342,22 +1412,22 @@ export const apiReference = {
             {
               "name": "compileCocoQLMutationToPostgres",
               "kind": "function",
-              "signature": "compileCocoQLMutationToPostgres(plan: CocoQLMutationPlan, schema: CocoQLSchema): CompiledCocoQLPostgresMutation",
+              "signature": "compileCocoQLMutationToPostgres(plan: CocoQLMutationPlan, schema: CocoQLSchema, options?: CocoQLPostgresMutationCompileOptions): CompiledCocoQLPostgresMutation",
               "summary": "Compiles an authorized, safety-checked plan. Execution remains adapter-owned.",
               "deprecated": false,
               "examples": [],
               "source": "packages/cocoql/src/compiler/postgres-mutation.ts",
-              "line": 19
+              "line": 30
             },
             {
               "name": "compileCocoQLPostgres",
               "kind": "function",
-              "signature": "compileCocoQLPostgres(source: string, schema: CocoQLSchema, options?: CocoQLPlanOptions): CompiledCocoQLPostgres",
+              "signature": "compileCocoQLPostgres(source: string, schema: CocoQLSchema, options?: CocoQLPlanOptions & CocoQLPostgresReadOptions): CompiledCocoQLPostgres",
               "summary": "Compiles Coco QL Postgres into guarded parameterized output.",
               "deprecated": false,
               "examples": [],
               "source": "packages/cocoql/src/index.ts",
-              "line": 54
+              "line": 55
             },
             {
               "name": "compileCocoQLToMySql",
@@ -1372,12 +1442,12 @@ export const apiReference = {
             {
               "name": "compileCocoQLToPostgres",
               "kind": "function",
-              "signature": "compileCocoQLToPostgres(plan: CocoQLQueryPlan, schema: CocoQLSchema): CompiledCocoQLPostgres",
+              "signature": "compileCocoQLToPostgres(plan: CocoQLQueryPlan, schema: CocoQLSchema, options?: CocoQLPostgresReadOptions): CompiledCocoQLPostgres",
               "summary": "Compiles a validated, dialect-independent read plan into PostgreSQL SQL.",
               "deprecated": false,
               "examples": [],
               "source": "packages/cocoql/src/compiler/postgres.ts",
-              "line": 14
+              "line": 47
             },
             {
               "name": "CompiledCocoQL",
@@ -1392,7 +1462,7 @@ export const apiReference = {
             {
               "name": "CompiledCocoQLMutation",
               "kind": "interface",
-              "signature": "interface CompiledCocoQLMutation {\n  dialect: \"mysql\";\n  operation: \"create\" | \"update\" | \"delete\";\n  sql: string;\n  parameters: readonly CocoQLScalar[];\n  guard: {    readonly maxAffectedRows: number;    readonly verifyBeforeCommit: true;}\n}",
+              "signature": "interface CompiledCocoQLMutation {\n  dialect: \"mysql\";\n  operation: \"create\" | \"update\" | \"delete\";\n  sql: string;\n  parameters: readonly CocoQLParameter[];\n  guard: {    readonly maxAffectedRows: number;    readonly verifyBeforeCommit: true;}\n}",
               "summary": "Public interface CompiledCocoQLMutation exported by CocoFrame.",
               "deprecated": false,
               "examples": [],
@@ -1402,7 +1472,7 @@ export const apiReference = {
             {
               "name": "CompiledCocoQLPostgres",
               "kind": "interface",
-              "signature": "interface CompiledCocoQLPostgres {\n  dialect: \"postgres\";\n  sql: string;\n  parameters: readonly CocoQLScalar[]\n}",
+              "signature": "interface CompiledCocoQLPostgres {\n  dialect: \"postgres\";\n  sql: string;\n  parameters: readonly CocoQLParameter[]\n}",
               "summary": "Public interface CompiledCocoQLPostgres exported by CocoFrame.",
               "deprecated": false,
               "examples": [],
@@ -1412,7 +1482,7 @@ export const apiReference = {
             {
               "name": "CompiledCocoQLPostgresMutation",
               "kind": "interface",
-              "signature": "interface CompiledCocoQLPostgresMutation {\n  dialect: \"postgres\";\n  operation: \"create\" | \"update\" | \"delete\";\n  sql: string;\n  parameters: readonly CocoQLScalar[];\n  guard: {    readonly maxAffectedRows: number;    readonly verifyBeforeCommit: true;}\n}",
+              "signature": "interface CompiledCocoQLPostgresMutation {\n  dialect: \"postgres\";\n  operation: \"create\" | \"update\" | \"delete\";\n  sql: string;\n  parameters: readonly CocoQLParameter[];\n  guard: {    readonly maxAffectedRows: number;    readonly verifyBeforeCommit: true;}\n}",
               "summary": "Public interface CompiledCocoQLPostgresMutation exported by CocoFrame.",
               "deprecated": false,
               "examples": [],
@@ -1447,7 +1517,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/cocoql/src/schema.ts",
-              "line": 34
+              "line": 39
             },
             {
               "name": "enforceCocoQLMutationSafety",
@@ -1527,7 +1597,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/cocoql/src/plan.ts",
-              "line": 192
+              "line": 193
             },
             {
               "name": "lexCocoQL",
@@ -1567,7 +1637,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/cocoql/src/plan.ts",
-              "line": 96
+              "line": 97
             },
             {
               "name": "planCocoQLMutation",
@@ -1637,7 +1707,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/cocoql/src/plan.ts",
-              "line": 153
+              "line": 154
             }
           ]
         }
@@ -2360,8 +2430,8 @@ export const apiReference = {
     },
     {
       "name": "@cocoframe/database-postgres",
-      "version": "0.0.3",
-      "description": "Pool-compatible PostgreSQL adapter, transactions, and advisory-locked migrations.",
+      "version": "0.1.0",
+      "description": "Pool-compatible PostgreSQL adapter and managed CocoQL executor for PostgreSQL 14–18.",
       "readme": "packages/database-postgres/README.md",
       "entries": [
         {
@@ -2370,6 +2440,36 @@ export const apiReference = {
           "source": "packages/database-postgres/src/index.ts",
           "symbols": [
             {
+              "name": "checksumPostgresMigration",
+              "kind": "function",
+              "signature": "checksumPostgresMigration(migration: PostgresMigration): string",
+              "summary": "Returns the deterministic SHA-256 checksum used to lock deployed migration source.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/database-postgres/src/index.ts",
+              "line": 163
+            },
+            {
+              "name": "CocoQLPostgresExecutor",
+              "kind": "interface",
+              "signature": "interface CocoQLPostgresExecutor {\n  read: <Row extends Record<string, unknown> = Record<string, unknown>>(input: PostgresExecutionInput) => Promise<PostgresExecutionResult<Row>>;\n  mutate: <Row extends Record<string, unknown> = Record<string, unknown>>(input: PostgresMutationExecutionInput) => Promise<PostgresExecutionResult<Row>>\n}",
+              "summary": "Public interface CocoQLPostgresExecutor exported by CocoFrame.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/database-postgres/src/executor.ts",
+              "line": 128
+            },
+            {
+              "name": "createCocoQLPostgresExecutor",
+              "kind": "function",
+              "signature": "createCocoQLPostgresExecutor(pool: PostgresPool, options?: PostgresExecutorOptions): CocoQLPostgresExecutor",
+              "summary": "Creates a managed, permission-aware CocoQL executor for PostgreSQL pools.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/database-postgres/src/executor.ts",
+              "line": 142
+            },
+            {
               "name": "createPostgresAdapter",
               "kind": "function",
               "signature": "createPostgresAdapter(pool: PostgresPool): DatabaseAdapter<PostgresConnection>",
@@ -2377,17 +2477,17 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/database-postgres/src/index.ts",
-              "line": 40
+              "line": 81
             },
             {
               "name": "migratePostgres",
               "kind": "function",
-              "signature": "migratePostgres(database: Database<PostgresConnection>, migrations: readonly PostgresMigration[]): Promise<readonly string[]>",
+              "signature": "migratePostgres(database: Database<PostgresConnection>, migrations: readonly PostgresMigration[], options?: PostgresMigrationOptions): Promise<readonly string[]>",
               "summary": "Runs ordered idempotent PostgreSQL migrations under a transaction-scoped advisory lock.",
               "deprecated": false,
               "examples": [],
               "source": "packages/database-postgres/src/index.ts",
-              "line": 76
+              "line": 117
             },
             {
               "name": "openPostgres",
@@ -2397,7 +2497,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/database-postgres/src/index.ts",
-              "line": 69
+              "line": 110
             },
             {
               "name": "PostgresConnection",
@@ -2407,7 +2507,87 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/database-postgres/src/index.ts",
-              "line": 21
+              "line": 38
+            },
+            {
+              "name": "PostgresExecutionError",
+              "kind": "class",
+              "signature": "class PostgresExecutionError {\n  code: PostgresExecutionErrorCode;\n  operation: PostgresExecutionOperation;\n  retryable: boolean;\n  sqlState?: string;\n  actualAffectedRows?: number;\n  maximumAffectedRows?: number;\n  toJSON: () => Readonly<Record<string, unknown>>;\n  name: string;\n  message: string;\n  stack?: string;\n  cause?: unknown\n}",
+              "summary": "A sanitized, typed failure from the managed PostgreSQL execution lifecycle.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/database-postgres/src/executor.ts",
+              "line": 86
+            },
+            {
+              "name": "PostgresExecutionErrorCode",
+              "kind": "type",
+              "signature": "type PostgresExecutionErrorCode",
+              "summary": "Public type PostgresExecutionErrorCode exported by CocoFrame.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/database-postgres/src/executor.ts",
+              "line": 80
+            },
+            {
+              "name": "PostgresExecutionEvent",
+              "kind": "interface",
+              "signature": "interface PostgresExecutionEvent {\n  name: PostgresExecutionEventName;\n  operation: PostgresExecutionOperation;\n  fingerprint: string;\n  attempt: number;\n  durationMs?: number;\n  rowCount?: number;\n  maximumAffectedRows?: number;\n  sqlState?: string\n}",
+              "summary": "Public interface PostgresExecutionEvent exported by CocoFrame.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/database-postgres/src/executor.ts",
+              "line": 32
+            },
+            {
+              "name": "PostgresExecutionEventName",
+              "kind": "type",
+              "signature": "type PostgresExecutionEventName",
+              "summary": "Public type PostgresExecutionEventName exported by CocoFrame.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/database-postgres/src/executor.ts",
+              "line": 26
+            },
+            {
+              "name": "PostgresExecutionInput",
+              "kind": "interface",
+              "signature": "interface PostgresExecutionInput {\n  source: string;\n  schema: CocoQLSchema;\n  permissions: CocoQLPermissionPolicy;\n  safety: CocoQLSafetyPolicy;\n  signal?: AbortSignal;\n  acquireTimeoutMs?: number;\n  queryTimeoutMs?: number;\n  fingerprint?: string;\n  plan?: CocoQLPlanOptions;\n  postgres?: CocoQLPostgresReadOptions\n}",
+              "summary": "Public interface PostgresExecutionInput exported by CocoFrame.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/database-postgres/src/executor.ts",
+              "line": 53
+            },
+            {
+              "name": "PostgresExecutionOperation",
+              "kind": "type",
+              "signature": "type PostgresExecutionOperation",
+              "summary": "Public type PostgresExecutionOperation exported by CocoFrame.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/database-postgres/src/executor.ts",
+              "line": 25
+            },
+            {
+              "name": "PostgresExecutionResult",
+              "kind": "interface",
+              "signature": "interface PostgresExecutionResult<Row extends Record<string, unknown>> {\n  rows: readonly Row[];\n  rowCount: number;\n  durationMs: number;\n  attempts: number;\n  fingerprint: string\n}",
+              "summary": "Public interface PostgresExecutionResult exported by CocoFrame.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/database-postgres/src/executor.ts",
+              "line": 72
+            },
+            {
+              "name": "PostgresExecutorOptions",
+              "kind": "interface",
+              "signature": "interface PostgresExecutorOptions {\n  acquireTimeoutMs?: number;\n  queryTimeoutMs?: number;\n  maximumResultRows?: number;\n  maximumResultBytes?: number;\n  retryMaximum?: number;\n  onEvent?: (event: PostgresExecutionEvent) => void;\n  now?: () => number\n}",
+              "summary": "Public interface PostgresExecutorOptions exported by CocoFrame.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/database-postgres/src/executor.ts",
+              "line": 43
             },
             {
               "name": "PostgresMigration",
@@ -2417,7 +2597,47 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/database-postgres/src/index.ts",
-              "line": 28
+              "line": 45
+            },
+            {
+              "name": "PostgresMigrationError",
+              "kind": "class",
+              "signature": "class PostgresMigrationError {\n  code: PostgresMigrationErrorCode;\n  migrationId?: string;\n  toJSON: () => Readonly<Record<string, unknown>>;\n  name: string;\n  message: string;\n  stack?: string;\n  cause?: unknown\n}",
+              "summary": "A typed migration validation, missing-history, or immutable-checksum failure.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/database-postgres/src/index.ts",
+              "line": 58
+            },
+            {
+              "name": "PostgresMigrationErrorCode",
+              "kind": "type",
+              "signature": "type PostgresMigrationErrorCode",
+              "summary": "Public type PostgresMigrationErrorCode exported by CocoFrame.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/database-postgres/src/index.ts",
+              "line": 55
+            },
+            {
+              "name": "PostgresMigrationOptions",
+              "kind": "interface",
+              "signature": "interface PostgresMigrationOptions {\n  toolVersion?: string;\n  now?: () => number\n}",
+              "summary": "Public interface PostgresMigrationOptions exported by CocoFrame.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/database-postgres/src/index.ts",
+              "line": 50
+            },
+            {
+              "name": "PostgresMutationExecutionInput",
+              "kind": "interface",
+              "signature": "interface PostgresMutationExecutionInput {\n  returning?: readonly string[];\n  conflict?: CocoQLPostgresConflict;\n  retryMaximum?: number;\n  source: string;\n  schema: CocoQLSchema;\n  permissions: CocoQLPermissionPolicy;\n  safety: CocoQLSafetyPolicy;\n  signal?: AbortSignal;\n  acquireTimeoutMs?: number;\n  queryTimeoutMs?: number;\n  fingerprint?: string;\n  plan?: CocoQLPlanOptions;\n  postgres?: CocoQLPostgresReadOptions\n}",
+              "summary": "Public interface PostgresMutationExecutionInput exported by CocoFrame.",
+              "deprecated": false,
+              "examples": [],
+              "source": "packages/database-postgres/src/executor.ts",
+              "line": 66
             },
             {
               "name": "PostgresPool",
@@ -2427,17 +2647,17 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/database-postgres/src/index.ts",
-              "line": 16
+              "line": 33
             },
             {
               "name": "PostgresPoolClient",
               "kind": "interface",
-              "signature": "interface PostgresPoolClient {\n  query: <Row extends Record<string, unknown> = Record<string, unknown>>(text: string, values?: readonly unknown[]) => Promise<PostgresQueryResult<Row>>;\n  release: () => void\n}",
+              "signature": "interface PostgresPoolClient {\n  query: <Row extends Record<string, unknown> = Record<string, unknown>>(text: string, values?: readonly unknown[]) => Promise<PostgresQueryResult<Row>>;\n  release: (destroyError?: Error) => void\n}",
               "summary": "Public interface PostgresPoolClient exported by CocoFrame.",
               "deprecated": false,
               "examples": [],
               "source": "packages/database-postgres/src/index.ts",
-              "line": 8
+              "line": 9
             },
             {
               "name": "PostgresQueryResult",
@@ -2447,7 +2667,7 @@ export const apiReference = {
               "deprecated": false,
               "examples": [],
               "source": "packages/database-postgres/src/index.ts",
-              "line": 3
+              "line": 4
             }
           ]
         }

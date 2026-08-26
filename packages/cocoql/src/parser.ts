@@ -7,7 +7,7 @@ import { registerCocoQLSourceMap } from "./source-map.ts";
 const READ_COMMANDS = new Set(["from", "with", "filter", "group", "select", "sort", "take", "skip"]);
 const COMMAND_ORDER: Readonly<Record<string, number>> = { from: 0, with: 1, filter: 2, group: 3, select: 4, sort: 5, take: 6, skip: 7 };
 const MUTATION_COMMANDS = new Set(["create", "update", "delete", "preview", "confirm"]);
-const FILTER_WORD_OPERATORS = new Set<CocoQLFilterOperator>(["in", "contains", "starts_with", "ends_with", "before", "after"]);
+const FILTER_WORD_OPERATORS = new Set<CocoQLFilterOperator>(["in", "contains", "starts_with", "ends_with", "before", "after", "ilike", "has_key", "overlaps", "contained_by", "matches"]);
 const AGGREGATE_FUNCTIONS = new Set<CocoQLAggregateFunction>(["count", "sum", "avg", "min", "max"]);
 
 /**
@@ -173,9 +173,10 @@ function parseOperator(cursor: TokenCursor): CocoQLFilterOperator {
   if (cursor.at("operator")) return cursor.take().value as CocoQLFilterOperator;
   const token = cursor.expect("word", "Expected a filter operator.");
   if (token.value === "not") {
-    const next = cursor.expect("word", "Expected 'in' after 'not'.");
+    const next = cursor.expect("word", "Expected 'in' or 'ilike' after 'not'.");
     if (next.value === "in") return "not in";
-    cursor.fail("Only 'not in' is a valid compound filter operator.", next);
+    if (next.value === "ilike") return "not ilike";
+    cursor.fail("Only 'not in' and 'not ilike' are valid compound filter operators.", next);
   }
   if (FILTER_WORD_OPERATORS.has(token.value as CocoQLFilterOperator)) return token.value as CocoQLFilterOperator;
   cursor.fail(`Unknown filter operator '${token.value}'.`, token);
@@ -186,7 +187,7 @@ function parseValue(cursor: TokenCursor, operator: CocoQLFilterOperator): CocoQL
     const semanticDate = parseSemanticDate(cursor);
     if (semanticDate) return semanticDate;
   }
-  if (operator === "in" || operator === "not in") {
+  if (operator === "in" || operator === "not in" || ((operator === "contains" || operator === "contained_by" || operator === "overlaps") && cursor.at("left-bracket"))) {
     cursor.expect("left-bracket", `Operator '${operator}' requires a bracketed list.`);
     const values: CocoQLScalar[] = [];
     while (!cursor.at("right-bracket")) {

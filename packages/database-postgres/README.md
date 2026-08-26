@@ -1,17 +1,33 @@
 # @cocoframe/database-postgres
 
-Pool-compatible PostgreSQL adapter, transactions, and advisory-locked migrations.
+Pool-compatible PostgreSQL adapter and managed CocoQL executor for PostgreSQL
+14–18.
 
-- `createPostgresAdapter(pool)` creates the driver-neutral adapter.
-- `openPostgres(pool)` creates a ready-to-use database facade.
-- `migratePostgres(database, migrations)` applies ordered idempotent migrations under an advisory lock.
-- Structural pool/client/query interfaces avoid a hard dependency on one PostgreSQL driver.
+- `createCocoQLPostgresExecutor(pool)` runs parse, permission, safety, planning,
+  parameterized compilation, bounded execution, affected-row guards, retry, and
+  sanitized telemetry.
+- `createPostgresAdapter(pool)` creates the driver-neutral low-level adapter.
+- `openPostgres(pool)` creates the database facade.
+- `migratePostgres(database, migrations)` applies checksum-locked migrations
+  under a transaction-scoped advisory lock.
 
 ```ts
-const database = openPostgres(pool);
-const users = await database.run((db) => db.query("SELECT id FROM users WHERE id = $1", [id]));
+import { Pool } from "pg";
+import { createCocoQLPostgresExecutor } from "@cocoframe/database-postgres";
+
+const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+const executor = createCocoQLPostgresExecutor(pool);
+
+const users = await executor.read({
+  source: "from users\nselect id,email\ntake 20",
+  schema,
+  permissions,
+  safety,
+  signal: request.signal,
+});
 ```
 
-Pass values separately from SQL. Always release clients, rollback failed
-transactions, and keep deployed migration IDs immutable. Verify with
-`tests/database-postgres.test.ts`.
+The package deliberately uses structural pool interfaces, so applications own
+their driver version. Values are always passed separately from SQL. See
+[`docs/cocoql-postgresql.md`](../../docs/cocoql-postgresql.md) for native types,
+advanced reads, guarded writes, failures, telemetry, migrations, and verification.

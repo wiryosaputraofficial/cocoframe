@@ -1,11 +1,12 @@
 {
   "name": "@cocoframe/database-postgres",
-  "version": "0.0.3",
+  "version": "0.1.0",
   "type": "module",
   "exports": {
     ".": "./src/index.ts"
   },
   "dependencies": {
+    "@cocoframe/cocoql": "0.2.0",
     "@cocoframe/database": "0.0.3"
   }
 }

@@ -18,6 +18,7 @@
     "quality": "npm run check && npm test && npm run inspect && npm run build && npm run test:e2e",
     "create": "node packages/create-cocoframe/src/cli.js",
     "test": "node --test --test-concurrency=1 tests/*.test.ts",
+    "test:postgres": "node --test --test-concurrency=1 tests/database-postgres.integration.test.ts",
     "inspect": "node packages/cli/src/main.ts inspect examples/basic",
     "dev": "node packages/cli/src/main.ts dev examples/basic",
     "start": "node packages/cli/src/main.ts start examples/basic",
@@ -28,12 +29,15 @@
     "packages:pack": "npm run packages:build && node scripts/pack-packages.mjs",
     "packages:smoke": "npm run packages:pack && node scripts/smoke-packages.mjs",
     "benchmark": "node benchmarks/ssr.bench.ts",
+    "benchmark:cocoql:postgres": "node benchmarks/cocoql-postgres.bench.ts",
     "benchmark:http": "node benchmarks/http.bench.ts",
     "benchmark:http:concurrent": "node benchmarks/http-concurrent.bench.ts"
   },
   "devDependencies": {
     "@playwright/test": "^1.62.1",
     "@types/node": "^24.0.0",
+    "@types/pg": "^8.23.1",
+    "pg": "^8.23.0",
     "rolldown": "^1.0.0",
     "typescript": "^5.9.0"
   }

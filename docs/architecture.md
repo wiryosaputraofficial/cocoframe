@@ -177,9 +177,14 @@ Connections are released in `finally` paths. Query language, migrations,
 pooling, and ORM behavior belong to concrete adapters rather than framework core.
 The SQLite adapter serializes access to its single native connection, returns
 plain row objects, supports parameter binding, and records idempotent migrations.
-The PostgreSQL adapter acquires one pool client per operation, releases it in all
-paths, rolls back failed transactions, and serializes migrations across instances
-with a transaction-scoped advisory lock.
+The PostgreSQL adapter acquires one pool client per operation and releases or
+destroys it in every path. The managed CocoQL executor performs parse,
+authorization, safety, planning, and compilation before acquisition; applies
+transaction-local timeouts; checks result and affected-row guards before commit;
+propagates AbortSignal cancellation; retries bounded serialization/deadlock
+failures on fresh connections; and emits sanitized events. Migrations are
+serialized with a transaction-scoped advisory lock and reject missing or changed
+applied history by SHA-256 checksum.
 
 ## Universal clients
 

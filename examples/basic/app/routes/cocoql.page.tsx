@@ -434,7 +434,7 @@ export default definePage({
     </section>
 
     <section class="cocoql-postgres section-shell" id="postgresql">
-      <header class="cocoql-section-copy reveal"><span class="eyebrow">POSTGRESQL DIALECT · CQ-018</span><h2>One Query Plan.<br />Two production dialects.</h2><p>PostgreSQL consumes the same schema-aware plan as MySQL. Only identifier quoting, numbered placeholders, date representation, and pagination syntax change at the final compiler boundary.</p></header>
+      <header class="cocoql-section-copy reveal"><span class="eyebrow">POSTGRESQL DIALECT · 14–18 · MANAGED EXECUTION</span><h2>One safe intent.<br />A complete PostgreSQL path.</h2><p>The PostgreSQL path now goes beyond compilation: native UUID, JSONB, arrays and full-text search; CTE, HAVING, cursor and row-lock reads; RETURNING and UPSERT; plus bounded transactions, cancellation, retry, sanitized telemetry, and checksum-locked migrations.</p></header>
       <div class="cocoql-compare reveal">
         <article><div class="cocoql-panel-title"><CodeSquareIcon size={17} /><span>CocoQL</span><small>shared intent</small></div><SyntaxHighlighter code={postgresQuery} language="cocoql" label="CocoQL query compiled for PostgreSQL" /></article>
         <article><div class="cocoql-panel-title"><DatabaseIcon size={17} /><span>PostgreSQL</span><small>numbered parameters</small></div><SyntaxHighlighter code={postgresSql} language="text" label="Parameterized PostgreSQL output" /></article>
@@ -473,8 +473,8 @@ export default definePage({
     </section>
 
     <section class="cocoql-status section-shell reveal">
-      <div><span class="eyebrow">VERSION 0.1 · CQ-018</span><h2>A multi-dialect AI database boundary.</h2><p>Reads and guarded writes now compile from one public plan into MySQL or PostgreSQL without coupling CocoQL to database execution.</p></div>
-      <div class="cocoql-status__columns"><article><h3>Available now</h3><ul><li>MySQL read and mutation compiler</li><li>PostgreSQL read and mutation compiler</li><li>Numbered PostgreSQL parameters</li><li>Semantic UTC date compilation</li><li>Shared forged-plan validation</li><li>Verify-before-commit guards</li></ul></article><article><h3>Next milestones</h3><ul><li>SQLite dialect</li><li>Adapter row estimation</li><li>Transaction execution helper</li><li>Tenant policy examples</li><li>Dialect conformance suite</li></ul></article></div>
+      <div><span class="eyebrow">COCOQL 0.2 · POSTGRESQL 14–18</span><h2>A managed AI database boundary.</h2><p>Reads and guarded writes compile from a trusted public plan and can execute through one permission-aware, safety-bounded PostgreSQL lifecycle.</p></div>
+      <div class="cocoql-status__columns"><article><h3>Available now</h3><ul><li>MySQL read and mutation compiler</li><li>Managed PostgreSQL executor</li><li>Native UUID, JSONB, arrays, and full-text</li><li>CTE, HAVING, cursor, and row locks</li><li>RETURNING and ON CONFLICT</li><li>Timeout, cancellation, retry, and guard rollback</li><li>Checksum-locked migrations</li></ul></article><article><h3>Verified boundaries</h3><ul><li>PostgreSQL 14–18 CI matrix</li><li>Zero connections for rejected input</li><li>Parameterized values only</li><li>Sanitized errors and telemetry</li><li>Real-driver integration suite</li></ul></article></div>
     </section>
   </main>,
 });

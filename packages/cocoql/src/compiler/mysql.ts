@@ -45,6 +45,7 @@ export function compileCocoQLToMySql(plan: CocoQLQueryPlan, schema: CocoQLSchema
 }
 
 function compileFilter(filter: CocoQLPlanFilter, schema: CocoQLSchema, aliases: ReadonlyMap<string | null, string>, parameters: CocoQLScalar[], qualify: boolean): string {
+  assertMySqlFilter(filter, schema);
   const field = compileField(filter.field, schema, aliases, qualify);
   if (filter.value.kind === "date-range") {
     const fieldType = schema.entities[filter.field.entity]!.fields[filter.field.field]!.type;
@@ -85,6 +86,14 @@ function compileFilter(filter: CocoQLPlanFilter, schema: CocoQLSchema, aliases: 
   if (value === null && (operator === "=" || operator === "!=")) return `${field} IS${operator === "!=" ? " NOT" : ""} NULL`;
   parameters.push(value);
   return `${field} ${operator} ?`;
+}
+
+function assertMySqlFilter(filter: CocoQLPlanFilter, schema: CocoQLSchema): void {
+  const field = schema.entities[filter.field.entity]!.fields[filter.field.field]!;
+  if (filter.operator === "ilike" || filter.operator === "not ilike" || filter.operator === "has_key" || filter.operator === "overlaps" || filter.operator === "contained_by" || filter.operator === "matches"
+    || (filter.operator === "contains" && (field.type === "json" || field.type === "jsonb" || field.type.endsWith("_array")))) {
+    invalidSchema(`Operator '${filter.operator}' on '${filter.field.entity}.${filter.field.field}' is available only in the PostgreSQL dialect.`);
+  }
 }
 
 function formatMySqlDate(value: string, fieldType: string): string {

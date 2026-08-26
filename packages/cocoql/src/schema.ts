@@ -1,10 +1,15 @@
-export type CocoQLFieldType = "id" | "string" | "number" | "boolean" | "date" | "datetime" | "enum" | "money";
+export type CocoQLFieldType =
+  | "id" | "string" | "number" | "boolean" | "date" | "datetime" | "enum" | "money"
+  | "uuid" | "json" | "jsonb"
+  | "string_array" | "number_array" | "boolean_array" | "uuid_array";
 export type CocoQLRelationType = "belongs_to" | "has_one" | "has_many";
 
 export interface CocoQLFieldSchema {
   readonly type: CocoQLFieldType;
   readonly column?: string;
   readonly nullable?: boolean;
+  readonly unique?: boolean;
+  readonly searchConfig?: string;
   readonly values?: readonly string[];
   readonly description?: string;
 }

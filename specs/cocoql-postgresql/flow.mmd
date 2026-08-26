@@ -1,0 +1,48 @@
+flowchart TD
+    start([Start: CocoQL PostgreSQL Production Integration])
+    step1["Developer defines the CocoQL schema, permissions, safety policy, PostgreSQL pool, and execution policy."]
+    start --> step1
+    step2["The application accepts CocoQL source from a developer or constrained AI agent."]
+    step1 --> step2
+    step3["CocoQL parses and semantically validates the source."]
+    step2 --> step3
+    step4["CocoQL applies default-deny permissions and deterministic safety limits before acquiring a connection."]
+    step3 --> step4
+    step5["A validated plan compiles to PostgreSQL SQL with trusted identifiers and separately bound values."]
+    step4 --> step5
+    step6["The PostgreSQL executor acquires a pooled client and applies timeout and cancellation."]
+    step5 --> step6
+    step7["Reads execute and return typed rows and metadata."]
+    step6 --> step7
+    step8["Mutations execute in a transaction and verify actual affected rows against the approved guard before commit."]
+    step7 --> step8
+    step9["Failures or guard violations roll back and every path releases the client."]
+    step8 --> step9
+    step10["Migrations run under an advisory lock with immutable identity and drift detection."]
+    step9 --> step10
+    step11["Sanitized diagnostics and observability describe the outcome."]
+    step10 --> step11
+    step12["Real PostgreSQL and packed-package tests prove the supported compatibility contract."]
+    step11 --> step12
+    success([CocoQL provides end-to-end, production-grade PostgreSQL integration: schema-aware generation, validation, authorization, safety, native PostgreSQL compilation, pooled execution, guarded transactions, migrations, cancellation, observability,])
+    step12 --> success
+    error1["Invalid CocoQL returns a structured source error and acquires no connection."]
+    step12 -. failure .-> error1
+    error2["Permission and safety violations are rejected before execution."]
+    step12 -. failure .-> error2
+    error3["Pool or connection failures return a typed unavailable error with optional application-controlled retry."]
+    step12 -. failure .-> error3
+    error4["Timeout or AbortSignal cancellation cancels work, rolls back an active transaction, and releases the client."]
+    step12 -. failure .-> error4
+    error5["Affected rows above the approved mutation guard roll back and report sanitized actual and maximum counts."]
+    step12 -. failure .-> error5
+    error6["Constraint violations return typed sanitized database errors without SQL parameters or credentials."]
+    step12 -. failure .-> error6
+    error7["Serialization failures and deadlocks retry only for eligible operations when an explicit bounded policy permits it."]
+    step12 -. failure .-> error7
+    error8["Commit failure returns an indeterminate outcome and never reports success."]
+    step12 -. failure .-> error8
+    error9["Migration checksum drift stops deployment and requires a new immutable migration."]
+    step12 -. failure .-> error9
+    error10["Unsupported capabilities return an explicit unsupported-feature error and never fall back silently to raw SQL."]
+    step12 -. failure .-> error10
